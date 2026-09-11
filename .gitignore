@@ -30,8 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — never commit secrets (VAPID private key, deployment tokens)
 .env*
+!.env.example
+*.vapid*
+*.key
+secrets/
 
 # vercel
 .vercel

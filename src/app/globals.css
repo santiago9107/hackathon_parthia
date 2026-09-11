@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---- Parthia Health design tokens -------------------------------------- */
+@theme {
+  /* Brand */
+  --color-brand-900: #083733;
+  --color-brand-800: #0a4541;
+  --color-brand-700: #0e5c56;
+  --color-brand-600: #17706a;
+  --color-brand-500: #2e8c83;
+  --color-brand-300: #8fc2bb;
+  --color-brand-100: #d9ebe7;
+  --color-brand-50: #eef5f3;
+
+  --color-navy: #1b2a41;
+
+  --color-gold-700: #9a6f18;
+  --color-gold-600: #b8861f;
+  --color-gold-500: #c9962b;
+  --color-gold-200: #efdcae;
+  --color-gold-100: #f6ebd3;
+  --color-gold-50: #fbf5e8;
+
+  /* Warm neutrals */
+  --color-cream: #f7f4ee;
+  --color-cream-dark: #efeae0;
+  --color-surface: #fffdf9;
+  --color-line: #e6e0d4;
+  --color-line-strong: #d3cbbb;
+  --color-ink: #2b2a28;
+  --color-ink-soft: #524f49;
+  --color-ink-muted: #75716a;
+
+  /* Status */
+  --color-good: #2e7d5b;
+  --color-good-soft: #e3f1e9;
+  --color-watch: #b8861f;
+  --color-watch-soft: #f8efd8;
+  --color-attention: #b5473a;
+  --color-attention-soft: #f7e3df;
+
+  --font-serif: var(--font-lora), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(43, 42, 40, 0.04), 0 4px 16px rgba(43, 42, 40, 0.05);
+  --radius-card: 1rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100dvh;
+  background: var(--color-cream);
+  color: var(--color-ink);
+}
+
+/* Standalone PWA: respect the iPhone notch / home indicator. */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+  .print-hidden {
+    display: none !important;
+  }
+  .print-page {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }

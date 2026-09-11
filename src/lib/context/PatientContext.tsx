@@ -1,0 +1,79 @@
+"use client";
+
+import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react";
+import { getRecord, listPatients, referenceNow } from "../mockData";
+import { evaluatePatient } from "../safetyEngine";
+import { computeIndicators } from "../status/indicators";
+import type { DomainIndicator, Patient, PatientId, PatientRecord, RiskFlag } from "../types";
+
+/**
+ * Holds the "current patient" for the demo and everything derived from it.
+ *
+ * In production this becomes the signed-in patient's own record (there is no
+ * switcher — the patient owns their data). The switcher exists purely so a
+ * demo can walk through different risk profiles.
+ */
+interface PatientContextValue {
+  patients: Patient[];
+  patientId: PatientId;
+  setPatientId: (id: PatientId) => void;
+  record: PatientRecord;
+  flags: RiskFlag[];
+  indicators: DomainIndicator[];
+  now: Date;
+}
+
+/* ---- Selected-patient store (persisted in localStorage) ------------------ */
+const STORAGE_KEY = "parthia.selectedPatient";
+const DEFAULT_ID: PatientId = listPatients()[0].id;
+let current: PatientId | null = null;
+const listeners = new Set<() => void>();
+
+function readSelected(): PatientId {
+  if (current !== null) return current;
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    current = saved && listPatients().some((p) => p.id === saved) ? saved : DEFAULT_ID;
+  } catch {
+    current = DEFAULT_ID;
+  }
+  return current;
+}
+
+function setSelected(id: PatientId) {
+  current = id;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, id);
+  } catch {
+    /* storage unavailable */
+  }
+  listeners.forEach((l) => l());
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+const PatientContext = createContext<PatientContextValue | null>(null);
+
+export function PatientProvider({ children }: { children: ReactNode }) {
+  const patients = useMemo(() => listPatients(), []);
+  const patientId = useSyncExternalStore(subscribe, readSelected, () => DEFAULT_ID);
+
+  const value = useMemo<PatientContextValue>(() => {
+    const now = referenceNow();
+    const record = getRecord(patientId)!;
+    const flags = evaluatePatient(record, { now });
+    const indicators = computeIndicators(record, flags, now);
+    return { patients, patientId, setPatientId: setSelected, record, flags, indicators, now };
+  }, [patients, patientId]);
+
+  return <PatientContext.Provider value={value}>{children}</PatientContext.Provider>;
+}
+
+export function usePatient(): PatientContextValue {
+  const ctx = useContext(PatientContext);
+  if (!ctx) throw new Error("usePatient must be used inside <PatientProvider>");
+  return ctx;
+}
