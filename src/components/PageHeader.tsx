@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 export function PageHeader({ eyebrow, title, subtitle, actions }: { eyebrow?: string; title: string; subtitle?: string; actions?: ReactNode }) {
@@ -27,7 +28,10 @@ export function Disclaimer() {
   return (
     <p className="mt-10 border-t border-line pt-4 text-xs leading-relaxed text-ink-muted">
       Demo prototype with synthetic data. Parthia Health surfaces questions for you to raise with your care team; it does not
-      diagnose, and nothing here is an instruction to start, stop or change a medicine.
+      diagnose, and nothing here is an instruction to start, stop or change a medicine.{" "}
+      <Link href="/about/" className="font-semibold text-brand-700 hover:text-brand-900">
+        About this prototype →
+      </Link>
     </p>
   );
 }

@@ -49,6 +49,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-2">
+            <Link
+              href="/about/"
+              className={`hidden rounded-full px-3 py-1.5 text-sm font-medium transition lg:inline-block ${
+                current === "/about/" ? "bg-brand-700 text-white" : "text-ink-muted hover:bg-brand-50 hover:text-brand-800"
+              }`}
+            >
+              About
+            </Link>
             <InstallCTA />
             <PatientSwitcher />
           </div>
