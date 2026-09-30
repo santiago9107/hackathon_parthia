@@ -1,6 +1,7 @@
 import type { PatientRecord, RiskFlag } from "../types";
 import { mean, withinLastDays, formatDate } from "../safetyEngine/rules/types";
-import { latestLabs } from "../passport/selectors";
+import { labHistory, latestLabs } from "../passport/selectors";
+import { openIssues, type ReconIssue } from "../reconcile";
 
 /**
  * CONVERSATIONAL ASSISTANT — scripted, data-grounded responder.
@@ -28,6 +29,8 @@ export interface AssistantInput {
   record: PatientRecord;
   flags: RiskFlag[];
   now: Date;
+  /** Differences between records (Phase G reconciliation). */
+  issues?: ReconIssue[];
 }
 
 export interface AssistantProvider {
@@ -51,7 +54,7 @@ function listFlags(flags: RiskFlag[], limit = 3): string {
 
 export const scriptedProvider: AssistantProvider = {
   name: "scripted",
-  async respond(question, { record, flags, now }) {
+  async respond(question, { record, flags, now, issues = [] }) {
     const q = question.toLowerCase().trim();
     const { patient } = record;
     const name = firstName(patient.name);
@@ -63,6 +66,9 @@ export const scriptedProvider: AssistantProvider = {
         sources: [],
       };
     }
+
+    const passportReply = answerFromPassport(q, record, now, issues);
+    if (passportReply) return passportReply;
 
     // A specific medication mentioned?
     const med = patient.medications.find((m) => q.includes(m.genericName) || q.includes(m.name.toLowerCase().split(" ")[0]));
@@ -81,7 +87,7 @@ export const scriptedProvider: AssistantProvider = {
 
     if (/^(hi|hello|hey|good (morning|afternoon|evening))/.test(q)) {
       return {
-        text: `Hi ${name}. I can answer questions about your own medications, safety flags, mood, nutrition, symptoms and labs — using only your records. What would you like to know?`,
+        text: `Hi ${name}. I can answer questions from your Passport — medications, allergies, labs, appointments, your care team, screenings, nutrition and safety flags — using only your own records. What would you like to know?`,
         sources: [],
         suggestions: ["What medications am I taking?", "Why was something flagged?", "How has my mood been?"],
       };
@@ -185,15 +191,17 @@ export const scriptedProvider: AssistantProvider = {
       };
     }
 
-    if (/doctor|appointment|ask|visit|share|question|clinic|pharmac/.test(q)) {
+    if (/doctor|ask|visit|share|question|clinic/.test(q)) {
+      const recordQs = issues.filter((i) => !i.resolution || i.resolution.askClinician).map((i) => i.question);
+      const all = [...flags.map((f) => f.suggestedNextStep), ...recordQs];
       return {
         text:
-          flags.length > 0
+          all.length > 0
             ? `Questions worth bringing to ${patient.primaryClinician}:\n` +
-              flags.map((f, i) => `${i + 1}. ${f.suggestedNextStep}`).join("\n") +
-              "\n\nYou can print or share the physician summary from the “Share with doctor” tab."
+              all.map((t, i) => `${i + 1}. ${t}`).join("\n") +
+              "\n\nYou can print or share the visit summary from Passport → Share."
             : `Nothing is flagged right now, but it's always reasonable to ask ${patient.primaryClinician} for a medication review.`,
-        sources: ["Safety engine flags"],
+        sources: ["Safety engine flags", ...(recordQs.length ? ["Differences between records"] : [])],
         suggestions: ["Open the share view"],
       };
     }
@@ -206,12 +214,133 @@ export const scriptedProvider: AssistantProvider = {
     }
 
     return {
-      text: `I can only answer from your own records, ${name}. Try asking about your medications, why something was flagged, your mood or nutrition trends, symptoms, labs, or what to ask your doctor.`,
+      text: `I can only answer from your own records, ${name}. Try asking about your medications, allergies, labs, next appointment, care team, screenings, why something was flagged, or what to ask your doctor.`,
       sources: [],
-      suggestions: ["What medications am I taking?", "Why was something flagged?", "How has my mood been?", "What should I ask my doctor?"],
+      suggestions: ["What medications am I taking?", "When is my next appointment?", "Do my records disagree?", "What should I ask my doctor?"],
     };
   },
 };
 
 /** Active provider. Swap for a model-backed provider behind an env var later. */
 export const assistant: AssistantProvider = scriptedProvider;
+
+const daysUntil = (iso: string, now: Date) => Math.round((new Date(iso).getTime() - now.getTime()) / 86_400_000);
+const LAB_WORDS: [RegExp, RegExp][] = [
+  [/egfr|kidney/, /egfr/i],
+  [/a1c|hba1c/, /a1c/i],
+  [/inr/, /inr/i],
+  [/potassium/, /potassium/i],
+  [/ldl|cholesterol/, /ldl/i],
+  [/tsh|thyroid/, /tsh/i],
+];
+
+/**
+ * Intents that draw on the fuller Passport (Phase G). Returns null when the
+ * question isn't one of these, so the original intents still apply.
+ */
+function answerFromPassport(q: string, record: PatientRecord, now: Date, issues: ReconIssue[]): AssistantReply | null {
+  const { patient } = record;
+
+  if (/allerg|allergic|reaction to/.test(q)) {
+    const list = record.allergies;
+    return {
+      text:
+        (list.length
+          ? `Allergies in your Passport:\n${list.map((a) => `• ${a.substance}${a.reaction ? ` — ${a.reaction.toLowerCase()}` : ""} (${a.severity}${a.type === "intolerance" ? ", intolerance" : ""})`).join("\n")}`
+          : "You haven't recorded any allergies.") +
+        "\n\nThe safety check compares these against every medicine on your list, including ones you add or scan.",
+      sources: ["Allergies"],
+      suggestions: ["Any interactions?", "What medications am I taking?"],
+    };
+  }
+
+  if (/phq|gad|screen|questionnaire|anxiety score|depression score/.test(q)) {
+    const latest = (inst: "PHQ-9" | "GAD-7") => record.assessments.filter((a) => a.instrument === inst).sort((a, b) => b.date.localeCompare(a.date));
+    const lines = (["PHQ-9", "GAD-7"] as const).flatMap((inst) => {
+      const [cur, prev] = latest(inst);
+      if (!cur) return [];
+      return [`• ${inst}: ${cur.score} (${cur.severity.toLowerCase()}) on ${formatDate(cur.date)}${prev ? `, previously ${prev.score} on ${formatDate(prev.date)}` : ""}`];
+    });
+    return {
+      text:
+        (lines.length ? `Your latest screenings:\n${lines.join("\n")}` : "You haven't completed a PHQ-9 or GAD-7 screening yet. You can take one from Log.") +
+        "\n\nThese are screenings, not diagnoses — a clinician interprets them with you.",
+      sources: ["Screening questionnaires"],
+      suggestions: ["How has my mood been?", "What should I ask my doctor?"],
+    };
+  }
+
+  if (/appointment|next visit|when do i see|upcoming|schedul/.test(q)) {
+    const upcoming = record.appointments.filter((a) => a.status === "booked" && daysUntil(a.start, now) >= 0).sort((a, b) => a.start.localeCompare(b.start));
+    return {
+      text: upcoming.length
+        ? `Upcoming appointments:\n${upcoming.map((a) => `• ${formatDate(a.start)} — ${a.clinician} (${a.specialty}): ${a.reason}${a.patientNotes ? `\n   Your notes: ${a.patientNotes}` : ""}`).join("\n")}`
+        : "You have no upcoming appointments in your Passport.",
+      sources: ["Appointments"],
+      suggestions: ["What should I ask my doctor?", "Who is on my care team?"],
+    };
+  }
+
+  if (/care team|who is my|who's my|cardiolog|pharmacist|dietitian|specialist|phone number|contact/.test(q) && !/emergency/.test(q)) {
+    return {
+      text: record.careTeam.length
+        ? `Your care team:\n${record.careTeam.map((c) => `• ${c.name}${c.specialty ? ` — ${c.specialty}` : ""}${c.organization ? `, ${c.organization}` : ""}${c.phone ? ` · ${c.phone}` : ""}`).join("\n")}`
+        : "You haven't added anyone to your care team yet.",
+      sources: ["Care team"],
+      suggestions: ["When is my next appointment?"],
+    };
+  }
+
+  if (/emergency (card|info|contact)|blood type/.test(q)) {
+    const e = record.emergency;
+    return {
+      text: e
+        ? `Your emergency card:\n• Blood type: ${e.bloodType ?? "not recorded"}\n• Critical allergies: ${e.criticalAllergies.join(", ") || "none listed"}\n• Conditions: ${e.criticalConditions.join(", ") || "none listed"}\n• Contacts: ${e.contacts.map((c) => `${c.name} (${c.relationship}) ${c.phone}`).join("; ") || "none"}`
+        : "You haven't filled in your emergency card yet. You can do it from Passport → Emergency card.",
+      sources: ["Emergency information"],
+    };
+  }
+
+  if (/differ|disagree|mismatch|reconcil|conflict between|records (say|match)/.test(q)) {
+    const open = openIssues(issues);
+    return {
+      text: open.length
+        ? `${open.length} difference${open.length === 1 ? "" : "s"} between your records still to review:\n${open.map((i) => `• ${i.title} — ${i.explanation}`).join("\n")}\n\nYou can resolve them in Passport → Review.`
+        : issues.length
+          ? "You've reviewed every difference between your records."
+          : "Your connected records agree with your own list — no differences found.",
+      sources: ["Differences between records"],
+      suggestions: ["What should I ask my doctor?"],
+    };
+  }
+
+  if (/limit|restrict|dietitian|diet plan|nutrition goal|how much (salt|sodium|sugar)/.test(q) && record.nutritionProfile) {
+    const n = record.nutritionProfile;
+    const note = [...n.dietitianNotes].sort((a, b) => b.date.localeCompare(a.date))[0];
+    return {
+      text:
+        `Your nutrition profile (${n.dietaryPattern}):\n` +
+        (n.restrictions.length ? `Limits: ${n.restrictions.join("; ")}\n` : "") +
+        (n.goals.length ? `Goals: ${n.goals.join("; ")}` : "") +
+        (note ? `\n\nLatest note from ${note.author} (${formatDate(note.date)}): ${note.note}` : ""),
+      sources: ["Nutrition profile"],
+      suggestions: ["What have I been eating?"],
+    };
+  }
+
+  // A specific lab's history ("how is my eGFR trending?")
+  const lab = LAB_WORDS.find(([w]) => w.test(q));
+  if (lab && /trend|history|over time|changing|chang|going|falling|rising/.test(q)) {
+    const latest = latestLabs(patient.labs).find((l) => lab[1].test(l.name));
+    if (latest) {
+      const hist = labHistory(patient.labs, latest.loincCode ?? latest.name);
+      return {
+        text: `${latest.name} over time:\n${hist.map((l) => `• ${formatDate(l.date)}: ${l.value}${l.unit ? ` ${l.unit}` : ""} (${l.status})`).join("\n")}`,
+        sources: ["Lab results"],
+        suggestions: ["What should I ask my doctor?"],
+      };
+    }
+  }
+
+  return null;
+}

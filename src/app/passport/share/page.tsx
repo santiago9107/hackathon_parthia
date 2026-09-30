@@ -5,13 +5,15 @@ import { Wordmark } from "@/components/Wordmark";
 import { CATEGORY_LABELS, LEVEL_STYLES } from "@/components/Badges";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
 import { latestLabs } from "@/lib/passport/selectors";
+import { questionsForClinician } from "@/lib/reconcile";
 
 function fmt(d: string) {
   return new Date(d.length === 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
 export default function SharePage() {
-  const { record, flags, indicators, now } = usePatient();
+  const { record, flags, indicators, now, issues } = usePatient();
+  const recordQuestions = questionsForClinician(issues);
   const { patient } = record;
   const moods14 = withinLastDays(record.moods, 14, now);
   const moods14Avg = mean(moods14.map((m) => m.score));
@@ -128,6 +130,18 @@ export default function SharePage() {
             </ol>
           )}
         </section>
+
+        {recordQuestions.length > 0 && (
+          <section className="mt-6">
+            <h2 className="font-serif text-lg font-semibold text-navy">Questions about my records ({recordQuestions.length})</h2>
+            <p className="text-xs text-ink-muted">Differences the patient found between their own list and connected records, and wants to confirm with you.</p>
+            <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm text-ink">
+              {recordQuestions.map((q) => (
+                <li key={q}>{q}</li>
+              ))}
+            </ol>
+          </section>
+        )}
 
         <section className="mt-6 grid gap-6 sm:grid-cols-2">
           <div>

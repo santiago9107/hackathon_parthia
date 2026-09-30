@@ -4,6 +4,7 @@ import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNod
 import { getRecord, listPatients, referenceNow } from "../mockData";
 import { passportStore, type StoreStatus } from "../passport/store";
 import type { LocalPassport } from "../passport/collections";
+import { findIssues, type ReconIssue } from "../reconcile";
 import { evaluatePatient } from "../safetyEngine";
 import { computeIndicators } from "../status/indicators";
 import type { DomainIndicator, Patient, PatientId, PatientRecord, RiskFlag } from "../types";
@@ -27,6 +28,8 @@ interface PatientContextValue {
   passportStatus: StoreStatus;
   /** What this device stores for the current patient (entries, pending imports, activity log). */
   local: LocalPassport | undefined;
+  /** Differences between sources (resolved and open). */
+  issues: ReconIssue[];
 }
 
 /* ---- Selected-patient store (persisted in localStorage) ------------------ */
@@ -75,9 +78,10 @@ export function PatientProvider({ children }: { children: ReactNode }) {
     const now = referenceNow();
     const record = getRecord(patientId)!;
     const flags = evaluatePatient(record, { now });
-    const indicators = computeIndicators(record, flags, now);
     const local = passportStore.get(patientId);
-    return { patients, patientId, setPatientId: setSelected, record, flags, indicators, now, passportStatus, local };
+    const issues = findIssues(record, local);
+    const indicators = computeIndicators(record, flags, now, issues);
+    return { patients, patientId, setPatientId: setSelected, record, flags, indicators, now, passportStatus, local, issues };
   }, [patients, patientId, passportVersion, passportStatus]);
 
   return <PatientContext.Provider value={value}>{children}</PatientContext.Provider>;

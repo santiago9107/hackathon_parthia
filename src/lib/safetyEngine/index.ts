@@ -21,6 +21,7 @@ import { burdenRules } from "./rules/burden";
 import { drugDrugRules } from "./rules/drugDrug";
 import { drugNutrientRules } from "./rules/drugNutrient";
 import { moodRules } from "./rules/moodAdherence";
+import { passportRules } from "./rules/passport";
 import type { RuleDefinition } from "./rules/types";
 
 export type { RuleDefinition } from "./rules/types";
@@ -31,6 +32,7 @@ export const RULES: readonly RuleDefinition[] = [
   ...burdenRules,
   ...moodRules,
   ...drugDrugRules,
+  ...passportRules,
 ];
 
 const SEVERITY_RANK: Record<RiskSeverity, number> = { high: 0, moderate: 1, low: 2 };
@@ -60,6 +62,9 @@ export function flagsByCategory(flags: RiskFlag[]): Record<RiskFlag["category"],
     "drug-nutrient": [],
     "drug-mood": [],
     "anticholinergic-burden": [],
+    "drug-vitals": [],
+    "drug-allergy": [],
+    "drug-kidney": [],
   };
   for (const f of flags) out[f.category].push(f);
   return out;

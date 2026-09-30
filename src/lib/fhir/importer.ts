@@ -39,7 +39,17 @@ export async function runFhirImport(source: FhirSource, patientId: PatientId, re
   const { mapped, plan, identityMismatch } = prepareFhirImport(bundle, record, label, importedAt);
   if (identityMismatch) throw new Error(identityMismatch);
   await importForReview(patientId, plan.batch, "ehr", `${label} — ${source.organization(patientId)}`, store);
-  await saveConnection(patientId, { id: source.id, kind: "ehr", name: label, status: "connected", simulated: source.simulated, connectedAt: importedAt, lastImportAt: importedAt }, store);
+  await saveConnection(
+    patientId,
+    {
+      id: source.id, kind: "ehr", name: label, status: "connected", simulated: source.simulated, connectedAt: importedAt, lastImportAt: importedAt,
+      snapshot: {
+        medications: mapped.medications.map((m) => ({ name: m.name, genericName: m.genericName, dose: m.dose, frequency: m.frequency, status: m.status ?? "active" })),
+        allergies: mapped.allergies.map((a) => ({ substance: a.substance })),
+      },
+    },
+    store,
+  );
   const skipped = Object.values(plan.duplicates).reduce((s, n) => s + (n ?? 0), 0);
   if (skipped) await recordActivity(patientId, "import", `${skipped} item${skipped === 1 ? " was" : "s were"} already in your Passport and skipped`, "ehr", store);
   return { plan, warnings: mapped.warnings };

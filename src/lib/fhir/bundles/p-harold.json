@@ -729,7 +729,7 @@
       "resource": {
         "resourceType": "MedicationRequest",
         "id": "h-medrx-16",
-        "status": "active",
+        "status": "stopped",
         "intent": "order",
         "medicationCodeableConcept": {
           "coding": [

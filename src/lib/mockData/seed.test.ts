@@ -73,7 +73,7 @@ describe("seed Passport", () => {
   });
 });
 
-describe("existing safety flags are unchanged by the Passport seed", () => {
+describe("safety flags on the seed Passports", () => {
   const flagsFor = (id: string) => evaluatePatient(getSeedRecord(id)!, { now: referenceNow() }).map((f) => `${f.severity}:${f.ruleId}`);
 
   it("Harold: 4 flags incl. high vitamin-K swing (INR above target) and warfarin + aspirin", () => {
@@ -85,11 +85,13 @@ describe("existing safety flags are unchanged by the Passport seed", () => {
     expect(f).toContain("low:drug-drug/known-pairs/multiple-bp-lowering+dizziness");
   });
 
-  it("Margaret: 6 flags", () => {
+  it("Margaret: the original 6 flags plus 2 from her fuller Passport (PHQ-9 rise, falling eGFR)", () => {
     const f = flagsFor("p-margaret");
-    expect(f).toHaveLength(6);
+    expect(f).toHaveLength(8);
     expect(f).toContain("high:burden/anticholinergic-score");
     expect(f).toContain("high:drug-mood/decline-after-change");
+    expect(f).toContain("high:drug-mood/phq9-rise-after-change/e-m1");
+    expect(f).toContain("moderate:drug-kidney/declining-egfr");
   });
 
   it("Rosa: 1 flag (metformin + alcohol)", () => {

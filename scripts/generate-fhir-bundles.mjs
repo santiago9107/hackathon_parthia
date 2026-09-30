@@ -9,7 +9,8 @@
  * gaps / conflicts for the reconciliation demo:
  *
  *   Harold   – Aspirin 81 mg MISSING (cardiology advised it over the counter);
- *              Metoprolol succinate DOSE DIFFERS (Epic 25 mg vs Passport 50 mg)
+ *              Metoprolol succinate DOSE DIFFERS (Epic 25 mg vs Passport 50 mg);
+ *              Omeprazole marked STOPPED in Epic while still on the Passport
  *   Margaret – Diphenhydramine MISSING (over the counter);
  *              Furosemide DOSE DIFFERS (Epic 20 mg vs 40 mg);
  *              NEW Potassium chloride prescription
@@ -175,7 +176,8 @@ function harold() {
   b.med({ rxcui: "866427", display: "metoprolol succinate 25 MG Extended Release Oral Tablet", dose: 25, unit: "mg", frequency: 1, text: "Take 1 tablet by mouth daily", authoredOn: "2023-11-10", requester: cho, reason: "Atrial fibrillation — rate control" });
   b.med({ rxcui: "314077", display: "lisinopril 20 MG Oral Tablet", dose: 20, unit: "mg", frequency: 1, text: "Take 1 tablet by mouth daily", authoredOn: "2015-04-01", requester: nwosu, reason: "Hypertension" });
   b.med({ rxcui: "861004", display: "metformin hydrochloride 1000 MG Oral Tablet", dose: 1000, unit: "mg", frequency: 2, text: "Take 1 tablet by mouth twice daily with meals", authoredOn: "2019-07-01", requester: nwosu, reason: "Type 2 diabetes" });
-  b.med({ rxcui: "198053", display: "omeprazole 20 MG Delayed Release Oral Capsule", dose: 20, unit: "mg", frequency: 1, text: "Take 1 capsule by mouth daily before breakfast", authoredOn: "2022-02-14", requester: nwosu, reason: "GERD" });
+  // POSSIBLY STOPPED: Epic marks omeprazole as stopped (reflux settled), but Harold still takes it.
+  b.med({ rxcui: "198053", display: "omeprazole 20 MG Delayed Release Oral Capsule", dose: 20, unit: "mg", frequency: 1, text: "Take 1 capsule by mouth daily before breakfast", authoredOn: "2022-02-14", requester: nwosu, reason: "GERD", status: "stopped" });
   // GAP: aspirin 81 mg is not in Epic (recommended over the counter at the cardiology visit)
 
   b.allergy({ code: "5640", display: "Ibuprofen", category: "medication", criticality: "high", reaction: "Gastrointestinal hemorrhage", severity: "severe", recorded: "2018-05-03" });

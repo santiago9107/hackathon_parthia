@@ -14,7 +14,7 @@ interface Message {
 const STARTERS = ["What medications am I taking?", "Why was something flagged?", "How has my mood been?", "What should I ask my doctor?"];
 
 export function AssistantPanel({ embedded = false }: { embedded?: boolean }) {
-  const { record, flags, now } = usePatient();
+  const { record, flags, now, issues } = usePatient();
   // The parent remounts this panel (key={patientId}) when the demo patient
   // changes, so the opening message can be a plain lazy initialiser.
   const [messages, setMessages] = useState<Message[]>(() => [
@@ -42,7 +42,7 @@ export function AssistantPanel({ embedded = false }: { embedded?: boolean }) {
     setMessages((m) => [...m, { id: idRef.current++, role: "user", text: q }]);
     // Small artificial delay so the exchange reads naturally in a demo.
     await new Promise((r) => setTimeout(r, 350));
-    const reply = await assistant.respond(q, { record, flags, now });
+    const reply = await assistant.respond(q, { record, flags, now, issues });
     setMessages((m) => [...m, { id: idRef.current++, role: "assistant", text: reply.text, reply }]);
     setBusy(false);
   }

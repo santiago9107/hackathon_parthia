@@ -35,8 +35,8 @@ export function LocalOnlyNotice({ className = "" }: { className?: string }) {
 }
 
 export function PassportHeader() {
-  const { record, local } = usePatient();
-  const pending = pendingEntries(local).length;
+  const { record, local, issues } = usePatient();
+  const pending = pendingEntries(local).length + issues.filter((i) => !i.resolution).length;
   return (
     <div className="print-hidden mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>

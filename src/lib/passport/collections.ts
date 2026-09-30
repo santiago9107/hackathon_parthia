@@ -110,6 +110,25 @@ export interface SourceConnection {
   simulated: boolean;
   connectedAt: ISODateTime;
   lastImportAt?: ISODateTime;
+  /**
+   * What this source listed at the last import (EHRs only) — kept so the
+   * Passport can spot medicines or allergies MISSING from the source, even
+   * though exact duplicates were not imported again.
+   */
+  snapshot?: {
+    medications: { name: string; genericName: string; dose: string; frequency: string; status: string }[];
+    allergies: { substance: string }[];
+  };
+}
+
+/** How the patient resolved a reconciliation issue (see lib/reconcile). */
+export interface Resolution {
+  issueId: string;
+  choice: string;
+  summary: string;
+  at: ISODateTime;
+  /** The patient wants to raise this with a clinician. */
+  askClinician?: boolean;
 }
 
 /**
@@ -122,6 +141,8 @@ export interface LocalPassport {
   entries: LocalEntry[];
   activity: ActivityEntry[];
   connections: SourceConnection[];
+  /** Reconciliation decisions (optional so older saved passports still load). */
+  resolutions?: Resolution[];
 }
 
 export function emptyPassport(patientId: PatientId): LocalPassport {

@@ -471,7 +471,10 @@ export type RiskCategory =
   | "drug-drug"
   | "drug-nutrient"
   | "drug-mood"
-  | "anticholinergic-burden";
+  | "anticholinergic-burden"
+  | "drug-vitals"
+  | "drug-allergy"
+  | "drug-kidney";
 
 export type RiskSeverity = "low" | "moderate" | "high";
 

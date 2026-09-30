@@ -1,6 +1,7 @@
 import type { ActivityEntry, PatientId, SourceKind } from "../types";
 import { COLLECTION_LABELS, type CollectionName, type CollectionTypes, type SourceConnection } from "./collections";
-import { appendActivity, describeCounts, removeItem, setStatus, upsertConnection, upsertItems } from "./ops";
+import { addResolution, appendActivity, describeCounts, newId, removeItem, setStatus, upsertConnection, upsertItems } from "./ops";
+import type { ReconIssue, ResolutionOption } from "../reconcile";
 import { passportStore, type PassportStore } from "./store";
 
 /**
@@ -126,4 +127,41 @@ export function describeItem(item: CollectionTypes[CollectionName]): string {
   if ("instrument" in i) return `${i.instrument} score ${i.score}`;
   if ("systolic" in i && i.systolic) return `BP ${i.systolic}/${i.diastolic}`;
   return first("name", "title", "substance", "vaccine", "reason", "symptom", "description", "dietaryPattern") ?? "item";
+}
+
+/**
+ * Apply the patient's choice for a reconciliation issue: keep one entry
+ * (removing or discarding the others), acknowledge, mark a medicine stopped,
+ * or flag it to ask a clinician. One change, one activity-log entry.
+ */
+export async function resolveReconIssue(
+  patientId: PatientId,
+  issue: ReconIssue,
+  option: ResolutionOption,
+  stoppedOn: string,
+  store: PassportStore = passportStore,
+): Promise<void> {
+  await store.update(patientId, (p, at) => {
+    let next = p;
+    const eff = option.effect;
+    if (eff.type === "keep-only") {
+      for (const e of issue.medications) {
+        if (e.item.id === eff.keepId) {
+          if (e.state === "pending") next = setStatus(next, "medications", e.item.id, "confirmed", at);
+        } else if (e.state === "pending") next = setStatus(next, "medications", e.item.id, "discarded", at);
+        else next = removeItem(next, "medications", e.item, at);
+      }
+    } else if (eff.type === "acknowledge") {
+      for (const e of issue.medications) if (e.state === "pending") next = setStatus(next, "medications", e.item.id, "confirmed", at);
+    } else if (eff.type === "mark-stopped") {
+      const med = issue.medications.find((e) => e.item.id === eff.medicationId)?.item;
+      if (med) {
+        const stopped = { ...med, status: "stopped" as const, stoppedOn, source: { ...med.source, kind: "patient-entered" as const, label: `Updated by you (was: ${med.source.label})`, importedAt: at, verified: true } };
+        next = upsertItems(next, "medications", [stopped], "confirmed", at);
+        next = upsertItems(next, "medicationHistory", [{ id: newId("e-you"), patientId, date: stoppedOn, medicationName: med.name, type: "stopped", detail: `${med.name} stopped (recorded while reconciling your records).`, source: stopped.source }], "confirmed", at);
+      }
+    }
+    next = addResolution(next, { issueId: issue.id, choice: option.id, summary: `${issue.title} — ${option.label}`, at, askClinician: eff.type === "ask-clinician" });
+    return appendActivity(next, "edit", `Reconciled: ${issue.title} — ${option.label}`, at, issue.medications[0]?.item.source.kind ?? issue.allergies[0]?.item.source.kind);
+  });
 }

@@ -6,6 +6,7 @@ import {
   type LocalEntry,
   type LocalPassport,
   type ReviewStatus,
+  type Resolution,
   type SourceConnection,
 } from "./collections";
 
@@ -96,4 +97,10 @@ export function describeCounts(counts: Partial<Record<CollectionName, number>>):
     .filter(([, n]) => (n ?? 0) > 0)
     .map(([c, n]) => `${n} ${n === 1 ? COLLECTION_LABELS[c as CollectionName].one : COLLECTION_LABELS[c as CollectionName].many}`);
   return parts.length ? parts.join(", ") : "nothing";
+}
+
+/** Record (or replace) how the patient resolved a reconciliation issue. */
+export function addResolution(p: LocalPassport, r: Resolution): LocalPassport {
+  const others = (p.resolutions ?? []).filter((x) => x.issueId !== r.issueId);
+  return { ...p, resolutions: [...others, r] };
 }

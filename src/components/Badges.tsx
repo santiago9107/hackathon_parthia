@@ -17,6 +17,9 @@ export const CATEGORY_LABELS: Record<RiskCategory, string> = {
   "drug-nutrient": "Medicine + food",
   "drug-mood": "Medicine + mood",
   "anticholinergic-burden": "Overall burden",
+  "drug-vitals": "Medicine + readings",
+  "drug-allergy": "Medicine + allergy",
+  "drug-kidney": "Medicine + kidneys",
 };
 
 export function SeverityBadge({ severity }: { severity: RiskSeverity }) {

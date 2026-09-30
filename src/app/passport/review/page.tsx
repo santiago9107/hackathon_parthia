@@ -9,6 +9,7 @@ import { usePatient } from "@/lib/context/PatientContext";
 import { confirmEntry, describeItem, discardEntry } from "@/lib/passport/actions";
 import { COLLECTION_LABELS, type LocalEntry } from "@/lib/passport/collections";
 import { pendingEntries } from "@/lib/passport/ops";
+import { ReconciliationSection } from "@/components/passport/Reconciliation";
 
 /** Forms that can correct a pending item before it is confirmed. */
 const EDIT_FORMS: Partial<Record<LocalEntry["collection"], string>> = {
@@ -53,6 +54,8 @@ export default function ReviewPage() {
         </p>
         <LocalOnlyNotice className="mt-2" />
       </div>
+
+      <ReconciliationSection />
 
       {pending.length === 0 && (
         <EmptyState action={<Link href="/passport/add/" className="text-sm font-semibold text-brand-700 hover:text-brand-900">Add to my Passport →</Link>}>

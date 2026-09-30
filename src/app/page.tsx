@@ -11,6 +11,7 @@ import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
 import { SourceBadge } from "@/components/passport/SourceBadge";
 import { fmtDateTime } from "@/components/passport/PassportChrome";
 import { pendingEntries } from "@/lib/passport/ops";
+import { openIssues } from "@/lib/reconcile";
 
 function greeting(now: Date) {
   const h = now.getHours();
@@ -18,7 +19,8 @@ function greeting(now: Date) {
 }
 
 export default function DashboardPage() {
-  const { record, flags, indicators, now, local } = usePatient();
+  const { record, flags, indicators, now, local, issues } = usePatient();
+  const differences = openIssues(issues).length;
   const { ready, isInstalled } = useInstall();
   const { patient } = record;
   const first = patient.name.split(" ")[0];
@@ -97,6 +99,11 @@ export default function DashboardPage() {
             {pending > 0 && (
               <Link href="/passport/review/" className="mt-3 flex items-center justify-between rounded-lg bg-gold-50 px-3 py-2 text-sm font-semibold text-[#5c430d] ring-1 ring-gold-200 hover:bg-gold-100">
                 {pending} item{pending === 1 ? "" : "s"} to review <span aria-hidden>→</span>
+              </Link>
+            )}
+            {differences > 0 && (
+              <Link href="/passport/review/" className="mt-2 flex items-center justify-between rounded-lg bg-gold-50 px-3 py-2 text-sm font-semibold text-[#5c430d] ring-1 ring-gold-200 hover:bg-gold-100">
+                {differences} difference{differences === 1 ? "" : "s"} between your records <span aria-hidden>→</span>
               </Link>
             )}
             {nextAppt && (

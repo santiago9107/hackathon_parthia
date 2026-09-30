@@ -157,3 +157,60 @@ export const DRUG_DRUG_PAIRS: readonly DrugDrugPair[] = [
     aggravatingSymptoms: ["dizziness"],
   },
 ];
+
+/* ---- Patient Passport rules (vitals, allergies, screenings, kidneys) ------ */
+
+/** Classes that lower blood pressure (as a main or side effect). */
+export const BP_LOWERING_CLASSES: ReadonlySet<MedicationClass> = new Set<MedicationClass>([
+  "ace-inhibitor",
+  "arb",
+  "diuretic",
+  "potassium-sparing-diuretic",
+  "beta-blocker",
+  "calcium-channel-blocker",
+  "nitrate",
+]);
+
+/** A reading counts as "low" below either of these (mmHg). */
+export const LOW_BP_SYSTOLIC = 100;
+export const LOW_BP_DIASTOLIC = 60;
+/** How many low readings in the lookback window before we raise it. */
+export const LOW_BP_MIN_READINGS = 3;
+export const LOW_BP_LOOKBACK_DAYS = 14;
+/** Any reading below this systolic makes the flag high severity. */
+export const VERY_LOW_BP_SYSTOLIC = 90;
+
+/** Resting heart rate below this (beats/min) counts as low. */
+export const LOW_RESTING_HR = 50;
+export const LOW_RESTING_HR_MIN_DAYS = 3;
+export const LOW_RESTING_HR_LOOKBACK_DAYS = 14;
+/** Below this, the flag is high severity. */
+export const VERY_LOW_RESTING_HR = 45;
+
+/** PHQ-9: a rise of this many points after a medication change is worth raising. */
+export const PHQ9_MEANINGFUL_RISE = 5;
+/** …or crossing into this band (Moderate) or higher. */
+export const PHQ9_MODERATE = 10;
+/** Latest score at or above this (Moderately severe) → high severity. */
+export const PHQ9_HIGH = 15;
+export const PHQ9_LOOKBACK_DAYS = 90;
+
+/**
+ * Medicines whose dose is usually reviewed when kidney function falls.
+ * Illustrative subset (metformin labeling: reassess below eGFR 45, avoid
+ * below 30; sulfonylureas accumulate; NSAIDs can worsen kidney function).
+ */
+export const RENAL_REVIEW: readonly { match: MedMatcher; note: string }[] = [
+  { match: { kind: "generic", names: ["metformin"] }, note: "metformin is cleared by the kidneys; its dose is usually reviewed as eGFR falls, especially below 45" },
+  { match: { kind: "generic", names: ["glipizide", "glyburide", "glimepiride"] }, note: "sulfonylureas can build up and cause low blood sugar when kidney function falls" },
+  { match: { kind: "class", classes: ["nsaid"] }, note: "anti-inflammatory painkillers can reduce kidney function further" },
+  { match: { kind: "generic", names: ["spironolactone"] }, note: "spironolactone can raise potassium more when kidney function falls" },
+];
+/** eGFR (mL/min) below which kidney function is reduced. */
+export const EGFR_REDUCED = 60;
+/** eGFR at or below which the flag is high severity. */
+export const EGFR_HIGH_CONCERN = 45;
+/** A fall of at least this many points, or this fraction, across results within a year. */
+export const EGFR_DECLINE_POINTS = 5;
+export const EGFR_DECLINE_FRACTION = 0.1;
+export const EGFR_LOOKBACK_DAYS = 365;
