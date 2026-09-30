@@ -17,7 +17,7 @@ This is a **phase-1, demo-quality prototype**, used for:
 - pitching to potential partners (health systems, payers, pharmacies, investors)
 - an exhibit in an immigration petition (evidence of original technical work)
 
-It is **not** a production or clinical system. It uses **synthetic data only**. There is no real EHR/FHIR integration, no real authentication, no trained ML model, no database, and no real language model. Each of those has a clearly marked seam in the code where it plugs in later.
+It is **not** a production or clinical system. It uses **synthetic data only**. There is no real EHR connection (the Epic sign-in is simulated), no real authentication, no trained ML model, no server database, and no real language model. Each of those has a clearly marked seam in the code where it plugs in later. Since phases A–H (2026-09/10) the app is built around the **Patient Passport** — see §18.
 
 ---
 
@@ -25,13 +25,13 @@ It is **not** a production or clinical system. It uses **synthetic data only**. 
 
 | Item | State |
 | --- | --- |
-| Code | Complete for phase 1. Lint-clean, type-clean, builds as a static export. |
+| Code | Phase 1 plus Patient Passport phases A–H (local commits, **not yet pushed or deployed**). Lint-clean, type-clean, 185 unit tests, builds as a static export. |
 | Local copy | `/Users/santiagoenriquez/parthia-health` (macOS). |
 | GitHub | `https://github.com/santiago9107/parthia-health`, **private**, branch `main`. |
 | Hosting | Azure Static Web Apps, **Standard tier**, resource `parthia-health` in resource group `rg-parthia-health`, East US 2. |
 | Live URLs | `https://app.parthiahealth.com` (custom domain, Azure-managed TLS cert) and `https://gentle-meadow-0edc5790f.6.azurestaticapps.net`. |
 | Access control | **Site-wide password protection** (Azure SWA basic auth) on all environments incl. PR previews. Password is held by the owner only; it is not in the repo or in any notes. |
-| CI/CD | GitHub Actions on every push to `main`: install → lint → typecheck → build → deploy `out/` with `Azure/static-web-apps-deploy@v1`. PR previews get their own URL and are closed on merge. |
+| CI/CD | GitHub Actions on every push to `main`: install → lint → typecheck → unit tests (vitest) → build → deploy `out/` with `Azure/static-web-apps-deploy@v1`. PR previews get their own URL and are closed on merge. |
 | Billing | Subscription "Azure subscription 1" is the Microsoft for Startups sponsorship (quota `Sponsored_2016-01-01`). Balance $10,000, expires 2028-04-21. Standard tier ≈ $9/month from that credit. |
 | DNS | `parthiahealth.com` is on Cloudflare. `app` is a CNAME → `gentle-meadow-0edc5790f.6.azurestaticapps.net`, **DNS-only (grey cloud)**. |
 | Secrets | GitHub repo secret `AZURE_STATIC_WEB_APPS_API_TOKEN` (SWA deployment token). Optional `NEXT_PUBLIC_VAPID_PUBLIC_KEY` not set. |
@@ -164,13 +164,13 @@ Nutrition tags are a closed set on purpose: rules match on tags, and a real food
 - Conditions: atrial fibrillation, hypertension, hyperlipidemia, type 2 diabetes.
 - 7 meds: warfarin 5 mg, atorvastatin 40 mg, metoprolol succinate 50 mg, lisinopril 20 mg, metformin 1000 mg, omeprazole 20 mg, **aspirin 81 mg (started 2026-08-20)**.
 - Story: nutrition alternates "greens weeks" (kale/spinach/broccoli, tag `high-vitamin-k`) and "no-greens weeks"; grapefruit at breakfast every 7th day; bruising entries after aspirin started; occasional dizziness; one nosebleed. Mood steady 3–4. INR 3.4 (above 2–3 target).
-- Expected flags: **high** warfarin + vitamin-K variability; **high** warfarin + aspirin (with bruising evidence); **moderate** atorvastatin + grapefruit; **low** multiple BP meds + dizziness.
+- Expected flags: **high** warfarin + vitamin-K variability; **high** warfarin + aspirin (with bruising evidence); **moderate** atorvastatin + grapefruit; **low** multiple BP meds + dizziness. Passport: severe NSAID allergy (ibuprofen). Scanning the sample naproxen prescription and confirming it adds a **high** warfarin + NSAID flag and an allergy conflict.
 
 **Margaret Lindqvist, 72, female** — `p-margaret`
 - Conditions: HFpEF, type 2 diabetes, hypertension, major depressive disorder, insomnia, overactive bladder.
 - 9 meds: metformin, glipizide, amlodipine, furosemide, carvedilol, **sertraline 100 mg (dose raised from 50 on 2026-08-22)**, zolpidem, oxybutynin, diphenhydramine (OTC, for sleep).
 - Story: mood ≈3.9 before the sertraline change, then a steady slide to ≈2; dry mouth, "forgetful/foggy", fatigue, dizziness entries. HbA1c 7.8, eGFR 52, potassium 3.4, NT-proBNP 410, sodium 134.
-- Expected flags: **high** anticholinergic burden score 8 (oxybutynin 3 + diphenhydramine 3 + carvedilol 1 + furosemide 1, with matching symptoms); **high** mood decline after sertraline change; **moderate** 2 psychotropics; **moderate** SSRI + sedatives; **low** sulfonylurea + beta-blocker; **low** multiple BP meds + dizziness.
+- Expected flags (8): **high** anticholinergic burden score 8 (oxybutynin 3 + diphenhydramine 3 + carvedilol 1 + furosemide 1, with matching symptoms); **high** mood decline after sertraline change; **high** PHQ-9 rise after the sertraline change (7 → 16); **moderate** declining eGFR with renal-review medicines (metformin, glipizide); **moderate** 2 psychotropics; **moderate** SSRI + sedatives; **low** sulfonylurea + beta-blocker; **low** multiple BP meds + dizziness.
 
 **Rosa Delgado, 65, female** — `p-rosa`
 - Conditions: type 2 diabetes (new, 2026-07-30), hypertension, hyperlipidemia, hypothyroidism.
@@ -179,7 +179,7 @@ Nutrition tags are a closed set on purpose: rules match on tags, and a real food
 - Expected flags: **low** metformin + alcohol. Nutrition indicator "worth watching" for logging gaps. Rosuvastatin is deliberately *not* grapefruit-sensitive in the knowledge table.
 
 ### Access functions (`mockData/index.ts`)
-`listPatients()`, `getPatient(id)`, `getRecord(id) → PatientRecord`, `referenceNow()`. UI code must import only from here or from `PatientContext`, never from the individual mock modules, so the swap to a FHIR client is a one-file change.
+`listPatients()`, `getPatient(id)`, `getSeedRecord(id)`, `getRecord(id) → PatientRecord` (seed merged with the patient's confirmed local Passport entries), `referenceNow()`, `demoTimestamp()`. UI code must import only from here or from `PatientContext`, never from the individual mock modules.
 
 ---
 
@@ -282,7 +282,7 @@ export const assistant: AssistantProvider = scriptedProvider;
 ### Manifest (`public/manifest.json`)
 name "Parthia Health", short_name "Parthia", `display: standalone`, `start_url: /`, `theme_color: #0E5C56`, `background_color: #F7F4EE`, icons 192/512 (`any`) + maskable 192/512, shortcuts to `/medications/` and `/trends/`. Linked via `metadata.manifest` in `layout.tsx`; `viewport.themeColor` and `appleWebApp` metadata are also set.
 
-### Service worker (`public/sw.js`, cache version `parthia-v2`)
+### Service worker (`public/sw.js`, cache version `parthia-v8`)
 - **install:** precache app shell — `/`, `/medications/`, `/trends/`, `/share/`, `/assistant/`, `/install/`, `/about/`, manifest, icons (`Promise.allSettled` so one miss doesn't abort).
 - **fetch:** navigations → network-first, fallback to cache (tries trailing-slash variant, then `/`); `/_next/static/*`, `/icons/*`, and png/svg/ico/woff2/css/js → cache-first with background fill.
 - **push:** shows a notification from the JSON payload `{title, body, url}`.
@@ -327,7 +327,8 @@ cd ~/parthia-health
 npm install
 npm run dev          # http://localhost:3000
 npm run lint         # ESLint (must be clean; CI runs it)
-npx tsc --noEmit     # typecheck (CI runs it)
+npm run typecheck    # tsc --noEmit (CI runs it)
+npm test             # vitest unit tests (CI runs them)
 npm run build        # static export → out/
 npx serve out        # serve the export locally (SW needs http://localhost or https)
 node scripts/generate-icons.mjs   # regenerate PWA icons if the mark changes
@@ -348,7 +349,10 @@ for (const p of listPatients()) console.log(p.name, evaluatePatient(getRecord(p.
 - Static export forbids dynamic routes without `generateStaticParams`, route handlers, server actions, redirects/headers in `next.config`, and default image optimisation.
 - `trailingSlash: true` means internal links end with `/` (`/medications/`). The SW precache list and `AppShell` nav use those forms.
 - When adding a route: add it to `SHELL_URLS` in `sw.js` and bump `VERSION` so installed clients refresh.
-- Commit messages end with `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>` when Claude authored the change.
+- Commit messages end with a `Co-Authored-By: Claude …` line when Claude authored the change.
+- `predev`/`prebuild` copy the Tesseract OCR assets into `public/ocr/` (git-ignored) — run through npm, not `next` directly.
+- Rules run on confirmed data only; never read pending entries in analysis code. Thresholds belong in `safetyEngine/knowledge.ts`.
+- Web Workers: `new Worker(new URL("./worker.ts", import.meta.url), { type: "module" })` (Turbopack bundles it).
 
 ---
 
@@ -401,7 +405,32 @@ No real authentication, no real FHIR/EHR calls, no trained ML model, no database
 ## 17. Key facts to keep straight
 
 - Demo "today" is **2026-09-11** (`REFERENCE_DATE`), not the real clock.
-- Flags: Harold 4, Margaret 6, Rosa 1 (as of this build).
+- Flags on seed data: Harold 4, Margaret 8, Rosa 1 (as of phase H).
 - The password protects the site; it is **not** stored in the repo, in notes, or in memory. Owner has it.
 - Two working URLs: `https://app.parthiahealth.com` (share this) and the `azurestaticapps.net` default.
-- `main` on GitHub == local `main` == what is deployed (commit `e56e1c0`).
+- Deployed = commit `e56e1c0`. Local `main` is ahead with the Passport phases A–H, awaiting review before push/deploy.
+
+---
+
+## 18. The Patient Passport (phases A–H)
+
+One patient-held record gathering every source, with provenance on every item. **Stored only on the device** (IndexedDB), never sent anywhere.
+
+### Architecture
+- **Seed + local overlay.** `mockData` provides the synthetic seed `PatientRecord`. `lib/passport/store.ts` (`PassportStore`, IndexedDB backend, memory backend for tests/prerender) holds a `LocalPassport` per patient: `entries` (each item with `status: pending | confirmed | discarded`, tombstones for removals), `activity`, `connections` (with a snapshot of each connected record for reconciliation), `resolutions`. `merge.ts#mergeRecord` applies **confirmed** entries only; `getRecord()` and `PatientContext` expose the merged record, so pending imports are never analysed.
+- **Provenance.** Every item extends `Sourced` (`DataSource`: kind seed | patient-entered | document-scan | ehr | wearable | device, label, importedAt, verified, confidence, originalText, refId). `SourceBadge` shows it everywhere; simulated sources say "Simulated", seed data says "Sample data".
+- **Sources.** Typed entries and questionnaires (`/log/*`, PHQ-9 item 9 shows 988/911 support immediately); simulated Epic SMART-on-FHIR (`lib/fhir`, synthetic bundles, real mapper: RxNorm, ICD-10/SNOMED, LOINC, CVX); on-device OCR (`lib/ocr`, Tesseract.js from `/ocr/`); Apple Health export.zip (`lib/appleHealth`, streaming zip + worker); Web Bluetooth BP cuff (`lib/devices/bpMonitor.ts`) plus a labelled simulated sync. All imports go to **Review** first (`/passport/review/`).
+- **Reconciliation** (`lib/reconcile`): duplicates, dose/schedule conflicts, missing from a connected record, possibly stopped, allergy missing from a record. Resolved on Review (`resolveReconIssue`: keep one / acknowledge / mark stopped / ask clinician). Open items show on the dashboard and in the Review count; unresolved and "ask" items become questions in the share summary.
+- **Rules added** (`rules/passport.ts`, thresholds in `knowledge.ts`): allergy ↔ medication conflict, low home BP on 2+ BP-lowering meds, low resting HR on a beta-blocker, PHQ-9 rise after a medication change, declining eGFR with renal-review medicines. Listed automatically on the Medications and About pages via `RULES`.
+- **Indicators** use the whole Passport (home BP, resting HR, eGFR trend, screenings, nutrition limits, open differences) and stay four separate indicators.
+- **Assistant** answers from the full Passport (allergies, screenings, appointments, care team, emergency card, nutrition profile, lab trends, differences). Still scripted, still "AI-generated".
+- **Export / import** (`lib/export`): FHIR R4 collection Bundle (`toFhirBundle`, MedicationStatement for meds, provenance in `meta.source` + a source-kind tag, optional section filter); **Passport file** (`buildPassportFile`: exact `LocalPassport` + FHIR Bundle) that restores exactly; plain FHIR Bundles import as pending items. UI in Passport settings.
+- **Share** (`/passport/share/`): choose sections (sensitive ones off by default), the preview is exactly what prints; print/PDF and "Download as FHIR" of the chosen coded sections; both logged.
+- **Passport lock** (`lib/passport/crypto.ts`): PBKDF2-SHA256 (600k iterations, random salt) → AES-GCM 256, fresh IV per write, encrypted check value in the `meta` store. Swapped in as the store's codec; the whole app shows `LockScreen` while locked. **A forgotten passcode can't be recovered** — the only way out is erasing local data. Exported files are not encrypted.
+- **Activity log** (`/passport/activity/`): imports, adds, edits, confirmations, reconciliation, exports, shares, restores, lock changes.
+
+### Routes added
+`/passport/` (overview, timeline, clinical, medications, nutrition, mental-health, appointments, documents, sources, share, emergency, review, activity, settings), `/passport/add/` (+ epic, scan, apple-health, device), `/log/` (+ mood, symptom, meal, vitals, medication, appointment, allergy, nutrition-profile, emergency, phq-9, gad-7). `/share/` now points to `/passport/share/`.
+
+### Tests (`npm test`, vitest, 16 files)
+Seed flags per persona; Passport store/merge/actions; views; screening scoring and item 9; log validation; FHIR mapper; OCR extraction on real OCR fixtures; Apple Health parser; BP cuff parsing; every Passport rule; reconciliation; indicators; assistant; FHIR export ↔ mapper round trip; Passport file export → import round trip (including the restored naproxen raising Harold's high warfarin + NSAID flag); encryption round trip and lock lifecycle.

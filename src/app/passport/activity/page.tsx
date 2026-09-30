@@ -17,7 +17,7 @@ const ACTION_LABELS: Record<ActivityEntry["action"], string> = {
   share: "Shared",
   restore: "Restored",
   lock: "Locked",
-  unlock: "Unlocked",
+  unlock: "Lock turned off",
   reset: "Reset",
 };
 

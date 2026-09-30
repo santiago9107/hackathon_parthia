@@ -5,6 +5,8 @@ import { Card, Disclaimer } from "@/components/PageHeader";
 import { LocalOnlyNotice, SectionTitle } from "@/components/passport/PassportChrome";
 import { usePatient } from "@/lib/context/PatientContext";
 import { resetDemoData } from "@/lib/passport/actions";
+import { ExportImport } from "@/components/passport/ExportImport";
+import { LockSettings } from "@/components/passport/LockSettings";
 
 export default function PassportSettingsPage() {
   const { patientId, record, local } = usePatient();
@@ -24,6 +26,9 @@ export default function PassportSettingsPage() {
         <h2 className="font-serif text-2xl font-semibold text-navy">Passport settings</h2>
         <LocalOnlyNotice className="mt-1" />
       </div>
+
+      <ExportImport />
+      <LockSettings />
 
       <Card className="p-5">
         <SectionTitle>Reset demo data</SectionTitle>

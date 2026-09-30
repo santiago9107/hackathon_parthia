@@ -17,7 +17,7 @@ const REAL: { title: string; body: string }[] = [
   },
   {
     title: "The data model",
-    body: "Patient, Medication, MedicationEvent, LabResult, VitalSign, SymptomEntry, MoodCheckIn, NutritionEntry and RiskFlag are real TypeScript types, each annotated with its FHIR R4 analogue so the mapping to an EHR feed is explicit.",
+    body: "Every Passport section is a real TypeScript type annotated with its FHIR R4 analogue, and every item carries its provenance: where it came from, when, and whether the patient has confirmed it.",
   },
   {
     title: "The installable app",
@@ -25,7 +25,7 @@ const REAL: { title: string; body: string }[] = [
   },
   {
     title: "The deployment pipeline",
-    body: "Every push to the main branch is linted, type-checked, built as a static export and published to Azure Static Web Apps by GitHub Actions.",
+    body: "Every push to the main branch is linted, type-checked, unit-tested, built as a static export and published to Azure Static Web Apps by GitHub Actions.",
   },
 ];
 
@@ -33,11 +33,11 @@ const SIMULATED: { title: string; body: string; later: string }[] = [
   {
     title: "Patients and their entries",
     body: `${listPatients().length} synthetic personas with five weeks of generated symptom, mood and nutrition entries. No real person's data appears anywhere in this prototype.`,
-    later: "A FHIR client reads Patient, MedicationStatement, Condition and Observation resources from the patient's health system, and patient-reported entries are stored in Parthia's own database.",
+    later: "Real patients connect their own health systems through SMART on FHIR; their Passport stays on their device unless they choose to sync it.",
   },
   {
     title: "The assistant",
-    body: "Replies are assembled by keyword rules from the current record and labelled AI-generated. There is no language model behind it yet.",
+    body: "Replies are assembled by keyword rules from the patient's full Passport (medications, allergies, labs, appointments, care team, screenings, differences between records) and labelled AI-generated. There is no language model behind it yet.",
     later: "A model-backed provider behind the same interface, given only the patient's own record as context and held to the same rule: questions for the doctor, never instructions.",
   },
   {
@@ -55,6 +55,25 @@ const SIMULATED: { title: string; body: string; later: string }[] = [
     body: "The patient switcher lets a presenter flip between personas. There is no sign-in.",
     later: "Patient authentication so each person sees only their own record, with explicit consent controls for sharing with a clinician.",
   },
+];
+
+
+const PASSPORT_SOURCES: { name: string; status: "Real" | "Simulated" | "Sample data"; note: string }[] = [
+  { name: "Typed entries and questionnaires", status: "Real", note: "Medicines, allergies, vitals, meals, mood, symptoms, appointments, PHQ-9 and GAD-7 — validated and stored on the device." },
+  { name: "Document scan", status: "Real", note: "On-device OCR (Tesseract.js, WebAssembly) reads prescriptions and lab reports; every extracted line is reviewed before it is saved." },
+  { name: "Apple Health export", status: "Real", note: "The export.zip is parsed in a background worker on the device. Nothing is uploaded." },
+  { name: "Bluetooth blood pressure cuff", status: "Real", note: "Web Bluetooth, standard Blood Pressure service (0x1810), where the browser supports it." },
+  { name: "Epic MyChart", status: "Simulated", note: "A simulated SMART on FHIR sign-in returns synthetic FHIR R4 bundles. The mapper and review flow are the real ones. No real Epic connection." },
+  { name: "Home cuff sync", status: "Simulated", note: "Generates two weeks of readings for demos when no cuff is available." },
+  { name: "The three personas", status: "Sample data", note: "Synthetic patients. No real person's data appears anywhere." },
+];
+
+const NEXT_PHASES = [
+  "Real SMART on FHIR connections to patient portals (Epic, Cerner/Oracle, athenahealth) with the same mapper and review step.",
+  "Encrypted sync across the patient's own devices, with the key held by the patient.",
+  "A licensed drug-interaction and renal-dosing database behind the same rule functions.",
+  "Sharing links with expiry and an access log, alongside today's printed and FHIR hand-over.",
+  "A model-backed assistant grounded only in the Passport, held to the same rules: questions for the clinician, never instructions.",
 ];
 
 export default function AboutPage() {
@@ -76,6 +95,45 @@ export default function AboutPage() {
           questions to raise with their doctor.
         </p>
       </Card>
+
+      <section className="mt-8" id="patient-passport">
+        <h2 className="font-serif text-2xl font-semibold text-navy">The Patient Passport</h2>
+        <Card className="mt-3 p-5 sm:p-6">
+          <p className="text-[15px] leading-relaxed text-ink-soft">
+            The Passport is one record of a person&apos;s health that they hold themselves: hospital records, prescriptions, labs, wearables,
+            home devices and their own entries, gathered in one place with the source of every item shown. It is stored only on the
+            patient&apos;s device. Imports wait for the patient to review them; nothing unconfirmed is used in any analysis. Where records
+            disagree — a different dose, a medicine missing from one list — the patient decides, or turns it into a question for their
+            clinician. They can export it (FHIR R4 or a Passport file), print a summary with only the sections they choose, and lock it
+            with a passcode.
+          </p>
+        </Card>
+        <Card className="mt-3 divide-y divide-line">
+          {PASSPORT_SOURCES.map((x) => (
+            <div key={x.name} className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-start sm:gap-4">
+              <span
+                className={`w-fit shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${
+                  x.status === "Real" ? "bg-good-soft text-good" : "bg-gold-100 text-[#5c430d]"
+                }`}
+              >
+                {x.status}
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-ink">{x.name}</p>
+                <p className="text-sm text-ink-soft">{x.note}</p>
+              </div>
+            </div>
+          ))}
+        </Card>
+        <Card className="mt-3 p-5">
+          <h3 className="font-serif text-lg font-semibold text-navy">Next phases</h3>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-soft">
+            {NEXT_PHASES.map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ul>
+        </Card>
+      </section>
 
       <section className="mt-8">
         <h2 className="font-serif text-2xl font-semibold text-navy">Built for real</h2>
@@ -147,6 +205,13 @@ export default function AboutPage() {
                 ["SymptomEntry", "symptom, severity 1–5, note, timestamp", "Observation (patient-reported)"],
                 ["MoodCheckIn", "score 1–5, note, timestamp", "Observation (patient-reported)"],
                 ["NutritionEntry", "meal, description, tags such as high-vitamin-K or grapefruit", "Observation (patient-reported)"],
+                ["Allergy", "substance, reaction, severity, matching medicines or classes", "AllergyIntolerance"],
+                ["Appointment, Encounter", "clinician, time, reason; visit notes", "Appointment, Encounter"],
+                ["Immunization, Procedure", "vaccine or procedure, date, performer", "Immunization, Procedure"],
+                ["CareTeamMember, CarePlan", "who looks after the patient and their instructions", "CareTeam, CarePlan"],
+                ["MentalHealthAssessment", "PHQ-9 / GAD-7 score and band (a screening, not a diagnosis)", "Observation (LOINC 44261-6 / 70274-6)"],
+                ["HealthDocument", "scanned or imported documents with extracted text", "DocumentReference"],
+                ["DataSource", "kind, label, imported at, verified, confidence, original text", "Provenance / meta.source"],
                 ["RiskFlag", "rule id, category, severity, medications, explanation, suggested question, evidence", "DetectedIssue"],
               ].map(([t, h, f]) => (
                 <tr key={t}>
@@ -170,7 +235,9 @@ export default function AboutPage() {
               ["Hosting", "Azure Static Web Apps, continuous deployment from GitHub"],
               ["Safety logic", "Pure, testable rule functions with inspectable knowledge tables"],
               ["Charts", "Hand-drawn SVG, no charting library, prints cleanly"],
-              ["Privacy stance", "Patient-owned data, sharing is an explicit act by the patient"],
+              ["Privacy stance", "Patient-owned data stored only on the device (IndexedDB); sharing is an explicit act by the patient"],
+              ["Encryption", "Optional Passport lock: PBKDF2-SHA256 key derivation, AES-GCM 256, Web Crypto"],
+              ["Interoperability", "FHIR R4 import and export with RxNorm, LOINC, ICD-10-CM, SNOMED CT and CVX codes"],
             ].map(([k, v]) => (
               <div key={k}>
                 <dt className="text-xs font-semibold uppercase tracking-wider text-ink-muted">{k}</dt>

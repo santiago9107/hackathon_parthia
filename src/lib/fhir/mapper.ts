@@ -40,6 +40,7 @@ import {
   type FhirEncounter,
   type FhirImmunization,
   type FhirMedicationRequest,
+  type FhirMedicationStatement,
   type FhirObservation,
   type FhirPatient,
   type FhirPractitioner,
@@ -125,6 +126,8 @@ const TIMES_A_DAY: Record<number, string> = { 1: "once daily", 2: "twice daily",
 export function frequencyText(d: Dosage | undefined): string {
   if (!d) return "as directed";
   const r = d.timing?.repeat;
+  // Free-text only (e.g. a Passport export of "at bedtime"): keep it as written.
+  if (!r) return `${d.text ?? "as directed"}${d.asNeededBoolean && !/as needed/i.test(d.text ?? "") ? " as needed" : ""}`;
   const text = (d.text ?? "").toLowerCase();
   let out: string;
   if (r?.frequency && (r.periodUnit ?? "d") === "d" && (r.period ?? 1) === 1) out = TIMES_A_DAY[r.frequency] ?? `${r.frequency} times daily`;
@@ -231,19 +234,23 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
         });
         break;
       }
-      case "MedicationRequest": {
-        const m = r as FhirMedicationRequest;
+      case "MedicationRequest":
+      case "MedicationStatement": {
+        const m = r as FhirMedicationRequest | FhirMedicationStatement;
         const rx = coding(m.medicationCodeableConcept, SYSTEMS.rxnorm);
         const display = textOf(m.medicationCodeableConcept);
         const drug = (rx?.code && lookupRxcui(rx.code)) || lookupDrug(display) || lookupDrug(medicationNameFromDisplay(display));
-        const dosage = m.dosageInstruction?.[0];
+        const isStatement = m.resourceType === "MedicationStatement";
+        const dosage = isStatement ? m.dosage?.[0] : m.dosageInstruction?.[0];
         const q = dosage?.doseAndRate?.[0]?.doseQuantity;
         const unit = (q?.unit ?? "").replace(/^meq$/i, "mEq");
         const status = m.status === "active" ? "active" : m.status === "on-hold" ? "on-hold" : "stopped";
         out.medications.push({
           id: id(m), name: medicationNameFromDisplay(display), genericName: drug?.generic ?? medicationNameFromDisplay(display).toLowerCase(),
           class: drug?.class ?? "other", rxNormCode: drug?.rxcui ?? rx?.code, dose: q?.value !== undefined ? `${q.value} ${unit}`.trim() : dosage?.text ?? "",
-          frequency: frequencyText(dosage), startDate: dateOnly(m.authoredOn), indication: m.reasonCode?.[0]?.text, prescriber: nameOf(m.requester) || undefined,
+          frequency: frequencyText(dosage), startDate: dateOnly(isStatement ? m.effectivePeriod?.start ?? m.dateAsserted : m.authoredOn), indication: m.reasonCode?.[0]?.text,
+          prescriber: (isStatement ? m.informationSource?.display : nameOf(m.requester)) || undefined,
+          stoppedOn: isStatement && status === "stopped" ? dateOnly(m.effectivePeriod?.end) || undefined : undefined,
           status, source: { ...src(m), originalText: display },
         });
         break;
@@ -335,10 +342,13 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
         const a = r as FhirAppointment;
         const actors = (a.participant ?? []).map((p) => p.actor).filter(Boolean) as Reference[];
         const prac = actors.find((x) => x.reference?.startsWith("Practitioner/"));
-        const location = actors.find((x) => !x.reference);
+        // Display-only actors: the location — or, with no Practitioner reference, the clinician then the location.
+        const displayOnly = actors.filter((x) => !x.reference);
+        const clinician = prac ? nameOf(prac) : displayOnly.shift()?.display ?? "";
+        const location = displayOnly[0];
         const status: Appointment["status"] = a.status === "fulfilled" || a.status === "arrived" || a.status === "checked-in" ? "fulfilled" : a.status === "cancelled" ? "cancelled" : a.status === "noshow" ? "noshow" : "booked";
         out.appointments.push({
-          id: id(a), patientId: pid, start: localDateTime(a.start), status, clinician: nameOf(prac), specialty: textOf(a.specialty?.[0]) || textOf(a.serviceType?.[0]) || "General",
+          id: id(a), patientId: pid, start: localDateTime(a.start), status, clinician, specialty: textOf(a.specialty?.[0]) || textOf(a.serviceType?.[0]) || "General",
           location: location?.display, reason: a.reasonCode?.[0]?.text ?? a.description ?? "", source: src(a),
         });
         break;

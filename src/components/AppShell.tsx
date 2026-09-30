@@ -6,6 +6,8 @@ import type { ReactElement, ReactNode } from "react";
 import { Wordmark } from "./Wordmark";
 import { PatientSwitcher } from "./PatientSwitcher";
 import { InstallCTA } from "./InstallCTA";
+import { LockScreen } from "./passport/LockScreen";
+import { usePatient } from "@/lib/context/PatientContext";
 
 interface NavItem {
   href: string;
@@ -38,6 +40,7 @@ function normalize(p: string) {
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const current = normalize(pathname ?? "/");
+  const { passportStatus } = usePatient();
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -87,7 +90,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:px-6 md:pb-12">{children}</main>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:px-6 md:pb-12">{passportStatus === "locked" ? <LockScreen /> : children}</main>
 
       {/* Mobile tab bar */}
       <nav

@@ -88,6 +88,9 @@ export class PassportStore {
         if (p) this.cache.set(r.patientId, p);
         else locked = true;
       }
+      // A lock with no key loaded stays locked even when nothing is stored yet,
+      // so new writes can't slip out unencrypted.
+      if (this.codec === plainCodec && (await this.backend.getMeta("lock"))) locked = true;
       this.status = locked ? "locked" : "ready";
     } catch (e) {
       this.status = "error";
@@ -98,12 +101,18 @@ export class PassportStore {
 
   /** Swap the codec (used by the Passport lock) and reload everything through it. */
   async setCodec(codec: PassportCodec, { reload }: { reload: boolean }): Promise<void> {
+    await this.writes.catch(() => undefined);
     this.codec = codec;
     if (reload) {
       this.cache.clear();
       this.loadPromise = this.load();
       await this.loadPromise;
-    }
+    } else this.bump();
+  }
+
+  /** Whether stored Passports are written through a non-plain codec. */
+  isEncrypting(): boolean {
+    return this.codec !== plainCodec;
   }
 
   /** Re-write every cached passport through the current codec (e.g. after locking). */

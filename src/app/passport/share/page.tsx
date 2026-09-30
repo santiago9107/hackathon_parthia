@@ -1,19 +1,64 @@
 "use client";
 
+import { useState } from "react";
 import { usePatient } from "@/lib/context/PatientContext";
 import { Wordmark } from "@/components/Wordmark";
 import { CATEGORY_LABELS, LEVEL_STYLES } from "@/components/Badges";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
 import { latestLabs } from "@/lib/passport/selectors";
 import { questionsForClinician } from "@/lib/reconcile";
+import { recordActivity } from "@/lib/passport/actions";
+import { downloadJson } from "@/lib/export/download";
+import { toFhirBundle, type ExportSection } from "@/lib/export/fhirExport";
+import { passportFileName } from "@/lib/export/passportFile";
+
+const SHARE_SECTIONS = [
+  { id: "status", label: "Status at a glance" },
+  { id: "conditions", label: "Conditions", fhir: ["conditions"] },
+  { id: "medications", label: "Medications and recent changes", fhir: ["medications"] },
+  { id: "allergies", label: "Allergies", fhir: ["allergies"] },
+  { id: "safety", label: "Safety questions (flags)" },
+  { id: "recordQuestions", label: "Questions about my records" },
+  { id: "labs", label: "Recent labs and vitals", fhir: ["labs", "vitals"] },
+  { id: "screenings", label: "Mental health screenings", sensitive: true, fhir: ["screenings"] },
+  { id: "selfReported", label: "Last 14 days: mood, meals, symptoms", sensitive: true },
+  { id: "immunizations", label: "Immunizations", fhir: ["immunizations"] },
+  { id: "careTeam", label: "Care team and upcoming appointments", fhir: ["careTeam", "appointments"] },
+  { id: "emergency", label: "Emergency contacts", sensitive: true },
+] as const satisfies readonly { id: string; label: string; sensitive?: boolean; fhir?: readonly ExportSection[] }[];
+type ShareSection = (typeof SHARE_SECTIONS)[number]["id"];
+const DEFAULT_SECTIONS: ShareSection[] = ["status", "conditions", "medications", "allergies", "safety", "recordQuestions", "labs"];
 
 function fmt(d: string) {
   return new Date(d.length === 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
 export default function SharePage() {
-  const { record, flags, indicators, now, issues } = usePatient();
+  const { record, flags, indicators, now, issues, patientId } = usePatient();
   const recordQuestions = questionsForClinician(issues);
+  const [chosen, setChosen] = useState<Set<ShareSection>>(() => new Set(DEFAULT_SECTIONS));
+  const on = (id: ShareSection) => chosen.has(id);
+  const toggle = (id: ShareSection) =>
+    setChosen((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  const chosenLabels = SHARE_SECTIONS.filter((x) => chosen.has(x.id)).map((x) => x.label);
+  const fhirSections = SHARE_SECTIONS.filter((x) => chosen.has(x.id)).flatMap((x) => ("fhir" in x ? [...x.fhir] : []));
+
+  async function print() {
+    await recordActivity(patientId, "share", `Printed or saved a visit summary: ${chosenLabels.join(", ") || "header only"}`);
+    window.print();
+  }
+  async function downloadFhir() {
+    const bundle = toFhirBundle(record, { now, sections: fhirSections });
+    downloadJson(passportFileName(record, now, "fhir"), bundle, "application/fhir+json");
+    await recordActivity(patientId, "share", `Downloaded shared sections as FHIR R4 (${bundle.entry?.length ?? 0} resources)`);
+  }
+  const upcoming = record.appointments.filter((a) => a.status === "booked" && a.start >= now.toISOString().slice(0, 19)).sort((a, b) => a.start.localeCompare(b.start));
+  const screenings = [...record.assessments].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
   const { patient } = record;
   const moods14 = withinLastDays(record.moods, 14, now);
   const moods14Avg = mean(moods14.map((m) => m.score));
@@ -29,14 +74,33 @@ export default function SharePage() {
           <div>
             <h2 className="font-serif text-2xl font-semibold text-navy">Share with a clinician</h2>
             <p className="mt-1 max-w-2xl text-sm text-ink-soft">
-              A one-page snapshot of your medicines, active safety questions and recent trends — print it or show it on your phone at your
-              next appointment. You decide who sees it.
+              Choose what to include. The preview below is exactly what will be printed or saved — nothing else is shared, and nothing is sent
+              anywhere: you hand it over yourself.
             </p>
           </div>
-          <button type="button" onClick={() => window.print()} className="min-h-11 shrink-0 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800">
-            Print / Save as PDF
-          </button>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <button type="button" onClick={print} className="min-h-11 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800">
+              Print / Save as PDF
+            </button>
+            <button type="button" onClick={downloadFhir} disabled={fhirSections.length === 0} className="min-h-11 rounded-full px-4 text-sm font-semibold text-brand-800 ring-1 ring-line hover:bg-brand-50 disabled:opacity-50">
+              Download as FHIR
+            </button>
+          </div>
         </div>
+        <fieldset className="mb-6 rounded-card border border-line bg-surface p-4">
+          <legend className="px-1 text-sm font-semibold text-ink">Sections to share ({chosen.size} of {SHARE_SECTIONS.length})</legend>
+          <div className="grid gap-x-4 sm:grid-cols-2 lg:grid-cols-3">
+            {SHARE_SECTIONS.map((x) => (
+              <label key={x.id} className="flex min-h-11 items-center gap-2 text-sm text-ink">
+                <input type="checkbox" checked={on(x.id)} onChange={() => toggle(x.id)} className="h-5 w-5 accent-brand-700" />
+                {x.label}
+                {"sensitive" in x && <span className="rounded-full bg-cream-dark px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-ink-soft">Sensitive</span>}
+              </label>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-ink-muted">FHIR download includes the coded sections only (conditions, medications, allergies, labs, vitals, screenings, immunizations, care team).</p>
+        </fieldset>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink-muted">Preview</p>
       </div>
 
       <article className="print-page mx-auto max-w-3xl rounded-card border border-line bg-white p-6 shadow-card sm:p-10">
@@ -54,7 +118,7 @@ export default function SharePage() {
           </div>
         </header>
 
-        <section className="mt-6">
+        {on("status") && <section className="mt-6">
           <h2 className="font-serif text-lg font-semibold text-navy">Status at a glance</h2>
           <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {indicators.map((i) => (
@@ -65,14 +129,23 @@ export default function SharePage() {
               </div>
             ))}
           </div>
-        </section>
+        </section>}
 
-        <section className="mt-6">
+        {on("conditions") && <section className="mt-6">
           <h2 className="font-serif text-lg font-semibold text-navy">Conditions</h2>
           <p className="mt-1 text-sm text-ink">{patient.conditions.map((c) => `${c.name}${c.code ? ` (${c.code})` : ""}`).join(" · ")}</p>
-        </section>
+        </section>}
 
-        <section className="mt-6">
+        {on("allergies") && <section className="mt-6">
+          <h2 className="font-serif text-lg font-semibold text-navy">Allergies ({record.allergies.length})</h2>
+          <p className="mt-1 text-sm text-ink">
+            {record.allergies.length
+              ? record.allergies.map((a) => `${a.substance}${a.reaction ? ` — ${a.reaction.toLowerCase()}` : ""} (${a.severity}${a.type === "intolerance" ? ", intolerance" : ""})`).join(" · ")
+              : "No known allergies recorded."}
+          </p>
+        </section>}
+
+        {on("medications") && <section className="mt-6">
           <h2 className="font-serif text-lg font-semibold text-navy">Current medications ({patient.medications.length})</h2>
           <table className="mt-2 w-full text-sm">
             <thead>
@@ -102,9 +175,9 @@ export default function SharePage() {
               Recent changes: {patient.medicationHistory.map((e) => `${fmt(e.date)} — ${e.detail}`).join(" ")}
             </p>
           )}
-        </section>
+        </section>}
 
-        <section className="mt-6">
+        {on("safety") && <section className="mt-6">
           <h2 className="font-serif text-lg font-semibold text-navy">Questions for this visit ({flags.length})</h2>
           <p className="text-xs text-ink-muted">Raised by Parthia&apos;s rule-based safety check from the patient&apos;s medication list and self-reported entries. Not a clinical assessment.</p>
           {flags.length === 0 ? (
@@ -129,9 +202,9 @@ export default function SharePage() {
               ))}
             </ol>
           )}
-        </section>
+        </section>}
 
-        {recordQuestions.length > 0 && (
+        {on("recordQuestions") && recordQuestions.length > 0 && (
           <section className="mt-6">
             <h2 className="font-serif text-lg font-semibold text-navy">Questions about my records ({recordQuestions.length})</h2>
             <p className="text-xs text-ink-muted">Differences the patient found between their own list and connected records, and wants to confirm with you.</p>
@@ -143,8 +216,8 @@ export default function SharePage() {
           </section>
         )}
 
-        <section className="mt-6 grid gap-6 sm:grid-cols-2">
-          <div>
+        {(on("labs") || on("selfReported")) && <section className="mt-6 grid gap-6 sm:grid-cols-2">
+          {on("labs") && <div>
             <h2 className="font-serif text-lg font-semibold text-navy">Recent labs & vitals</h2>
             <ul className="mt-2 divide-y divide-line text-sm">
               {latestLabs(patient.labs).map((l) => (
@@ -169,8 +242,8 @@ export default function SharePage() {
                 </li>
               )}
             </ul>
-          </div>
-          <div>
+          </div>}
+          {on("selfReported") && <div>
             <h2 className="font-serif text-lg font-semibold text-navy">Last 14 days, self-reported</h2>
             <ul className="mt-2 divide-y divide-line text-sm">
               <li className="flex items-center justify-between py-1.5">
@@ -190,11 +263,56 @@ export default function SharePage() {
                 <p className="text-ink-soft">{symptomSummary.length ? symptomSummary.map(([s, n]) => `${s} (${n})`).join(", ") : "None logged"}</p>
               </li>
             </ul>
+          </div>}
+        </section>}
+
+        {on("screenings") && <section className="mt-6">
+          <h2 className="font-serif text-lg font-semibold text-navy">Mental health screenings</h2>
+          <p className="text-xs text-ink-muted">Screenings, not diagnoses. Self-administered unless noted.</p>
+          {screenings.length ? (
+            <ul className="mt-2 divide-y divide-line text-sm">
+              {screenings.map((a) => (
+                <li key={a.id} className="flex items-center justify-between py-1.5">
+                  <span className="text-ink">{a.instrument} <span className="text-xs text-ink-muted">{fmt(a.date)}{a.administeredBy === "clinician" ? " · clinician" : ""}</span></span>
+                  <span className="font-semibold text-ink">{a.score} · {a.severity}</span>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="mt-1 text-sm text-ink">No screenings recorded.</p>}
+        </section>}
+
+        {on("immunizations") && <section className="mt-6">
+          <h2 className="font-serif text-lg font-semibold text-navy">Immunizations</h2>
+          <p className="mt-1 text-sm text-ink">{record.immunizations.length ? [...record.immunizations].sort((a, b) => b.date.localeCompare(a.date)).map((i) => `${i.vaccine} (${fmt(i.date)})`).join(" · ") : "None recorded."}</p>
+        </section>}
+
+        {on("careTeam") && <section className="mt-6 grid gap-6 sm:grid-cols-2">
+          <div>
+            <h2 className="font-serif text-lg font-semibold text-navy">Care team</h2>
+            <ul className="mt-2 space-y-1 text-sm text-ink">
+              {record.careTeam.map((c) => <li key={c.id}>{c.name}{c.specialty ? ` — ${c.specialty}` : ""}{c.phone ? ` · ${c.phone}` : ""}</li>)}
+              {record.careTeam.length === 0 && <li>None recorded.</li>}
+            </ul>
           </div>
-        </section>
+          <div>
+            <h2 className="font-serif text-lg font-semibold text-navy">Upcoming appointments</h2>
+            <ul className="mt-2 space-y-1 text-sm text-ink">
+              {upcoming.map((a) => <li key={a.id}>{fmt(a.start)} — {a.clinician} ({a.specialty}): {a.reason}</li>)}
+              {upcoming.length === 0 && <li>None booked.</li>}
+            </ul>
+          </div>
+        </section>}
+
+        {on("emergency") && <section className="mt-6">
+          <h2 className="font-serif text-lg font-semibold text-navy">Emergency contacts</h2>
+          <p className="mt-1 text-sm text-ink">
+            {record.emergency?.contacts.length ? record.emergency.contacts.map((c) => `${c.name} (${c.relationship}) ${c.phone}`).join(" · ") : "None recorded."}
+            {record.emergency?.bloodType ? ` · Blood type ${record.emergency.bloodType}` : ""}
+          </p>
+        </section>}
 
         <footer className="mt-8 border-t border-line pt-3 text-[11px] leading-relaxed text-ink-muted">
-          Prototype with synthetic data. Generated by Parthia Health from information the patient owns and chose to share. Flags are the output of
+          Sections shared: {chosenLabels.join(", ") || "none"}. Prototype with synthetic data. Generated by Parthia Health from information the patient owns and chose to share; only reviewed and confirmed items are included. Flags are the output of
           transparent rules (listed in the app under Medications → How the safety check works) and are intended to prompt discussion, not to direct treatment.
         </footer>
       </article>

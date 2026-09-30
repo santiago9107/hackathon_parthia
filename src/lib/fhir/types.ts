@@ -48,7 +48,7 @@ export interface ContactPoint {
 
 interface ResourceBase {
   id: string;
-  meta?: { lastUpdated?: string; source?: string };
+  meta?: { lastUpdated?: string; source?: string; tag?: Coding[] };
 }
 
 export interface FhirPatient extends ResourceBase {
@@ -84,6 +84,19 @@ export interface FhirMedicationRequest extends ResourceBase {
   requester?: Reference;
   reasonCode?: CodeableConcept[];
   dosageInstruction?: Dosage[];
+}
+
+/** What the patient says they take (vs. MedicationRequest: what was prescribed). */
+export interface FhirMedicationStatement extends ResourceBase {
+  resourceType: "MedicationStatement";
+  status: "active" | "completed" | "entered-in-error" | "intended" | "stopped" | "on-hold" | "unknown" | "not-taken";
+  medicationCodeableConcept?: CodeableConcept;
+  subject?: Reference;
+  effectivePeriod?: Period;
+  dateAsserted?: string;
+  informationSource?: Reference;
+  reasonCode?: CodeableConcept[];
+  dosage?: Dosage[];
 }
 
 export interface FhirAllergyIntolerance extends ResourceBase {
@@ -206,6 +219,7 @@ export type FhirResource =
   | FhirPatient
   | FhirCondition
   | FhirMedicationRequest
+  | FhirMedicationStatement
   | FhirAllergyIntolerance
   | FhirObservation
   | FhirDiagnosticReport
