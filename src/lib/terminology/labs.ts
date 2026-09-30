@@ -31,6 +31,8 @@ export const LABS: readonly LabConcept[] = [
   { loinc: "2160-0", name: "Creatinine", aliases: ["creatinine", "creat", "serum creatinine"], unit: "mg/dL", range: { low: 0.6, high: 1.3 } },
   { loinc: "2093-3", name: "Total cholesterol", aliases: ["total cholesterol", "cholesterol, total", "cholesterol"], unit: "mg/dL", range: { high: 200 } },
   { loinc: "718-7", name: "Hemoglobin", aliases: ["hemoglobin", "hgb", "hb"], unit: "g/dL", range: { low: 12.0, high: 17.5 } },
+  { loinc: "9318-7", name: "Urine albumin/creatinine ratio", aliases: ["urine albumin/creatinine ratio", "uacr", "acr", "microalbumin/creatinine ratio", "albumin/creatinine ratio"], unit: "mg/g", range: { high: 30 } },
+  { loinc: "1989-3", name: "Vitamin D (25-OH)", aliases: ["vitamin d", "25-oh vitamin d", "vitamin d, 25-hydroxy", "25-hydroxyvitamin d"], unit: "ng/mL", range: { low: 30, high: 100 } },
 ];
 
 const byAlias = new Map<string, LabConcept>();

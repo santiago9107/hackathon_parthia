@@ -445,6 +445,18 @@ export interface EmergencyInfo extends Sourced {
   updatedAt: ISODateTime;
 }
 
+/** Smoking, alcohol, activity and similar. FHIR analogue: Observation (category social-history) */
+export interface SocialHistoryItem extends Sourced {
+  id: string;
+  patientId: PatientId;
+  category: "tobacco" | "alcohol" | "physical-activity" | "other";
+  /** Plain-language value, e.g. "Former smoker (quit 2009)", "1–2 drinks a week". */
+  value: string;
+  date: ISODate;
+  /** LOINC code of the observation, when available. */
+  code?: string;
+}
+
 /** A record of something that happened to the Passport. */
 export interface ActivityEntry {
   id: string;
@@ -512,6 +524,7 @@ export interface PatientRecord {
   carePlans: CarePlan[];
   documents: HealthDocument[];
   assessments: MentalHealthAssessment[];
+  socialHistory: SocialHistoryItem[];
   nutritionProfile?: NutritionProfile;
   emergency?: EmergencyInfo;
 }

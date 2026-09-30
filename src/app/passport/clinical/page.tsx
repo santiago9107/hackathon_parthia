@@ -137,6 +137,19 @@ export default function ClinicalPage() {
           )}
         </Card>
         <Card className="p-5">
+          <SectionTitle>Social history</SectionTitle>
+          {record.socialHistory.length === 0 ? <EmptyState>None recorded.</EmptyState> : (
+            <ul className="divide-y divide-line">
+              {[...record.socialHistory].sort((a, b) => b.date.localeCompare(a.date)).map((h) => (
+                <li key={h.id} className="flex flex-wrap items-start justify-between gap-2 py-2.5 text-sm">
+                  <span><span className="font-medium capitalize text-ink">{h.category.replace("-", " ")}</span><span className="block text-ink-soft">{h.value}</span><span className="block text-xs text-ink-muted">{fmtDate(h.date)}</span></span>
+                  <SourceBadge source={h.source} compact />
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+        <Card className="p-5">
           <SectionTitle>Immunizations</SectionTitle>
           <ul className="divide-y divide-line">
             {[...record.immunizations].sort((a, b) => b.date.localeCompare(a.date)).map((i) => (

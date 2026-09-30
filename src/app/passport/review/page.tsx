@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Card, Disclaimer } from "@/components/PageHeader";
 import { SourceBadge } from "@/components/passport/SourceBadge";
-import { EmptyState, LocalOnlyNotice, SectionTitle, fmtDateTime } from "@/components/passport/PassportChrome";
+import { EmptyState, LocalOnlyNotice, SectionTitle, fmtDate, fmtDateTime } from "@/components/passport/PassportChrome";
 import { usePatient } from "@/lib/context/PatientContext";
 import { confirmEntry, describeItem, discardEntry } from "@/lib/passport/actions";
 import { COLLECTION_LABELS, type LocalEntry } from "@/lib/passport/collections";
@@ -16,6 +16,13 @@ const EDIT_FORMS: Partial<Record<LocalEntry["collection"], string>> = {
   allergies: "/log/allergy/",
   appointments: "/log/appointment/",
 };
+
+/** The clinical date of an item (not when it was imported), if it has one. */
+function itemDate(item: LocalEntry["item"]): string | undefined {
+  const i = item as unknown as Record<string, unknown>;
+  const d = i.date ?? i.start ?? i.timestamp ?? i.startDate ?? i.recordedOn;
+  return typeof d === "string" && d ? d : undefined;
+}
 
 export default function ReviewPage() {
   const { patientId, local } = usePatient();
@@ -74,7 +81,7 @@ export default function ReviewPage() {
               <li key={`${e.collection}:${e.item.id}`} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
                 <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">{COLLECTION_LABELS[e.collection].one}</p>
-                  <p className="font-medium text-ink">{describeItem(e.item)}</p>
+                  <p className="font-medium text-ink">{describeItem(e.item)}{itemDate(e.item) && <span className="ml-2 text-xs font-normal text-ink-muted">{fmtDate(itemDate(e.item)!)}</span>}</p>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-ink-muted">
                     <SourceBadge source={e.item.source} />
                     <span>imported {fmtDateTime(e.item.source.importedAt)}</span>

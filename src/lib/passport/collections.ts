@@ -20,6 +20,7 @@ import type {
   NutritionProfile,
   PatientId,
   Procedure,
+  SocialHistoryItem,
   SourceKind,
   SymptomEntry,
   VitalSign,
@@ -45,6 +46,7 @@ export interface CollectionTypes {
   carePlans: CarePlan;
   documents: HealthDocument;
   assessments: MentalHealthAssessment;
+  socialHistory: SocialHistoryItem;
   /** Singleton: one per patient (id = `np-<patientId>`). */
   nutritionProfile: NutritionProfile;
   /** Singleton: one per patient (id = `em-<patientId>`). */
@@ -76,6 +78,7 @@ export const COLLECTION_LABELS: Record<CollectionName, { one: string; many: stri
   carePlans: { one: "care plan", many: "care plans" },
   documents: { one: "document", many: "documents" },
   assessments: { one: "screening", many: "screenings" },
+  socialHistory: { one: "social history item", many: "social history items" },
   nutritionProfile: { one: "nutrition profile", many: "nutrition profiles" },
   emergency: { one: "emergency info", many: "emergency info" },
 };

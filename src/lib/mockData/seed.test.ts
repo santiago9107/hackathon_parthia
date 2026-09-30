@@ -8,7 +8,7 @@ function allItems(r: PatientRecord): Sourced[] {
   return [
     ...r.patient.conditions, ...r.patient.medications, ...r.patient.medicationHistory, ...r.patient.labs, ...r.patient.vitals,
     ...r.symptoms, ...r.moods, ...r.nutrition, ...r.allergies, ...r.appointments, ...r.encounters, ...r.labPanels,
-    ...r.immunizations, ...r.procedures, ...r.careTeam, ...r.carePlans, ...r.documents, ...r.assessments,
+    ...r.immunizations, ...r.procedures, ...r.careTeam, ...r.carePlans, ...r.documents, ...r.assessments, ...r.socialHistory,
     ...(r.nutritionProfile ? [r.nutritionProfile] : []), ...(r.emergency ? [r.emergency] : []),
   ];
 }
@@ -23,7 +23,7 @@ describe("seed Passport", () => {
   });
 
   it.each(records.map((r) => [r.patient.name, r] as const))("%s: has every Passport section", (_n, r) => {
-    for (const key of ["allergies", "appointments", "encounters", "labPanels", "immunizations", "procedures", "careTeam", "carePlans", "documents", "assessments"] as const) {
+    for (const key of ["allergies", "appointments", "encounters", "labPanels", "immunizations", "procedures", "careTeam", "carePlans", "documents", "assessments", "socialHistory"] as const) {
       expect(r[key].length, key).toBeGreaterThan(0);
     }
     expect(r.nutritionProfile).toBeDefined();

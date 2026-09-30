@@ -21,7 +21,7 @@ export interface DrugConcept {
   rxcui: string;
   class: MedicationClass;
   /** Units this medicine is usually prescribed in. */
-  units: ("mg" | "mcg" | "g" | "units" | "mL")[];
+  units: ("mg" | "mcg" | "g" | "units" | "mL" | "mEq")[];
 }
 
 export const DRUGS: readonly DrugConcept[] = [
@@ -61,6 +61,8 @@ export const DRUGS: readonly DrugConcept[] = [
   { generic: "penicillin", display: "Penicillin", brands: [], rxcui: "70618", class: "other", units: ["mg"] },
   { generic: "codeine", display: "Codeine", brands: [], rxcui: "2670", class: "opioid", units: ["mg"] },
   { generic: "acetaminophen", display: "Acetaminophen", brands: ["Tylenol"], rxcui: "161", class: "other", units: ["mg"] },
+  { generic: "potassium chloride", display: "Potassium chloride", brands: ["Klor-Con", "K-Tab"], rxcui: "8591", class: "supplement", units: ["mEq", "mg"] },
+  { generic: "cholecalciferol", display: "Vitamin D3 (cholecalciferol)", brands: ["Vitamin D3"], rxcui: "2418", class: "supplement", units: ["units", "mcg"] },
 ];
 
 const byName = new Map<string, DrugConcept>();

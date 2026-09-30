@@ -12,6 +12,7 @@ import type {
   NutritionProfile,
   PatientId,
   Procedure,
+  SocialHistoryItem,
 } from "../types";
 import { severityBand } from "../screening";
 import { seeded, seededAll, type Unsourced } from "./seed";
@@ -37,6 +38,7 @@ interface SeedPassport {
   carePlans: Unsourced<CarePlan>[];
   documents: Unsourced<HealthDocument>[];
   assessments: Unsourced<MentalHealthAssessment>[];
+  socialHistory: Unsourced<SocialHistoryItem>[];
   nutritionProfile: Unsourced<NutritionProfile>;
   emergency: Unsourced<EmergencyInfo>;
 }
@@ -52,6 +54,7 @@ export interface PassportSeed {
   carePlans: CarePlan[];
   documents: HealthDocument[];
   assessments: MentalHealthAssessment[];
+  socialHistory: SocialHistoryItem[];
   nutritionProfile: NutritionProfile;
   emergency: EmergencyInfo;
 }
@@ -184,6 +187,10 @@ const harold: SeedPassport = {
     screening("as-h2", H, "GAD-7", "2026-02-12", 3, "clinician"),
     screening("as-h3", H, "PHQ-9", "2026-08-15", 3, "clinician"),
     screening("as-h4", H, "GAD-7", "2026-08-15", 4, "clinician"),
+  ],
+  socialHistory: [
+    { id: "sh-h1", patientId: H, category: "tobacco", value: "Former smoker — quit in 2009", date: "2026-08-15", code: "72166-2" },
+    { id: "sh-h2", patientId: H, category: "alcohol", value: "A glass of wine with dinner on weekends", date: "2026-08-15", code: "11331-6" },
   ],
   nutritionProfile: {
     id: `np-${H}`, patientId: H, dietaryPattern: "Mediterranean-style home cooking; working on eating greens steadily through the week",
@@ -330,6 +337,10 @@ const margaret: SeedPassport = {
     screening("as-m7", M, "GAD-7", "2026-09-02", 8, "clinician"),
     screening("as-m8", M, "PHQ-9", "2026-09-09", 16, "self"),
   ],
+  socialHistory: [
+    { id: "sh-m1", patientId: M, category: "tobacco", value: "Never smoked", date: "2026-08-28", code: "72166-2" },
+    { id: "sh-m2", patientId: M, category: "alcohol", value: "Doesn't drink alcohol", date: "2026-08-28", code: "11331-6" },
+  ],
   nutritionProfile: {
     id: `np-${M}`, patientId: M, dietaryPattern: "Heart-failure diet (low sodium) with consistent carbohydrates for diabetes",
     restrictions: ["Sodium under 2 g a day", "Fluids about 1.5–2 L a day", "Consistent carbohydrate portions"],
@@ -440,6 +451,10 @@ const rosa: SeedPassport = {
     screening("as-r3", R, "PHQ-9", "2026-09-05", 4, "self"),
     screening("as-r4", R, "GAD-7", "2026-09-05", 5, "self"),
   ],
+  socialHistory: [
+    { id: "sh-r1", patientId: R, category: "tobacco", value: "Never smoked", date: "2026-07-30", code: "72166-2" },
+    { id: "sh-r2", patientId: R, category: "alcohol", value: "Occasional beer or wine on weekends", date: "2026-07-30", code: "11331-6" },
+  ],
   nutritionProfile: {
     id: `np-${R}`, patientId: R, dietaryPattern: "Traditional Mexican home cooking; learning carbohydrate awareness",
     restrictions: ["Limit sugary drinks and sweet bread", "Alcohol only on special occasions"],
@@ -474,6 +489,7 @@ export function passportSeedFor(patientId: PatientId): PassportSeed | undefined 
     carePlans: seededAll<CarePlan>(s.carePlans),
     documents: seededAll<HealthDocument>(s.documents),
     assessments: seededAll<MentalHealthAssessment>(s.assessments),
+    socialHistory: seededAll<SocialHistoryItem>(s.socialHistory),
     nutritionProfile: seeded<NutritionProfile>(s.nutritionProfile),
     emergency: seeded<EmergencyInfo>(s.emergency),
   };

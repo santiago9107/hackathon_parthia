@@ -59,6 +59,7 @@ export function mergeRecord(seed: PatientRecord, local: LocalPassport | undefine
     carePlans: apply("carePlans", seed.carePlans),
     documents: apply("documents", seed.documents),
     assessments: apply("assessments", seed.assessments),
+    socialHistory: apply("socialHistory", seed.socialHistory),
     nutritionProfile: applySingleton("nutritionProfile", seed.nutritionProfile),
     emergency: applySingleton("emergency", seed.emergency),
   };

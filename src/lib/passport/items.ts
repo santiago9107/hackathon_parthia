@@ -23,6 +23,7 @@ export function recordItems(r: PatientRecord): { collection: CollectionName; ite
   push("carePlans", r.carePlans);
   push("documents", r.documents);
   push("assessments", r.assessments);
+  push("socialHistory", r.socialHistory);
   if (r.nutritionProfile) push("nutritionProfile", [r.nutritionProfile]);
   if (r.emergency) push("emergency", [r.emergency]);
   return out;
