@@ -11,7 +11,7 @@
  * Mock data ships inside the JS bundles, so caching the app shell also caches
  * the data — the whole demo works offline after the first visit.
  */
-const VERSION = "parthia-v3";
+const VERSION = "parthia-v4";
 const SHELL_CACHE = `${VERSION}-shell`;
 const ASSET_CACHE = `${VERSION}-assets`;
 
@@ -24,6 +24,17 @@ const SHELL_URLS = [
   "/install/",
   "/about/",
   "/log/",
+  "/log/mood/",
+  "/log/symptom/",
+  "/log/meal/",
+  "/log/vitals/",
+  "/log/medication/",
+  "/log/appointment/",
+  "/log/allergy/",
+  "/log/nutrition-profile/",
+  "/log/emergency/",
+  "/log/phq-9/",
+  "/log/gad-7/",
   "/passport/",
   "/passport/timeline/",
   "/passport/clinical/",
