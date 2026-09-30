@@ -1,5 +1,6 @@
 import type { DomainIndicator, PatientRecord, RiskFlag, StatusLevel } from "../types";
 import { mean, withinLastDays } from "../safetyEngine/rules/types";
+import { latestLabs } from "../passport/selectors";
 
 /**
  * Four SEPARATE domain indicators. Deliberately not combined into a single
@@ -33,8 +34,9 @@ export function medicationSafetyIndicator(flags: RiskFlag[]): DomainIndicator {
 }
 
 export function physicalIndicator(record: PatientRecord, now: Date): DomainIndicator {
-  const abnormal = record.patient.labs.filter((l) => l.status === "abnormal");
-  const borderline = record.patient.labs.filter((l) => l.status === "borderline");
+  const current = latestLabs(record.patient.labs);
+  const abnormal = current.filter((l) => l.status === "abnormal");
+  const borderline = current.filter((l) => l.status === "borderline");
   const recentSymptoms = withinLastDays(record.symptoms, 7, now);
   const avgSeverity = mean(recentSymptoms.map((s) => s.severity));
   const severeSymptoms = recentSymptoms.filter((s) => s.severity >= 4);

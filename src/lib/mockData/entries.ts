@@ -6,6 +6,10 @@ import type {
   Scale1to5,
   SymptomEntry,
 } from "../types";
+import { REFERENCE_DATE } from "./reference";
+import { seededAll, type Unsourced } from "./seed";
+
+export { REFERENCE_DATE };
 
 /**
  * SYNTHETIC daily entries for the three personas.
@@ -22,8 +26,6 @@ import type {
  *              early metformin stomach upset that fades.
  */
 
-/** Fixed "today" so the demo is stable regardless of the real clock. */
-export const REFERENCE_DATE = "2026-09-11";
 const DAYS_OF_HISTORY = 35;
 
 function mulberry32(seed: number) {
@@ -102,9 +104,9 @@ function pick<T>(rand: () => number, list: T[]): T {
 }
 
 interface Generated {
-  symptoms: SymptomEntry[];
-  moods: MoodCheckIn[];
-  nutrition: NutritionEntry[];
+  symptoms: Unsourced<SymptomEntry>[];
+  moods: Unsourced<MoodCheckIn>[];
+  nutrition: Unsourced<NutritionEntry>[];
 }
 
 function generateHarold(): Generated {
@@ -253,6 +255,12 @@ const generated: Record<PatientId, Generated> = {
   "p-rosa": generateRosa(),
 };
 
-export function entriesFor(patientId: PatientId): Generated {
-  return generated[patientId] ?? { symptoms: [], moods: [], nutrition: [] };
+export function entriesFor(patientId: PatientId): { symptoms: SymptomEntry[]; moods: MoodCheckIn[]; nutrition: NutritionEntry[] } {
+  const g = generated[patientId];
+  if (!g) return { symptoms: [], moods: [], nutrition: [] };
+  return {
+    symptoms: seededAll<SymptomEntry>(g.symptoms),
+    moods: seededAll<MoodCheckIn>(g.moods),
+    nutrition: seededAll<NutritionEntry>(g.nutrition),
+  };
 }

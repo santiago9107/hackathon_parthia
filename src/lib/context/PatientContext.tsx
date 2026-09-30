@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import { getRecord, listPatients, referenceNow } from "../mockData";
+import { passportStore, type StoreStatus } from "../passport/store";
 import { evaluatePatient } from "../safetyEngine";
 import { computeIndicators } from "../status/indicators";
 import type { DomainIndicator, Patient, PatientId, PatientRecord, RiskFlag } from "../types";
@@ -21,6 +22,8 @@ interface PatientContextValue {
   flags: RiskFlag[];
   indicators: DomainIndicator[];
   now: Date;
+  /** Local Passport store status ("loading" until IndexedDB has been read). */
+  passportStatus: StoreStatus;
 }
 
 /* ---- Selected-patient store (persisted in localStorage) ------------------ */
@@ -60,14 +63,18 @@ const PatientContext = createContext<PatientContextValue | null>(null);
 export function PatientProvider({ children }: { children: ReactNode }) {
   const patients = useMemo(() => listPatients(), []);
   const patientId = useSyncExternalStore(subscribe, readSelected, () => DEFAULT_ID);
+  // Re-derive everything whenever the local Passport changes (server snapshot: seed only).
+  const passportVersion = useSyncExternalStore(passportStore.subscribe, passportStore.getVersion, () => 0);
+  const passportStatus = useSyncExternalStore(passportStore.subscribe, passportStore.getStatus, () => "idle" as StoreStatus);
 
   const value = useMemo<PatientContextValue>(() => {
+    void passportVersion; // dependency: the merged record changes with the store
     const now = referenceNow();
     const record = getRecord(patientId)!;
     const flags = evaluatePatient(record, { now });
     const indicators = computeIndicators(record, flags, now);
-    return { patients, patientId, setPatientId: setSelected, record, flags, indicators, now };
-  }, [patients, patientId]);
+    return { patients, patientId, setPatientId: setSelected, record, flags, indicators, now, passportStatus };
+  }, [patients, patientId, passportVersion, passportStatus]);
 
   return <PatientContext.Provider value={value}>{children}</PatientContext.Provider>;
 }

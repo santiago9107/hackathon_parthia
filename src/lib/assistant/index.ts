@@ -1,5 +1,6 @@
 import type { PatientRecord, RiskFlag } from "../types";
 import { mean, withinLastDays, formatDate } from "../safetyEngine/rules/types";
+import { latestLabs } from "../passport/selectors";
 
 /**
  * CONVERSATIONAL ASSISTANT — scripted, data-grounded responder.
@@ -173,7 +174,7 @@ export const scriptedProvider: AssistantProvider = {
     }
 
     if (/lab|inr|a1c|glucose|cholesterol|ldl|potassium|kidney|egfr|blood pressure|\bbp\b|vital/.test(q)) {
-      const labs = patient.labs.map((l) => `• ${l.name}: ${l.value}${l.unit ? " " + l.unit : ""} (${formatDate(l.date)}) — ${l.status}`);
+      const labs = latestLabs(patient.labs).map((l) => `• ${l.name}: ${l.value}${l.unit ? " " + l.unit : ""} (${formatDate(l.date)}) — ${l.status}`);
       const v = [...patient.vitals].sort((a, b) => b.timestamp.localeCompare(a.timestamp))[0];
       return {
         text:

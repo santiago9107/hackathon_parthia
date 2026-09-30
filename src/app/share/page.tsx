@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Wordmark } from "@/components/Wordmark";
 import { CATEGORY_LABELS, LEVEL_STYLES } from "@/components/Badges";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
+import { latestLabs } from "@/lib/passport/selectors";
 
 function fmt(d: string) {
   return new Date(d.length === 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -131,7 +132,7 @@ export default function SharePage() {
           <div>
             <h2 className="font-serif text-lg font-semibold text-navy">Recent labs & vitals</h2>
             <ul className="mt-2 divide-y divide-line text-sm">
-              {patient.labs.map((l) => (
+              {latestLabs(patient.labs).map((l) => (
                 <li key={l.id} className="flex items-center justify-between py-1.5">
                   <span className="text-ink">
                     {l.name} <span className="text-xs text-ink-muted">{fmt(l.date)}</span>

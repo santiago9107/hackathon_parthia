@@ -1,6 +1,7 @@
 import type { NutritionEntry, RiskFlag } from "../../types";
 import { GRAPEFRUIT_STATIN_SENSITIVITY } from "../knowledge";
 import { dateOnly, formatDate, makeFlag, withinLastDays, type RuleDefinition } from "./types";
+import { latestLab } from "../../passport/selectors";
 
 const LOOKBACK_DAYS = 28;
 
@@ -43,7 +44,7 @@ export const warfarinVitaminKRule: RuleDefinition = {
     const total = weekCounts.reduce((a, b) => a + b, 0);
 
     const flags: RiskFlag[] = [];
-    const inr = record.patient.labs.find((l) => l.name === "INR");
+    const inr = latestLab(record.patient.labs, "INR");
     const inrEvidence = inr ? `Most recent INR: ${inr.value} on ${formatDate(inr.date)} (target ${inr.referenceRange.low}–${inr.referenceRange.high}).` : null;
 
     if (max - min >= 3) {
