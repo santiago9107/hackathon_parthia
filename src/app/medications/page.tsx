@@ -7,6 +7,7 @@ import { PageHeader, Card, Disclaimer } from "@/components/PageHeader";
 import { RiskFlagCard } from "@/components/RiskFlagCard";
 import { CATEGORY_LABELS, SEVERITY_STYLES, SeverityBadge } from "@/components/Badges";
 import type { RiskCategory } from "@/lib/types";
+import { SourceBadge } from "@/components/passport/SourceBadge";
 
 const CATEGORY_ORDER: RiskCategory[] = ["drug-drug", "drug-nutrient", "drug-mood", "anticholinergic-burden"];
 
@@ -44,6 +45,7 @@ export default function MedicationsPage() {
                       <span className="rounded-full bg-cream-dark px-2 py-0.5 text-[11px] font-medium text-ink-soft">{med.class.replace(/-/g, " ")}</span>
                       {psychotropic && <span className="rounded-full bg-cream-dark px-2 py-0.5 text-[11px] font-medium text-ink-soft">acts on the brain</span>}
                       {acb && <span className="rounded-full bg-cream-dark px-2 py-0.5 text-[11px] font-medium text-ink-soft">anticholinergic score {acb}</span>}
+                      <SourceBadge source={med.source} />
                     </div>
                     <p className="mt-1 text-sm text-ink">
                       <span className="font-semibold">{med.dose}</span> · {med.frequency}

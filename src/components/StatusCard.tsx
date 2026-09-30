@@ -5,7 +5,7 @@ import { Card } from "./PageHeader";
 
 const DOMAIN_LINKS: Record<DomainIndicator["domain"], { href: string; icon: string }> = {
   "medication-safety": { href: "/medications/", icon: "💊" },
-  physical: { href: "/share/", icon: "🩺" },
+  physical: { href: "/passport/clinical/", icon: "🩺" },
   "mental-health": { href: "/trends/", icon: "🌤️" },
   nutrition: { href: "/trends/", icon: "🥗" },
 };

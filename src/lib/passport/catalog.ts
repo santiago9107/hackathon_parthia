@@ -1,0 +1,61 @@
+import type { SourceKind } from "../types";
+
+/** The sources a patient can bring into their Passport, and whether each is real or simulated here. */
+export interface SourceOption {
+  id: string;
+  kind: SourceKind;
+  name: string;
+  description: string;
+  href: string;
+  /** What's real in this prototype vs simulated. */
+  status: "real" | "simulated" | "real-with-simulated-fallback";
+  statusNote: string;
+}
+
+export const SOURCE_CATALOG: readonly SourceOption[] = [
+  {
+    id: "epic",
+    kind: "ehr",
+    name: "Hospital record (Epic MyChart)",
+    description: "Conditions, medications, allergies, labs, visits, appointments, immunizations and notes from your health system.",
+    href: "/passport/add/epic/",
+    status: "simulated",
+    statusNote: "Simulated — no real Epic connection. Uses synthetic FHIR R4 data mapped by a real mapper.",
+  },
+  {
+    id: "scan",
+    kind: "document-scan",
+    name: "Scan a document",
+    description: "Take a photo of a prescription, lab report or visit summary. Text is read on this device and you review every item.",
+    href: "/passport/add/scan/",
+    status: "real",
+    statusNote: "Real on-device text recognition (OCR). Nothing is uploaded.",
+  },
+  {
+    id: "apple-health",
+    kind: "wearable",
+    name: "Apple Health export",
+    description: "Heart rate, resting heart rate, blood pressure, steps, sleep and weight from the Health app export file.",
+    href: "/passport/add/apple-health/",
+    status: "real",
+    statusNote: "Real parser for the Health app's export.zip, run on this device. A sample export is included.",
+  },
+  {
+    id: "bp-monitor",
+    kind: "device",
+    name: "Blood pressure monitor",
+    description: "Readings from a home blood pressure cuff.",
+    href: "/passport/add/device/",
+    status: "real-with-simulated-fallback",
+    statusNote: "Real Bluetooth connection where the browser supports it; otherwise a simulated sync.",
+  },
+  {
+    id: "self",
+    kind: "patient-entered",
+    name: "Your own entries",
+    description: "Mood, symptoms, meals, readings, medicines, appointments, allergies and screenings you log yourself.",
+    href: "/log/",
+    status: "real",
+    statusNote: "Saved on this device as you enter them.",
+  },
+];

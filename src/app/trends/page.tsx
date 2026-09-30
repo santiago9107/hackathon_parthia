@@ -5,6 +5,7 @@ import { usePatient } from "@/lib/context/PatientContext";
 import { PageHeader, Card, Disclaimer } from "@/components/PageHeader";
 import { TrendChart, ChartLegend } from "@/components/charts/TrendChart";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
+import { SourceBadges } from "@/components/passport/SourceBadge";
 
 export default function TrendsPage() {
   const { record, flags, now } = usePatient();
@@ -56,6 +57,9 @@ export default function TrendsPage() {
         }
       />
 
+      <p className="-mt-3 mb-4 flex flex-wrap items-center gap-2 text-xs text-ink-muted">
+        Data from: <SourceBadges sources={[...moodsRecent, ...nutritionRecent, ...symptomsRecent].map((e) => e.source)} />
+      </p>
       <Card className="p-4 sm:p-5">
         <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="font-serif text-xl font-semibold text-navy">Daily timeline</h2>

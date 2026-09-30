@@ -8,6 +8,9 @@ import { Card, Disclaimer } from "@/components/PageHeader";
 import { InstallCTA } from "@/components/InstallCTA";
 import { useInstall } from "@/lib/pwa/useInstall";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
+import { SourceBadge } from "@/components/passport/SourceBadge";
+import { fmtDateTime } from "@/components/passport/PassportChrome";
+import { pendingEntries } from "@/lib/passport/ops";
 
 function greeting(now: Date) {
   const h = now.getHours();
@@ -15,7 +18,7 @@ function greeting(now: Date) {
 }
 
 export default function DashboardPage() {
-  const { record, flags, indicators, now } = usePatient();
+  const { record, flags, indicators, now, local } = usePatient();
   const { ready, isInstalled } = useInstall();
   const { patient } = record;
   const first = patient.name.split(" ")[0];
@@ -28,6 +31,9 @@ export default function DashboardPage() {
   const moodAvg = mean(week.moods.map((m) => m.score));
   const topFlags = flags.filter((f) => f.severity !== "low").slice(0, 3);
   const recentChanges = patient.medicationHistory.filter((e) => (now.getTime() - new Date(e.date).getTime()) / 86_400_000 <= 45);
+  const pending = pendingEntries(local).length;
+  const nowIso = now.toISOString().slice(0, 19);
+  const nextAppt = record.appointments.filter((a) => a.status === "booked" && a.start >= nowIso).sort((a, b) => a.start.localeCompare(b.start))[0];
 
   return (
     <div>
@@ -83,6 +89,36 @@ export default function DashboardPage() {
         </div>
 
         <div className="space-y-4">
+          <Card className="p-5" accent="border-l-brand-500">
+            <div className="flex items-baseline justify-between gap-2">
+              <h2 className="font-serif text-lg font-semibold text-navy">My Passport</h2>
+              <Link href="/passport/" className="text-sm font-semibold text-brand-700 hover:text-brand-900">Open →</Link>
+            </div>
+            {pending > 0 && (
+              <Link href="/passport/review/" className="mt-3 flex items-center justify-between rounded-lg bg-gold-50 px-3 py-2 text-sm font-semibold text-[#5c430d] ring-1 ring-gold-200 hover:bg-gold-100">
+                {pending} item{pending === 1 ? "" : "s"} to review <span aria-hidden>→</span>
+              </Link>
+            )}
+            {nextAppt && (
+              <p className="mt-3 text-sm text-ink-soft">
+                <span className="text-ink-muted">Next: </span>
+                <span className="font-semibold text-ink">{fmtDateTime(nextAppt.start)}</span> · {nextAppt.clinician}
+              </p>
+            )}
+            <div className="mt-3 flex flex-wrap gap-2">
+              {[
+                { href: "/log/mood/", label: "Mood" },
+                { href: "/log/meal/", label: "Meal" },
+                { href: "/log/symptom/", label: "Symptom" },
+                { href: "/log/vitals/", label: "BP" },
+              ].map((a) => (
+                <Link key={a.href} href={a.href} className="inline-flex min-h-11 items-center rounded-full bg-surface px-3.5 text-sm font-semibold text-brand-800 ring-1 ring-line hover:bg-brand-50">
+                  ＋ {a.label}
+                </Link>
+              ))}
+            </div>
+          </Card>
+
           <Card className="p-5">
             <h2 className="font-serif text-lg font-semibold text-navy">This week</h2>
             <dl className="mt-3 divide-y divide-line text-sm">
@@ -123,6 +159,7 @@ export default function DashboardPage() {
                       <span className="font-normal text-ink-muted">· {new Date(`${e.date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
                     </p>
                     <p className="text-ink-muted">{e.detail}</p>
+                    <div className="mt-1"><SourceBadge source={e.source} compact /></div>
                   </li>
                 ))}
               </ul>
@@ -133,7 +170,7 @@ export default function DashboardPage() {
             <h2 className="font-serif text-lg font-semibold text-navy">Your care team</h2>
             <p className="mt-2 text-sm text-ink">{patient.primaryClinician}</p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <Link href="/share/" className="rounded-full bg-brand-700 px-3.5 py-1.5 text-sm font-semibold text-white hover:bg-brand-800">
+              <Link href="/passport/share/" className="rounded-full bg-brand-700 px-3.5 py-1.5 text-sm font-semibold text-white hover:bg-brand-800">
                 Prepare a summary to share
               </Link>
               <Link href="/assistant/" className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm font-medium text-ink hover:border-brand-300">
