@@ -6,6 +6,7 @@ import { PageHeader, Card, Disclaimer } from "@/components/PageHeader";
 import { TrendChart, ChartLegend } from "@/components/charts/TrendChart";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
 import { SourceBadges } from "@/components/passport/SourceBadge";
+import { DeviceTrends } from "@/components/passport/DeviceTrends";
 
 export default function TrendsPage() {
   const { record, flags, now } = usePatient();
@@ -136,6 +137,11 @@ export default function TrendsPage() {
           )}
         </Card>
       </div>
+
+      <Card className="mt-6 p-5">
+        <h3 className="mb-3 font-serif text-lg font-semibold text-navy">From your wearables and devices</h3>
+        <DeviceTrends vitals={record.patient.vitals} now={now} days={days} />
+      </Card>
 
       <Disclaimer />
     </div>

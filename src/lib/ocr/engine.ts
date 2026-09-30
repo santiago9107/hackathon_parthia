@@ -34,9 +34,12 @@ export async function loadImage(src: Blob | string, max: number): Promise<HTMLCa
   const url = typeof src === "string" ? src : URL.createObjectURL(src);
   try {
     const img = new Image();
-    img.decoding = "async";
-    img.src = url;
-    await img.decode();
+    // Wait for "load" rather than img.decode(): decode() can stall while the page is in the background.
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("That image couldn't be opened. Try a JPEG or PNG photo."));
+      img.src = url;
+    });
     const scale = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
     const canvas = document.createElement("canvas");
     canvas.width = Math.round(img.naturalWidth * scale);

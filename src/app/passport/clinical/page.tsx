@@ -6,6 +6,7 @@ import { SourceBadge } from "@/components/passport/SourceBadge";
 import { EmptyState, SectionTitle, TextLink, fmtDate } from "@/components/passport/PassportChrome";
 import { usePatient } from "@/lib/context/PatientContext";
 import { labHistory, labKey, latestLabs } from "@/lib/passport/selectors";
+import { DeviceTrends } from "@/components/passport/DeviceTrends";
 
 const STATUS_TONE = { normal: "text-ink", borderline: "text-[#7a5812]", abnormal: "text-attention" } as const;
 
@@ -18,10 +19,12 @@ function rangeText(r: { low?: number; high?: number }, unit: string) {
 }
 
 export default function ClinicalPage() {
-  const { record } = usePatient();
+  const { record, now } = usePatient();
   const { patient } = record;
   const latest = latestLabs(patient.labs);
   const vitals = [...patient.vitals].sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+  // Individual measurements for the table; daily wearable summaries are shown as trends below.
+  const readings = vitals.filter((v) => v.systolic !== undefined || v.weightKg !== undefined || (v.heartRate !== undefined && !v.id.startsWith("ah-day-")));
   const bp = vitals.filter((v) => v.systolic);
 
   return (
@@ -89,7 +92,7 @@ export default function ClinicalPage() {
               <tr><th scope="col" className="py-2 font-semibold">When</th><th scope="col" className="font-semibold">Blood pressure</th><th scope="col" className="font-semibold">Heart rate</th><th scope="col" className="font-semibold">Weight</th><th scope="col" className="font-semibold">Where</th><th scope="col" className="font-semibold">Source</th></tr>
             </thead>
             <tbody className="divide-y divide-line">
-              {vitals.slice(0, 20).map((v) => (
+              {readings.slice(0, 20).map((v) => (
                 <tr key={v.id}>
                   <td className="py-2 text-ink-soft">{fmtDate(v.timestamp, { month: "short", day: "numeric" })}</td>
                   <td className="font-medium text-ink">{v.systolic ? `${v.systolic}/${v.diastolic}` : "—"}</td>
@@ -102,6 +105,11 @@ export default function ClinicalPage() {
             </tbody>
           </table>
         </div>
+      </Card>
+
+      <Card className="p-5">
+        <SectionTitle action={<TextLink href="/passport/add/">Import</TextLink>}>Devices and activity (last 30 days)</SectionTitle>
+        <DeviceTrends vitals={patient.vitals} now={now} days={30} />
       </Card>
 
       <Card className="p-5">
