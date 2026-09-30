@@ -116,11 +116,19 @@ export async function restorePassportFile(file: PassportFile, knownPatients: Pat
   );
 }
 
+export const NOTHING_NEW_MESSAGE = "Everything in this file is already in your Passport — nothing new to add.";
+
+/** True when every item in a FHIR Bundle is already in this patient's Passport. */
+export function fhirFileHasNothingNew(bundle: FhirBundle, record: PatientRecord): boolean {
+  const { plan } = prepareFhirImport(bundle, record, "FHIR file", new Date().toISOString());
+  return Object.values(plan.batch).every((items) => !items?.length);
+}
+
 /** A plain FHIR Bundle: map, de-duplicate and save for review — nothing is used until confirmed. */
 export async function importFhirFile(bundle: FhirBundle, record: PatientRecord, fileName: string, store: PassportStore = passportStore): Promise<ImportPlan> {
   const { plan, identityMismatch } = prepareFhirImport(bundle, record, `FHIR file (${fileName})`, new Date().toISOString());
   if (identityMismatch) throw new ImportFileError(identityMismatch);
-  if (Object.values(plan.batch).every((items) => !items?.length)) throw new ImportFileError("Everything in this file is already in your Passport.");
+  if (Object.values(plan.batch).every((items) => !items?.length)) throw new ImportFileError(NOTHING_NEW_MESSAGE);
   await importForReview(record.patient.id, plan.batch, "ehr", `FHIR file ${fileName}`, store);
   return plan;
 }

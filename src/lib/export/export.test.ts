@@ -8,7 +8,7 @@ import { mergeRecord } from "../passport/merge";
 import { PassportStore } from "../passport/store";
 import { mapBundle } from "../fhir/mapper";
 import { EXPORT_SECTIONS, bundleCounts, toFhirBundle } from "./fhirExport";
-import { ImportFileError, buildPassportFile, describePassportFile, importFhirFile, parseImportFile, restorePassportFile } from "./passportFile";
+import { ImportFileError, buildPassportFile, describePassportFile, fhirFileHasNothingNew, importFhirFile, parseImportFile, restorePassportFile } from "./passportFile";
 
 const P = "p-harold";
 const now = referenceNow();
@@ -113,5 +113,14 @@ describe("Passport file export → import round trip", () => {
     expect(plan.batch.medications?.map((m) => m.name)).toEqual(["Naproxen"]);
     expect(s.get(P)!.entries[0]).toMatchObject({ status: "pending" });
     await expect(importFhirFile(parsed.bundle, getSeedRecord("p-rosa")!, "x.json", s)).rejects.toThrow(/This record is for Harold/);
+  });
+
+  it("a FHIR file with nothing new is recognised before importing", async () => {
+    const seed = getSeedRecord(P)!;
+    const same = toFhirBundle(seed, { now, sections: ["medications", "allergies"] });
+    expect(fhirFileHasNothingNew(same, seed)).toBe(true);
+    await expect(importFhirFile(same, seed, "same.json", store())).rejects.toThrow(/nothing new to add/);
+    const withNaproxen = { ...seed, patient: { ...seed.patient, medications: [...seed.patient.medications, naproxen] } };
+    expect(fhirFileHasNothingNew(toFhirBundle(withNaproxen, { now, sections: ["medications"] }), seed)).toBe(false);
   });
 });

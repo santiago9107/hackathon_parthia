@@ -13,6 +13,8 @@ import {
   ImportFileError,
   buildPassportFile,
   describePassportFile,
+  fhirFileHasNothingNew,
+  NOTHING_NEW_MESSAGE,
   importFhirFile,
   parseImportFile,
   passportFileName,
@@ -81,6 +83,7 @@ export function ExportImport() {
 
   const summary = pending?.kind === "passport" ? describePassportFile(pending.file) : null;
   const fhirCounts = pending?.kind === "fhir" ? bundleCounts(pending.bundle) : null;
+  const nothingNew = pending?.kind === "fhir" && fhirFileHasNothingNew(pending.bundle, record);
   const target = pending?.kind === "passport" ? patients.find((p) => p.id === pending.file.patient.id) : undefined;
 
   return (
@@ -131,7 +134,7 @@ export function ExportImport() {
         </label>
 
         {pending && (
-          <div className="mt-4 rounded-xl border border-gold-200 bg-gold-50/60 p-4 text-sm">
+          <div className={`mt-4 rounded-xl border p-4 text-sm ${nothingNew ? "border-line bg-cream/60" : "border-gold-200 bg-gold-50/60"}`}>
             <p className="font-semibold text-ink">{pending.fileName}</p>
             {pending.kind === "passport" && summary ? (
               <>
@@ -143,15 +146,19 @@ export function ExportImport() {
                   This replaces what this device stores for {pending.file.patient.name}{target ? "" : " (not a sample patient — can't be restored)"}.
                 </p>
               </>
+            ) : fhirCounts && nothingNew ? (
+              <p role="status" className="mt-1 text-ink-soft">
+                FHIR Bundle with {Object.entries(fhirCounts).map(([k, n]) => `${n} ${k}`).join(", ")}. {NOTHING_NEW_MESSAGE}
+              </p>
             ) : fhirCounts ? (
               <p className="mt-1 text-ink-soft">
                 FHIR Bundle with {Object.entries(fhirCounts).map(([k, n]) => `${n} ${k}`).join(", ")}. New items will be added to Review for {record.patient.name}; anything already in the Passport is skipped.
               </p>
             ) : null}
             <div className="mt-3 flex flex-wrap gap-2">
-              <button type="button" disabled={busy || !ready} onClick={apply} className="min-h-11 rounded-full bg-brand-700 px-4 font-semibold text-white hover:bg-brand-800 disabled:opacity-50">
+              {!nothingNew && <button type="button" disabled={busy || !ready} onClick={apply} className="min-h-11 rounded-full bg-brand-700 px-4 font-semibold text-white hover:bg-brand-800 disabled:opacity-50">
                 {pending.kind === "passport" ? "Replace and restore" : "Add to Review"}
-              </button>
+              </button>}
               <button type="button" onClick={() => setPending(null)} className="min-h-11 rounded-full px-4 font-semibold text-ink-soft ring-1 ring-line">
                 Cancel
               </button>
