@@ -56,6 +56,26 @@ export async function importForReview(
   });
 }
 
+/**
+ * Several collections the patient has just reviewed and confirmed on one
+ * screen (e.g. rows from a scanned document) — one change, one log entry.
+ */
+export async function addReviewedBatch(
+  patientId: PatientId,
+  batch: Partial<{ [C in CollectionName]: CollectionTypes[C][] }>,
+  summary: string,
+  sourceKind: SourceKind,
+  store: PassportStore = passportStore,
+): Promise<void> {
+  await store.update(patientId, (p, at) => {
+    let next = p;
+    for (const [collection, items] of Object.entries(batch) as [CollectionName, CollectionTypes[CollectionName][]][]) {
+      if (items?.length) next = upsertItems(next, collection, items, "confirmed", at);
+    }
+    return appendActivity(next, "import", summary, at, sourceKind);
+  });
+}
+
 export async function confirmEntry(patientId: PatientId, collection: CollectionName, id: string, store: PassportStore = passportStore): Promise<void> {
   await store.update(patientId, (p, at) => {
     const e = p.entries.find((x) => x.collection === collection && x.item.id === id);

@@ -11,7 +11,7 @@
  * Mock data ships inside the JS bundles, so caching the app shell also caches
  * the data — the whole demo works offline after the first visit.
  */
-const VERSION = "parthia-v5";
+const VERSION = "parthia-v6";
 const SHELL_CACHE = `${VERSION}-shell`;
 const ASSET_CACHE = `${VERSION}-assets`;
 
@@ -51,6 +51,7 @@ const SHELL_URLS = [
   "/passport/settings/",
   "/passport/add/",
   "/passport/add/epic/",
+  "/passport/add/scan/",
   "/manifest.json",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
@@ -79,6 +80,9 @@ function isStaticAsset(url) {
   return (
     url.pathname.startsWith("/_next/static/") ||
     url.pathname.startsWith("/icons/") ||
+    // On-device OCR engine + language data and the sample documents: cache after first use (works offline).
+    url.pathname.startsWith("/ocr/") ||
+    url.pathname.startsWith("/samples/") ||
     /\.(png|svg|ico|woff2?|css|js)$/.test(url.pathname)
   );
 }

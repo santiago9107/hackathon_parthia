@@ -46,3 +46,6 @@ next-env.d.ts
 
 # local editor/agent config
 .claude/
+
+# On-device OCR assets (copied from node_modules by scripts/copy-ocr-assets.mjs)
+/public/ocr/

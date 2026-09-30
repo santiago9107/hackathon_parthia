@@ -1,0 +1,15 @@
+SAMPLE — SYNTHETIC — NOT A REAL DOCUMENT
+
+MESA FAMILY PRACTICE
+After-Visit Summary
+Patient: Rosa Delgado Visit date: 09/05/2026
+Provider: Dr. Marcus Bell, MD
+Reason for visit: Thyroid and blood pressure follow-up
+Your medications
+Levothyroxine 75 mcg - take 1 tablet once daily, empty stomach
+Vitamin D3 2000 units - take once daily with food (new)
+Lisinopril 10 mg - take once daily
+Today's vitals: BP 128/78 Pulse 72
+Follow-up: TSH in 3 months
+
+Synthetic sample for the Parthia Health demo. No real patient.
