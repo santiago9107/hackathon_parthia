@@ -13,8 +13,8 @@ import {
   ImportFileError,
   buildPassportFile,
   describePassportFile,
-  fhirFileHasNothingNew,
-  NOTHING_NEW_MESSAGE,
+  fhirFileNovelty,
+  NOTHING_NEW_MESSAGES,
   importFhirFile,
   parseImportFile,
   passportFileName,
@@ -83,7 +83,8 @@ export function ExportImport() {
 
   const summary = pending?.kind === "passport" ? describePassportFile(pending.file) : null;
   const fhirCounts = pending?.kind === "fhir" ? bundleCounts(pending.bundle) : null;
-  const nothingNew = pending?.kind === "fhir" && fhirFileHasNothingNew(pending.bundle, record);
+  const novelty = pending?.kind === "fhir" ? fhirFileNovelty(pending.bundle, record, local) : "new";
+  const nothingNew = novelty !== "new";
   const target = pending?.kind === "passport" ? patients.find((p) => p.id === pending.file.patient.id) : undefined;
 
   return (
@@ -148,7 +149,13 @@ export function ExportImport() {
               </>
             ) : fhirCounts && nothingNew ? (
               <p role="status" className="mt-1 text-ink-soft">
-                FHIR Bundle with {Object.entries(fhirCounts).map(([k, n]) => `${n} ${k}`).join(", ")}. {NOTHING_NEW_MESSAGE}
+                FHIR Bundle with {Object.entries(fhirCounts).map(([k, n]) => `${n} ${k}`).join(", ")}. {NOTHING_NEW_MESSAGES[novelty as keyof typeof NOTHING_NEW_MESSAGES]}
+                {novelty === "all-known" && (
+                  <>
+                    {" "}
+                    <Link href="/passport/review/" className="font-semibold text-brand-700 underline hover:text-brand-900">Go to Review →</Link>
+                  </>
+                )}
               </p>
             ) : fhirCounts ? (
               <p className="mt-1 text-ink-soft">

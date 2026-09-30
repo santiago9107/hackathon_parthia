@@ -3,6 +3,7 @@ import type { LocalPassport } from "../passport/collections";
 import { importForReview } from "../passport/actions";
 import { appendActivity } from "../passport/ops";
 import { passportStore, type PassportStore } from "../passport/store";
+import { mergeRecord } from "../passport/merge";
 import type { ImportPlan } from "../passport/importPlan";
 import { prepareFhirImport } from "../fhir/importer";
 import type { FhirBundle } from "../fhir/types";
@@ -116,19 +117,42 @@ export async function restorePassportFile(file: PassportFile, knownPatients: Pat
   );
 }
 
-export const NOTHING_NEW_MESSAGE = "Everything in this file is already in your Passport — nothing new to add.";
+export const NOTHING_NEW_MESSAGES = {
+  "all-confirmed": "Everything in this file is already in your Passport — nothing new to add.",
+  "all-known": "Everything in this file is already in your Passport or waiting in Review — nothing new to add.",
+} as const;
 
-/** True when every item in a FHIR Bundle is already in this patient's Passport. */
-export function fhirFileHasNothingNew(bundle: FhirBundle, record: PatientRecord): boolean {
-  const { plan } = prepareFhirImport(bundle, record, "FHIR file", new Date().toISOString());
-  return Object.values(plan.batch).every((items) => !items?.length);
+/**
+ * Is there anything new in this FHIR Bundle for this patient?
+ * "all-confirmed": every item is already confirmed in the Passport;
+ * "all-known": every item is confirmed or already waiting in Review;
+ * "new": at least one item would be added.
+ */
+export type FhirFileNovelty = "new" | keyof typeof NOTHING_NEW_MESSAGES;
+
+/** The record plus items still waiting in Review, as if they were confirmed — used only for de-duplication. */
+function withPending(record: PatientRecord, local: LocalPassport | undefined): PatientRecord {
+  const pending = (local?.entries ?? []).filter((e) => e.status === "pending" && !e.removed);
+  return pending.length ? mergeRecord(record, { ...local!, entries: pending.map((e) => ({ ...e, status: "confirmed" as const })) }) : record;
+}
+
+const isEmpty = (plan: ImportPlan) => Object.values(plan.batch).every((items) => !items?.length);
+
+export function fhirFileNovelty(bundle: FhirBundle, record: PatientRecord, local: LocalPassport | undefined): FhirFileNovelty {
+  const at = new Date().toISOString();
+  if (isEmpty(prepareFhirImport(bundle, record, "FHIR file", at).plan)) return "all-confirmed";
+  if (isEmpty(prepareFhirImport(bundle, withPending(record, local), "FHIR file", at).plan)) return "all-known";
+  return "new";
 }
 
 /** A plain FHIR Bundle: map, de-duplicate and save for review — nothing is used until confirmed. */
 export async function importFhirFile(bundle: FhirBundle, record: PatientRecord, fileName: string, store: PassportStore = passportStore): Promise<ImportPlan> {
-  const { plan, identityMismatch } = prepareFhirImport(bundle, record, `FHIR file (${fileName})`, new Date().toISOString());
+  const local = store.get(record.patient.id);
+  // De-duplicate against items waiting in Review too, so a re-import doesn't add them again.
+  const { plan, identityMismatch } = prepareFhirImport(bundle, withPending(record, local), `FHIR file (${fileName})`, new Date().toISOString());
   if (identityMismatch) throw new ImportFileError(identityMismatch);
-  if (Object.values(plan.batch).every((items) => !items?.length)) throw new ImportFileError(NOTHING_NEW_MESSAGE);
+  const novelty = isEmpty(plan) ? fhirFileNovelty(bundle, record, local) : "new";
+  if (novelty !== "new") throw new ImportFileError(NOTHING_NEW_MESSAGES[novelty]);
   await importForReview(record.patient.id, plan.batch, "ehr", `FHIR file ${fileName}`, store);
   return plan;
 }

@@ -8,7 +8,7 @@ import { mergeRecord } from "../passport/merge";
 import { PassportStore } from "../passport/store";
 import { mapBundle } from "../fhir/mapper";
 import { EXPORT_SECTIONS, bundleCounts, toFhirBundle } from "./fhirExport";
-import { ImportFileError, buildPassportFile, describePassportFile, fhirFileHasNothingNew, importFhirFile, parseImportFile, restorePassportFile } from "./passportFile";
+import { ImportFileError, buildPassportFile, describePassportFile, fhirFileNovelty, importFhirFile, parseImportFile, restorePassportFile } from "./passportFile";
 
 const P = "p-harold";
 const now = referenceNow();
@@ -118,9 +118,28 @@ describe("Passport file export → import round trip", () => {
   it("a FHIR file with nothing new is recognised before importing", async () => {
     const seed = getSeedRecord(P)!;
     const same = toFhirBundle(seed, { now, sections: ["medications", "allergies"] });
-    expect(fhirFileHasNothingNew(same, seed)).toBe(true);
-    await expect(importFhirFile(same, seed, "same.json", store())).rejects.toThrow(/nothing new to add/);
+    expect(fhirFileNovelty(same, seed, undefined)).toBe("all-confirmed");
+    await expect(importFhirFile(same, seed, "same.json", store())).rejects.toThrow("Everything in this file is already in your Passport — nothing new to add.");
     const withNaproxen = { ...seed, patient: { ...seed.patient, medications: [...seed.patient.medications, naproxen] } };
-    expect(fhirFileHasNothingNew(toFhirBundle(withNaproxen, { now, sections: ["medications"] }), seed)).toBe(false);
+    expect(fhirFileNovelty(toFhirBundle(withNaproxen, { now, sections: ["medications"] }), seed, undefined)).toBe("new");
+  });
+
+  it("items already waiting in Review count as known, with their own message", async () => {
+    const s = store();
+    const seed = getSeedRecord(P)!;
+    const withNaproxen = { ...seed, patient: { ...seed.patient, medications: [...seed.patient.medications, naproxen] } };
+    const file = toFhirBundle(withNaproxen, { now, sections: ["medications"] });
+    await importFhirFile(file, seed, "first.json", s);
+    expect(s.get(P)!.entries.filter((e) => e.status === "pending")).toHaveLength(1);
+    // Naproxen is pending, not confirmed: the same file again has nothing new.
+    const record = mergeRecord(seed, s.get(P));
+    expect(fhirFileNovelty(file, record, s.get(P))).toBe("all-known");
+    await expect(importFhirFile(file, record, "again.json", s)).rejects.toThrow(
+      "Everything in this file is already in your Passport or waiting in Review — nothing new to add.",
+    );
+    expect(s.get(P)!.entries).toHaveLength(1);
+    // A discarded item no longer counts as waiting in Review.
+    await s.update(P, (p) => ({ ...p, entries: p.entries.map((e) => ({ ...e, status: "discarded" as const })) }));
+    expect(fhirFileNovelty(file, record, s.get(P))).toBe("new");
   });
 });
