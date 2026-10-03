@@ -40,7 +40,7 @@ export const AGENTS: AgentPersona[] = [
     role: "Patient companion",
     audience: "Patient",
     tribute: "TechNovaTime",
-    why: "For TechNovaTime. Nova's job is timing: the moment Harold logs a medicine, it rechecks his record and tells him what changed, and an urgent symptom gets 911 or 988 before anything else.",
+    why: "For TechNovaTime. Nova's job is timing: the moment Margaret logs a medicine, it rechecks her record and tells her what changed, and an urgent symptom gets 911 or 988 before anything else.",
     color: "#0e5c56",
     assurance: "I explain what changed in plain words and help you bring the right questions to your doctor.",
     description: "Answers the patient on any page from their own Passport. Rules decide, templates explain: no language model, no network call, no API key. It never tells anyone to start, stop or change a medicine.",

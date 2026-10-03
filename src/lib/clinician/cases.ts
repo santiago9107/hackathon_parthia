@@ -98,6 +98,8 @@ export function buildClinicianCase(patientId: string): ClinicianCase {
     ];
   } else if (p.id === "p-margaret") {
     extras = [
+      med("urgent:m-furosemide", "furosemide", "20 mg", "active", "prescribed", "urgent", "2026-10-02", "Furosemide 20 mg tablet"),
+      med("specialist:m-furosemide", "furosemide", "40 mg", "active", "prescribed", "specialist", "2026-08-30", "Furosemide 40 mg tablet"),
       med("specialist:sertraline", "sertraline", "50 mg", "stopped", "prescribed", "specialist", "2026-01-05", "Sertraline 50 mg"),
       med("photon:sertraline", "sertraline", "100 mg", "fulfilled", "fulfillment", "photon", "2026-09-23", "Sertraline 100 mg"),
       med("passport:otc-diphenhydramine", "diphenhydramine", "25 mg", "unconfirmed", "patient-reported", "passport", AS_OF, "Benadryl 25 mg tablet"),

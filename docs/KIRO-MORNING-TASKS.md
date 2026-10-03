@@ -2,25 +2,25 @@
 
 ## ⭐ FOCUS CHANGE (9:30 AM): the PATIENT is the main character
 
-Parthia Health is a patient-owned product. The demo leads with **Harold's patient experience**;
+Parthia Health is a patient-owned product. The demo leads with **Margaret's patient experience**;
 the clinician view is the **payoff in the last minute**, not the whole demo.
 
 **New priority order:** M1 → M2 → **M4 (patient-side agent, now the core)** → M5 (ship by noon)
 → M3 (agent team, only if time) . If anything slips, cut M3 first, never M4.
 
 ### The 3-minute demo this must support (patient first)
-1. **Harold's Passport** (`/passport/`): his records from the hospital, urgent care, cardiologist
+1. **Margaret's Passport** (`/passport/`): her records from the hospital, urgent care, cardiologist
    and pharmacy fills in one place, each item showing where it came from.
-2. **He logs Advil** for knee pain (`/log/medication`). The **patient agent** notices it is in no
-   clinical record, re-runs the safety check and tells him, in plain words, that it can clash
-   with his warfarin and that his record lists an NSAID allergy, so it is **worth asking his
-   doctor or pharmacist before taking it**. (Never "stop" or "start".)
-3. **He asks the agent** on any page: "Why is this flagged?", "Where did this medicine come
-   from?", "What should I ask at my visit?" The agent answers from his own record with the
+2. **She logs Benadryl 25 mg for sleep** (`/log/medication`). The **patient agent** notices it is in no
+   clinical record, re-runs the safety check and tells her, in plain words, that it adds to her
+   anticholinergic burden and drowsiness findings, so it is **worth asking her doctor or pharmacist**.
+   (Never "stop" or "start".)
+3. **She asks the agent** on any page: "Why is this flagged?", "Where did this medicine come
+   from?", "What should I ask at my visit?" The agent answers from her own record with the
    source shown.
-4. **The agent prepares his visit**: a short list of questions + the share summary
+4. **The agent prepares her visit**: a short list of questions + the share summary
    (`/passport/share/`).
-5. **He shares → "Open as clinician"** (`/clinician/`): the same findings with label evidence and
+5. **She shares → "Open as clinician"** (`/clinician/`): the same findings with label evidence and
    **live Photon screening**; only the clinician decides; prescribing goes through Photon.
    (≈60 seconds.)
 
@@ -47,7 +47,7 @@ In addition to the M4 list below, do these first:
 4. **Global "Ask Parthia" panel** on every patient page (M4 item 1), with example questions per
    page.
 5. The clinician view keeps working as is; just make sure "Open as clinician" from the share page
-   lands on Harold with the same findings.
+   lands on Margaret with the same findings.
 
 ---
 
