@@ -5,6 +5,7 @@ import { usePatient } from "@/lib/context/PatientContext";
 import { StatusCard } from "@/components/StatusCard";
 import { RiskFlagCard } from "@/components/RiskFlagCard";
 import { Card, Disclaimer } from "@/components/PageHeader";
+import { AgentCard } from "@/components/patient/AgentCard";
 import { InstallCTA } from "@/components/InstallCTA";
 import { useInstall } from "@/lib/pwa/useInstall";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
@@ -63,6 +64,8 @@ export default function DashboardPage() {
           <InstallCTA variant="banner" />
         </div>
       )}
+
+      <AgentCard />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {indicators.map((ind) => (
