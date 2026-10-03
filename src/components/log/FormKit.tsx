@@ -5,6 +5,7 @@ import { useId, useState, type ReactNode } from "react";
 import { Disclaimer } from "@/components/PageHeader";
 import { LocalOnlyNotice, fmtDate } from "@/components/passport/PassportChrome";
 import { REFERENCE_DATE } from "@/lib/mockData";
+import { AppIcon } from "@/components/AppIcon";
 
 /**
  * Mobile-first form building blocks: large touch targets (≥48px), real
@@ -175,7 +176,7 @@ export function ChipGroup<T extends string>({ legend, options, value, onChange, 
           return (
             <label key={o.value} className={`inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-medium ring-1 transition focus-within:ring-2 focus-within:ring-brand-500 ${on ? "bg-brand-700 text-white ring-brand-700" : "bg-surface text-ink-soft ring-line-strong hover:bg-brand-50"}`}>
               <input type="checkbox" className="sr-only" checked={on} onChange={() => onChange(on ? value.filter((v) => v !== o.value) : [...value, o.value])} />
-              {on && <span aria-hidden className="mr-1">✓</span>}
+              {on && <AppIcon name="check" className="mr-1 h-4 w-4" />}
               {o.label}
             </label>
           );
@@ -203,7 +204,7 @@ export function ListEditor({ label, items, onChange, placeholder, hint }: { labe
           {items.map((it) => (
             <li key={it} className="flex items-center justify-between gap-2 rounded-xl bg-cream/70 px-3 py-2 text-sm text-ink">
               {it}
-              <button type="button" onClick={() => onChange(items.filter((x) => x !== it))} className="min-h-11 min-w-11 rounded-full text-ink-muted hover:bg-cream-dark hover:text-attention" aria-label={`Remove ${it}`}>✕</button>
+              <button type="button" onClick={() => onChange(items.filter((x) => x !== it))} className="min-h-11 min-w-11 rounded-full text-ink-muted hover:bg-cream-dark hover:text-attention" aria-label={`Remove ${it}`}><AppIcon name="close" className="mx-auto h-4 w-4" /></button>
             </li>
           ))}
         </ul>
@@ -234,7 +235,7 @@ export function SubmitBar({ label, busy, error, extra }: { label: string; busy?:
 export function SavedPanel({ title, children, onAnother, anotherLabel = "Log another", links = [] }: { title: string; children?: ReactNode; onAnother?: () => void; anotherLabel?: string; links?: { href: string; label: string }[] }) {
   return (
     <div role="status" className="rounded-card border border-good/30 bg-good-soft p-5">
-      <p className="font-serif text-xl font-semibold text-navy">✓ {title}</p>
+      <p className="flex items-center gap-2 font-serif text-xl font-semibold text-navy"><AppIcon name="check" className="h-5 w-5" />{title}</p>
       {children && <div className="mt-1 text-sm text-ink-soft">{children}</div>}
       <div className="mt-4 flex flex-wrap gap-2">
         {onAnother && <button type="button" onClick={onAnother} className="min-h-12 rounded-full bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800">{anotherLabel}</button>}

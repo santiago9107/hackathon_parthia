@@ -5,6 +5,7 @@ import { runClinicianAgent } from "@/lib/clinician/agent";
 import { buildClinicianCase } from "@/lib/clinician/cases";
 import { PHOTON_DEMO_DRAFTS } from "@/lib/clinician/photonCatalog";
 import { RULES } from "@/lib/safetyEngine";
+import { AppIcon } from "@/components/AppIcon";
 
 /**
  * The agent roster. Every count on this page comes from a real run of the
@@ -104,7 +105,7 @@ export default function AgentsPage() {
         <ul className="mt-4 divide-y divide-line">
           {blocked.map((b) => (
             <li key={b.tool} className="flex flex-col gap-1 py-2.5 sm:flex-row sm:items-baseline sm:gap-4">
-              <span className="w-56 shrink-0 text-sm font-semibold text-attention">✕ {b.label}</span>
+              <span className="flex w-56 shrink-0 items-center gap-2 text-sm font-semibold text-attention"><AppIcon name="close" className="h-4 w-4" />{b.label}</span>
               <span className="text-sm text-ink-soft">{b.reason}</span>
             </li>
           ))}

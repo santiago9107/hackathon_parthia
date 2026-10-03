@@ -11,6 +11,7 @@ import { addReviewedBatch, importForReview, saveConnection } from "@/lib/passpor
 import { planImport } from "@/lib/passport/importPlan";
 import type { AppleHealthResult } from "@/lib/appleHealth/parser";
 import type { VitalSign } from "@/lib/types";
+import { AppIcon } from "@/components/AppIcon";
 
 type Step = "choose" | "reading" | "preview" | "done" | "error";
 const WINDOWS = [{ days: 30, label: "Last 30 days" }, { days: 90, label: "Last 90 days" }, { days: 365, label: "Last year" }];
@@ -132,7 +133,7 @@ export default function AppleHealthPage() {
 
       {step === "done" && (
         <Card className="p-5" accent="border-l-good">
-          <p role="status" className="font-serif text-xl font-semibold text-navy">✓ {message}</p>
+          <p role="status" className="flex items-center gap-2 font-serif text-xl font-semibold text-navy"><AppIcon name="check" className="h-5 w-5" />{message}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link href="/passport/clinical/" className="inline-flex min-h-12 items-center rounded-full bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800">See vitals</Link>
             <Link href="/trends/" className="inline-flex min-h-12 items-center rounded-full px-5 text-sm font-semibold text-brand-700 ring-1 ring-line hover:bg-brand-50">See trends</Link>

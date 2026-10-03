@@ -7,6 +7,7 @@ import { SectionTitle, fmtDate } from "@/components/passport/PassportChrome";
 import { usePatient } from "@/lib/context/PatientContext";
 import { REFERENCE_DATE } from "@/lib/mockData";
 import { resolveReconIssue } from "@/lib/passport/actions";
+import { AppIcon } from "@/components/AppIcon";
 import { openIssues, type ReconIssue } from "@/lib/reconcile";
 
 const KIND_LABEL: Record<ReconIssue["kind"], string> = {
@@ -94,7 +95,7 @@ export function ReconciliationSection() {
           <ul className="mt-1 space-y-1 text-sm text-ink-soft">
             {resolved.map((i) => (
               <li key={i.id}>
-                ✓ {i.resolution!.summary} <span className="text-xs text-ink-muted">· {fmtDate(i.resolution!.at)}{i.resolution!.askClinician ? " · will ask my clinician" : ""}</span>
+                <span className="inline-flex items-center gap-1"><AppIcon name="check" className="h-4 w-4" />{i.resolution!.summary}</span> <span className="text-xs text-ink-muted">· {fmtDate(i.resolution!.at)}{i.resolution!.askClinician ? " · will ask my clinician" : ""}</span>
               </li>
             ))}
           </ul>

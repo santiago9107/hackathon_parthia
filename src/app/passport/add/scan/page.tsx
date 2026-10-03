@@ -226,7 +226,7 @@ export default function ScanPage() {
                       <label className="col-span-2 text-xs font-semibold text-ink-muted">How often<input value={m.frequency} onChange={(e) => setMeds(meds.map((r, j) => (j === i ? { ...r, frequency: e.target.value } : r)))} className={`${inputCls} mt-0.5`} /></label>
                       <label className="col-span-2 text-xs font-semibold text-ink-muted">For<input value={m.indication} onChange={(e) => setMeds(meds.map((r, j) => (j === i ? { ...r, indication: e.target.value } : r)))} className={`${inputCls} mt-0.5`} /></label>
                     </div>
-                    {m.issues.length > 0 && <ul className="mt-2 text-xs text-[#7a5812]">{m.issues.map((iss) => <li key={iss}>⚠ {iss}</li>)}</ul>}
+                    {m.issues.length > 0 && <ul className="mt-2 text-xs text-[#7a5812]">{m.issues.map((iss) => <li key={iss} className="flex items-start gap-1"><AppIcon name="alert" className="mt-0.5 h-3 w-3 shrink-0" />{iss}</li>)}</ul>}
                     <p className="mt-1 text-xs italic text-ink-muted">From: “{m.line}”</p>
                   </li>
                 ))}
@@ -253,7 +253,7 @@ export default function ScanPage() {
                       <label className="text-xs font-semibold text-ink-muted">Range low<input inputMode="decimal" value={l.low} onChange={(e) => setLabs(labs.map((r, j) => (j === i ? { ...r, low: e.target.value } : r)))} className={`${inputCls} mt-0.5`} /></label>
                       <label className="text-xs font-semibold text-ink-muted">Range high<input inputMode="decimal" value={l.high} onChange={(e) => setLabs(labs.map((r, j) => (j === i ? { ...r, high: e.target.value } : r)))} className={`${inputCls} mt-0.5`} /></label>
                     </div>
-                    {l.issues.length > 0 && <ul className="mt-2 text-xs text-[#7a5812]">{l.issues.map((iss) => <li key={iss}>⚠ {iss}</li>)}</ul>}
+                    {l.issues.length > 0 && <ul className="mt-2 text-xs text-[#7a5812]">{l.issues.map((iss) => <li key={iss} className="flex items-start gap-1"><AppIcon name="alert" className="mt-0.5 h-3 w-3 shrink-0" />{iss}</li>)}</ul>}
                     <p className="mt-1 text-xs italic text-ink-muted">From: “{l.line}”</p>
                   </li>
                 ))}
@@ -282,7 +282,7 @@ export default function ScanPage() {
 
       {step === "saved" && saved && (
         <Card className="p-5" accent="border-l-good">
-          <p role="status" className="font-serif text-xl font-semibold text-navy">✓ Added to your Passport</p>
+          <p role="status" className="flex items-center gap-2 font-serif text-xl font-semibold text-navy"><AppIcon name="check" className="h-5 w-5" />Added to your Passport</p>
           <ul className="mt-2 list-disc pl-5 text-sm text-ink-soft">{saved.added.map((a) => <li key={a}>{a}</li>)}</ul>
           {newFlags.length > 0 ? (
             <div className="mt-4 rounded-xl border border-attention/30 bg-attention-soft p-4 text-sm">
