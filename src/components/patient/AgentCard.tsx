@@ -39,11 +39,11 @@ export function AgentCard() {
     <Card className="mb-6 p-5" accent="border-l-brand-500">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-serif text-lg font-semibold text-navy">Your Parthia agent</h2>
-        <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-700">AI-generated</span>
+        <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-700">Rule-based</span>
       </div>
 
       {nothingNew ? (
-        <p className="mt-2 text-[15px] text-ink">Nothing new since your last visit.</p>
+        <p className="mt-2 text-[15px] text-ink">No new findings from this check.</p>
       ) : (
         <>
           {newCount > 0 && (

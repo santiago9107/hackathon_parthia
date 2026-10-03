@@ -55,7 +55,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Wordmark />
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto px-2 md:flex" aria-label="Primary">
             {DESKTOP_NAV.map((item) => {
               const { href, label } = item;
               const active = isActive(item, current);
@@ -64,7 +64,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   key={href}
                   href={href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition ${
+                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium transition ${
                     active ? "bg-brand-700 text-white" : "text-ink-soft hover:bg-brand-50 hover:text-brand-800"
                   }`}
                 >
@@ -103,7 +103,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className={`mx-auto w-full flex-1 px-4 pb-24 pt-6 sm:px-6 md:pb-12 ${clinicianSurface ? "max-w-[1440px]" : "max-w-6xl"}`}>{passportStatus === "locked" ? <LockScreen /> : children}</main>
+      <main className={`mx-auto w-full flex-1 px-4 pb-28 pt-6 sm:px-6 md:pb-20 ${clinicianSurface ? "max-w-[1440px]" : "max-w-6xl"}`}>{passportStatus === "locked" ? <LockScreen /> : children}</main>
 
       {/* The patient agent dock. The clinician workspace keeps its own chat, so
           it is not rendered there, and it stays hidden while the Passport is

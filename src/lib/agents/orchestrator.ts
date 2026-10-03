@@ -13,11 +13,15 @@ export function orchestrate(record: PatientRecord, now: Date): Orchestration {
   const messages: HandoffMessage[] = [];
   const all = outputs.flatMap((output) => output.items);
   const byIngredient = new Map<string, SpecialistItem[]>();
+  const linkedKeys = new Set<string>();
   for (const item of all) for (const ingredient of item.ingredients) byIngredient.set(ingredient.toLowerCase(), [...(byIngredient.get(ingredient.toLowerCase()) ?? []), item]);
   for (const items of byIngredient.values()) {
     const distinct = [...new Map(items.map((item) => [item.specialist, item])).values()];
     if (distinct.length < 2) continue;
     const ingredients = distinct[0].ingredients.filter((ingredient) => distinct.every((item) => item.ingredients.map((x) => x.toLowerCase()).includes(ingredient.toLowerCase())));
+    const linkedKey = ingredients.map((ingredient) => ingredient.toLowerCase()).sort().join("+");
+    if (!linkedKey || linkedKeys.has(linkedKey)) continue;
+    linkedKeys.add(linkedKey);
     const factIds = distinct.flatMap((item) => item.factIds);
     const linkedItem: SpecialistItem = {
       id: `linked:${ingredients.join("+")}`, specialist: "pharmacist", ingredients, factIds,
