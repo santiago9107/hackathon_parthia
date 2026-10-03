@@ -7,7 +7,7 @@ import { Card } from "@/components/PageHeader";
 import { Citations } from "@/components/patient/Citations";
 import { VisitQuestions } from "@/components/patient/VisitQuestions";
 import { usePatient } from "@/lib/context/PatientContext";
-import { buildHuddle, huddleEnabled } from "@/lib/agents/huddle";
+import { buildHuddle, huddleEnabled, setHuddleEnabled } from "@/lib/agents/huddle";
 import { orchestrate } from "@/lib/agents/orchestrator";
 import { usePatientAgent } from "@/lib/patientAgent/usePatientAgent";
 import { buildVisitQuestions } from "@/lib/patientAgent/visitQuestions";
@@ -30,6 +30,7 @@ export function AgentCard() {
   const [huddleOpen, setHuddleOpen] = useState(false);
   const [huddle, setHuddle] = useState<ReturnType<typeof buildHuddle> | null>(null);
   const [triggerKind, setTriggerKind] = useState<"prepare" | "watch">("prepare");
+  const [huddlesOn, setHuddlesOn] = useState(() => huddleEnabled());
   const prepareRef = useRef<HTMLButtonElement>(null);
   const watchRef = useRef<HTMLButtonElement>(null);
   const questions = useMemo(() => buildVisitQuestions(update, issues, record), [update, issues, record]);
@@ -46,7 +47,7 @@ export function AgentCard() {
   async function openHuddle(question: string, trigger: "prepare" | "watch") {
     setPrepared(true);
     setTriggerKind(trigger);
-    if (!huddleEnabled()) return;
+    if (!huddlesOn || !huddleEnabled()) return;
     const reply = await ask(question);
     if (reply.urgent) return;
     setHuddle(buildHuddle(orchestrate(record, now), reply));
@@ -110,6 +111,15 @@ export function AgentCard() {
         >
           Watch your agents work
         </button>
+        {!huddlesOn && (
+          <button
+            type="button"
+            onClick={() => { setHuddleEnabled(true); setHuddlesOn(true); }}
+            className="text-sm font-semibold text-brand-700 underline hover:text-brand-900"
+          >
+            Turn agent huddles on
+          </button>
+        )}
         <span className="text-[11px] text-ink-muted">Answered from your records by Parthia&apos;s rules</span>
       </div>
 

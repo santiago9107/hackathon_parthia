@@ -50,7 +50,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="print-hidden sticky top-0 z-30 border-b border-line bg-cream/90 backdrop-blur safe-top">
-        <div className={`mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6 ${clinicianSurface ? "max-w-[1440px]" : "max-w-6xl"}`}>
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-3 px-4 sm:px-6">
           <Link href="/start/" className="shrink-0" aria-label="Parthia Health: choose the patient or clinician side">
             <Wordmark />
           </Link>
