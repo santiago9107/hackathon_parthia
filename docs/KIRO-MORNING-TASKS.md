@@ -1,5 +1,56 @@
 # Kiro: Saturday morning tasks (demo 4:00 PM, feature freeze 2:00 PM)
 
+## ⭐ FOCUS CHANGE (9:30 AM): the PATIENT is the main character
+
+Parthia Health is a patient-owned product. The demo leads with **Harold's patient experience**;
+the clinician view is the **payoff in the last minute**, not the whole demo.
+
+**New priority order:** M1 → M2 → **M4 (patient-side agent, now the core)** → M5 (ship by noon)
+→ M3 (agent team, only if time) . If anything slips, cut M3 first, never M4.
+
+### The 3-minute demo this must support (patient first)
+1. **Harold's Passport** (`/passport/`): his records from the hospital, urgent care, cardiologist
+   and pharmacy fills in one place, each item showing where it came from.
+2. **He logs Advil** for knee pain (`/log/medication`). The **patient agent** notices it is in no
+   clinical record, re-runs the safety check and tells him, in plain words, that it can clash
+   with his warfarin and that his record lists an NSAID allergy, so it is **worth asking his
+   doctor or pharmacist before taking it**. (Never "stop" or "start".)
+3. **He asks the agent** on any page: "Why is this flagged?", "Where did this medicine come
+   from?", "What should I ask at my visit?" The agent answers from his own record with the
+   source shown.
+4. **The agent prepares his visit**: a short list of questions + the share summary
+   (`/passport/share/`).
+5. **He shares → "Open as clinician"** (`/clinician/`): the same findings with label evidence and
+   **live Photon screening**; only the clinician decides; prescribing goes through Photon.
+   (≈60 seconds.)
+
+### Patient-agent rules (apply to everything in M4)
+- Plain language, short sentences, no jargon; every reply labelled "AI-generated".
+- It explains, summarises, navigates and **prepares questions for the clinician**. It never tells
+  the patient to start, stop, skip or change a medicine or dose, and never contacts anyone on his
+  behalf.
+- Urgent symptoms (chest pain, trouble breathing, severe bleeding, black stools, fainting,
+  thoughts of self-harm) → show "Call 911 / 988 or go to the ER" immediately, before anything
+  else (Parthia already does this for PHQ-9 item 9; reuse that pattern).
+- Every answer cites where the fact came from (Passport item, record, rule) using `SourceBadge`.
+- Same policy engine as the clinician agent; add tests that the patient agent cannot produce
+  directive wording (reuse the neutral-language check).
+
+### M4 moves up: make it patient-first
+In addition to the M4 list below, do these first:
+1. **Dashboard (`/`)**: an agent card at the top: "Since your last visit: 1 new thing to ask your
+   doctor about" when the Safety agent finds something, linking to the explanation.
+2. **After logging (`/log/*`)**: when a medicine, symptom or meal is saved, run the safety check
+   and show the result inline on the confirmation screen (new finding, or "nothing new").
+3. **"Prepare for my visit"** action (dashboard + `/passport/share/`): the agent writes 3 to 5
+   questions from his open findings and differences, and adds them to the share summary.
+4. **Global "Ask Parthia" panel** on every patient page (M4 item 1), with example questions per
+   page.
+5. The clinician view keeps working as is; just make sure "Open as clinician" from the share page
+   lands on Harold with the same findings.
+
+---
+
 Status checked at 9:00 AM on `.worktrees/clinician-core` (branch `hackathon/clinician-agent`):
 the clinician flow works end to end, tsc/lint clean, 210/210 tests pass. Great work.
 Everything below is verified by hand this morning. Do the tasks **in order**; commit after each
@@ -155,5 +206,6 @@ Make the agents available on every page, aware of where the user is:
    `.env.local`. Add the Vercel URL to Photon's whitelisted URLs if Photon Elements are used.
 4. On the Vercel URL: run Harold's full demo twice (pause → confirm → findings incl. allergy and
    aspirin → live Photon screen → "Stop ibuprofen" refused → Continue in Photon → export).
-5. **Stop at 2:00 PM.** After that only fixes. If M3 or M4 are not done by 1:00 PM, leave them
-   out; M1, M2 and M5 are what the demo needs.
+4b. Rehearse the **patient-first** demo above, not only the clinician flow.
+5. **Stop at 2:00 PM.** After that only fixes. Cut M3 first if short on time; M1, M2, M4 and M5
+   are what the demo needs.
