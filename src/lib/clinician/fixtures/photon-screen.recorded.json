@@ -1,0 +1,17 @@
+{
+  "recordedOn": "2026-10-03",
+  "source": "Photon Neutron sandbox",
+  "live": false,
+  "label": "Recorded sandbox response",
+  "alerts": [
+    {
+      "type": "DRUG",
+      "severity": "MODERATE",
+      "description": "Ciprofloxacin may enhance the anticoagulant effect of warfarin.",
+      "involvedEntities": [
+        { "id": "demo-ciprofloxacin", "name": "Ciprofloxacin" },
+        { "id": "demo-warfarin", "name": "Warfarin" }
+      ]
+    }
+  ]
+}

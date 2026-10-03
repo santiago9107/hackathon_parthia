@@ -9,15 +9,19 @@
     "lint": "eslint",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
+    "mcp": "tsx mcp/server.mts",
+    "mcp:smoke": "tsx mcp/smoke.mts",
     "predev": "node scripts/copy-ocr-assets.mjs",
     "prebuild": "node scripts/copy-ocr-assets.mjs"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.0",
     "@tesseract.js-data/eng": "^1.0.0",
-    "next": "16.3.4",
+    "next": "^16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "tesseract.js": "^6.0.1"
+    "tesseract.js": "^6.0.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -25,9 +29,10 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.4",
+    "eslint-config-next": "^16.3.8",
     "sharp": "^0.35.4",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^3.2.7"
   }

@@ -7,6 +7,12 @@
 **Reference code to port from:** `../chartfuse` (built tonight by Om). Port ideas and logic into
 Parthia's architecture; do not copy ChartFuse's app shell, styling or engine wholesale.
 
+> **Implementation note (3 Oct 2026):** Kiro completed the fused-record logo and
+> live public FHIR import. The clinician workspace, deterministic coordinator,
+> policy guard, evidence-backed findings, patient clarification, Photon screening
+> seam and fallback, evaluation suite, report export and MCP server were completed
+> on `hackathon/clinician-agent`. See the branch history and README for verification.
+
 ---
 
 ## 0. The story we are demoing

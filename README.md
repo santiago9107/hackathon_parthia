@@ -2,8 +2,10 @@
 
 Patient-owned, holistic medication safety for people living with several chronic
 conditions and five or more medicines. This repository is the **demo-quality
-prototype** built for partner pitches and as an exhibit: synthetic data only,
-no real EHR connection, no real authentication, no trained model.
+prototype** built for partner pitches and as an exhibit. The main personas are
+synthetic, and the optional public SMART Health IT import reads synthetic
+Synthea records from a real FHIR R4 server. There is no production EHR
+connection, real authentication, or trained model.
 
 What *is* real: the safety engine. Every flag you see is produced by readable,
 rule-based logic in `src/lib/safetyEngine` — no black-box score.
@@ -29,6 +31,8 @@ Node 20+ is required. Icons are pre-generated; regenerate with
 | Trends | `/trends/` | Mood line + meals-logged bars + symptom markers, with medication changes drawn on the same timeline |
 | Share with doctor | `/share/` | Printable one-page visit summary (`Print / Save as PDF`) |
 | Assistant | `/assistant/` | Scripted, data-grounded chat; every reply labelled **AI-generated** |
+| Clinician agent | `/clinician/` | Gathers five sources, validates, normalizes, reconciles, pauses for patient clarification, attaches label evidence, routes decisions to people, and never changes care |
+| Prototype evaluation | `/clinician/eval/` | 12 expected/prohibited-finding cases; explicitly not clinical validation |
 | Install | `/install/` | Platform-aware install flow + reminder settings |
 
 **Patient switcher** (top right) flips between three synthetic personas:
@@ -54,6 +58,19 @@ src/
 public/
   manifest.json, sw.js, icons/, staticwebapp.config.json
 ```
+
+### Hackers & Healers clinician agent
+
+Parthia Health predates Hackers & Healers NYC. The clinician-agent workspace,
+live public FHIR sandbox importer, Photon screening seam, MCP server and fused-record
+brand mark were built for the event. The agent is deterministic and resumable:
+it performs evidence gathering and reconciliation autonomously, then waits for
+the patient or clinician wherever judgment or authorization is required.
+
+Run the MCP integration with `npm run mcp`; verify all 10 tools end to end with
+`npm run mcp:smoke`. Photon credentials remain server-side in Vercel environment
+variables. When Photon is unavailable, the interface says so and uses a clearly
+labelled recorded sandbox response for the demo.
 
 ### Safety engine
 
