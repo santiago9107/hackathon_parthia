@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChipGroup, ChoiceGroup, Form, FormPage, SavedPanel, SubmitBar, TextField, useSave } from "@/components/log/FormKit";
+import { SafetyUpdateNotice } from "@/components/patient/SafetyUpdateNotice";
 import { usePatient } from "@/lib/context/PatientContext";
 import { demoTimestamp } from "@/lib/mockData";
 import { addEntries } from "@/lib/passport/actions";
@@ -30,12 +31,12 @@ const MEALS: { value: NutritionEntry["meal"]; label: string; icon: AppIconName }
 ];
 
 export default function MealPage() {
-  const { patientId } = usePatient();
+  const { patientId, flags } = usePatient();
   const [meal, setMeal] = useState<NutritionEntry["meal"] | null>(null);
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState<NutritionTag[]>([]);
   const [errs, setErrs] = useState<{ meal?: string; description?: string }>({});
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<{ beforeRuleIds: string[]; beforeFlagIds: string[] } | null>(null);
   const { busy, error, save } = useSave();
 
   async function submit() {
@@ -43,13 +44,18 @@ export default function MealPage() {
     setErrs(e);
     if (e.meal || e.description) return;
     const entry: NutritionEntry = { id: newId("nu-you"), patientId, timestamp: demoTimestamp(), meal: meal!, description: description.trim(), tags, source: youSource() };
-    if (await save(() => addEntries(patientId, "nutrition", [entry], `Meal: ${entry.description}`))) setSaved(true);
+    // The flags already firing before this save, captured in the user event.
+    const beforeRuleIds = flags.map((f) => f.ruleId);
+    const beforeFlagIds = flags.map((f) => f.id);
+    if (await save(() => addEntries(patientId, "nutrition", [entry], `Meal: ${entry.description}`))) setSaved({ beforeRuleIds, beforeFlagIds });
   }
 
   return (
     <FormPage title="Log a meal" subtitle="Food can change how some medicines work. Even a one-line entry helps.">
       {saved ? (
-        <SavedPanel title="Meal saved" onAnother={() => { setSaved(false); setMeal(null); setDescription(""); setTags([]); }} links={[{ href: "/passport/nutrition/", label: "See nutrition" }, { href: "/", label: "Home" }]} />
+        <SavedPanel title="Meal saved" onAnother={() => { setSaved(null); setMeal(null); setDescription(""); setTags([]); }} links={[{ href: "/passport/nutrition/", label: "See nutrition" }, { href: "/", label: "Home" }]}>
+          <SafetyUpdateNotice beforeRuleIds={saved.beforeRuleIds} beforeFlagIds={saved.beforeFlagIds} />
+        </SavedPanel>
       ) : (
         <Form label="Log a meal" onSubmit={submit}>
           <ChoiceGroup legend="Meal" columns={2} value={meal} onChange={(v) => { setMeal(v); setErrs((x) => ({ ...x, meal: undefined })); }} error={errs.meal} options={MEALS.map((item) => ({ ...item, icon: <AppIcon name={item.icon} /> }))} />
