@@ -11,6 +11,7 @@ import { recordActivity } from "@/lib/passport/actions";
 import { downloadJson } from "@/lib/export/download";
 import { toFhirBundle, type ExportSection } from "@/lib/export/fhirExport";
 import { passportFileName } from "@/lib/export/passportFile";
+import Link from "next/link";
 
 const SHARE_SECTIONS = [
   { id: "status", label: "Status at a glance" },
@@ -79,6 +80,9 @@ export default function SharePage() {
             </p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-2">
+            <Link href="/clinician/" className="min-h-11 rounded-full bg-navy px-4 py-3 text-sm font-semibold text-white hover:bg-brand-900">
+              Open as clinician →
+            </Link>
             <button type="button" onClick={print} className="min-h-11 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800">
               Print / Save as PDF
             </button>

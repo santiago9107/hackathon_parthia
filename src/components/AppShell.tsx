@@ -22,10 +22,11 @@ const PASSPORT: NavItem = { href: "/passport/", label: "Passport", icon: Passpor
 const SAFETY: NavItem = { href: "/medications/", label: "Safety", icon: PillIcon };
 const TRENDS: NavItem = { href: "/trends/", label: "Trends", icon: TrendIcon };
 const ASSISTANT: NavItem = { href: "/assistant/", label: "Assistant", icon: ChatIcon };
+const CLINICIAN: NavItem = { href: "/clinician/", label: "Clinician", icon: ClinicianIcon, prefix: "/clinician/" };
 const LOG: NavItem = { href: "/log/", label: "Log", icon: PlusIcon, prefix: "/log/" };
 
 /** Desktop header: the Passport is a primary item; "Log" is a separate button. */
-const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT];
+const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, CLINICIAN];
 /** Mobile tab bar (max 5): Log sits in the middle as a raised quick action. */
 const MOBILE_NAV: NavItem[] = [HOME, PASSPORT, LOG, SAFETY, ASSISTANT];
 
@@ -84,7 +85,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               About
             </Link>
-            <InstallCTA />
+            <span className="hidden sm:inline-flex"><InstallCTA /></span>
             <PatientSwitcher />
           </div>
         </div>
@@ -177,6 +178,13 @@ function ChatIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <path d="M4 5h16v11H9l-5 4z" />
+    </svg>
+  );
+}
+function ClinicianIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="12" cy="7" r="3" /><path d="M5.5 20c.5-4 2.5-6 6.5-6s6 2 6.5 6" /><path d="M18 4v4M16 6h4" />
     </svg>
   );
 }

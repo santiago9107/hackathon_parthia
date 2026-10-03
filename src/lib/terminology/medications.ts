@@ -58,6 +58,7 @@ export const DRUGS: readonly DrugConcept[] = [
   { generic: "levothyroxine", display: "Levothyroxine", brands: ["Synthroid", "Levoxyl"], rxcui: "10582", class: "thyroid", units: ["mcg"] },
   { generic: "amiodarone", display: "Amiodarone", brands: ["Pacerone"], rxcui: "703", class: "antiarrhythmic", units: ["mg"] },
   { generic: "amoxicillin", display: "Amoxicillin", brands: ["Amoxil"], rxcui: "723", class: "other", units: ["mg"] },
+  { generic: "ciprofloxacin", display: "Ciprofloxacin", brands: ["Cipro"], rxcui: "2551", class: "other", units: ["mg"] },
   { generic: "penicillin", display: "Penicillin", brands: [], rxcui: "70618", class: "other", units: ["mg"] },
   { generic: "codeine", display: "Codeine", brands: [], rxcui: "2670", class: "opioid", units: ["mg"] },
   { generic: "acetaminophen", display: "Acetaminophen", brands: ["Tylenol"], rxcui: "161", class: "other", units: ["mg"] },
