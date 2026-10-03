@@ -15,7 +15,7 @@ import {
   runPhotonScreen,
   syncPhotonPatient,
 } from "./photonScreen";
-import { PHOTON_RECORDED_SCREENS, type RecordedPhotonScreen } from "./photonRecorded";
+import { PHOTON_MARGARET_RECORDED_SCREENS, PHOTON_RECORDED_SCREENS, type RecordedPhotonScreen } from "./photonRecorded";
 const liveAlert = {
   type: "DRUG",
   severity: "MAJOR",
@@ -80,6 +80,15 @@ describe("Photon screening client", () => {
     expect(outcome.label).toBe(PHOTON_SYNTHETIC_LABEL);
     expect(outcome.label).not.toContain(PHOTON_RECORDED_LABEL);
   });
+  it("sends Margaret's catalog patient and uses her recorded fallback", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(jsonResponse({ error: "Photon screening unavailable" }, 503));
+    const outcome = await runPhotonScreen(["tramadol-50-mg"], { patientId: "p-margaret", fetchImpl: fetchImpl as unknown as typeof fetch });
+    expect(outcome.provenance).toBe("recorded");
+    expect(outcome.alerts).toHaveLength(2);
+    const [, init] = fetchImpl.mock.calls[0] as [string, RequestInit];
+    expect(JSON.parse(String(init.body))).toMatchObject({ demoPatientId: "p-margaret" });
+    expect(String(init.body)).not.toContain("token");
+  });
   it("prefers a real captured response over a synthetic example", () => {
     const recorded: Record<string, RecordedPhotonScreen> = {
       "ciprofloxacin-500-mg": { recordedAt: "2026-10-03T14:30:00.000Z", treatmentKey: "ciprofloxacin-500-mg", alerts: [liveAlert] },
@@ -130,6 +139,12 @@ describe("captured sandbox responses", () => {
       expect(JSON.stringify(capture)).not.toMatch(/token|secret|bearer/i);
     }
     expect(photonFallback(["ciprofloxacin-500-mg"], "live call failed").provenance).toBe("recorded");
+  });
+  it("has recorded captures for Margaret's three Photon drafts", () => {
+    expect(PHOTON_MARGARET_RECORDED_SCREENS["tramadol-50-mg"].alerts).toHaveLength(2);
+    expect(PHOTON_MARGARET_RECORDED_SCREENS["ibuprofen-200-mg"].alerts).toHaveLength(2);
+    expect(PHOTON_MARGARET_RECORDED_SCREENS["diphenhydramine-25-mg"].alerts).toHaveLength(0);
+    expect(JSON.stringify(PHOTON_MARGARET_RECORDED_SCREENS)).not.toMatch(/token|secret|bearer/i);
   });
   it("matches the alert sets the sandbox actually returned, extra alerts included", () => {
     const cipro = PHOTON_RECORDED_SCREENS["ciprofloxacin-500-mg"].alerts;

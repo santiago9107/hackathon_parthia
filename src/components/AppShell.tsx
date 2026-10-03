@@ -29,7 +29,7 @@ const ARCHITECTURE: NavItem = { href: "/architecture/", label: "Architecture", i
 const LOG: NavItem = { href: "/log/", label: "Log", icon: PlusIcon, prefix: "/log/" };
 
 /** Desktop header: the Passport is a primary item; "Log" is a separate button. */
-const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, AGENTS, CLINICIAN, ARCHITECTURE];
+const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, AGENTS, CLINICIAN];
 /** Mobile tab bar (max 5): Log sits in the middle as a raised quick action. */
 const MOBILE_NAV: NavItem[] = [HOME, PASSPORT, LOG, SAFETY, ASSISTANT];
 
@@ -80,6 +80,14 @@ export function AppShell({ children }: { children: ReactNode }) {
               className="hidden items-center gap-1 rounded-full bg-gold-500 px-3.5 py-1.5 text-sm font-semibold text-navy transition hover:bg-gold-600 md:inline-flex"
             >
               <PlusIcon className="h-4 w-4" /> Log
+            </Link>
+            <Link
+              href={ARCHITECTURE.href}
+              className={`hidden rounded-full px-3 py-1.5 text-sm font-medium transition lg:inline-block ${
+                isActive(ARCHITECTURE, current) ? "bg-brand-700 text-white" : "text-ink-muted hover:bg-brand-50 hover:text-brand-800"
+              }`}
+            >
+              Architecture
             </Link>
             <Link
               href="/about/"

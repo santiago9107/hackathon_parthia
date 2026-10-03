@@ -13,6 +13,8 @@ import { type PhotonDemoPatient, photonAllowedTreatmentIds, photonDemoPatient } 
 export interface PhotonScreenInput {
   /** Optional. Defaults to the synthetic sandbox patient for the demo. */
   patientId?: string;
+  /** Synthetic catalog patient to resolve when patientId is omitted. */
+  demoPatientId?: "p-harold" | "p-margaret";
   treatmentIds: string[];
 }
 export interface PhotonAlert {
@@ -153,11 +155,11 @@ async function lookupDemoPatient(demo: PhotonDemoPatient): Promise<SandboxPatien
  * path screening uses, so a screen never creates or changes a patient record:
  * if he has not been synced yet, screening fails rather than writing.
  */
-export async function findPhotonDemoPatientId(): Promise<string | undefined> {
-  return (await lookupDemoPatient(photonDemoPatient()))?.id;
+export async function findPhotonDemoPatientId(patientId: "p-harold" | "p-margaret" = "p-harold"): Promise<string | undefined> {
+  return (await lookupDemoPatient(photonDemoPatient(patientId)))?.id;
 }
-export async function syncPhotonPatient(): Promise<PhotonSyncResult> {
-  const demo = photonDemoPatient();
+export async function syncPhotonPatient(patientId: "p-harold" | "p-margaret" = "p-harold"): Promise<PhotonSyncResult> {
+  const demo = photonDemoPatient(patientId);
   const existing = await lookupDemoPatient(demo);
   const allergies = demo.allergenIds.map((allergenId) => ({ allergenId }));
   const medicationHistory = demo.medicationIds.map((medicationId) => ({ medicationId, active: true }));
@@ -227,10 +229,10 @@ export async function screenPhoton(input: PhotonScreenInput): Promise<PhotonScre
   }
   // Read-only all the way: the patient is looked up, never created or updated,
   // so no screen can write to the Photon org.
-  const patientId = input.patientId ?? await findPhotonDemoPatientId();
-  if (!patientId) throw new Error("The synthetic sandbox patient is not in the Photon org yet. Run the patient sync once before screening");
+  const photonPatientId = input.patientId ?? await findPhotonDemoPatientId(input.demoPatientId);
+  if (!photonPatientId) throw new Error("The synthetic sandbox patient is not in the Photon org yet. Run the patient sync once before screening");
   const data = await photonGraphql<{ prescriptionScreen?: { alerts?: RawAlert[] | null } }>("clinical", SCREEN_QUERY, {
-    patientId,
+    patientId: photonPatientId,
     draftedPrescriptions: input.treatmentIds.map((id) => ({ treatment: { id } })),
   }, { withUserToken: true });
   const alerts: PhotonAlert[] = (data.prescriptionScreen?.alerts ?? []).map((alert) => ({
@@ -243,7 +245,7 @@ export async function screenPhoton(input: PhotonScreenInput): Promise<PhotonScre
       kind: ENTITY_KIND[entity?.__typename ?? ""] ?? "other",
     })),
   }));
-  return { source: PHOTON_SOURCE, live: true, patientId, screenedAt: new Date().toISOString(), treatmentIds: input.treatmentIds, alerts };
+  return { source: PHOTON_SOURCE, live: true, patientId: photonPatientId, screenedAt: new Date().toISOString(), treatmentIds: input.treatmentIds, alerts };
 }
 const OPENROUTER_SYSTEM = `You are the evidence explainer inside Parthia Health's medication reconciliation prototype.
 Answer only from the patient evidence supplied in the user message. Be concise and name the source records behind each claim.

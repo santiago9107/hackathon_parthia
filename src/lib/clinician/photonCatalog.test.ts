@@ -5,6 +5,7 @@ import {
   PHOTON_DEMO_DRAFTS,
   photonAllowedTreatmentIds,
   photonDemoPatient,
+  photonDemoDrafts,
   photonEntityLabel,
   photonTreatment,
   photonTreatmentId,
@@ -24,9 +25,23 @@ describe("Photon sandbox catalog", () => {
   });
   it("allow-lists exactly the catalog treatments", () => {
     const allowed = photonAllowedTreatmentIds();
-    expect(allowed).toHaveLength(7);
+    expect(allowed).toHaveLength(12);
     expect(allowed).toContain(photonTreatmentId("warfarin-5-mg"));
     expect(new Set(allowed).size).toBe(allowed.length);
+  });
+  it("resolves Margaret's catalog patient and three screening drafts", () => {
+    const margaret = photonDemoPatient("p-margaret");
+    expect(margaret.externalId).toBe("parthia-margaret-lindqvist");
+    expect(margaret.sex).toBe("FEMALE");
+    expect(margaret.allergenIds).toEqual([]);
+    expect(margaret.medicationIds).toEqual([
+      photonTreatmentId("sertraline-100-mg"),
+      photonTreatmentId("zolpidem-5-mg"),
+      photonTreatmentId("furosemide-40-mg"),
+    ]);
+    expect(photonDemoDrafts("p-margaret").map((draft) => draft.treatmentKey)).toEqual([
+      "tramadol-50-mg", "ibuprofen-200-mg", "diphenhydramine-25-mg",
+    ]);
   });
   it("resolves the synthetic demo patient to sandbox allergen and medication ids", () => {
     const demo = photonDemoPatient();
