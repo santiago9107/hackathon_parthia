@@ -38,13 +38,19 @@ function merge(findings: ClinicianFinding[], incoming: ClinicianFinding): void {
   existing.recordIds = uniq([...existing.recordIds, ...incoming.recordIds]);
 }
 
+/**
+ * Builds the review queue. Every finding here and every finding the Parthia
+ * engine returns is `blocking`, because every finding is a question for a
+ * human: a case cannot reach `complete` while one of them is unrouted.
+ * Severity decides priority and who it routes to, not whether it is seen.
+ */
 function makeFindings(sources: ClinicianCase["sources"], records: SourceMedication[], confirmations: Record<string, boolean>, engine: EngineResult): ClinicianFinding[] {
   const findings: ClinicianFinding[] = [];
   const active = (ingredient: string) => records.some((r) => r.ingredient === ingredient && (r.status === "active" || confirmations[r.id]));
   const add = (finding: ClinicianFinding) => { if (!findings.some((f) => f.id === finding.id)) findings.push(finding); };
   for (const source of sources) {
     if (!source.available) add({ id: `unavailable:${source.id}`, kind: "unavailable-source", priority: "data-quality", route: "clinician", title: `${source.label} unavailable`, detail: "The source did not respond after one retry, so the case cannot be marked complete.", question: `Can the ${source.label} record be obtained before this list is finalized?`, ingredients: [], recordIds: [], blocking: true });
-    else if (Date.parse(AS_OF) - Date.parse(source.lastUpdated) > 180 * DAY) add({ id: `stale:${source.id}`, kind: "stale-source", priority: "data-quality", route: "clinician", title: `${source.label} is stale`, detail: `Last updated ${source.lastUpdated}. This is a data-quality warning, not a patient diagnosis.`, question: `Is there a newer ${source.label} record?`, ingredients: [], recordIds: [], blocking: false });
+    else if (Date.parse(AS_OF) - Date.parse(source.lastUpdated) > 180 * DAY) add({ id: `stale:${source.id}`, kind: "stale-source", priority: "data-quality", route: "clinician", title: `${source.label} is stale`, detail: `Last updated ${source.lastUpdated}. This is a data-quality warning, not a patient diagnosis.`, question: `Is there a newer ${source.label} record?`, ingredients: [], recordIds: [], blocking: true });
   }
   for (const medication of reconcile(records)) {
     const clinical = medication.records.filter((r) => r.recordType === "prescribed");

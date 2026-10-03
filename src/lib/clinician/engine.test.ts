@@ -2,13 +2,23 @@ import { describe, expect, it } from "vitest";
 import { runClinicianAgent } from "./agent";
 import { buildClinicianCase, CLINICIAN_COHORT } from "./cases";
 import { FDA_ADVIL_LABEL_URL } from "./evidence";
-import type { AgentRun } from "./types";
+import type { AgentRun, ClinicianCase } from "./types";
 
 const WARFARIN_ANTIPLATELET = "drug-drug/known-pairs/warfarin+antiplatelet";
 const EM_DASH = /[\u2014\u2013]/;
 
 function haroldConfirmed(): AgentRun {
   return runClinicianAgent(buildClinicianCase("p-harold"), { confirmations: { "passport:otc-ibuprofen": true }, resumed: true });
+}
+
+/** Harold's Passport with only atorvastatin current, whose one rule flag is moderate. */
+function moderateOnlyCase(): ClinicianCase {
+  const base = buildClinicianCase("p-harold");
+  return {
+    ...base,
+    sources: base.sources.map((s) => ({ ...s, lastUpdated: "2026-09-18" })),
+    records: base.records.filter((r) => r.ingredient === "atorvastatin" && r.status === "active"),
+  };
 }
 
 describe("full Parthia engine in the clinician agent", () => {
@@ -63,6 +73,27 @@ describe("full Parthia engine in the clinician agent", () => {
     const kinds = new Set(run.findings.filter((f) => f.supportingRules).map((f) => f.kind));
     expect(kinds).toEqual(new Set(["anticholinergic-burden", "drug-mood", "drug-kidney", "interaction"]));
     for (const finding of run.findings) expect(finding.question).not.toMatch(/^(stop|start|increase|decrease|switch|prescribe)\b/i);
+  });
+
+  it("does not reach complete on a moderate-only case, because the finding still needs a human", () => {
+    const run = runClinicianAgent(moderateOnlyCase());
+    const priorities = new Set(run.findings.map((f) => f.priority));
+    expect(run.findings.length).toBeGreaterThan(0);
+    expect(priorities).toEqual(new Set(["moderate"]));
+    expect(run.findings.every((f) => f.blocking)).toBe(true);
+    expect(run.stage).not.toBe("complete");
+    expect(run.status).toBe("review-required");
+    expect(run.humanCount).toBe(run.findings.length);
+  });
+
+  it("routes every finding to a human at any severity, on both the engine and the agent path", () => {
+    for (const patient of CLINICIAN_COHORT) {
+      for (const options of [{}, { confirmations: { "passport:otc-ibuprofen": true, "passport:otc-diphenhydramine": true } }]) {
+        const run = runClinicianAgent(buildClinicianCase(patient.id), options);
+        for (const finding of run.findings) expect(finding.blocking, `${patient.id} ${finding.id}`).toBe(true);
+        if (run.findings.length) expect(run.stage, patient.id).not.toBe("complete");
+      }
+    }
   });
 
   it("carries no em dash into any clinician finding", () => {
