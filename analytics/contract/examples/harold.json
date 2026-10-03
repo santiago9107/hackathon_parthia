@@ -25,7 +25,134 @@
     ]
   },
   "urgent": [],
-  "domain_profile": [],
+  "domain_profile": [
+    {
+      "domain": "medication_safety",
+      "label": "Medication safety",
+      "status": "attention",
+      "trend": "unknown",
+      "reason": "1 item to discuss with the care team: NSAID in heart failure (high).",
+      "trend_detail": "No time series is defined for this domain.",
+      "finding_ids": [
+        "R01:m-naproxen"
+      ],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D001",
+        "D005"
+      ],
+      "rule_ids": [
+        "R01"
+      ]
+    },
+    {
+      "domain": "fluid_congestion",
+      "label": "Fluid / congestion",
+      "status": "good",
+      "trend": "stable",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Weight: average 84.04 kg in the last 7 days vs 84.05 kg in the previous 14 (stable within 0.5 kg; higher is worse) -> stable.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D011",
+        "D014"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "heart_kidney_labs",
+      "label": "Heart-kidney labs",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Potassium distance outside the lab's range: not enough data to compare the last 7 days with the previous 14 (0 and 0 values; 1 needed in each). eGFR: not enough data to compare the last 7 days with the previous 14 (0 and 0 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D007",
+        "D009"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "bp_heart_rate",
+      "label": "Blood pressure / heart rate",
+      "status": "good",
+      "trend": "stable",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Share of BP/HR readings outside alert limits: average 0 in the last 7 days vs 0 in the previous 14 (stable within 0.1; higher is worse) -> stable.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D012",
+        "D013"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "mental_health",
+      "label": "Mental health",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "PHQ-9: not enough data to compare the last 21 days with the previous 60 (1 and 0 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D016"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "adherence",
+      "label": "Adherence",
+      "status": "good",
+      "trend": "stable",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Missed doses per day: average 0 in the last 7 days vs 0 in the previous 14 (stable within 0.1; higher is worse) -> stable.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D006"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "nutrition",
+      "label": "Nutrition",
+      "status": "good",
+      "trend": "stable",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Diet risk tags per log: average 0.43 in the last 7 days vs 0.25 in the previous 14 (stable within 0.25; higher is worse) -> stable.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D015"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "function_qol",
+      "label": "Function and quality of life",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not assessed yet: KCCQ (S14) is not yet a data-dictionary element.",
+      "trend_detail": "KCCQ (S14) is not yet a data-dictionary element.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [],
+      "rule_ids": []
+    }
+  ],
   "ranked_findings": [
     {
       "finding_id": "R01:m-naproxen",
@@ -2338,7 +2465,8 @@
       "precursors (phase 5)",
       "contributing_factors (phase 6)",
       "risk_scores (phase 7; tables to be supplied by the clinical lead, DEC-10)",
-      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)"
+      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)",
+      "patient_view / clinician_view (phase 8)"
     ]
   }
 }

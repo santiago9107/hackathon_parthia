@@ -25,7 +25,155 @@
     ]
   },
   "urgent": [],
-  "domain_profile": [],
+  "domain_profile": [
+    {
+      "domain": "medication_safety",
+      "label": "Medication safety",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "No time series is defined for this domain.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D005"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "fluid_congestion",
+      "label": "Fluid / congestion",
+      "status": "watch",
+      "trend": "worsening",
+      "reason": "1 item to discuss with the care team: Rapid weight gain (moderate).",
+      "trend_detail": "Weight: average 72.11 kg in the last 7 days vs 71.01 kg in the previous 14 (stable within 0.5 kg; higher is worse) -> worsening.",
+      "finding_ids": [
+        "R08"
+      ],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D011",
+        "D014"
+      ],
+      "rule_ids": [
+        "R08"
+      ]
+    },
+    {
+      "domain": "heart_kidney_labs",
+      "label": "Heart-kidney labs",
+      "status": "attention",
+      "trend": "worsening",
+      "reason": "1 item to discuss with the care team: High potassium on an MRA (high).",
+      "trend_detail": "Potassium distance outside the lab's range: average 0.6 mEq/L in the last 7 days vs 0 mEq/L in the previous 14 (stable within 0.2 mEq/L; higher is worse) -> worsening. eGFR: average 49 in the last 7 days vs 52 in the previous 14 (stable within 5; lower is worse) -> stable.",
+      "finding_ids": [
+        "R02"
+      ],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D003",
+        "D005",
+        "D007",
+        "D009"
+      ],
+      "rule_ids": [
+        "R02"
+      ]
+    },
+    {
+      "domain": "bp_heart_rate",
+      "label": "Blood pressure / heart rate",
+      "status": "good",
+      "trend": "stable",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Share of BP/HR readings outside alert limits: average 0 in the last 7 days vs 0 in the previous 14 (stable within 0.1; higher is worse) -> stable.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D012",
+        "D013"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "mental_health",
+      "label": "Mental health",
+      "status": "watch",
+      "trend": "worsening",
+      "reason": "1 item to discuss with the care team: Depression screening positive or worsening (moderate).",
+      "trend_detail": "PHQ-9: average 16 points in the last 21 days vs 7 points in the previous 60 (stable within 2 points; higher is worse) -> worsening.",
+      "finding_ids": [
+        "R19"
+      ],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D006",
+        "D016"
+      ],
+      "rule_ids": [
+        "R19"
+      ]
+    },
+    {
+      "domain": "adherence",
+      "label": "Adherence",
+      "status": "watch",
+      "trend": "worsening",
+      "reason": "1 item to discuss with the care team: Missed doses (moderate).",
+      "trend_detail": "Missed doses per day: average 0.43 in the last 7 days vs 0 in the previous 14 (stable within 0.1; higher is worse) -> worsening.",
+      "finding_ids": [
+        "R20"
+      ],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D005",
+        "D006"
+      ],
+      "rule_ids": [
+        "R20"
+      ]
+    },
+    {
+      "domain": "nutrition",
+      "label": "Nutrition",
+      "status": "attention",
+      "trend": "worsening",
+      "reason": "1 item to discuss with the care team: Potassium salt substitute with RAAS inhibitor or MRA (high).",
+      "trend_detail": "Diet risk tags per log: average 0.86 in the last 7 days vs 0.14 in the previous 14 (stable within 0.25; higher is worse) -> worsening.",
+      "finding_ids": [
+        "R07"
+      ],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D005",
+        "D007",
+        "D015"
+      ],
+      "rule_ids": [
+        "R07"
+      ]
+    },
+    {
+      "domain": "function_qol",
+      "label": "Function and quality of life",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not assessed yet: KCCQ (S14) is not yet a data-dictionary element.",
+      "trend_detail": "KCCQ (S14) is not yet a data-dictionary element.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [],
+      "rule_ids": []
+    }
+  ],
   "ranked_findings": [
     {
       "finding_id": "R07",
@@ -4033,7 +4181,8 @@
       "precursors (phase 5)",
       "contributing_factors (phase 6)",
       "risk_scores (phase 7; tables to be supplied by the clinical lead, DEC-10)",
-      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)"
+      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)",
+      "patient_view / clinician_view (phase 8)"
     ]
   }
 }

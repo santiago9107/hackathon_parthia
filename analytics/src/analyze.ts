@@ -34,6 +34,7 @@ const NOT_IMPLEMENTED = [
   "contributing_factors (phase 6)",
   "risk_scores (phase 7; tables to be supplied by the clinical lead, DEC-10)",
   "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)",
+  "patient_view / clinician_view (phase 8)",
 ];
 
 export function analyzePatient(snapshot: PatientSnapshotInput | PatientSnapshot, asOf: string, config: AnalysisConfig = {}): HolisticAnalysisBundle {

@@ -38,7 +38,7 @@
     { "id": "bp_heart_rate", "label": "Blood pressure / heart rate", "required_elements": ["D012", "D013"],
       "trend": { "metric": "out_of_range_share", "worse": "up", "stable_tolerance": 0.1, "min_points_each": 2, "$comment": "Share of readings outside T06/T07 alert limits. DRAFT tolerance" } },
     { "id": "mental_health", "label": "Mental health", "required_elements": ["D016"],
-      "trend": { "metric": "phq9_score", "worse": "up", "stable_tolerance": 2, "min_points_each": 1, "recent_days": 30, "previous_days": 60, "$comment": "DRAFT: monthly instrument, so windows follow D016 validity (30 days) instead of 7/14" } },
+      "trend": { "metric": "phq9_score", "worse": "up", "stable_tolerance": 2, "min_points_each": 1, "recent_days": 21, "previous_days": 60, "$comment": "DRAFT (AMB-19): monthly instrument, so wider windows than 7/14; 21 days keeps consecutive monthly screenings in different windows" } },
     { "id": "adherence", "label": "Adherence", "required_elements": ["D006"],
       "trend": { "metric": "missed_doses_per_day", "worse": "up", "stable_tolerance": 0.1, "min_points_each": 1, "$comment": "DRAFT tolerance" } },
     { "id": "nutrition", "label": "Nutrition", "required_elements": ["D015"],

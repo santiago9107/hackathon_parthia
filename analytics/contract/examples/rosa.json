@@ -25,7 +25,138 @@
     ]
   },
   "urgent": [],
-  "domain_profile": [],
+  "domain_profile": [
+    {
+      "domain": "medication_safety",
+      "label": "Medication safety",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "No time series is defined for this domain.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D005"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "fluid_congestion",
+      "label": "Fluid / congestion",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: body weight and symptoms checklist are missing or out of date.",
+      "trend_detail": "Weight: not enough data to compare the last 7 days with the previous 14 (1 and 1 values; 2 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D011",
+        "D014"
+      ],
+      "element_ids": [
+        "D011",
+        "D014"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "heart_kidney_labs",
+      "label": "Heart-kidney labs",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Potassium distance outside the lab's range: not enough data to compare the last 7 days with the previous 14 (0 and 0 values; 1 needed in each). eGFR: not enough data to compare the last 7 days with the previous 14 (0 and 0 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D007",
+        "D009"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "bp_heart_rate",
+      "label": "Blood pressure / heart rate",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Share of BP/HR readings outside alert limits: not enough data to compare the last 7 days with the previous 14 (2 and 0 values; 2 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D012",
+        "D013"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "mental_health",
+      "label": "Mental health",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: phq-2 / phq-9 is missing or out of date.",
+      "trend_detail": "PHQ-9: not enough data to compare the last 21 days with the previous 60 (0 and 0 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D016"
+      ],
+      "element_ids": [
+        "D016"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "adherence",
+      "label": "Adherence",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: missed doses and reason is missing or out of date.",
+      "trend_detail": "Missed doses per day: not enough data to compare the last 7 days with the previous 14 (0 and 1 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D006"
+      ],
+      "element_ids": [
+        "D006"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "nutrition",
+      "label": "Nutrition",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: diet risk tags is missing or out of date.",
+      "trend_detail": "Diet risk tags per log: not enough data to compare the last 7 days with the previous 14 (0 and 1 values; 2 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D015"
+      ],
+      "element_ids": [
+        "D015"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "function_qol",
+      "label": "Function and quality of life",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not assessed yet: KCCQ (S14) is not yet a data-dictionary element.",
+      "trend_detail": "KCCQ (S14) is not yet a data-dictionary element.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [],
+      "rule_ids": []
+    }
+  ],
   "ranked_findings": [],
   "precursors": [],
   "contributing_factors": [],
@@ -39,7 +170,9 @@
       "needed_by_rule_ids": [
         "R20"
       ],
-      "needed_by_domains": [],
+      "needed_by_domains": [
+        "adherence"
+      ],
       "last_value": null,
       "suggested_patient_question": "Can you complete this week's medicine check-in (how many doses were missed, and why)?",
       "knowledge": [
@@ -77,13 +210,34 @@
       "needed_by_rule_ids": [
         "R08"
       ],
-      "needed_by_domains": [],
+      "needed_by_domains": [
+        "fluid_congestion"
+      ],
       "last_value": null,
       "suggested_patient_question": "Can you weigh yourself tomorrow morning and log it?",
       "knowledge": [
         {
           "kind": "element",
           "id": "D011",
+          "review_status": "in_review"
+        }
+      ]
+    },
+    {
+      "element_id": "D014",
+      "element_name": "Symptoms checklist",
+      "reason": "stale",
+      "detail": "Latest Symptoms checklist is from 2026-09-28, older than its 1-day validity window (D014); treated as missing.",
+      "needed_by_rule_ids": [],
+      "needed_by_domains": [
+        "fluid_congestion"
+      ],
+      "last_value": null,
+      "suggested_patient_question": "Can you complete today's symptom check (under a minute)?",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D014",
           "review_status": "in_review"
         }
       ]
@@ -96,7 +250,9 @@
       "needed_by_rule_ids": [
         "R07"
       ],
-      "needed_by_domains": [],
+      "needed_by_domains": [
+        "nutrition"
+      ],
       "last_value": null,
       "suggested_patient_question": "Can you log your meals for the next few days?",
       "knowledge": [
@@ -115,7 +271,9 @@
       "needed_by_rule_ids": [
         "R19"
       ],
-      "needed_by_domains": [],
+      "needed_by_domains": [
+        "mental_health"
+      ],
       "last_value": null,
       "suggested_patient_question": "Can you complete the mood questionnaire (PHQ-9)?",
       "knowledge": [
@@ -706,6 +864,11 @@
       },
       {
         "kind": "element",
+        "id": "D014",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
         "id": "D015",
         "review_status": "in_review"
       },
@@ -810,7 +973,8 @@
       "precursors (phase 5)",
       "contributing_factors (phase 6)",
       "risk_scores (phase 7; tables to be supplied by the clinical lead, DEC-10)",
-      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)"
+      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)",
+      "patient_view / clinician_view (phase 8)"
     ]
   }
 }
