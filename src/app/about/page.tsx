@@ -25,7 +25,7 @@ const REAL: { title: string; body: string }[] = [
   },
   {
     title: "The deployment pipeline",
-    body: "Every push to the main branch is linted, type-checked, unit-tested, built as a static export and published to Azure Static Web Apps by GitHub Actions.",
+    body: "The code is linted, type-checked and unit-tested, then built as a static export and deployed on Vercel, with two small serverless functions for the Photon Health screening calls.",
   },
 ];
 
@@ -78,7 +78,7 @@ const NEXT_PHASES = [
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-6xl">
       <PageHeader
         eyebrow="About this prototype"
         title="What is real, what is simulated"
@@ -87,7 +87,7 @@ export default function AboutPage() {
 
       <Card className="p-5 sm:p-6">
         <h2 className="font-serif text-xl font-semibold text-navy">The problem it addresses</h2>
-        <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
+        <p className="mt-2 text-[15px] leading-relaxed text-ink-soft lg:columns-2 lg:gap-10">
           Adults living with diabetes, hypertension and cardiovascular disease routinely take five to ten medicines prescribed by
           several clinicians. Interactions between those medicines, and between medicines and food, mood and daily habits, are
           usually caught late, if at all, because no single party sees the whole picture. Parthia puts that picture in the
@@ -99,7 +99,7 @@ export default function AboutPage() {
       <section className="mt-8" id="patient-passport">
         <h2 className="font-serif text-2xl font-semibold text-navy">The Patient Passport</h2>
         <Card className="mt-3 p-5 sm:p-6">
-          <p className="text-[15px] leading-relaxed text-ink-soft">
+          <p className="text-[15px] leading-relaxed text-ink-soft lg:columns-2 lg:gap-10">
             The Passport is one record of a person&apos;s health that they hold themselves: hospital records, prescriptions, labs, wearables,
             home devices and their own entries, gathered in one place with the source of every item shown. It is stored only on the
             patient&apos;s device. Imports wait for the patient to review them; nothing unconfirmed is used in any analysis. Where records
@@ -151,7 +151,7 @@ export default function AboutPage() {
       <section className="mt-8">
         <h2 className="font-serif text-2xl font-semibold text-navy">Simulated for now</h2>
         <p className="mb-4 mt-1 text-sm text-ink-muted">Each of these has a clean seam in the code where the real integration plugs in.</p>
-        <div className="space-y-3">
+        <div className="grid gap-3 md:grid-cols-2">
           {SIMULATED.map((item) => (
             <Card key={item.title} accent="border-l-watch" className="p-4">
               <h3 className="font-semibold text-ink">{item.title}</h3>
@@ -232,7 +232,7 @@ export default function AboutPage() {
             {[
               ["Front end", "React 19, TypeScript, Next.js App Router, Tailwind CSS"],
               ["Delivery", "Static export, installable progressive web app, offline-capable"],
-              ["Hosting", "Azure Static Web Apps, continuous deployment from GitHub"],
+              ["Hosting", "Vercel: static site plus serverless functions for Photon Health"],
               ["Safety logic", "Pure, testable rule functions with inspectable knowledge tables"],
               ["Charts", "Hand-drawn SVG, no charting library, prints cleanly"],
               ["Privacy stance", "Patient-owned data stored only on the device (IndexedDB); sharing is an explicit act by the patient"],
