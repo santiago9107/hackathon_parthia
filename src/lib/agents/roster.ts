@@ -100,6 +100,36 @@ export const AGENTS: AgentPersona[] = [
     tools: ["route_to_reviewer"],
     code: "src/components/clinician/ClinicianWorkspace.tsx",
   },
+  {
+    id: "cardiology", name: "Willem", role: "Cardiology specialist", audience: "Clinician", tribute: "Visualize AI",
+    why: "Named for Willem Einthoven, who developed the ECG.", color: "#167d8d", assurance: "I collect heart-failure measures and cardiovascular findings for clinician review.",
+    description: "Reads weight, blood-pressure and heart-rate measures plus cardiovascular rules. Rule-based, no language model.",
+    tools: [], does: ["Heart-failure measures", "Blood pressure and heart rate", "Rule-based, no language model"], code: "src/lib/agents/specialists.ts",
+  },
+  {
+    id: "nutrition", name: "Elsie", role: "Nutrition specialist", audience: "Clinician", tribute: "Redesign Health",
+    why: "Named for Elsie Widdowson, a pioneer in nutrition science.", color: "#8b6b27", assurance: "I surface food, nutrient and potassium evidence without turning it into a prescription.",
+    description: "Reads drug-nutrient findings and potassium measures. Rule-based, no language model.",
+    tools: [], does: ["Drug-nutrient findings", "Potassium trend", "Rule-based, no language model"], code: "src/lib/agents/specialists.ts",
+  },
+  {
+    id: "behavioral", name: "Aaron", role: "Behavioral health specialist", audience: "Clinician", tribute: "TechNovaTime",
+    why: "Named for Aaron Beck, who founded cognitive therapy.", color: "#7d5ab8", assurance: "I put mood scores and psychotropic changes in the same review, with the patient in control.",
+    description: "Reads PHQ-9, GAD-7, mood and psychotropic-change findings. Rule-based, no language model.",
+    tools: [], does: ["PHQ-9 and GAD-7", "Mood changes", "Rule-based, no language model"], code: "src/lib/agents/specialists.ts",
+  },
+  {
+    id: "orchestrator", name: "Reid's handoff", role: "Specialist orchestrator", audience: "Behind the scenes", tribute: "Redesign Health",
+    why: "Extends Reid's record handoff by linking shared ingredients across specialist reviews.", color: "#315b8c", assurance: "I route each fact to the right specialist and show every handoff.",
+    description: "Routes facts deterministically, links shared ingredients across reviewers and records the message log. Rule-based, no language model.",
+    tools: [], does: ["Deterministic routing", "Cross-specialist links", "Rule-based, no language model"], code: "src/lib/agents/orchestrator.ts",
+  },
+  {
+    id: "reviewer", name: "Iris's review", role: "Safety reviewer", audience: "Behind the scenes", tribute: "Visualize AI",
+    why: "Extends Iris's clinician boundary by checking every specialist sentence before it is shown.", color: "#3b765d", assurance: "I block unsupported facts, diagnoses and medication directives before review.",
+    description: "Checks fact ids, neutral wording and cited numbers. Rule-based, no language model.",
+    tools: [], does: ["Fact-id validation", "Neutral wording gate", "Rule-based, no language model"], code: "src/lib/agents/safetyReviewer.ts",
+  },
 ];
 
 /** The actions no agent can take, read from the same policy every agent calls. */

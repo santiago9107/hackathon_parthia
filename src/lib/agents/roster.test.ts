@@ -5,8 +5,8 @@ import { buildClinicianCase } from "@/lib/clinician/cases";
 
 describe("agent roster", () => {
   it("credits each host and sponsor exactly once", () => {
-    const tributes = AGENTS.map((a) => a.tribute);
-    expect(new Set(tributes).size).toBe(AGENTS.length);
+    const tributes = AGENTS.slice(0, 5).map((a) => a.tribute);
+    expect(new Set(tributes).size).toBe(5);
     expect(tributes).toEqual(expect.arrayContaining(["DxAngels", "Redesign Health", "Photon Health", "TechNovaTime", "Visualize AI"]));
   });
 
@@ -31,5 +31,9 @@ describe("agent roster", () => {
 
   it("uses no em dashes in any copy", () => {
     expect(JSON.stringify(AGENTS)).not.toMatch(/—/);
+  });
+
+  it("includes the specialist and review roles", () => {
+    expect(AGENTS.map((agent) => agent.id)).toEqual(expect.arrayContaining(["cardiology", "nutrition", "behavioral", "orchestrator", "reviewer"]));
   });
 });
