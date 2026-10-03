@@ -12,6 +12,10 @@ export function buildClinicianReport(caseData: ClinicianCase, run: AgentRun, dec
     const decision = decisions.find((d) => d.findingId === finding.id);
     out.push(`### ${finding.title}`, `- **Priority:** ${finding.priority} (configured review priority)`, `- **Route:** ${finding.route}`, `- **Question:** ${finding.question}`, `- **Decision:** ${decision ? `${decision.action} by ${decision.reviewer}${decision.note ? `: ${decision.note}` : ""}` : "Open"}`);
     if (finding.citation) out.push(`- **Evidence:** ${finding.citation.sourceName}: “${finding.citation.passage}” (${finding.citation.url})`);
+    for (const rule of finding.supportingRules ?? []) {
+      out.push(`- **Parthia rule:** ${rule.ruleId} (${rule.severity})`);
+      for (const line of rule.evidence) out.push(`  - ${safe(line)}`);
+    }
     out.push("");
   }
   out.push("## Agent audit trail", "", "| # | Stage | Tool | Status | Summary |", "|---|---|---|---|---|");

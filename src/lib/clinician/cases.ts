@@ -113,6 +113,7 @@ export function buildClinicianCase(patientId: string): ClinicianCase {
     sharedAt: "2026-10-03T09:14:00-04:00",
     sources: sources(p.id === "p-harold"),
     records: [...passport, ...clinical, ...extras],
+    passport: base,
   };
 }
 
