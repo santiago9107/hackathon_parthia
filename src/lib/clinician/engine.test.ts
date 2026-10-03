@@ -75,6 +75,18 @@ describe("full Parthia engine in the clinician agent", () => {
     for (const finding of run.findings) expect(finding.question).not.toMatch(/^(stop|start|increase|decrease|switch|prescribe)\b/i);
   });
 
+  it("gives every finding split out of one pair rule its own title", () => {
+    const run = runClinicianAgent(buildClinicianCase("p-margaret"), { confirmations: { "passport:otc-diphenhydramine": true }, resumed: true });
+    const sedation = run.findings.filter((f) => f.supportingRules?.some((r) => r.ruleId === "drug-drug/known-pairs/ssri+zdrug-sedation"));
+    expect(sedation).toHaveLength(2);
+    expect(new Set(sedation.map((f) => f.title)).size).toBe(2);
+    for (const finding of sedation) for (const ingredient of finding.ingredients) expect(finding.title.toLowerCase()).toContain(ingredient);
+
+    // Harold's warfarin pairs: aspirin keeps its own heading, ibuprofen keeps the label-backed one.
+    const aspirin = haroldConfirmed().findings.find((f) => f.id === "interaction:aspirin+warfarin");
+    expect(aspirin!.title).toBe("Two medicines that both reduce clotting: Warfarin and Aspirin");
+  });
+
   it("reports the merge count that merge() actually performed", () => {
     const harold = haroldConfirmed();
     const step = harold.trace.find((entry) => entry.tool === "run_parthia_engine");
