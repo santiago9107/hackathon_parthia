@@ -1,0 +1,1021 @@
+{
+  "contract_version": "1.1.0",
+  "patient_id": "p-rosa",
+  "as_of": "2026-10-03T12:00:00Z",
+  "module_version": "0.3.0",
+  "knowledge_version": "234dfffb4aee",
+  "overrides_version": "2026-10-03.3",
+  "knowledge_mode": "development",
+  "phenotype": {
+    "element_id": "D003",
+    "value": "HFpEF",
+    "lvef": {
+      "element_id": "D002",
+      "item_id": "p-rosa-lvef-2025-11-20",
+      "label": "LVEF",
+      "value": 55,
+      "unit": "%",
+      "date": "2025-11-20",
+      "source": "ehr",
+      "conversion": null
+    },
+    "detail": "LVEF 55% on 2025-11-20 -> HFpEF (DEC-02).",
+    "decision_ids": [
+      "DEC-02"
+    ]
+  },
+  "urgent": [],
+  "domain_profile": [
+    {
+      "domain": "medication_safety",
+      "label": "Medication safety",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "No time series is defined for this domain.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D005"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "fluid_congestion",
+      "label": "Fluid / congestion",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: body weight and symptoms checklist are missing or out of date.",
+      "trend_detail": "Weight: not enough data to compare the last 7 days with the previous 14 (1 and 1 values; 2 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D011",
+        "D014"
+      ],
+      "element_ids": [
+        "D011",
+        "D014"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "heart_kidney_labs",
+      "label": "Heart-kidney labs",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Potassium distance outside the lab's range: not enough data to compare the last 7 days with the previous 14 (0 and 0 values; 1 needed in each). eGFR: not enough data to compare the last 7 days with the previous 14 (0 and 0 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D007",
+        "D009"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "bp_heart_rate",
+      "label": "Blood pressure / heart rate",
+      "status": "good",
+      "trend": "unknown",
+      "reason": "No findings from the rules checked in this domain, and the required data is current.",
+      "trend_detail": "Share of BP/HR readings outside alert limits: not enough data to compare the last 7 days with the previous 14 (2 and 0 values; 2 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [
+        "D012",
+        "D013"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "mental_health",
+      "label": "Mental health",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: phq-2 / phq-9 is missing or out of date.",
+      "trend_detail": "PHQ-9: not enough data to compare the last 21 days with the previous 60 (0 and 0 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D016"
+      ],
+      "element_ids": [
+        "D016"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "adherence",
+      "label": "Adherence",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: missed doses and reason is missing or out of date.",
+      "trend_detail": "Missed doses per day: not enough data to compare the last 7 days with the previous 14 (0 and 1 values; 1 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D006"
+      ],
+      "element_ids": [
+        "D006"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "nutrition",
+      "label": "Nutrition",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not enough recent data to assess: diet risk tags is missing or out of date.",
+      "trend_detail": "Diet risk tags per log: not enough data to compare the last 7 days with the previous 14 (0 and 1 values; 2 needed in each).",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [
+        "D015"
+      ],
+      "element_ids": [
+        "D015"
+      ],
+      "rule_ids": []
+    },
+    {
+      "domain": "function_qol",
+      "label": "Function and quality of life",
+      "status": "insufficient_data",
+      "trend": "unknown",
+      "reason": "Not assessed yet: KCCQ (S14) is not yet a data-dictionary element.",
+      "trend_detail": "KCCQ (S14) is not yet a data-dictionary element.",
+      "finding_ids": [],
+      "urgent_ids": [],
+      "missing_element_ids": [],
+      "element_ids": [],
+      "rule_ids": []
+    }
+  ],
+  "ranked_findings": [],
+  "precursors": [],
+  "contributing_factors": [],
+  "risk_scores": [],
+  "missing_data": [
+    {
+      "element_id": "D006",
+      "element_name": "Missed doses and reason",
+      "reason": "stale",
+      "detail": "Latest Missed doses and reason is from 2026-09-19, older than its 7-day validity window (D006); treated as missing.",
+      "needed_by_rule_ids": [
+        "R20"
+      ],
+      "needed_by_domains": [
+        "adherence"
+      ],
+      "last_value": null,
+      "suggested_patient_question": "Can you complete this week's medicine check-in (how many doses were missed, and why)?",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D006",
+          "review_status": "in_review"
+        }
+      ]
+    },
+    {
+      "element_id": "D009",
+      "element_name": "Creatinine / eGFR",
+      "reason": "baseline_not_set",
+      "detail": "No clinician-set eGFR baseline in the care plan (T03: baseline set by clinician).",
+      "needed_by_rule_ids": [
+        "R13"
+      ],
+      "needed_by_domains": [],
+      "last_value": null,
+      "suggested_patient_question": "Has your care team set a personal baseline for this test? You can ask at your next visit.",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D009",
+          "review_status": "in_review"
+        }
+      ]
+    },
+    {
+      "element_id": "D011",
+      "element_name": "Body weight",
+      "reason": "stale",
+      "detail": "Latest Body weight is from 2026-09-28, older than its 2-day validity window (D011); treated as missing.",
+      "needed_by_rule_ids": [
+        "R08"
+      ],
+      "needed_by_domains": [
+        "fluid_congestion"
+      ],
+      "last_value": null,
+      "suggested_patient_question": "Can you weigh yourself tomorrow morning and log it?",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D011",
+          "review_status": "in_review"
+        }
+      ]
+    },
+    {
+      "element_id": "D012",
+      "element_name": "Blood pressure",
+      "reason": "no_data",
+      "detail": "1 home blood pressure reading(s) in the last 7 days; R16 needs at least 4.",
+      "needed_by_rule_ids": [
+        "R16"
+      ],
+      "needed_by_domains": [],
+      "last_value": null,
+      "suggested_patient_question": "Can you check and log your blood pressure today?",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D012",
+          "review_status": "in_review"
+        }
+      ]
+    },
+    {
+      "element_id": "D014",
+      "element_name": "Symptoms checklist",
+      "reason": "stale",
+      "detail": "Latest Symptoms checklist is from 2026-09-28, older than its 1-day validity window (D014); treated as missing.",
+      "needed_by_rule_ids": [],
+      "needed_by_domains": [
+        "fluid_congestion"
+      ],
+      "last_value": null,
+      "suggested_patient_question": "Can you complete today's symptom check (under a minute)?",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D014",
+          "review_status": "in_review"
+        }
+      ]
+    },
+    {
+      "element_id": "D015",
+      "element_name": "Diet risk tags",
+      "reason": "stale",
+      "detail": "Latest Diet risk tags is from 2026-09-15, older than its 14-day validity window (D015); treated as missing.",
+      "needed_by_rule_ids": [
+        "R07"
+      ],
+      "needed_by_domains": [
+        "nutrition"
+      ],
+      "last_value": null,
+      "suggested_patient_question": "Can you log your meals for the next few days?",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D015",
+          "review_status": "in_review"
+        }
+      ]
+    },
+    {
+      "element_id": "D016",
+      "element_name": "PHQ-2 / PHQ-9",
+      "reason": "stale",
+      "detail": "Latest PHQ-2 / PHQ-9 is from 2026-07-01, older than its 30-day validity window (D016); treated as missing.",
+      "needed_by_rule_ids": [
+        "R19"
+      ],
+      "needed_by_domains": [
+        "mental_health"
+      ],
+      "last_value": null,
+      "suggested_patient_question": "Can you complete the mood questionnaire (PHQ-9)?",
+      "knowledge": [
+        {
+          "kind": "element",
+          "id": "D016",
+          "review_status": "in_review"
+        }
+      ]
+    }
+  ],
+  "needs_review": [],
+  "timeline": {
+    "events": [
+      {
+        "event_id": "m-lisinopril#0",
+        "at": "2023-05-01",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Lisinopril",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-metformin#0",
+        "at": "2025-03-15",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Metformin",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-lvef-2025-11-20",
+        "at": "2025-11-20",
+        "category": "lab",
+        "element_id": "D002",
+        "label": "lvef",
+        "value": 55,
+        "unit": "%",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-empagliflozin#0",
+        "at": "2025-12-01",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Empagliflozin",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-phq-9-2026-07-01",
+        "at": "2026-07-01",
+        "category": "mood",
+        "element_id": "D016",
+        "label": "PHQ-9",
+        "value": 3,
+        "unit": "points",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-egfr-2026-08-05",
+        "at": "2026-08-05",
+        "category": "lab",
+        "element_id": "D009",
+        "label": "egfr",
+        "value": 72,
+        "unit": "mL/min/1.73m²",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-hba1c-2026-08-05",
+        "at": "2026-08-05",
+        "category": "lab",
+        "element_id": "D020",
+        "label": "hba1c",
+        "value": 7.1,
+        "unit": "%",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-k-2026-08-05",
+        "at": "2026-08-05",
+        "category": "lab",
+        "element_id": "D007",
+        "label": "potassium",
+        "value": 4.3,
+        "unit": "mEq/L",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-na-2026-08-05",
+        "at": "2026-08-05",
+        "category": "lab",
+        "element_id": "D008",
+        "label": "sodium",
+        "value": 140,
+        "unit": "mEq/L",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-diet-2026-09-15-1",
+        "at": "2026-09-15",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-wt-2026-09-25",
+        "at": "2026-09-25T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 68.2,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-wt-2026-09-28",
+        "at": "2026-09-28T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 68.4,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-sx-2026-09-28",
+        "at": "2026-09-28T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-bp-2026-09-28-0800",
+        "at": "2026-09-28T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "124/78",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-rosa-hr-2026-09-28-0800",
+        "at": "2026-09-28T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 70,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      }
+    ],
+    "daily_series": {
+      "weight_kg": [
+        {
+          "date": "2026-09-25",
+          "value": 68.2,
+          "n": 1
+        },
+        {
+          "date": "2026-09-28",
+          "value": 68.4,
+          "n": 1
+        }
+      ],
+      "systolic_mmhg": [
+        {
+          "date": "2026-09-28",
+          "value": 124,
+          "n": 1
+        }
+      ],
+      "diastolic_mmhg": [
+        {
+          "date": "2026-09-28",
+          "value": 78,
+          "n": 1
+        }
+      ],
+      "heart_rate_bpm": [
+        {
+          "date": "2026-09-28",
+          "value": 70,
+          "n": 1
+        }
+      ],
+      "phq9_score": [
+        {
+          "date": "2026-07-01",
+          "value": 3,
+          "n": 1
+        }
+      ],
+      "diet_risk_tags": [
+        {
+          "date": "2026-09-15",
+          "value": 0,
+          "n": 1
+        }
+      ],
+      "missed_doses": []
+    }
+  },
+  "audit": {
+    "rules_evaluated": [
+      {
+        "rule_id": "R01",
+        "outcome": "not_applicable",
+        "detail": "No active NSAID.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R02",
+        "outcome": "not_applicable",
+        "detail": "No active MRA.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R03",
+        "outcome": "not_applicable",
+        "detail": "No active MRA.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R04",
+        "outcome": "not_applicable",
+        "detail": "No active diltiazem or verapamil.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R05",
+        "outcome": "not_applicable",
+        "detail": "No active thiazolidinedione.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R06",
+        "outcome": "not_applicable",
+        "detail": "No active ARNI.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R07",
+        "outcome": "missing_data",
+        "detail": "No valid diet log (D015).",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R08",
+        "outcome": "missing_data",
+        "detail": "No valid weight (D011).",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R09",
+        "outcome": "not_fired",
+        "detail": "0 low systolic reading(s).",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R10",
+        "outcome": "not_applicable",
+        "detail": "No active DPP-4 inhibitor linked to HF hospitalization.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R11",
+        "outcome": "not_applicable",
+        "detail": "No relevant active medicine.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R12",
+        "outcome": "not_fired",
+        "detail": "sodium 140 mEq/L.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R13",
+        "outcome": "missing_data",
+        "detail": "No eGFR baseline.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R14",
+        "outcome": "not_fired",
+        "detail": "eGFR 72 mL/min/1.73m².",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R15",
+        "outcome": "not_evaluable",
+        "detail": "Threshold undefined: 'rise vs baseline (define % with clinician)'.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R16",
+        "outcome": "missing_data",
+        "detail": "1 BP readings in window.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R17",
+        "outcome": "not_applicable",
+        "detail": "No rate-lowering medicine.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R18",
+        "outcome": "not_fired",
+        "detail": "Resting HR 70 beats/min.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R19",
+        "outcome": "missing_data",
+        "detail": "No valid PHQ-2/PHQ-9.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R20",
+        "outcome": "missing_data",
+        "detail": "No valid adherence check-in.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R21",
+        "outcome": "not_fired",
+        "detail": "0 urgent item(s). Runs in every mode (DEC-17).",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R22",
+        "outcome": "not_fired",
+        "detail": "0 PHQ-9 with item 9 > 0 in the D016 window. Runs in every mode (DEC-17).",
+        "review_status": "draft_verify"
+      }
+    ],
+    "thresholds_used": [
+      {
+        "threshold_id": null,
+        "element_id": "D009",
+        "parameter": "eGFR (R14)",
+        "op": "<",
+        "value": 30,
+        "low": null,
+        "high": null,
+        "unit": "mL/min/1.73m²",
+        "source": "default",
+        "reference": "R14 Threshold values"
+      },
+      {
+        "threshold_id": "T01",
+        "element_id": "D007",
+        "parameter": "urgent potassium",
+        "op": ">=",
+        "value": 6,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T01 URGENT; DEC-06"
+      },
+      {
+        "threshold_id": "T01",
+        "element_id": "D007",
+        "parameter": "urgent potassium",
+        "op": "<",
+        "value": 3,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T01 URGENT; DEC-06"
+      },
+      {
+        "threshold_id": "T02",
+        "element_id": "D008",
+        "parameter": "sodium (R12)",
+        "op": "<",
+        "value": 130,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T02 via R12"
+      },
+      {
+        "threshold_id": "T02",
+        "element_id": "D008",
+        "parameter": "urgent sodium",
+        "op": "<",
+        "value": 125,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T02 URGENT; DEC-06"
+      },
+      {
+        "threshold_id": "T06",
+        "element_id": "D012",
+        "parameter": "low systolic (R09)",
+        "op": "<",
+        "value": 90,
+        "low": null,
+        "high": null,
+        "unit": "mmHg",
+        "source": "default",
+        "reference": "R09; DEC-08"
+      },
+      {
+        "threshold_id": "T06",
+        "element_id": "D012",
+        "parameter": "urgent BP: systolic >= 180 or diastolic >= 120",
+        "op": ">=",
+        "value": 180,
+        "low": null,
+        "high": 120,
+        "unit": "mmHg",
+        "source": "default",
+        "reference": "T06 URGENT; DEC-15"
+      },
+      {
+        "threshold_id": "T06",
+        "element_id": "D012",
+        "parameter": "urgent systolic with symptoms",
+        "op": "<",
+        "value": 80,
+        "low": null,
+        "high": null,
+        "unit": "mmHg",
+        "source": "default",
+        "reference": "T06 URGENT; DEC-07"
+      },
+      {
+        "threshold_id": "T07",
+        "element_id": "D013",
+        "parameter": "resting HR alert high",
+        "op": ">",
+        "value": 100,
+        "low": null,
+        "high": null,
+        "unit": "beats/min",
+        "source": "default",
+        "reference": "T07"
+      },
+      {
+        "threshold_id": "T07",
+        "element_id": "D013",
+        "parameter": "urgent resting HR with symptoms",
+        "op": "range",
+        "value": null,
+        "low": 40,
+        "high": 120,
+        "unit": "beats/min",
+        "source": "default",
+        "reference": "T07 URGENT; DEC-07"
+      },
+      {
+        "threshold_id": "T08",
+        "element_id": "D016",
+        "parameter": "PHQ-9 item 9",
+        "op": ">",
+        "value": 0,
+        "low": null,
+        "high": null,
+        "unit": "points",
+        "source": "default",
+        "reference": "T08 URGENT"
+      },
+      {
+        "threshold_id": "T09",
+        "element_id": "D014",
+        "parameter": "red-flag symptom",
+        "op": "range",
+        "value": null,
+        "low": null,
+        "high": null,
+        "unit": "n/a",
+        "source": "default",
+        "reference": "T09 URGENT; DEC-07"
+      },
+      {
+        "threshold_id": "T11",
+        "element_id": "D019",
+        "parameter": "urgent inr",
+        "op": ">",
+        "value": 4.5,
+        "low": null,
+        "high": null,
+        "unit": "ratio",
+        "source": "default",
+        "reference": "T11 URGENT; DEC-06"
+      }
+    ],
+    "knowledge_rows_used": [
+      {
+        "kind": "decision",
+        "id": "DEC-02",
+        "review_status": "clinical_lead_decision"
+      },
+      {
+        "kind": "element",
+        "id": "D002",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D003",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D006",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D009",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D011",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D012",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D014",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D015",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D016",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "rule",
+        "id": "R01",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R02",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R03",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R04",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R05",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R06",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R07",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R08",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R09",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R10",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R11",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R12",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R13",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R14",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R16",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R17",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R18",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R19",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R20",
+        "review_status": "draft_verify"
+      }
+    ],
+    "warnings": [],
+    "not_implemented": [
+      "precursors (phase 5)",
+      "contributing_factors (phase 6)",
+      "risk_scores (phase 7; tables to be supplied by the clinical lead, DEC-10)",
+      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)",
+      "patient_view / clinician_view (phase 8)"
+    ]
+  }
+}

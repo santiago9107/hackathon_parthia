@@ -1,0 +1,111 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "How to use",
+  "rows": [
+    [
+      "Parthia Health — Heart Failure Clinical Knowledge Base"
+    ],
+    [
+      "Purpose",
+      "Organizes the clinical knowledge the safety engine and AI agents use. Every rule and card must trace back to a registered source."
+    ],
+    [
+      "Sheets"
+    ],
+    [
+      "Source register",
+      "One row per source document (guideline, decision pathway, statement, drug label, patient education). Record version, license status and whether full text may be stored."
+    ],
+    [
+      "Rules",
+      "Deterministic logic for the safety engine: thresholds and yes/no checks. The software engineer turns each approved row into code and a test."
+    ],
+    [
+      "Recommendation cards",
+      "One guideline recommendation per row, written in your own words, with metadata. Loaded into the knowledge base for agents to retrieve and cite."
+    ],
+    [
+      "Domain tracker",
+      "Progress for the 10 clinical domains: targets (blue, editable) and approved counts (automatic)."
+    ],
+    [
+      "Thresholds",
+      "Reference ranges, heart failure targets, alert and urgent limits for each measurement, with the order agents use to pick a threshold."
+    ],
+    [
+      "Dictionary guide",
+      "What to enter in each column, how agents must use the dictionary, and which sources complete it."
+    ],
+    [
+      "Data dictionary",
+      "The patient data we capture and why. Each element lists the rules that need it, its standard code, source and frequency."
+    ],
+    [
+      "Test cases",
+      "Clinical scenarios with the expected findings, including negative tests. Engineers run these after every change."
+    ],
+    [
+      "Lists",
+      "Allowed values for the dropdown columns. Edit here to add options."
+    ],
+    [
+      "How to fill it in"
+    ],
+    [
+      "1",
+      "Add each new source to the Source register first and give it an ID (S01, S02…)."
+    ],
+    [
+      "2",
+      "Extract rules and cards from that source; put its Source ID in every row."
+    ],
+    [
+      "3",
+      "Write recommendations in your own words (copyright). Note the section/page so anyone can verify."
+    ],
+    [
+      "4",
+      "Set Review status. Only rows marked 'Approved' are used by the app."
+    ],
+    [
+      "5",
+      "A second clinician reviews every row before approval; fill in Reviewed by and Date reviewed."
+    ],
+    [
+      "Legend"
+    ],
+    [
+      "Shaded rows",
+      "Pre-filled DRAFT examples. Thresholds, classes of recommendation and levels of evidence must be verified against the original source before approval."
+    ],
+    [
+      "Dropdown columns",
+      "Category, Severity, Agent, Review status, License status and similar columns use lists from the Lists sheet."
+    ],
+    [
+      "Status summary"
+    ],
+    [
+      "Sheet",
+      "Draft – verify",
+      "In review",
+      "Approved",
+      "Retired"
+    ],
+    [
+      "Rules",
+      22,
+      0,
+      0,
+      0
+    ],
+    [
+      "Recommendation cards",
+      6,
+      0,
+      0,
+      0
+    ]
+  ]
+}

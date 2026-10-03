@@ -1,0 +1,630 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "Data dictionary",
+  "notes": [],
+  "rows": [
+    {
+      "element_id": "D001",
+      "name": "Heart failure diagnosis",
+      "category": "Profile",
+      "definition": "Active diagnosis of heart failure",
+      "data_type": "Coded",
+      "unit": "n/a",
+      "code_system": "SNOMED CT",
+      "code": "84114007",
+      "data_source": "EHR",
+      "frequency": "When it changes",
+      "valid_for_analysis": "Until changed",
+      "priority": "MVP",
+      "required_by_rules": "R01; R04; R05; R10",
+      "used_by_agent": "All",
+      "source_ids_text": "S01",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R01",
+        "R04",
+        "R05",
+        "R10"
+      ],
+      "validity": null,
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D002",
+      "name": "LVEF value and date",
+      "category": "Profile",
+      "definition": "Most recent left ventricular ejection fraction with measurement date",
+      "data_type": "Number + date",
+      "unit": "%",
+      "code_system": "LOINC",
+      "code": "10230-1",
+      "data_source": "EHR / scan",
+      "frequency": "When it changes",
+      "valid_for_analysis": "12 months",
+      "priority": "MVP",
+      "required_by_rules": "R04",
+      "used_by_agent": "Cardiology",
+      "source_ids_text": "S01; S05",
+      "review_status_text": "In review",
+      "notes": "Drives HFrEF vs HFpEF",
+      "source_ids": [
+        "S01",
+        "S05"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R04"
+      ],
+      "validity": {
+        "amount": 12,
+        "unit": "months"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D003",
+      "name": "HF phenotype",
+      "category": "Profile",
+      "definition": "HFrEF or HFpEF, derived from LVEF using U.S. definitions",
+      "data_type": "Category",
+      "unit": "n/a",
+      "code_system": "Internal",
+      "code": "n/a",
+      "data_source": "Calculated",
+      "frequency": "When LVEF changes",
+      "valid_for_analysis": "Until LVEF changes",
+      "priority": "MVP",
+      "required_by_rules": "R02; R03; R04",
+      "used_by_agent": "All",
+      "source_ids_text": "S01; S05",
+      "review_status_text": "In review",
+      "notes": "U.S. and ESC thresholds differ",
+      "source_ids": [
+        "S01",
+        "S05"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R02",
+        "R03",
+        "R04"
+      ],
+      "validity": null,
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D004",
+      "name": "Comorbidities",
+      "category": "Profile",
+      "definition": "CKD, diabetes, atrial fibrillation, hypertension, depression, cognitive impairment, COPD",
+      "data_type": "Coded list",
+      "unit": "n/a",
+      "code_system": "SNOMED / ICD-10",
+      "code": "Per condition",
+      "data_source": "EHR",
+      "frequency": "When it changes",
+      "valid_for_analysis": "Until changed",
+      "priority": "MVP",
+      "required_by_rules": "R10",
+      "used_by_agent": "All",
+      "source_ids_text": "S01; S04",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S04"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R10"
+      ],
+      "validity": null,
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D005",
+      "name": "Medication list",
+      "category": "Medications",
+      "definition": "All active medicines incl. OTC and supplements: name, dose, frequency, start/change/stop dates, prescriber",
+      "data_type": "Coded list",
+      "unit": "n/a",
+      "code_system": "RxNorm",
+      "code": "Per drug",
+      "data_source": "EHR / scan",
+      "frequency": "Every change",
+      "valid_for_analysis": "Current list only",
+      "priority": "MVP",
+      "required_by_rules": "All medication rules",
+      "used_by_agent": "Pharmacist",
+      "source_ids_text": "S01; S09",
+      "review_status_text": "In review",
+      "notes": "Patient must confirm",
+      "source_ids": [
+        "S01",
+        "S09"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [],
+      "validity": null,
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D006",
+      "name": "Missed doses and reason",
+      "category": "Adherence",
+      "definition": "Missed doses in past 7 days and main reason",
+      "data_type": "Number + category",
+      "unit": "doses",
+      "code_system": "Internal",
+      "code": "n/a",
+      "data_source": "Patient",
+      "frequency": "Weekly",
+      "valid_for_analysis": "7 days",
+      "priority": "MVP",
+      "required_by_rules": null,
+      "used_by_agent": "Behavioral health",
+      "source_ids_text": "S01",
+      "review_status_text": "In review",
+      "notes": "Reasons: cost, side effects, forgot, diuretic timing",
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 7,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D007",
+      "name": "Potassium",
+      "category": "Labs",
+      "definition": "Serum potassium with result date",
+      "data_type": "Number + date",
+      "unit": "mEq/L",
+      "code_system": "LOINC",
+      "code": "2823-3",
+      "data_source": "EHR / scan",
+      "frequency": "Each result",
+      "valid_for_analysis": "90 days; 14 days after MRA/RAAS start or dose change",
+      "priority": "MVP",
+      "required_by_rules": "R02; R07",
+      "used_by_agent": "Pharmacist",
+      "source_ids_text": "S01",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R02",
+        "R07"
+      ],
+      "validity": {
+        "amount": 90,
+        "unit": "days"
+      },
+      "validity_has_context": true,
+      "mvp": true
+    },
+    {
+      "element_id": "D008",
+      "name": "Sodium",
+      "category": "Labs",
+      "definition": "Serum sodium with result date",
+      "data_type": "Number + date",
+      "unit": "mEq/L",
+      "code_system": "LOINC",
+      "code": "2951-2",
+      "data_source": "EHR / scan",
+      "frequency": "Each result",
+      "valid_for_analysis": "90 days",
+      "priority": "MVP",
+      "required_by_rules": null,
+      "used_by_agent": "Pharmacist",
+      "source_ids_text": "S01",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 90,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D009",
+      "name": "Creatinine / eGFR",
+      "category": "Labs",
+      "definition": "Serum creatinine and eGFR with result date",
+      "data_type": "Number + date",
+      "unit": "mg/dL; mL/min/1.73m²",
+      "code_system": "LOINC",
+      "code": "2160-0; 98979-8",
+      "data_source": "EHR / scan",
+      "frequency": "Each result",
+      "valid_for_analysis": "90 days; 14 days after MRA/RAAS start or dose change",
+      "priority": "MVP",
+      "required_by_rules": "R03",
+      "used_by_agent": "Pharmacist",
+      "source_ids_text": "S01; S04",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S04"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R03"
+      ],
+      "validity": {
+        "amount": 90,
+        "unit": "days"
+      },
+      "validity_has_context": true,
+      "mvp": true
+    },
+    {
+      "element_id": "D010",
+      "name": "BNP or NT-proBNP",
+      "category": "Labs",
+      "definition": "Natriuretic peptide with result date",
+      "data_type": "Number + date",
+      "unit": "pg/mL",
+      "code_system": "LOINC",
+      "code": "30934-4; 33762-6",
+      "data_source": "EHR / scan",
+      "frequency": "Each result",
+      "valid_for_analysis": "12 months",
+      "priority": "MVP",
+      "required_by_rules": null,
+      "used_by_agent": "Cardiology",
+      "source_ids_text": "S01",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 12,
+        "unit": "months"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D011",
+      "name": "Body weight",
+      "category": "Home monitoring",
+      "definition": "Morning weight, daily",
+      "data_type": "Number + date",
+      "unit": "kg",
+      "code_system": "LOINC",
+      "code": "29463-7",
+      "data_source": "Device / patient",
+      "frequency": "Daily",
+      "valid_for_analysis": "2 days",
+      "priority": "MVP",
+      "required_by_rules": "R08",
+      "used_by_agent": "Cardiology",
+      "source_ids_text": "S01; S12",
+      "review_status_text": "In review",
+      "notes": "Most important home signal",
+      "source_ids": [
+        "S01",
+        "S12"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R08"
+      ],
+      "validity": {
+        "amount": 2,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D012",
+      "name": "Blood pressure",
+      "category": "Home monitoring",
+      "definition": "Systolic and diastolic home readings",
+      "data_type": "Number + time",
+      "unit": "mmHg",
+      "code_system": "LOINC",
+      "code": "8480-6; 8462-4",
+      "data_source": "Device / patient",
+      "frequency": "Daily or several/week",
+      "valid_for_analysis": "7 days",
+      "priority": "MVP",
+      "required_by_rules": "R09",
+      "used_by_agent": "Cardiology",
+      "source_ids_text": "S02",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S02"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R09"
+      ],
+      "validity": {
+        "amount": 7,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D013",
+      "name": "Heart rate",
+      "category": "Home monitoring",
+      "definition": "Resting heart rate",
+      "data_type": "Number + time",
+      "unit": "beats/min",
+      "code_system": "LOINC",
+      "code": "8867-4",
+      "data_source": "Device",
+      "frequency": "Daily",
+      "valid_for_analysis": "7 days",
+      "priority": "MVP",
+      "required_by_rules": null,
+      "used_by_agent": "Cardiology",
+      "source_ids_text": "S02",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S02"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 7,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D014",
+      "name": "Symptoms checklist",
+      "category": "Symptoms",
+      "definition": "Breathlessness, orthopnea, swelling, dizziness, fatigue; red flags: chest pain, fainting, severe breathlessness",
+      "data_type": "Checklist",
+      "unit": "n/a",
+      "code_system": "Internal",
+      "code": "n/a",
+      "data_source": "Patient",
+      "frequency": "Daily (under 1 minute)",
+      "valid_for_analysis": "1 day",
+      "priority": "MVP",
+      "required_by_rules": "R09; urgent pathway",
+      "used_by_agent": "Cardiology",
+      "source_ids_text": "S01; S12",
+      "review_status_text": "In review",
+      "notes": "Red flags go to urgent pathway",
+      "source_ids": [
+        "S01",
+        "S12"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R09"
+      ],
+      "validity": {
+        "amount": 1,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D015",
+      "name": "Diet risk tags",
+      "category": "Nutrition",
+      "definition": "High-sodium meal, potassium salt substitute, alcohol, fluid amount if restricted, grapefruit, vitamin K",
+      "data_type": "Tags",
+      "unit": "n/a",
+      "code_system": "Internal",
+      "code": "n/a",
+      "data_source": "Patient",
+      "frequency": "When relevant",
+      "valid_for_analysis": "14 days",
+      "priority": "MVP",
+      "required_by_rules": "R07",
+      "used_by_agent": "Nutrition",
+      "source_ids_text": "S01; S13",
+      "review_status_text": "In review",
+      "notes": "From meal AI tagging, confirmed by patient",
+      "source_ids": [
+        "S01",
+        "S13"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [
+        "R07"
+      ],
+      "validity": {
+        "amount": 14,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D016",
+      "name": "PHQ-2 / PHQ-9",
+      "category": "Mental health",
+      "definition": "Depression screening scores; PHQ-9 item 9 answer",
+      "data_type": "Score",
+      "unit": "points",
+      "code_system": "LOINC",
+      "code": "55758-7; 44261-6",
+      "data_source": "Patient",
+      "frequency": "Monthly",
+      "valid_for_analysis": "30 days",
+      "priority": "MVP",
+      "required_by_rules": "Urgent pathway (item 9)",
+      "used_by_agent": "Behavioral health",
+      "source_ids_text": "S15",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S15"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 30,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D017",
+      "name": "Hospital and ER visits, falls",
+      "category": "Events",
+      "definition": "Date and reason of hospitalizations, ER visits and falls",
+      "data_type": "Event list",
+      "unit": "n/a",
+      "code_system": "Internal",
+      "code": "n/a",
+      "data_source": "EHR / patient",
+      "frequency": "When they happen",
+      "valid_for_analysis": "12 months",
+      "priority": "MVP",
+      "required_by_rules": null,
+      "used_by_agent": "All",
+      "source_ids_text": "S01",
+      "review_status_text": "In review",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "in_review",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 12,
+        "unit": "months"
+      },
+      "validity_has_context": false,
+      "mvp": true
+    },
+    {
+      "element_id": "D018",
+      "name": "Magnesium",
+      "category": "Labs",
+      "definition": "Serum magnesium (diuretics, digoxin)",
+      "data_type": "Number + date",
+      "unit": "mg/dL",
+      "code_system": "LOINC",
+      "code": "19123-9",
+      "data_source": "EHR / scan",
+      "frequency": "Each result",
+      "valid_for_analysis": "90 days",
+      "priority": "Later",
+      "required_by_rules": null,
+      "used_by_agent": "Pharmacist",
+      "source_ids_text": "S01",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "draft_verify",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 90,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": false
+    },
+    {
+      "element_id": "D019",
+      "name": "INR",
+      "category": "Labs",
+      "definition": "INR if on warfarin",
+      "data_type": "Number + date",
+      "unit": "ratio",
+      "code_system": "LOINC",
+      "code": "6301-6",
+      "data_source": "EHR / scan",
+      "frequency": "Each result",
+      "valid_for_analysis": "30 days",
+      "priority": "Later",
+      "required_by_rules": null,
+      "used_by_agent": "Pharmacist",
+      "source_ids_text": "S09",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S09"
+      ],
+      "review_status": "draft_verify",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 30,
+        "unit": "days"
+      },
+      "validity_has_context": false,
+      "mvp": false
+    },
+    {
+      "element_id": "D020",
+      "name": "HbA1c",
+      "category": "Labs",
+      "definition": "Glycated hemoglobin if diabetic",
+      "data_type": "Number + date",
+      "unit": "%",
+      "code_system": "LOINC",
+      "code": "4548-4",
+      "data_source": "EHR / scan",
+      "frequency": "Each result",
+      "valid_for_analysis": "6 months",
+      "priority": "Later",
+      "required_by_rules": null,
+      "used_by_agent": "Pharmacist",
+      "source_ids_text": "S04",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S04"
+      ],
+      "review_status": "draft_verify",
+      "required_by_rule_ids": [],
+      "validity": {
+        "amount": 6,
+        "unit": "months"
+      },
+      "validity_has_context": false,
+      "mvp": false
+    }
+  ]
+}

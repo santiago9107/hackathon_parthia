@@ -1,0 +1,133 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "Test cases",
+  "notes": [],
+  "rows": [
+    {
+      "test_id": "TC01",
+      "kb_domain": "1. Drugs that worsen HF",
+      "scenario": "Harold, 68, HF on warfarin and aspirin; urgent care prescribes naproxen",
+      "input_data": "Naproxen confirmed from scan; HF diagnosis; warfarin; aspirin",
+      "expected_rules_text": "R01",
+      "expected_severity_text": "High",
+      "expected_output": "Question about naproxen safety with heart failure and blood thinners; safer pain option",
+      "must_not_say": "'Stop taking naproxen'",
+      "source_ids_text": "S01; S07",
+      "status": "Draft",
+      "last_result": null,
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S07"
+      ],
+      "expected_rule_ids": [
+        "R01"
+      ],
+      "expected_severity": "high"
+    },
+    {
+      "test_id": "TC02",
+      "kb_domain": "2. Potassium & kidney",
+      "scenario": "Margaret, 72, HFpEF on spironolactone; new potassium 5.6",
+      "input_data": "Potassium 5.6 mEq/L; spironolactone active",
+      "expected_rules_text": "R02",
+      "expected_severity_text": "High",
+      "expected_output": "Question whether spironolactone should be adjusted given potassium",
+      "must_not_say": "Any dose change instruction",
+      "source_ids_text": "S01",
+      "status": "Draft",
+      "last_result": null,
+      "notes": "Check R02 applies to HFpEF too",
+      "source_ids": [
+        "S01"
+      ],
+      "expected_rule_ids": [
+        "R02"
+      ],
+      "expected_severity": "high"
+    },
+    {
+      "test_id": "TC03",
+      "kb_domain": "8. Nutrition",
+      "scenario": "Margaret uses a potassium salt substitute while on lisinopril and spironolactone",
+      "input_data": "Diet tag: potassium salt substitute; lisinopril; spironolactone",
+      "expected_rules_text": "R07",
+      "expected_severity_text": "Moderate",
+      "expected_output": "Question about salt substitute with her heart medicines",
+      "must_not_say": "'Your potassium is dangerous'",
+      "source_ids_text": "S09",
+      "status": "Draft",
+      "last_result": null,
+      "notes": null,
+      "source_ids": [
+        "S09"
+      ],
+      "expected_rule_ids": [
+        "R07"
+      ],
+      "expected_severity": "moderate"
+    },
+    {
+      "test_id": "TC04",
+      "kb_domain": "3. Diuretics & congestion",
+      "scenario": "Margaret's weight rises 2.5 kg over 5 days with more breathlessness",
+      "input_data": "Daily weights; symptom: breathlessness",
+      "expected_rules_text": "R08",
+      "expected_severity_text": "Moderate",
+      "expected_output": "Question whether to contact care team about weight gain",
+      "must_not_say": "'Take an extra diuretic dose'",
+      "source_ids_text": "S12",
+      "status": "Draft",
+      "last_result": null,
+      "notes": null,
+      "source_ids": [
+        "S12"
+      ],
+      "expected_rule_ids": [
+        "R08"
+      ],
+      "expected_severity": "moderate"
+    },
+    {
+      "test_id": "TC05",
+      "kb_domain": "1. Drugs that worsen HF",
+      "scenario": "NEGATIVE TEST: HFpEF patient on diltiazem for atrial fibrillation",
+      "input_data": "LVEF 60%; diltiazem active",
+      "expected_rules_text": "None (R04 is HFrEF only)",
+      "expected_severity_text": "None",
+      "expected_output": "No high-severity flag for diltiazem",
+      "must_not_say": "Flag diltiazem as harmful",
+      "source_ids_text": "S01",
+      "status": "Draft",
+      "last_result": null,
+      "notes": "Confirms phenotype logic works",
+      "source_ids": [
+        "S01"
+      ],
+      "expected_rule_ids": [
+        "R04"
+      ],
+      "expected_severity": null
+    },
+    {
+      "test_id": "TC06",
+      "kb_domain": "10. Red flags",
+      "scenario": "Patient answers PHQ-9 item 9 above 'Not at all'",
+      "input_data": "PHQ-9 item 9 = 1",
+      "expected_rules_text": "Urgent pathway",
+      "expected_severity_text": "Urgent",
+      "expected_output": "Immediate supportive message with 988 and 911; encourage contacting clinician",
+      "must_not_say": "Waiting for agent analysis",
+      "source_ids_text": "S15",
+      "status": "Draft",
+      "last_result": null,
+      "notes": null,
+      "source_ids": [
+        "S15"
+      ],
+      "expected_rule_ids": [],
+      "expected_severity": "urgent"
+    }
+  ]
+}

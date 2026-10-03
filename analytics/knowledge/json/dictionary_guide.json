@@ -1,0 +1,191 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "Dictionary guide",
+  "rows": [
+    [
+      "Data dictionary guide"
+    ],
+    [
+      "A. What to enter in each column"
+    ],
+    [
+      "Column",
+      "What to enter",
+      "Example"
+    ],
+    [
+      "Element ID",
+      "Unique ID, D + 3 digits. Never reuse an ID.",
+      "D007"
+    ],
+    [
+      "Data element",
+      "Short clinical name.",
+      "Potassium"
+    ],
+    [
+      "Category",
+      "Profile, Medications, Adherence, Labs, Home monitoring, Symptoms, Nutrition, Mental health, Events.",
+      "Labs"
+    ],
+    [
+      "Definition",
+      "One sentence: exactly what is captured, including date/time if needed.",
+      "Serum potassium with result date"
+    ],
+    [
+      "Data type",
+      "Number, Number + date, Coded, Category, Checklist, Tags, Score, Event list.",
+      "Number + date"
+    ],
+    [
+      "Unit",
+      "Standard unit; note conversions if devices differ.",
+      "mEq/L"
+    ],
+    [
+      "Code system / Code",
+      "LOINC for labs, vitals and questionnaires; SNOMED CT or ICD-10 for conditions; RxNorm for medicines. Verify on the official site.",
+      "LOINC 2823-3"
+    ],
+    [
+      "Data source",
+      "Where it comes from: EHR, Patient, Device, Scan, Calculated.",
+      "EHR / scan"
+    ],
+    [
+      "Frequency",
+      "How often it is expected to arrive.",
+      "Each result"
+    ],
+    [
+      "Valid for analysis",
+      "How old a value can be and still be used. Older values are treated as missing. Clinical lead decides.",
+      "90 days; 14 days after MRA start"
+    ],
+    [
+      "Priority",
+      "MVP = collected from day one. Later = used if available, not requested.",
+      "MVP"
+    ],
+    [
+      "Required by rules",
+      "Rule IDs that need this element. Empty means no rule uses it yet.",
+      "R02; R07"
+    ],
+    [
+      "Used by agent",
+      "Agents that read it.",
+      "Pharmacist"
+    ],
+    [
+      "Justification",
+      "Source ID from the Source register that explains why it is captured.",
+      "S01"
+    ],
+    [
+      "Status",
+      "Draft – verify, In review, Approved, Retired.",
+      "In review"
+    ],
+    [
+      "B. How the agents must use the dictionary"
+    ],
+    [
+      "Rule for agents",
+      "Instruction"
+    ],
+    [
+      "1. Only defined data",
+      "Use only data elements listed here. Refer to them by Element ID in every finding (e.g. D007 = 5.6 mEq/L on 2026-09-30, source EHR)."
+    ],
+    [
+      "2. Only confirmed data",
+      "Use only items the patient has confirmed and that are reconciled across sources. Ignore pending or conflicting items and point to the Review screen instead."
+    ],
+    [
+      "3. Respect validity",
+      "If the latest value is older than 'Valid for analysis', treat it as missing. Never use an outdated value as current."
+    ],
+    [
+      "4. Missing is not normal",
+      "Never assume a missing value is normal. If a rule needs it, say it is missing and suggest a question, e.g. 'When was your last potassium test?'"
+    ],
+    [
+      "5. Units and dates",
+      "Always report value, unit and date. Convert units only using the Unit column (e.g. lb to kg)."
+    ],
+    [
+      "6. Stay in your role",
+      "Each agent works mainly with elements where 'Used by agent' includes its role. Other elements may be read for context but not interpreted outside the agent's discipline."
+    ],
+    [
+      "7. Priority",
+      "MVP elements may be requested from the patient. 'Later' elements are used only if already present; never ask the patient for them."
+    ],
+    [
+      "8. Phenotype",
+      "Use the calculated phenotype (D003) based on U.S. definitions. Do not re-derive it."
+    ],
+    [
+      "9. Red flags first",
+      "Red-flag symptoms in D014 and a positive PHQ-9 item 9 in D016 trigger the urgent pathway immediately. Do not wait for analysis."
+    ],
+    [
+      "10. No new data, no diagnosis",
+      "Never request data that is not in this dictionary. Never diagnose or give dosing instructions; findings end with a question for the clinician."
+    ],
+    [
+      "11. Cite",
+      "Every finding cites the Element IDs used and the rule or recommendation card that applies."
+    ],
+    [
+      "12. Thresholds",
+      "Judge values with the Thresholds sheet. Order: (1) clinician's patient-specific target, (2) the lab's reported range, (3) default values. Always state which one was used."
+    ],
+    [
+      "C. Sources needed to complete the dictionary"
+    ],
+    [
+      "Category",
+      "Sources (IDs in Source register)",
+      "What they provide"
+    ],
+    [
+      "Profile (diagnosis, LVEF, phenotype, NYHA, comorbidities)",
+      "S01 2022 AHA/ACC/HFSA guideline; S05 Universal Definition 2026; S04 CKM guideline 2026",
+      "Definitions, LVEF categories, stages, comorbidities that matter"
+    ],
+    [
+      "Medications and adherence",
+      "S01; S02 HFrEF pathway 2024; S03 HFpEF pathway 2026; S07 drugs that worsen HF; S08 Beers; S09 FDA labels; S10 RxNorm",
+      "Which medicines to capture, harmful drugs, older-adult risks, codes"
+    ],
+    [
+      "Labs",
+      "S01 monitoring sections; S02 labs during dose changes; S09 label monitoring; S16 LOINC",
+      "Which labs, how often, validity windows, codes"
+    ],
+    [
+      "Home monitoring and symptoms",
+      "S01 self-care; S12 HFSA/AHA patient education; S02 BP and heart rate",
+      "Daily weight, BP/HR, warning symptoms, thresholds"
+    ],
+    [
+      "Nutrition",
+      "S01 nonpharmacological care; S13 SODIUM-HF; S09 labels (potassium)",
+      "Sodium, fluids, potassium salt substitutes, alcohol"
+    ],
+    [
+      "Mental health",
+      "S15 PHQ-2/PHQ-9; S01 psychosocial care; S14 KCCQ (later)",
+      "Screening tools, scoring, item 9 safety response"
+    ],
+    [
+      "Codes for everything",
+      "S16 LOINC; S17 SNOMED CT; S10 RxNorm",
+      "Standard codes for engineers"
+    ]
+  ]
+}
