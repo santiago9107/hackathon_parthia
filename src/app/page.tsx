@@ -184,9 +184,6 @@ export default function DashboardPage() {
               <Link href="/passport/share/" className="rounded-full bg-brand-700 px-3.5 py-1.5 text-sm font-semibold text-white hover:bg-brand-800">
                 Prepare a summary to share
               </Link>
-              <Link href="/assistant/" className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm font-medium text-ink hover:border-brand-300">
-                Ask a question
-              </Link>
             </div>
           </Card>
         </div>

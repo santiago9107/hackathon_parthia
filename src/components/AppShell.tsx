@@ -22,16 +22,16 @@ const HOME: NavItem = { href: "/", label: "Home", icon: HomeIcon };
 const PASSPORT: NavItem = { href: "/passport/", label: "Passport", icon: PassportIcon, prefix: "/passport/" };
 const SAFETY: NavItem = { href: "/medications/", label: "Safety", icon: PillIcon };
 const TRENDS: NavItem = { href: "/trends/", label: "Trends", icon: TrendIcon };
-const ASSISTANT: NavItem = { href: "/assistant/", label: "Assistant", icon: ChatIcon };
+const ANALYTICS: NavItem = { href: "/analytics/", label: "Analytics", icon: TrendIcon };
 const AGENTS: NavItem = { href: "/agents/", label: "Agents", icon: AgentsIcon, prefix: "/agents/" };
 const CLINICIAN: NavItem = { href: "/clinician/", label: "Clinician", icon: ClinicianIcon, prefix: "/clinician/" };
 const ARCHITECTURE: NavItem = { href: "/architecture/", label: "Architecture", icon: ClinicianIcon, prefix: "/architecture/" };
 const LOG: NavItem = { href: "/log/", label: "Log", icon: PlusIcon, prefix: "/log/" };
 
 /** Desktop header: the Passport is a primary item; "Log" is a separate button. */
-const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, AGENTS, CLINICIAN];
+const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ANALYTICS, AGENTS, CLINICIAN];
 /** Mobile tab bar (max 5): Log sits in the middle as a raised quick action. */
-const MOBILE_NAV: NavItem[] = [HOME, PASSPORT, LOG, SAFETY, ASSISTANT];
+const MOBILE_NAV: NavItem[] = [HOME, PASSPORT, LOG, SAFETY, AGENTS];
 
 function isActive(item: NavItem, current: string) {
   return item.prefix ? current.startsWith(item.prefix) : current === normalize(item.href);
@@ -188,13 +188,6 @@ function PlusIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <path d="M12 5v14M5 12h14" />
-    </svg>
-  );
-}
-function ChatIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M4 5h16v11H9l-5 4z" />
     </svg>
   );
 }

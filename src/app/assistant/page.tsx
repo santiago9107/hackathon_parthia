@@ -1,20 +1,15 @@
 "use client";
 
-import { PageHeader, Disclaimer } from "@/components/PageHeader";
-import { AssistantPanel } from "@/components/AssistantPanel";
-import { usePatient } from "@/lib/context/PatientContext";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
+/**
+ * The standalone assistant is hidden: Ask Parthia (the docked patient agent)
+ * is the one place a patient asks questions. Anyone arriving on this old URL
+ * is sent home.
+ */
 export default function AssistantPage() {
-  const { patientId } = usePatient();
-  return (
-    <div>
-      <PageHeader
-        eyebrow="Assistant"
-        title="Ask about your own records"
-        subtitle="Every answer is built only from your medication list, safety flags and daily entries — never from anyone else's data, and never as medical advice."
-      />
-      <AssistantPanel key={patientId} />
-      <Disclaimer />
-    </div>
-  );
+  const router = useRouter();
+  useEffect(() => { router.replace("/"); }, [router]);
+  return null;
 }
