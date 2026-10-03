@@ -171,6 +171,22 @@ const seedPatients: SeedPatient[] = [
       { id: "v-r3", patientId: "p-rosa", timestamp: "2026-07-30T10:15:00", systolic: 136, diastolic: 82, heartRate: 78, weightKg: 81.0, bpSetting: "clinic" },
     ],
   },
+  {
+    // An empty Passport shell. It is filled by importing the bundled Synthea
+    // FHIR R4 record at /passport/add/synthea/, through the same review queue
+    // every other import uses.
+    id: "p-synthea-shaun",
+    name: "Shaun461 Javier97 Cormier289",
+    age: 73,
+    sex: "male",
+    summary: "Synthetic Synthea patient. Import the FHIR record to build this Passport.",
+    primaryClinician: "Not imported yet",
+    conditions: [],
+    medications: [],
+    medicationHistory: [],
+    labs: [],
+    vitals: [],
+  },
 ];
 
 function normalize(p: SeedPatient): Patient {
