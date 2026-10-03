@@ -42,9 +42,22 @@ async function decodeChunk(response: Response, expectedBytes: number): Promise<A
   return buffer;
 }
 
-export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = false }: { findingTitle?: string; compact?: boolean; embedded?: boolean }) {
+export function ClinicalBodyAtlas3D({ findingTitle, findingSystems, counts, filter, onFilter, compact = false, embedded = false }: {
+  findingTitle?: string;
+  /** Systems the selected finding acts on; all of them are highlighted together. */
+  findingSystems?: RiskSystem[];
+  /** How many findings touch each system, shown on the tab. */
+  counts?: Record<RiskSystem, number>;
+  /** The system the finding list is filtered to, if any. */
+  filter?: RiskSystem | null;
+  onFilter?: (system: RiskSystem | null) => void;
+  compact?: boolean;
+  embedded?: boolean;
+}) {
   const host = useRef<HTMLDivElement>(null);
-  const systemRef = useRef<RiskSystem>("circulatory");
+  const highlightRef = useRef<RiskSystem[]>(["circulatory"]);
+  const onFilterRef = useRef(onFilter);
+  useEffect(() => { onFilterRef.current = onFilter; }, [onFilter]);
   const pausedRef = useRef(false);
   const [system, setSystem] = useState<RiskSystem>("circulatory");
   const [paused, setPaused] = useState(false);
@@ -52,7 +65,10 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
   const [structureCount, setStructureCount] = useState(2234);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => { systemRef.current = system; }, [system]);
+  // A tab filter wins, then the selected finding's systems, then the last system picked by hand.
+  const highlighted: RiskSystem[] = filter ? [filter] : findingSystems ?? [system];
+  const highlightKey = highlighted.join(",");
+  useEffect(() => { highlightRef.current = highlightKey ? (highlightKey.split(",") as RiskSystem[]) : []; }, [highlightKey]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
 
   useEffect(() => {
@@ -106,9 +122,9 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
       materials.set(name, new THREE.MeshStandardMaterial({ color: ATLAS_COLORS[name], metalness: 0.05, roughness: 0.5, transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide }));
     });
 
-    let lastRiskSystem: RiskSystem | null = null;
+    let lastHighlightKey = "";
     function updateMaterials() {
-      const active = new Set(RISK_SYSTEMS.find((item) => item.id === systemRef.current)?.atlas ?? []);
+      const active = new Set(RISK_SYSTEMS.filter((item) => highlightRef.current.includes(item.id)).flatMap((item) => item.atlas));
       for (const [name, material] of materials) {
         const selected = active.has(name);
         material.opacity = selected ? 1 : name === "skeletal" || name === "muscular" ? 0.16 : 0.11;
@@ -117,7 +133,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
         material.depthWrite = selected;
         material.needsUpdate = true;
       }
-      lastRiskSystem = systemRef.current;
+      lastHighlightKey = highlightRef.current.join(",");
     }
 
     function fitAnatomy() {
@@ -195,7 +211,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
       raycaster.setFromCamera(pointer, camera);
       const hit = raycaster.intersectObjects(meshes, false)[0]?.object as THREE.Mesh | undefined;
       const risk = hit ? sourceToRisk(hit.userData.atlasSystem as AtlasSystem) : undefined;
-      if (risk) setSystem(risk);
+      if (risk) { setSystem(risk); onFilterRef.current?.(risk); }
     };
     renderer.domElement.addEventListener("pointerdown", onDown);
     renderer.domElement.addEventListener("pointerup", onUp);
@@ -212,7 +228,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     const animate = () => {
       if (disposed) return;
       frame = requestAnimationFrame(animate);
-      if (lastRiskSystem !== systemRef.current) updateMaterials();
+      if (lastHighlightKey !== highlightRef.current.join(",")) updateMaterials();
       controls.autoRotate = !pausedRef.current;
       controls.update(); renderer.render(scene, camera);
     };
@@ -226,16 +242,18 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     };
   }, []);
 
-  const selected = RISK_SYSTEMS.find((item) => item.id === system)!;
+  const selected = RISK_SYSTEMS.find((item) => item.id === highlighted[0]);
+  const highlightedLabels = RISK_SYSTEMS.filter((item) => highlighted.includes(item.id)).map((item) => item.label).join(" + ") || "No body system";
+  const unmapped = !filter && findingSystems !== undefined && findingSystems.length === 0;
   return <div className={`overflow-hidden bg-[#07111e] text-white ${embedded ? "" : "border border-slate-800 shadow-[0_24px_80px_rgba(2,8,23,.22)]"}`}>
-    <div className="flex items-start justify-between gap-3 border-b border-slate-800 px-4 py-4"><div><p className="text-[10px] font-semibold uppercase tracking-[.18em] text-teal-300">Anatomy</p><h2 className="mt-1 text-base font-semibold">Anatomy</h2></div><div className="text-right"><span className="block text-[9px] uppercase tracking-[.12em] text-emerald-300">{progress < 100 ? `${progress}% loading` : `${structureCount.toLocaleString()} structures`}</span><button type="button" onClick={() => setPaused((value) => !value)} className="mt-1 text-[9px] text-slate-400 hover:text-white">{paused ? "Resume rotation" : "Pause rotation"}</button></div></div>
-    <div className="flex gap-1 overflow-x-auto border-b border-slate-800 p-2">{RISK_SYSTEMS.map((item) => <button type="button" key={item.id} onClick={() => setSystem(item.id)} className={`shrink-0 border-b-2 px-2 py-2 text-[10px] font-medium transition ${system === item.id ? "border-teal-300 bg-white/10 text-white" : "border-transparent text-slate-400 hover:bg-white/5"}`}><span className="mr-2 inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />{item.label}</button>)}</div>
+    <div className="flex items-start justify-between gap-3 border-b border-slate-800 px-4 py-4"><div><p className="text-[10px] font-semibold uppercase tracking-[.18em] text-teal-300">Anatomy</p><h2 className="mt-1 text-base font-semibold">Where these medication risks act</h2></div><div className="text-right"><span className="block text-[9px] uppercase tracking-[.12em] text-emerald-300">{progress < 100 ? `${progress}% loading` : `${structureCount.toLocaleString()} structures`}</span><button type="button" onClick={() => setPaused((value) => !value)} className="mt-1 text-[9px] text-slate-400 hover:text-white">{paused ? "Resume rotation" : "Pause rotation"}</button></div></div>
+    <div className="grid grid-cols-2 gap-1 border-b border-slate-800 p-2">{RISK_SYSTEMS.map((item) => <button type="button" key={item.id} onClick={() => { setSystem(item.id); onFilter?.(filter === item.id ? null : item.id); }} aria-pressed={highlighted.includes(item.id)} className={`flex min-w-0 items-center border-b-2 px-3 py-2 text-xs font-medium transition ${highlighted.includes(item.id) ? "border-teal-300 bg-white/10 text-white" : "border-transparent text-slate-400 hover:bg-white/5"}`}><span className="mr-2 inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: item.color }} /><span className="truncate">{item.label}</span>{counts ? <span className="ml-auto rounded-full bg-white/10 px-2 py-0.5 text-[11px] tabular-nums text-slate-200">{counts[item.id]}</span> : null}</button>)}</div>
     <div className={`relative ${compact ? "min-h-[520px]" : "min-h-[600px]"}`}>
       <div ref={host} className="absolute inset-0 cursor-grab active:cursor-grabbing" />
       {progress < 100 && !error && <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#07111e]/80"><div className="text-center"><span className="mx-auto block h-8 w-8 animate-spin rounded-full border-2 border-slate-700 border-t-teal-300"/><p className="mt-3 text-[10px] font-semibold uppercase tracking-[.14em] text-slate-400">Loading reference anatomy</p></div></div>}
       {error && <div className="absolute inset-0 grid place-items-center p-6 text-center"><div><p className="text-sm font-semibold text-red-300">Anatomy unavailable</p><p className="mt-2 text-xs leading-5 text-slate-400">{error}</p></div></div>}
     </div>
     <div className="flex min-w-0 items-center justify-between gap-3 border-t border-slate-800 px-4 py-2 text-[11px] text-slate-500"><span className="min-w-0 truncate text-left">Drag to orbit · scroll to zoom · select a highlighted system</span><a href="/about#credits" className="shrink-0 text-teal-300 underline-offset-2 hover:underline">Anatomy credits</a></div>
-    <div className="border-t border-slate-800 p-4"><div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ background: selected.color }}/><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-slate-500">{selected.label} context</p></div><p className="mt-2 text-xs leading-5 text-slate-300">{findingTitle ?? selected.detail}</p><div className="mt-3 border-l-2 border-amber-400 bg-amber-400/10 p-3 text-[10px] leading-4 text-amber-100">Associated medication-warning context only. This is reference anatomy, not a patient-specific model or diagnosis.</div></div>
+    <div className="border-t border-slate-800 p-4"><div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ background: selected?.color ?? "#64748b" }}/><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-slate-500">{highlightedLabels} context</p></div><p className="mt-2 text-xs leading-5 text-slate-300">{findingTitle ? (unmapped ? `${findingTitle}. No body system is shown for this finding.` : findingTitle) : selected?.detail}</p><div className="mt-3 border-l-2 border-amber-400 bg-amber-400/10 p-3 text-[10px] leading-4 text-amber-100">Associated medication-warning context only. This is reference anatomy, not a patient-specific model or diagnosis.</div></div>
   </div>;
 }
