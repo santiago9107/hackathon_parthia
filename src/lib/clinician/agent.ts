@@ -89,9 +89,12 @@ export function runClinicianAgent(caseData: ClinicianCase, options: { available?
   const engine = engineFindings(caseData, medications, records, AS_OF);
   const { findings, merged } = makeFindings(sources, records, confirmations, engine);
   step("check", "run_safety_rules", "ok", `Ran deterministic rules: ${findings.length} finding(s), including ${findings.filter((f) => f.priority === "high").length} high-priority review item(s).`);
-  step("check", "run_parthia_engine", engine.ran ? "ok" : "info", engine.ran
+  const unresolvedNote = engine.unresolved.length
+    ? ` ${engine.unresolved.length} current medication(s) could not be mapped to a verified ingredient (${engine.unresolved.join(", ")}), so no rule could consider them. They are raised as data-quality findings and the case stays incomplete.`
+    : "";
+  step("check", "run_parthia_engine", engine.ran ? "ok" : "info", (engine.ran
     ? `Ran the full Parthia rule set (drug-drug, drug-allergy, drug-nutrient, burden, mood and Passport rules) on the reconciled current list plus the Passport entries: ${engine.flagCount} rule flag(s), ${engine.findings.length - merged} new finding(s), ${merged} merged into an existing finding as supporting rule evidence.`
-    : "This case carries no Passport record, so the Parthia rules did not run. Nothing was inferred in their place.");
+    : "This case carries no Passport record, so the Parthia rules did not run. Nothing was inferred in their place.") + unresolvedNote);
   const pending = findings.find((f) => f.kind === "needs-confirmation");
   if (pending) {
     step("clarify", "ask_patient", "waiting", `Paused before applying rules to ${pending.ingredients[0]}. Asked: “${pending.question}”`);
@@ -101,6 +104,7 @@ export function runClinicianAgent(caseData: ClinicianCase, options: { available?
   const decided = new Set((options.decisions ?? []).map((d) => d.findingId));
   const open = findings.filter((f) => f.blocking && !decided.has(f.id));
   step("route", "route_to_reviewer", open.length ? "waiting" : "ok", open.length ? `Routed ${open.length} finding(s) to a human. The agent made no treatment decision.` : "Every routed finding has a recorded human decision.");
-  const incomplete = findings.some((f) => f.kind === "unavailable-source");
+  // Missing data and unmappable data both leave the list incomplete, never clean.
+  const incomplete = findings.some((f) => f.kind === "unavailable-source" || f.kind === "unmapped-medication");
   return { stage: open.length ? "route" : "complete", status: incomplete ? "incomplete" : open.length ? "review-required" : "complete", sources, records, medications, findings, trace, autonomousCount: trace.filter((t) => t.status === "ok").length, humanCount: open.length };
 }

@@ -66,6 +66,35 @@ export function engineMedications(medications: ReconciledMedication[], asOf: str
   });
 }
 
+/**
+ * Current medications whose ingredient the drug dictionary does not know. The
+ * rules cannot consider these, so they are surfaced rather than dropped: a
+ * case must not look clean when the engine could not look at something.
+ */
+function unresolvedIngredients(medications: ReconciledMedication[]): string[] {
+  return medications.filter((m) => m.current && !lookupDrug(m.ingredient)).map((m) => m.ingredient);
+}
+
+/**
+ * A data-quality question for an unmappable medication. Nothing here guesses
+ * an ingredient, maps it by resemblance or invents a risk for it.
+ */
+function unmappedFinding(ingredient: string, records: SourceMedication[]): ClinicianFinding {
+  const matching = records.filter((r) => r.ingredient === ingredient);
+  return {
+    id: `unmapped:${ingredient}`,
+    kind: "unmapped-medication",
+    priority: "data-quality",
+    route: "clinician",
+    title: `${ingredient}: not in the verified drug dictionary`,
+    detail: `${matching.map((r) => `${r.sourceLabel}: ${r.display}`).join("; ") || "No source record carries a recognized ingredient."} The dictionary has no entry for it, so no Parthia rule could consider it. The name was not guessed and no risk was inferred, so this case stays incomplete.`,
+    question: `Can ${ingredient} be identified against a verified drug dictionary before this list is finalized?`,
+    ingredients: [ingredient],
+    recordIds: matching.map((r) => r.id),
+    blocking: true,
+  };
+}
+
 function ingredientsOf(displayNames: string[]): string[] {
   return [...new Set(displayNames.map((name) => lookupDrug(name)?.generic ?? name.toLowerCase()))];
 }
@@ -113,6 +142,8 @@ export interface EngineResult {
   findings: ClinicianFinding[];
   flagCount: number;
   ran: boolean;
+  /** Current ingredients the drug dictionary could not resolve, named in the trace. */
+  unresolved: string[];
 }
 
 /**
@@ -121,8 +152,10 @@ export interface EngineResult {
  * which case the agent trace says so rather than inventing a shell record.
  */
 export function engineFindings(caseData: ClinicianCase, medications: ReconciledMedication[], records: SourceMedication[], asOf: string): EngineResult {
+  const unresolved = unresolvedIngredients(medications);
+  const unmapped = unresolved.map((ingredient) => unmappedFinding(ingredient, records));
   const passport = caseData.passport;
-  if (!passport) return { findings: [], flagCount: 0, ran: false };
+  if (!passport) return { findings: unmapped, flagCount: 0, ran: false, unresolved };
 
   const meds = engineMedications(medications, asOf);
   const flags = evaluatePatient(
@@ -130,7 +163,7 @@ export function engineFindings(caseData: ClinicianCase, medications: ReconciledM
     { now: new Date(asOf) },
   );
 
-  const findings: ClinicianFinding[] = [];
+  const findings: ClinicianFinding[] = [...unmapped];
   for (const flag of flags) {
     if (flag.category === "drug-drug") {
       for (const pair of splitPairs(flag, meds)) {
@@ -141,5 +174,5 @@ export function engineFindings(caseData: ClinicianCase, medications: ReconciledM
     const ingredients = ingredientsOf(flag.medications);
     findings.push(toFinding(flag, ingredients, records, `rule:${flag.ruleId}:${[...ingredients].sort().join("+")}`, flag.title));
   }
-  return { findings, flagCount: flags.length, ran: true };
+  return { findings, flagCount: flags.length, ran: true, unresolved };
 }

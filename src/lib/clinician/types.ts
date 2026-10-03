@@ -55,7 +55,8 @@ export type FindingKind =
   | "drug-mood"
   | "drug-vitals"
   | "drug-kidney"
-  | "anticholinergic-burden";
+  | "anticholinergic-burden"
+  | "unmapped-medication";
 
 /**
  * A Parthia safety-engine rule that contributed to a finding. Carried so the
