@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { ChoiceGroup, Form, FormPage, SavedPanel, SelectField, SubmitBar, TextField, useSave } from "@/components/log/FormKit";
+import { SafetyUpdateNotice } from "@/components/patient/SafetyUpdateNotice";
 import { usePatient } from "@/lib/context/PatientContext";
 import { REFERENCE_DATE } from "@/lib/mockData";
 import { addEntries, editEntry } from "@/lib/passport/actions";
@@ -45,7 +46,7 @@ function splitDose(dose: string): { dose: string; unit: string } {
 }
 
 function MedicationForm({ existing, isPending }: { existing?: Medication; isPending: boolean }) {
-  const { patientId, record } = usePatient();
+  const { patientId, record, flags } = usePatient();
   const [input, setInput] = useState<MedicationInput>(() => ({
     name: existing?.name ?? "",
     ...splitDose(existing?.dose ?? ""),
@@ -57,7 +58,7 @@ function MedicationForm({ existing, isPending }: { existing?: Medication; isPend
     stoppedOn: existing?.stoppedOn ?? "",
   }));
   const [errs, setErrs] = useState<ReturnType<typeof validateMedication>>({});
-  const [saved, setSaved] = useState<Medication | null>(null);
+  const [saved, setSaved] = useState<{ med: Medication; beforeRuleIds: string[]; beforeFlagIds: string[] } | null>(null);
   const { busy, error, save } = useSave();
   const set = <K extends keyof MedicationInput>(k: K) => (v: MedicationInput[K]) => setInput((x) => ({ ...x, [k]: v }));
   const recognised = input.name ? lookupDrug(input.name) : undefined;
@@ -67,21 +68,25 @@ function MedicationForm({ existing, isPending }: { existing?: Medication; isPend
     setErrs(e);
     if (Object.keys(e).length) return;
     const med = buildMedication(input, existing);
+    // The flags that had already fired before this save, captured here in the
+    // user event so the confirmation can name what is genuinely new.
+    const beforeRuleIds = flags.map((f) => f.ruleId);
+    const beforeFlagIds = flags.map((f) => f.id);
     const event = medicationChangeEvent(patientId, isPending ? undefined : existing, med, REFERENCE_DATE);
     const ok = await save(async () => {
       if (existing) await editEntry(patientId, "medications", med, isPending ? `Corrected and confirmed medication: ${med.name} ${med.dose}` : `Edited medication: ${med.name} ${med.dose}`);
       else await addEntries(patientId, "medications", [med], `Added medication: ${med.name} ${med.dose}`);
       if (event) await addEntries(patientId, "medicationHistory", [{ ...event, source: youSource() }], `Medication change: ${event.detail}`);
     });
-    if (ok) setSaved(med);
+    if (ok) setSaved({ med, beforeRuleIds, beforeFlagIds });
   }
 
   if (saved) {
     return (
       <FormPage title={existing ? "Edit a medication" : "Add a medication"}>
-        <SavedPanel title={`${saved.name} saved`} links={[{ href: "/medications/", label: "Check medication safety" }, { href: "/passport/medications/", label: "My medications" }]}>
-          {saved.class === "other" && !lookupDrug(saved.name) && <p>We didn&apos;t recognise this name, so the safety check can&apos;t look for interactions with it yet. Your clinician or pharmacist can.</p>}
-          <p className="mt-1">The safety check has re-run with your updated list.</p>
+        <SavedPanel title={`${saved.med.name} saved`} links={[{ href: "/medications/", label: "Check medication safety" }, { href: "/passport/medications/", label: "My medications" }]}>
+          {saved.med.class === "other" && !lookupDrug(saved.med.name) && <p>We didn&apos;t recognise this name, so the safety check can&apos;t look for interactions with it yet. Your clinician or pharmacist can.</p>}
+          <SafetyUpdateNotice beforeRuleIds={saved.beforeRuleIds} beforeFlagIds={saved.beforeFlagIds} />
         </SavedPanel>
       </FormPage>
     );

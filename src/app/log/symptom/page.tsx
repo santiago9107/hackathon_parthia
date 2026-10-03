@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChoiceGroup, Form, FormPage, SavedPanel, SubmitBar, TextArea, TextField, useSave } from "@/components/log/FormKit";
+import { SafetyUpdateNotice } from "@/components/patient/SafetyUpdateNotice";
 import { usePatient } from "@/lib/context/PatientContext";
 import { demoTimestamp } from "@/lib/mockData";
 import { addEntries } from "@/lib/passport/actions";
@@ -21,12 +22,12 @@ const SEVERITY: { value: Scale1to5; label: string; hint: string }[] = [
 ];
 
 export default function SymptomPage() {
-  const { patientId } = usePatient();
+  const { patientId, flags } = usePatient();
   const [symptom, setSymptom] = useState("");
   const [severity, setSeverity] = useState<Scale1to5 | null>(null);
   const [note, setNote] = useState("");
   const [errs, setErrs] = useState<{ symptom?: string; severity?: string }>({});
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<{ text: string; beforeRuleIds: string[]; beforeFlagIds: string[] } | null>(null);
   const { busy, error, save } = useSave();
 
   async function submit() {
@@ -34,14 +35,19 @@ export default function SymptomPage() {
     setErrs(e);
     if (e.symptom || e.severity) return;
     const entry: SymptomEntry = { id: newId("sy-you"), patientId, timestamp: demoTimestamp(), symptom: symptom.trim(), severity: severity!, note: note.trim() || undefined, source: youSource() };
-    if (await save(() => addEntries(patientId, "symptoms", [entry], `Symptom: ${entry.symptom} (${entry.severity}/5)`))) setSaved(true);
+    // The flags already firing before this save, captured in the user event.
+    const beforeRuleIds = flags.map((f) => f.ruleId);
+    const beforeFlagIds = flags.map((f) => f.id);
+    const text = [entry.symptom, entry.note].filter(Boolean).join(". ");
+    if (await save(() => addEntries(patientId, "symptoms", [entry], `Symptom: ${entry.symptom} (${entry.severity}/5)`))) setSaved({ text, beforeRuleIds, beforeFlagIds });
   }
 
   return (
     <FormPage title="Log a symptom" subtitle="Anything you noticed — the safety check looks for symptoms that can be linked to medicines.">
       {saved ? (
-        <SavedPanel title="Symptom saved" onAnother={() => { setSaved(false); setSymptom(""); setSeverity(null); setNote(""); }} links={[{ href: "/medications/", label: "See medication safety" }, { href: "/", label: "Home" }]}>
-          If a symptom is severe or sudden — chest pain, trouble breathing, signs of a stroke — call 911.
+        <SavedPanel title="Symptom saved" onAnother={() => { setSaved(null); setSymptom(""); setSeverity(null); setNote(""); }} links={[{ href: "/medications/", label: "See medication safety" }, { href: "/", label: "Home" }]}>
+          <SafetyUpdateNotice beforeRuleIds={saved.beforeRuleIds} beforeFlagIds={saved.beforeFlagIds} savedText={saved.text} />
+          <p className="mt-3">If a symptom is severe or sudden — chest pain, trouble breathing, signs of a stroke — call 911.</p>
         </SavedPanel>
       ) : (
         <Form label="Log a symptom" onSubmit={submit}>
