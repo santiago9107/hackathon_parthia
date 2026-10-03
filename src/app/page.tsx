@@ -46,9 +46,6 @@ export default function DashboardPage() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">
             <LiveClock />
-            <span className="ml-3 font-medium normal-case tracking-normal text-ink-muted">
-              Sample records as of {now.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-            </span>
           </p>
           <h1 className="mt-1 font-serif text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
             {greeting(new Date())}, {first}.
