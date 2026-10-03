@@ -337,12 +337,136 @@ Check at 390, 768, 1280 and 1440 px wide, with screenshots, on: `/log/*`, `/pass
 - No sideways scroll at 390 px. No text below 12 px on patient pages.
 - Fix with the existing tokens and components (`PageHeader`, `Card`). No new colors.
 
+### C5 (25 min): fix the 3D anatomy panel and move its credit
+Exception to the ownership rule: Stream C owns `src/components/clinician/ClinicalBodyAtlas3D.tsx`
+(only that clinician file). Problems seen on screen at 1440 px wide:
+- The body is not centred in the panel. It sits to the right and is cut off at the right edge.
+- "Drag to orbit · scroll to zoom · select a highlighted system" floats in the middle of the
+  panel, over the body, and is clipped at the edges.
+- The header says "BodyParts3D anatomy".
+
+Fix:
+1. **Centre the model from its real bounds.** After the meshes load, compute a `THREE.Box3` over
+   the whole model, move the model so the box centre sits at the origin, set `controls.target` to
+   the origin, and place the camera straight in front (x = 0) at the distance that fits the box
+   height in the vertical field of view for the current aspect ratio, with about 10 percent
+   margin. Remove the hard-coded `camera.position.set(1.15, 1.02, 3.35)` and
+   `controls.target.set(0, 0.86, 0)`. Recompute the fit on resize. Auto-rotation must turn the body
+   around its own vertical axis, so it stays centred while it turns.
+2. **Resize properly.** Use a `ResizeObserver` on the host element: on every size change, call
+   `renderer.setSize(w, h)`, set `camera.aspect = w / h`, `camera.updateProjectionMatrix()`, refit.
+   The canvas must always fill the panel exactly. The text floating mid-panel comes from the canvas
+   being sized once at mount while the panel grows taller.
+3. **Hint text.** Move "Drag to orbit · scroll to zoom" into the panel's bottom bar (the existing
+   `border-t` footer), left-aligned, `text-[11px]`, one line, truncating rather than overflowing.
+   Nothing overlays the model.
+4. **Credit.** Replace the header label "BodyParts3D anatomy" with "Anatomy". Change the canvas
+   `aria-label` to "Interactive adult reference anatomy. Drag to orbit and scroll to zoom." In the
+   footer, add a small "Anatomy credits" link to `/about#credits`.
+5. **Credits section on `/about`** (Stream C owns this page): add `id="credits"` with the
+   attribution from `public/anatomy/ATTRIBUTION.md`, quoted exactly (source, author, licence CC
+   BY-SA 2.1 Japan, link). The licence requires attribution, so it must stay reachable from the
+   atlas; this keeps it one tap away without naming it on the panel. Add the other credits there
+   too: SMART Health IT sandbox, Synthea, RxNav (NLM), Photon Health sandbox, and Heather Song and
+   Santiago Enriquez for their work.
+6. Check at 1280, 1440 and 1920 px: the body is centred horizontally and vertically, fully
+   visible, nothing overlaps it, during rotation and after a drag. Screenshot each.
+7. In task C (Stream A, after the merge): update Iris's `why` line in `src/lib/agents/roster.ts`
+   to "...A tribute name only: the 3D atlas uses an open anatomy model credited on the About page,
+   not the Visualize SDK." Run `git grep -n -i bodyparts -- src` and confirm the only mentions left
+   are the About credits.
+
 ### C4 (in task C, after the freeze): clinician view sweep
 The clinician view uses 7 to 10 px text in 59 places (`ClinicianWorkspace.tsx`) and 9 in
 `ClinicalBodyAtlas3D.tsx`. After A4 and B1 are merged, raise every `text-[7px]`, `text-[8px]` and
 `text-[9px]` to `text-[11px]` and `text-[10px]` to `text-xs`, then check the three-column layout at
 1280, 1440 and 1920 px still fits and stays centred at `max-w-[1440px]`. Screenshot before and
 after.
+
+## 6c. Task H: the agent huddle (patient side)
+
+When the patient's agent works on something, a centred pop-up shows the agents working together:
+the patient's agent in the middle, the specialists around it, each saying what it is doing, and a
+step-by-step flow along the bottom that ends with the answer. **It must replay the real
+orchestrator message log, never scripted text.**
+
+Run it in a fourth session (`.worktrees/demo-huddle`, branch `hackathon/demo-huddle`, created like
+Stream B) from 12:45 to 1:55, building only new files. Wiring happens in task C. With fewer
+sessions, it replaces C3 in Stream C.
+
+### H1. Data contract (new file `src/lib/agents/huddle.ts`, pure, tested)
+```ts
+export type HuddleAgentId = "patient" | "records" | "safety" | "cardiology" | "nutrition"
+  | "behavioral" | "reviewer" | "photon";
+export interface HuddleMessage { seq: number; from: HuddleAgentId; to: HuddleAgentId;
+  summary: string; factIds: string[]; status: "ok" | "blocked" | "info" }
+export interface HuddleStep { id: "question" | "records" | "rules" | "specialists" | "linked"
+  | "review" | "answer"; label: string; detail?: string }   // detail like "9 facts", "1 blocked"
+export interface Huddle { messages: HuddleMessage[]; steps: HuddleStep[]; answer: string;
+  citations: { label: string; url?: string }[] }
+export function buildHuddle(input: OrchestratorResult, reply: PatientReply): Huddle;
+```
+- Stream A's A4 orchestrator records `{ from, to, factIds, summary }`. Map that log into
+  `HuddleMessage`s one to one. Until A4 lands, build against a fixture in
+  `src/lib/agents/huddle.fixture.ts` that has the same shape and uses Margaret's real current
+  findings (section 2). After the merge, `buildHuddle` reads the real log; the fixture stays for
+  tests only.
+- Steps, always in this order, ending with the answer: Question received, Records gathered, Safety
+  rules checked, Specialists reviewing, Linked across specialists, Safety review (N passed, M
+  blocked), Answer ready.
+- `usePlayback(huddle, { stepMs = 700, reducedMotion })`: a small state machine returning the
+  current message index, active agent, the per-agent status (idle, working, done, blocked) and the
+  current step. Pure logic in a function so it can be unit-tested without timers.
+
+### H2. Component (new file `src/components/agents/AgentHuddle.tsx`)
+- A modal dialog centred on screen, `max-w-[960px]`, over a dimmed, blurred backdrop.
+- **Centre:** the patient's agent, Nova, large (`AgentFace` from C2, 72 px; fall back to the
+  initial circle if C2 has not merged), with its name and "Your Parthia agent".
+- **Around it:** the other agents on an arc or ring (Reid, Dex as pharmacist, Willem, Elsie, Aaron,
+  Iris as safety reviewer), each a small card with face, name, role, a status dot, and a one-line
+  speech bubble showing the summary of its latest message. Fotini (Photon) appears only when a
+  Photon result is part of the facts.
+- **Connectors:** an SVG line from the centre to each agent. When a message plays, a dot travels
+  along the line from sender to receiver, and both cards highlight. Blocked messages show in the
+  attention color with the reason.
+- **Bottom:** a horizontal step flow (the seven steps above) with a tick, the step label and its
+  detail as each completes. The last step, "Answer ready", reveals the answer text with its
+  citations and a "See the answer" button that closes the pop-up and scrolls to the reply in Ask
+  Parthia.
+- **Mobile (below 768 px):** Nova on top, the other agents as a vertical list with their bubbles,
+  the steps as a vertical list. No sideways scroll.
+- Small label under the title: "Rule-based agents, no language model."
+- Total run time 5 to 9 seconds. "Skip" (top right) jumps to the final state. Esc and the close
+  button close it.
+- Styling: the existing tokens and components only, no new colors, no new libraries (CSS
+  transitions and SVG only). No emojis.
+
+### H3. Safety and accessibility (required)
+- **Urgent symptoms never wait for an animation.** If the patient agent detects urgent symptoms
+  (`src/lib/patientAgent/urgent.ts`), do not open the huddle; show the 911 / 988 notice
+  immediately, as today.
+- The answer shown at the end is the same text the patient agent returns, already passed through
+  the safety reviewer. The huddle never adds wording of its own beyond the step labels.
+- It never says or implies which medicine to take. It explains and prepares questions for the
+  clinician, like the rest of the patient agent.
+- `role="dialog"`, `aria-modal="true"`, a labelled title, focus moves into the dialog and returns to
+  the trigger on close, focus trapped while open.
+- A visually hidden `aria-live="polite"` list announces each message as text.
+- `prefers-reduced-motion`: no travelling dots or transitions; render the final state at once.
+
+### H4. Wiring (in task C, after the freeze, by Stream A)
+Open the huddle when the patient (a) sends a question in the Ask Parthia panel
+(`src/components/patient/AskParthiaPanel.tsx`), (b) taps "Prepare for my visit", or (c) taps a new
+"Watch your agents work" link under the dashboard agent card. Do not open it automatically after
+every log; the inline recheck stays as it is. Add a setting to turn it off
+(`localStorage`, wrapped in try/catch).
+
+### H5. Tests
+- `buildHuddle` maps the orchestrator log in order, and the steps always end with "answer".
+- Playback: statuses advance correctly; skip jumps to the end; reduced motion renders the end.
+- Urgent input never opens the huddle.
+- The component renders Nova in the centre and one card per agent in the log, and closing returns
+  focus to the trigger.
 
 ## 7. After the freeze
 
