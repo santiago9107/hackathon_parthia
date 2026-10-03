@@ -5,10 +5,15 @@ const safeId = /^[A-Za-z0-9_-]{1,120}$/;
 /**
  * Read-only drug-drug and drug-allergy screen of drafted prescriptions.
  * `patientId` is optional: when it is absent the synthetic demo patient is
- * used. Treatment ids are checked again server-side against the screening
- * allow-list, so this never reaches the sandbox with an arbitrary drug.
+ * looked up. Treatment ids are checked again server-side against the
+ * screening allow-list, so this never reaches the sandbox with an arbitrary
+ * drug.
  *
- * This endpoint cannot prescribe, change, stop or dose a medication.
+ * This endpoint cannot prescribe, change, stop or dose a medication, and it
+ * writes nothing to the Photon org: the patient is resolved by a read-only
+ * lookup, so an unsynced patient fails the screen rather than creating a
+ * record. Creating the synthetic patient is the separate sync-patient
+ * function's job.
  */
 export default async function handler(request: RequestLike, response: ResponseLike) {
   response.setHeader("Cache-Control", "no-store");

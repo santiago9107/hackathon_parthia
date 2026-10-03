@@ -1,4 +1,5 @@
 import { syncPhotonPatient } from "../../src/lib/integrations/server";
+/** Only the method is read. No body, no query, no header is ever consulted. */
 interface RequestLike { method?: string }
 interface ResponseLike { status(code: number): ResponseLike; json(body: unknown): void; setHeader(name: string, value: string): void }
 /**
@@ -6,6 +7,17 @@ interface ResponseLike { status(code: number): ResponseLike; json(body: unknown)
  * his allergies and medication history, and returns the same Photon patient id
  * on every later call. Credentials come from PHOTON_CLIENT_ID and
  * PHOTON_CLIENT_SECRET in the server environment and are never returned.
+ *
+ * Takes no caller-controlled input by design. The request body and query
+ * string are ignored entirely: the patient, his externalId, his allergens and
+ * his medication history all come from the committed catalog in
+ * src/lib/clinician/photonTreatments.json, so a caller cannot choose who is
+ * synced or what is attached to him. The worst an anonymous caller can do is
+ * re-sync the one synthetic patient, which is idempotent and a no-op.
+ *
+ * Unauthenticated by design for the demo. Its blast radius is that single
+ * synthetic sandbox patient plus sandbox quota. It needs a caller credential
+ * before it ever points at anything non-synthetic.
  *
  * Synthetic patient only. Nothing here prescribes.
  */

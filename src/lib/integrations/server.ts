@@ -1,4 +1,4 @@
-import { photonAllowedTreatmentIds, photonDemoPatient } from "../clinician/photonCatalog";
+import { type PhotonDemoPatient, photonAllowedTreatmentIds, photonDemoPatient } from "../clinician/photonCatalog";
 /**
  * Server-only integrations. These run in Vercel Functions under the root `api/`
  * directory and in the local MCP server, never in the browser: they read
@@ -6,8 +6,9 @@ import { photonAllowedTreatmentIds, photonDemoPatient } from "../clinician/photo
  * environment and those must never be shipped to a client bundle.
  *
  * Photon screening here is read-only decision support. There is no code path
- * that creates, changes, stops or doses a prescription; the only mutations are
- * on the synthetic sandbox patient used by the demo.
+ * that creates, changes, stops or doses a prescription, and screening itself
+ * writes nothing at all: the only mutations in this file are in
+ * `syncPhotonPatient`, on the one synthetic sandbox patient the demo uses.
  */
 export interface PhotonScreenInput {
   /** Optional. Defaults to the synthetic sandbox patient for the demo. */
@@ -142,11 +143,22 @@ interface SandboxPatientRow {
  * org holds exactly one Harold Okafor after repeated calls. The lookup also
  * caps at the first 50 same-named patients.
  */
-export async function syncPhotonPatient(): Promise<PhotonSyncResult> {
-  const demo = photonDemoPatient();
+async function lookupDemoPatient(demo: PhotonDemoPatient): Promise<SandboxPatientRow | undefined> {
   const fullName = `${demo.firstName} ${demo.lastName}`;
   const lookup = await photonGraphql<{ patients?: SandboxPatientRow[] }>("main", PATIENT_LOOKUP_QUERY, { name: fullName });
-  const existing = (lookup.patients ?? []).find((patient) => patient.externalId === demo.externalId);
+  return (lookup.patients ?? []).find((patient) => patient.externalId === demo.externalId);
+}
+/**
+ * Read-only resolve of the synthetic demo patient's Photon id. This is the
+ * path screening uses, so a screen never creates or changes a patient record:
+ * if he has not been synced yet, screening fails rather than writing.
+ */
+export async function findPhotonDemoPatientId(): Promise<string | undefined> {
+  return (await lookupDemoPatient(photonDemoPatient()))?.id;
+}
+export async function syncPhotonPatient(): Promise<PhotonSyncResult> {
+  const demo = photonDemoPatient();
+  const existing = await lookupDemoPatient(demo);
   const allergies = demo.allergenIds.map((allergenId) => ({ allergenId }));
   const medicationHistory = demo.medicationIds.map((medicationId) => ({ medicationId, active: true }));
   if (!existing) {
@@ -202,6 +214,10 @@ const ENTITY_KIND: Record<string, string> = {
  * Read-only screen of drafted prescriptions against the sandbox patient's
  * medication history and allergies. Rules decide: every alert below is the
  * sandbox's own output, never a model's.
+ *
+ * Nothing in this path mutates the Photon org. The patient is resolved by
+ * lookup, so an unsynced patient makes screening fail closed instead of
+ * creating a record as a side effect of a read.
  */
 export async function screenPhoton(input: PhotonScreenInput): Promise<PhotonScreenResult> {
   const configured = (process.env.PHOTON_ALLOWED_TREATMENT_IDS ?? "").split(",").map((id) => id.trim()).filter(Boolean);
@@ -209,7 +225,10 @@ export async function screenPhoton(input: PhotonScreenInput): Promise<PhotonScre
   if (!input.treatmentIds.length || input.treatmentIds.some((id) => !allowed.has(id))) {
     throw new Error("Requested treatment is not in the Photon screening allow-list");
   }
-  const patientId = input.patientId ?? (await syncPhotonPatient()).patientId;
+  // Read-only all the way: the patient is looked up, never created or updated,
+  // so no screen can write to the Photon org.
+  const patientId = input.patientId ?? await findPhotonDemoPatientId();
+  if (!patientId) throw new Error("The synthetic sandbox patient is not in the Photon org yet. Run the patient sync once before screening");
   const data = await photonGraphql<{ prescriptionScreen?: { alerts?: RawAlert[] | null } }>("clinical", SCREEN_QUERY, {
     patientId,
     draftedPrescriptions: input.treatmentIds.map((id) => ({ treatment: { id } })),
