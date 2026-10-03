@@ -1,0 +1,191 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "Domain tracker",
+  "notes": [
+    "Total 30 0 49 0 34 0",
+    "Blue numbers are targets you can edit. Approved/ready counts update automatically from the Rules, Recommendation cards and Test cases sheets."
+  ],
+  "rows": [
+    {
+      "kb_domain": "1. Drugs that worsen HF",
+      "key_question": "Is a new medicine harmful in heart failure?",
+      "week": 1,
+      "source_ids_text": "S01; S07",
+      "target_rules": 5,
+      "rules_approved": 0,
+      "target_cards": 6,
+      "cards_approved": 0,
+      "target_tests": 4,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S07"
+      ]
+    },
+    {
+      "kb_domain": "2. Potassium & kidney",
+      "key_question": "Are potassium or kidney values unsafe for current medicines?",
+      "week": 1,
+      "source_ids_text": "S01; S09",
+      "target_rules": 4,
+      "rules_approved": 0,
+      "target_cards": 5,
+      "cards_approved": 0,
+      "target_tests": 4,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S09"
+      ]
+    },
+    {
+      "kb_domain": "3. Diuretics & congestion",
+      "key_question": "Does weight gain plus symptoms suggest fluid retention?",
+      "week": 2,
+      "source_ids_text": "S01; S12",
+      "target_rules": 2,
+      "rules_approved": 0,
+      "target_cards": 4,
+      "cards_approved": 0,
+      "target_tests": 3,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S12"
+      ]
+    },
+    {
+      "kb_domain": "4. Core HF medicines",
+      "key_question": "Are guideline medicines present; any contraindications?",
+      "week": 3,
+      "source_ids_text": "S01; S02; S03",
+      "target_rules": 4,
+      "rules_approved": 0,
+      "target_cards": 8,
+      "cards_approved": 0,
+      "target_tests": 4,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S02",
+        "S03"
+      ]
+    },
+    {
+      "kb_domain": "5. BP & heart rate",
+      "key_question": "Are low BP / heart rate with symptoms a medication issue?",
+      "week": 2,
+      "source_ids_text": "S02",
+      "target_rules": 2,
+      "rules_approved": 0,
+      "target_cards": 3,
+      "cards_approved": 0,
+      "target_tests": 3,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S02"
+      ]
+    },
+    {
+      "kb_domain": "6. Comorbidity medicines",
+      "key_question": "Do diabetes, anticoagulation, CKD, pain or sleep medicines conflict with HF?",
+      "week": 3,
+      "source_ids_text": "S04; S09; S11",
+      "target_rules": 4,
+      "rules_approved": 0,
+      "target_cards": 6,
+      "cards_approved": 0,
+      "target_tests": 4,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S04",
+        "S09",
+        "S11"
+      ]
+    },
+    {
+      "kb_domain": "7. Older adults",
+      "key_question": "Beers criteria, anticholinergic burden, fall risk",
+      "week": 4,
+      "source_ids_text": "S08",
+      "target_rules": 3,
+      "rules_approved": 0,
+      "target_cards": 5,
+      "cards_approved": 0,
+      "target_tests": 3,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S08"
+      ]
+    },
+    {
+      "kb_domain": "8. Nutrition",
+      "key_question": "Sodium, fluids, potassium salt substitutes, alcohol",
+      "week": 4,
+      "source_ids_text": "S01; S13",
+      "target_rules": 2,
+      "rules_approved": 0,
+      "target_cards": 5,
+      "cards_approved": 0,
+      "target_tests": 3,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S13"
+      ]
+    },
+    {
+      "kb_domain": "9. Mental health & adherence",
+      "key_question": "Do mood changes explain missed doses?",
+      "week": 4,
+      "source_ids_text": "S15; S01",
+      "target_rules": 2,
+      "rules_approved": 0,
+      "target_cards": 4,
+      "cards_approved": 0,
+      "target_tests": 3,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S15"
+      ]
+    },
+    {
+      "kb_domain": "10. Red flags",
+      "key_question": "Which symptoms need urgent action, bypassing analysis?",
+      "week": 4,
+      "source_ids_text": "S12; S15",
+      "target_rules": 2,
+      "rules_approved": 0,
+      "target_cards": 3,
+      "cards_approved": 0,
+      "target_tests": 3,
+      "tests_ready": 0,
+      "status": "Not started",
+      "notes": null,
+      "source_ids": [
+        "S12",
+        "S15"
+      ]
+    }
+  ]
+}

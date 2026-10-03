@@ -1,0 +1,27 @@
+{
+  "$comment": "Suggested patient questions for missing data (Dictionary guide rule 4). Elements with Priority 'Later' are never requested from the patient (rule 7) and have no question. Wording is DRAFT for clinical-lead review.",
+  "by_element": {
+    "D001": "Is heart failure listed in your health records? You can ask your care team to confirm.",
+    "D002": "When was your last heart ultrasound (echocardiogram), and do you know your ejection fraction?",
+    "D003": "When was your last heart ultrasound (echocardiogram), and do you know your ejection fraction?",
+    "D004": "Can you review your list of health conditions so it is complete?",
+    "D005": "Can you review your medicine list, including over-the-counter medicines and supplements?",
+    "D006": "Can you complete this week's medicine check-in (how many doses were missed, and why)?",
+    "D007": "When was your last potassium blood test?",
+    "D008": "When was your last sodium blood test?",
+    "D009": "When was your last kidney function blood test (creatinine or eGFR)?",
+    "D010": "When was your last BNP or NT-proBNP blood test?",
+    "D011": "Can you weigh yourself tomorrow morning and log it?",
+    "D012": "Can you check and log your blood pressure today?",
+    "D013": "Can you log your resting heart rate today?",
+    "D014": "Can you complete today's symptom check (under a minute)?",
+    "D015": "Can you log your meals for the next few days?",
+    "D016": "Can you complete the mood questionnaire (PHQ-9)?",
+    "D017": "Have you been to the ER or hospital, or had a fall, in the past year?"
+  },
+  "by_reason": {
+    "baseline_not_set": "Has your care team set a personal baseline for this test? You can ask at your next visit.",
+    "post_change_monitoring_due": "A blood test is usually checked after this medicine change. When is your next blood test?",
+    "post_change_monitoring_overdue": "A blood test is usually checked after this medicine change. Has it been done yet?"
+  }
+}

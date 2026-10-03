@@ -1,0 +1,7 @@
+{
+  "$comment": "Patient-facing urgent messages. The KB rows R21/R22 describe the message rather than giving its text, so this wording is DRAFT for clinical-lead approval (AMB-08). Urgent messages may say 'call 911/988'; that is a safety instruction, not a treatment instruction.",
+  "R21": "Some of what you reported can be a sign of an emergency. If you have chest pain, fainted, have severe trouble breathing or feel confused, call 911 now. Otherwise, contact your care team right away.",
+  "R22": "Thank you for answering honestly. You do not have to face these thoughts alone. If you are thinking about harming yourself, call or text 988 (Suicide & Crisis Lifeline) now, or call 911 if you are in immediate danger. Please let your care team know today.",
+  "urgent_lab": "One of your recent blood test results needs prompt attention. Please contact your care team today. If you feel very unwell, call 911.",
+  "urgent_lab_clinician": "Lab value at the urgent limit per DEC-06; urgent pathway, not ranked with other findings."
+}

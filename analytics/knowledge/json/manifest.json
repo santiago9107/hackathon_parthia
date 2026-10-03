@@ -1,0 +1,17 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "(manifest)",
+  "rows": [
+    "data_dictionary",
+    "dictionary_guide",
+    "domain_tracker",
+    "how_to_use",
+    "lists",
+    "recommendation_cards",
+    "rules",
+    "source_register",
+    "test_cases",
+    "thresholds"
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "$comment": "Structured clinical parameters that the Excel text cannot express unambiguously. Every value here traces to a decision in DECISIONS.md (DEC-xx) or to verbatim KB text (kb_text). Values marked review_status=draft_verify are engineering drafts the clinical lead must verify. Do not edit without updating DECISIONS.md.",
+  "overrides_version": "2026-10-03.1",
+  "decisions": [
+    { "id": "DEC-01", "topic": "R02/R03 phenotype scope", "decision": "R02 and R03 apply to all HF phenotypes when an MRA is active. TC02 (HFpEF) is correct.", "affects": ["R02", "R03", "TC02"] },
+    { "id": "DEC-02", "topic": "HF phenotype (D003)", "decision": "2022 AHA/ACC/HFSA: LVEF <=40 HFrEF; 41-49 HFmrEF; >=50 HFpEF; prior <=40 and now >40 HFimpEF. R04: HFrEF/HFimpEF High, HFmrEF Moderate, HFpEF not flagged.", "affects": ["D002", "D003", "R04", "TC05"] },
+    { "id": "DEC-03", "topic": "Validity after MRA/RAAS start or dose change", "decision": "For D007 and D009, results drawn before the latest MRA/ACEi/ARB/ARNI start or dose change no longer count. A post-change result is expected within 14 days; without one the element is missing.", "affects": ["D007", "D009"] },
+    { "id": "DEC-04", "topic": "Weight gain (R08, T05)", "decision": "1-day gain >= 0.9 kg; 7-day gain >= 2.3 kg measured from the lowest value in the previous 7 days; both inclusive. Care-plan limits override.", "affects": ["R08", "T05", "TC04"] },
+    { "id": "DEC-05", "topic": "R07 escalation", "decision": "R07 escalates to High when an MRA is active AND (potassium >= 5.0, or potassium rose >= 0.5 mEq/L versus the previous result within 90 days).", "affects": ["R07", "TC03"] },
+    { "id": "DEC-06", "topic": "Urgent labs", "decision": "Potassium >= 6.0 or < 3.0, sodium < 125, INR > 4.5 go to urgent[]. eGFR drop >= 30% stays High (R13), not urgent.", "affects": ["T01", "T02", "T03", "T11", "R13"] },
+    { "id": "DEC-07", "topic": "R21 'with symptoms'", "decision": "SBP < 80 or HR < 40 / > 120 is urgent with dizziness, fainting, chest pain, severe breathlessness or confusion reported within 24 h of the reading. Fainting, chest pain, severe breathlessness at rest and confusion are urgent on their own.", "affects": ["R21", "T06", "T07", "T09"] },
+    { "id": "DEC-08", "topic": "Undefined thresholds", "decision": "R09: 2 low readings within 7 days. R16: >= 3 readings at >= 140/90 among the last 7 days, minimum 4 readings. R20: >= 2 missed doses of any HF medicine in 7 days. R15: not evaluable, threshold undefined.", "affects": ["R09", "R15", "R16", "R20"] },
+    { "id": "DEC-09", "topic": "R02 clinician note wording", "decision": "Replace R02 clinician note to avoid directive wording. Forbidden-phrase scan stays strict on all generated text.", "affects": ["R02"] },
+    { "id": "DEC-10", "topic": "Risk score tables", "decision": "Build structure and input checks only. ACB, Charlson, LACE and MAGGIC tables to be supplied by the clinical lead.", "affects": [] },
+    { "id": "DEC-11", "topic": "Unit conversions", "decision": "lb -> kg x 0.45359237; potassium and sodium mmol/L = mEq/L; creatinine umol/L / 88.4 -> mg/dL.", "affects": ["D007", "D008", "D009", "D011"] },
+    { "id": "DEC-12", "topic": "Domain mapping", "decision": "KB 1, 4, 6, 7 -> Medication safety; 2 -> Heart-kidney labs; 3 -> Fluid/congestion; 5 -> BP/HR; 8 -> Nutrition; 9 -> Mental health (R19) / Adherence (R20); 10 -> urgent[].", "affects": [] },
+    { "id": "DEC-13", "topic": "Care-plan targets", "decision": "Care-plan targets are tagged with the element they override and source 'care plan'.", "affects": ["D011", "D012", "D009", "D010", "D019"] },
+    { "id": "DEC-14", "topic": "Priority defaults", "decision": "Modifiability and evidence strength default to 0.5 until the clinical panel sets values.", "affects": [] }
+  ],
+
+  "rule_elements": {
+    "$comment": "KB 'Data needed' is free text for R01-R10; element IDs mapped here. R11-R22 come from the KB directly and are repeated for completeness. review_status draft_verify: confirm and add to the Excel 'Data needed' column.",
+    "review_status": "draft_verify",
+    "map": {
+      "R01": ["D001", "D005"], "R02": ["D003", "D005", "D007"], "R03": ["D003", "D005", "D009"],
+      "R04": ["D002", "D003", "D005"], "R05": ["D001", "D005"], "R06": ["D005"],
+      "R07": ["D005", "D007", "D015"], "R08": ["D011"], "R09": ["D005", "D012", "D014", "D017"],
+      "R10": ["D001", "D005"], "R11": ["D005", "D007"], "R12": ["D008"], "R13": ["D009"],
+      "R14": ["D005", "D009"], "R15": ["D010"], "R16": ["D012"], "R17": ["D005", "D013", "D014"],
+      "R18": ["D013"], "R19": ["D006", "D016"], "R20": ["D005", "D006"],
+      "R21": ["D012", "D013", "D014"], "R22": ["D016"]
+    }
+  },
+
+  "phenotype": {
+    "decision": "DEC-02",
+    "element_input": "D002",
+    "element_output": "D003",
+    "lvef_unit": "%",
+    "hfref_max_inclusive": 40,
+    "hfpef_min_inclusive": 50,
+    "hfimpef": { "prior_max_inclusive": 40, "current_min_exclusive": 40 },
+    "$comment_bands": "LVEF <= 40 HFrEF; 40 < LVEF < 50 HFmrEF; >= 50 HFpEF. HFimpEF when any earlier confirmed LVEF <= 40 and the latest is > 40."
+  },
+
+  "validity_context": {
+    "decision": "DEC-03",
+    "elements": ["D007", "D009"],
+    "trigger_groups": ["mra", "ace_inhibitor", "arb", "arni"],
+    "trigger_events": ["start", "change"],
+    "post_change_due_days": 14
+  },
+
+  "rules": {
+    "R01": { "groups": ["nsaid"], "requires_hf": true, "severity": "high", "kb_text": "Any use" },
+    "R02": { "decision": "DEC-01", "groups": ["mra"], "element": "D007", "analyte": "potassium", "threshold_id": "T01", "op": ">=", "value": 5.5, "unit": "mEq/L", "phenotypes": "all" },
+    "R03": { "decision": "DEC-01", "groups": ["mra"], "element": "D009", "analyte": "egfr", "threshold_id": "T03", "op": "<=", "value": 30, "unit": "mL/min/1.73m²", "phenotypes": "all" },
+    "R04": { "decision": "DEC-02", "groups": ["non_dhp_ccb"], "severity_by_phenotype": { "HFrEF": "high", "HFimpEF": "high", "HFmrEF": "moderate", "HFpEF": null } },
+    "R05": { "groups": ["tzd"], "requires_hf": true },
+    "R06": { "groups_a": ["arni"], "groups_b": ["ace_inhibitor"], "washout_hours": 36, "kb_text": "36-hour washout" },
+    "R07": { "decision": "DEC-05", "groups": ["ace_inhibitor", "arb", "arni", "mra"], "diet_tag": "potassium_salt_substitute",
+      "escalate_to": "high", "escalate_if_groups": ["mra"], "escalate_potassium_gte": 5.0, "escalate_potassium_rise_gte": 0.5, "rise_lookback_days": 90 },
+    "R08": { "decision": "DEC-04", "element": "D011", "threshold_id": "T05", "one_day_gain_kg": 0.9, "seven_day_gain_kg": 2.3, "seven_day_baseline": "min_previous_7_days", "inclusive": true },
+    "R09": { "decision": "DEC-08", "groups": ["bp_lowering"], "min_drugs": 2, "systolic_lt": 90, "min_low_readings": 2, "window_days": 7, "symptom": "dizziness", "threshold_id": "T06",
+      "$comment": "Dizziness must be a valid D014 entry (validity 1 day) per Dictionary guide rule 3." },
+    "R10": { "groups": ["dpp4_hf_risk"], "requires_hf": true },
+    "R11": { "groups": ["loop_diuretic", "thiazide_diuretic", "digoxin"], "element": "D007", "analyte": "potassium", "threshold_id": "T01", "op": "<", "value": 3.5, "unit": "mEq/L",
+      "escalate_to": "high", "escalate_if_groups": ["digoxin"], "kb_text": "Comments: High if on digoxin" },
+    "R12": { "element": "D008", "analyte": "sodium", "threshold_id": "T02", "op": "<", "value": 130, "unit": "mEq/L" },
+    "R13": { "element": "D009", "analyte": "egfr", "threshold_id": "T03", "drop_fraction_gte": 0.30, "baseline": "care_plan", "kb_text": "Baseline set by clinician" },
+    "R14": { "groups": ["metformin"], "element": "D009", "analyte": "egfr", "op": "<", "value": 30, "unit": "mL/min/1.73m²" },
+    "R15": { "not_evaluable": true, "reason": "Threshold undefined: 'rise vs baseline (define % with clinician)'.", "decision": "DEC-08" },
+    "R16": { "decision": "DEC-08", "systolic_gte": 140, "diastolic_gte": 90, "min_high_readings": 3, "min_readings": 4, "window_days": 7, "threshold_id": "T06",
+      "not_evaluable": true, "reason": "Pending AMB-01: whether 140/90 means systolic AND diastolic or systolic OR diastolic." },
+    "R17": { "groups": ["rate_lowering"], "element": "D013", "threshold_id": "T07", "hr_lt": 50, "reading": "latest_valid" },
+    "R18": { "element": "D013", "threshold_id": "T07", "hr_gt": 100, "irregular_flag": true, "reading": "latest_valid" },
+    "R19": { "element": "D016", "threshold_id": "T08", "phq9_gte": 10, "phq9_rise_gte": 5, "phq2_gte": 3 },
+    "R20": { "decision": "DEC-08", "groups": ["hf_medicine"], "min_missed": 2, "window_days": 7 },
+    "R21": { "decision": "DEC-07",
+      "red_flag_symptoms_alone": ["fainting", "chest_pain", "severe_breathlessness_at_rest", "confusion"],
+      "qualifying_symptoms": ["dizziness", "fainting", "chest_pain", "severe_breathlessness_at_rest", "confusion"],
+      "symptom_window_hours": 24,
+      "systolic_lt_with_symptoms": 80, "hr_lt_with_symptoms": 40, "hr_gt_with_symptoms": 120,
+      "severe_hypertension": { "systolic_gte": 180, "diastolic_gte": 120, "combine": "or", "provisional": true, "ambiguity": "AMB-02" } },
+    "R22": { "element": "D016", "threshold_id": "T08", "item9_gt": 0 }
+  },
+
+  "urgent_labs": {
+    "decision": "DEC-06",
+    "checks": [
+      { "id": "UL-K-HIGH", "element": "D007", "analyte": "potassium", "op": ">=", "value": 6.0, "unit": "mEq/L", "threshold_id": "T01", "related_rules": ["R02"] },
+      { "id": "UL-K-LOW", "element": "D007", "analyte": "potassium", "op": "<", "value": 3.0, "unit": "mEq/L", "threshold_id": "T01", "related_rules": ["R11"] },
+      { "id": "UL-NA-LOW", "element": "D008", "analyte": "sodium", "op": "<", "value": 125, "unit": "mEq/L", "threshold_id": "T02", "related_rules": ["R12"] },
+      { "id": "UL-INR-HIGH", "element": "D019", "analyte": "inr", "op": ">", "value": 4.5, "unit": "ratio", "threshold_id": "T11", "related_rules": [] }
+    ]
+  },
+
+  "text_overrides": {
+    "R02": { "decision": "DEC-09", "clinician_note": "Guideline addresses MRA continuation when potassium stays above the threshold; review MRA therapy." },
+    "R13": { "ambiguity": "AMB-09", "clinician_note": "Some creatinine rise is expected after RAAS inhibitor or SGLT2i initiation; clinician interprets.", "kb_text": "Some rise in creatinine is expected after starting RAAS/SGLT2i; clinician interprets." }
+  },
+
+  "units": {
+    "decision": "DEC-11",
+    "canonical": {
+      "weight": "kg", "potassium": "mEq/L", "sodium": "mEq/L", "creatinine": "mg/dL",
+      "egfr": "mL/min/1.73m²", "bnp": "pg/mL", "ntprobnp": "pg/mL", "magnesium": "mg/dL",
+      "inr": "ratio", "hba1c": "%", "lvef": "%", "systolic": "mmHg", "diastolic": "mmHg", "heart_rate": "beats/min"
+    },
+    "aliases": {
+      "$comment": "Spelling variants only, no numeric change.",
+      "kg": ["kilogram", "kilograms"], "lb": ["lbs", "pound", "pounds"],
+      "mEq/L": ["meq/l"], "mmol/L": ["mmol/l"], "mg/dL": ["mg/dl"], "umol/L": ["µmol/L", "μmol/L", "umol/l"],
+      "mL/min/1.73m²": ["mL/min/1.73m2", "ml/min/1.73m2", "mL/min/{1.73_m2}"],
+      "beats/min": ["bpm", "/min", "beats per minute"], "mmHg": ["mm[Hg]", "mmhg"], "pg/mL": ["pg/ml"], "%": ["percent"]
+    },
+    "conversions": [
+      { "quantity": "weight", "from": "lb", "to": "kg", "factor": 0.45359237 },
+      { "quantity": "potassium", "from": "mmol/L", "to": "mEq/L", "factor": 1 },
+      { "quantity": "sodium", "from": "mmol/L", "to": "mEq/L", "factor": 1 },
+      { "quantity": "creatinine", "from": "umol/L", "to": "mg/dL", "divisor": 88.4 }
+    ]
+  },
+
+  "vocabularies": {
+    "$comment": "Codes derived from D014/T09 (symptoms), D015 (diet tags) and D006 (missed-dose reasons).",
+    "symptoms": ["breathlessness", "orthopnea", "swelling", "dizziness", "fatigue", "chest_pain", "fainting", "severe_breathlessness_at_rest", "confusion"],
+    "diet_tags": ["high_sodium_meal", "potassium_salt_substitute", "alcohol", "fluid_over_limit", "grapefruit", "vitamin_k"],
+    "missed_dose_reasons": ["cost", "side_effects", "forgot", "diuretic_timing", "other"],
+    "missed_dose_reason_labels": { "cost": "cost", "side_effects": "side effects", "forgot": "forgetting", "diuretic_timing": "diuretic timing", "other": "other reasons" }
+  },
+
+  "drug_groups": {
+    "$comment": "Medicine group membership by generic ingredient (lower case; combination products list all ingredients joined by '/'). kb_listed = named in the KB Rules sheet; draft_added = added by engineering from standard pharmacology, pharmacist to verify. A medicine matches a member when it contains all of that member's ingredients.",
+    "review_status": "draft_verify",
+    "groups": {
+      "nsaid": { "kb_listed": ["ibuprofen", "naproxen", "diclofenac", "celecoxib"], "draft_added": ["meloxicam", "indomethacin", "ketorolac", "etodolac", "nabumetone", "ketoprofen"] },
+      "mra": { "kb_listed": ["spironolactone", "eplerenone"], "draft_added": [] },
+      "ace_inhibitor": { "kb_listed": [], "draft_added": ["lisinopril", "enalapril", "ramipril", "captopril", "benazepril", "quinapril", "perindopril", "fosinopril", "trandolapril"] },
+      "arb": { "kb_listed": [], "draft_added": ["losartan", "valsartan", "candesartan", "irbesartan", "olmesartan", "telmisartan"] },
+      "arni": { "kb_listed": ["sacubitril/valsartan"], "draft_added": [] },
+      "non_dhp_ccb": { "kb_listed": ["diltiazem", "verapamil"], "draft_added": [] },
+      "tzd": { "kb_listed": ["pioglitazone", "rosiglitazone"], "draft_added": [] },
+      "dpp4_hf_risk": { "kb_listed": ["saxagliptin", "alogliptin"], "draft_added": [] },
+      "loop_diuretic": { "kb_listed": [], "draft_added": ["furosemide", "bumetanide", "torsemide"] },
+      "thiazide_diuretic": { "kb_listed": [], "draft_added": ["hydrochlorothiazide", "chlorthalidone", "metolazone", "indapamide"] },
+      "digoxin": { "kb_listed": ["digoxin"], "draft_added": [] },
+      "beta_blocker": { "kb_listed": [], "draft_added": ["metoprolol", "carvedilol", "bisoprolol", "atenolol", "nebivolol", "propranolol"] },
+      "ivabradine": { "kb_listed": ["ivabradine"], "draft_added": [] },
+      "amiodarone": { "kb_listed": ["amiodarone"], "draft_added": [] },
+      "sglt2i": { "kb_listed": ["dapagliflozin", "empagliflozin"], "draft_added": ["canagliflozin", "sotagliflozin"] },
+      "metformin": { "kb_listed": ["metformin"], "draft_added": [] }
+    },
+    "composites": {
+      "bp_lowering": { "of": ["beta_blocker", "ace_inhibitor", "arb", "arni", "mra", "loop_diuretic", "thiazide_diuretic", "sglt2i"], "kb_text": "R09: Beta-blockers, ACEi/ARB/ARNI, MRA, diuretics, SGLT2i" },
+      "rate_lowering": { "of": ["beta_blocker", "digoxin", "ivabradine", "non_dhp_ccb", "amiodarone"], "kb_text": "R17: Beta-blockers, digoxin, ivabradine, diltiazem, verapamil, amiodarone" },
+      "hf_medicine": { "of": ["beta_blocker", "ace_inhibitor", "arb", "arni", "mra", "sglt2i", "loop_diuretic", "thiazide_diuretic", "digoxin", "ivabradine"], "kb_text": "R20: All HF medicines", "ambiguity": "AMB-03" }
+    }
+  }
+}

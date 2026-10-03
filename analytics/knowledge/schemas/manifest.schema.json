@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "parthia/knowledge/manifest.schema.json",
+  "title": "Parthia HF knowledge base: manifest",
+  "type": "object",
+  "required": [
+    "knowledge_version",
+    "source_workbook",
+    "sheet",
+    "rows"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "knowledge_version": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{12}$"
+    },
+    "source_workbook": {
+      "type": "string"
+    },
+    "sheet": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

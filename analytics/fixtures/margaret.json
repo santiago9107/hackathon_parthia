@@ -1,0 +1,2085 @@
+{
+  "schema_version": "1",
+  "patient_id": "p-margaret",
+  "synthetic": true,
+  "profile": {
+    "display_name": "Margaret Lindqvist (synthetic)",
+    "age": 72,
+    "sex": "female"
+  },
+  "conditions": [
+    {
+      "id": "p-margaret-cond-heart_failure",
+      "element_id": "D001",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "key": "heart_failure",
+      "name": "Heart failure",
+      "code_system": "SNOMED CT",
+      "code": "84114007",
+      "onset_date": "2023-02-01",
+      "active": true
+    },
+    {
+      "id": "p-margaret-cond-hypertension",
+      "element_id": "D004",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "key": "hypertension",
+      "name": "Hypertension",
+      "code_system": "SNOMED CT",
+      "code": "38341003",
+      "onset_date": "2015-01-01",
+      "active": true
+    },
+    {
+      "id": "p-margaret-cond-depression",
+      "element_id": "D004",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "key": "depression",
+      "name": "Depression",
+      "code_system": "SNOMED CT",
+      "code": "35489007",
+      "onset_date": "2025-04-01",
+      "active": true
+    }
+  ],
+  "medications": [
+    {
+      "id": "m-spiro",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Spironolactone",
+      "ingredients": [
+        "spironolactone"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2025-11-01"
+        }
+      ],
+      "dose": "25 mg",
+      "frequency": "once daily"
+    },
+    {
+      "id": "m-lisinopril",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Lisinopril",
+      "ingredients": [
+        "lisinopril"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2024-06-01"
+        }
+      ],
+      "dose": "20 mg",
+      "frequency": "once daily"
+    },
+    {
+      "id": "m-furosemide",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Furosemide",
+      "ingredients": [
+        "furosemide"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2025-01-15"
+        }
+      ],
+      "dose": "40 mg",
+      "frequency": "once daily"
+    },
+    {
+      "id": "m-metoprolol",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Metoprolol succinate",
+      "ingredients": [
+        "metoprolol"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2024-06-01"
+        }
+      ],
+      "dose": "50 mg",
+      "frequency": "once daily"
+    },
+    {
+      "id": "m-sertraline",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Sertraline",
+      "ingredients": [
+        "sertraline"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2025-05-01",
+          "detail": "50 mg daily"
+        },
+        {
+          "type": "change",
+          "date": "2026-09-12",
+          "detail": "dose changed 50 mg to 100 mg daily"
+        }
+      ],
+      "dose": "100 mg",
+      "frequency": "once daily"
+    },
+    {
+      "id": "m-diphenhydramine",
+      "element_id": "D005",
+      "provenance": {
+        "source": "scan",
+        "confirmed": false,
+        "reconciliation": "reconciled",
+        "source_label": "Pharmacy bag photo (OCR)"
+      },
+      "name": "Diphenhydramine",
+      "ingredients": [
+        "diphenhydramine"
+      ],
+      "otc": true,
+      "events": [
+        {
+          "type": "start",
+          "date": "2026-09-20"
+        }
+      ],
+      "dose": "25 mg",
+      "frequency": "at night as needed"
+    }
+  ],
+  "labs": [
+    {
+      "id": "p-margaret-lvef-2026-03-10",
+      "element_id": "D002",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "lvef",
+      "value": 58,
+      "unit": "%",
+      "date": "2026-03-10"
+    },
+    {
+      "id": "p-margaret-k-2026-09-15",
+      "element_id": "D007",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "potassium",
+      "value": 4.8,
+      "unit": "mEq/L",
+      "date": "2026-09-15",
+      "reference_range": {
+        "low": 3.5,
+        "high": 5.0
+      }
+    },
+    {
+      "id": "p-margaret-k-2026-09-30",
+      "element_id": "D007",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "potassium",
+      "value": 5.6,
+      "unit": "mEq/L",
+      "date": "2026-09-30",
+      "reference_range": {
+        "low": 3.5,
+        "high": 5.0
+      }
+    },
+    {
+      "id": "p-margaret-egfr-2026-09-15",
+      "element_id": "D009",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "egfr",
+      "value": 52,
+      "unit": "mL/min/1.73m²",
+      "date": "2026-09-15"
+    },
+    {
+      "id": "p-margaret-egfr-2026-09-30",
+      "element_id": "D009",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "egfr",
+      "value": 49,
+      "unit": "mL/min/1.73m²",
+      "date": "2026-09-30"
+    },
+    {
+      "id": "p-margaret-cr-2026-09-30",
+      "element_id": "D009",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "creatinine",
+      "value": 1.12,
+      "unit": "mg/dL",
+      "date": "2026-09-30",
+      "reference_range": {
+        "low": 0.5,
+        "high": 1.0
+      }
+    },
+    {
+      "id": "p-margaret-na-2026-09-30",
+      "element_id": "D008",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "sodium",
+      "value": 137,
+      "unit": "mEq/L",
+      "date": "2026-09-30",
+      "reference_range": {
+        "low": 135,
+        "high": 145
+      }
+    },
+    {
+      "id": "p-margaret-ntprobnp-2026-08-20",
+      "element_id": "D010",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "ntprobnp",
+      "value": 890,
+      "unit": "pg/mL",
+      "date": "2026-08-20"
+    }
+  ],
+  "vitals": [
+    {
+      "id": "p-margaret-wt-2026-09-10",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-10T07:00:00-04:00",
+      "value": 70.9,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-10-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-10T08:00:00-04:00",
+      "systolic": 126,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-10-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-10T08:00:00-04:00",
+      "value": 68,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-11",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-11T07:00:00-04:00",
+      "value": 71.0,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-11-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-11T08:00:00-04:00",
+      "systolic": 127,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-11-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-11T08:00:00-04:00",
+      "value": 69,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-12",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-12T07:00:00-04:00",
+      "value": 71.2,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-12-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-12T08:00:00-04:00",
+      "systolic": 128,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-12-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-12T08:00:00-04:00",
+      "value": 70,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-13",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-13T07:00:00-04:00",
+      "value": 71.1,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-13-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-13T08:00:00-04:00",
+      "systolic": 126,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-13-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-13T08:00:00-04:00",
+      "value": 71,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-14",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-14T07:00:00-04:00",
+      "value": 70.8,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-14-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-14T08:00:00-04:00",
+      "systolic": 127,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-14-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-14T08:00:00-04:00",
+      "value": 72,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-15",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-15T07:00:00-04:00",
+      "value": 71.0,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-15-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-15T08:00:00-04:00",
+      "systolic": 128,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-15-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-15T08:00:00-04:00",
+      "value": 68,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-16",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-16T07:00:00-04:00",
+      "value": 71.1,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-16-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-16T08:00:00-04:00",
+      "systolic": 126,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-16-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-16T08:00:00-04:00",
+      "value": 69,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-17",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-17T07:00:00-04:00",
+      "value": 70.9,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-17-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-17T08:00:00-04:00",
+      "systolic": 127,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-17-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-17T08:00:00-04:00",
+      "value": 70,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-18",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-18T07:00:00-04:00",
+      "value": 71.0,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-18-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-18T08:00:00-04:00",
+      "systolic": 128,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-18-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-18T08:00:00-04:00",
+      "value": 71,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-19",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-19T07:00:00-04:00",
+      "value": 71.2,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-19-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-19T08:00:00-04:00",
+      "systolic": 126,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-19-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-19T08:00:00-04:00",
+      "value": 72,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-20",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-20T07:00:00-04:00",
+      "value": 71.1,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-20-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-20T08:00:00-04:00",
+      "systolic": 127,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-20-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-20T08:00:00-04:00",
+      "value": 68,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-21",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-21T07:00:00-04:00",
+      "value": 70.9,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-21-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-21T08:00:00-04:00",
+      "systolic": 128,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-21-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-21T08:00:00-04:00",
+      "value": 69,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-22",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-22T07:00:00-04:00",
+      "value": 71.0,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-22-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-22T08:00:00-04:00",
+      "systolic": 126,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-22-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-22T08:00:00-04:00",
+      "value": 70,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-23",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-23T07:00:00-04:00",
+      "value": 71.1,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-23-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-23T08:00:00-04:00",
+      "systolic": 127,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-23-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-23T08:00:00-04:00",
+      "value": 71,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-24",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-24T07:00:00-04:00",
+      "value": 71.0,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-24-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-24T08:00:00-04:00",
+      "systolic": 128,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-24-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-24T08:00:00-04:00",
+      "value": 72,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-25",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-25T07:00:00-04:00",
+      "value": 70.9,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-25-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-25T08:00:00-04:00",
+      "systolic": 126,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-25-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-25T08:00:00-04:00",
+      "value": 68,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-26",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-26T07:00:00-04:00",
+      "value": 71.1,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-26-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-26T08:00:00-04:00",
+      "systolic": 127,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-26-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-26T08:00:00-04:00",
+      "value": 69,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-27",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-27T07:00:00-04:00",
+      "value": 71.2,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-27-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-27T08:00:00-04:00",
+      "systolic": 128,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-27-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-27T08:00:00-04:00",
+      "value": 70,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-28",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-28T07:00:00-04:00",
+      "value": 71.0,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-28-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-28T08:00:00-04:00",
+      "systolic": 126,
+      "diastolic": 76,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-28-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-28T08:00:00-04:00",
+      "value": 71,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-29",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-29T07:00:00-04:00",
+      "value": 71.4,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-29-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-29T08:00:00-04:00",
+      "systolic": 127,
+      "diastolic": 77,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-29-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-29T08:00:00-04:00",
+      "value": 72,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-09-30",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-30T07:00:00-04:00",
+      "value": 72.0,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-09-30-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-30T08:00:00-04:00",
+      "systolic": 120,
+      "diastolic": 72,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-09-30-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-30T08:00:00-04:00",
+      "value": 68,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-10-01",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-10-01T07:00:00-04:00",
+      "value": 72.6,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-10-01-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-10-01T08:00:00-04:00",
+      "systolic": 118,
+      "diastolic": 73,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-10-01-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-10-01T08:00:00-04:00",
+      "value": 69,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-10-02",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-10-02T07:00:00-04:00",
+      "value": 73.1,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-10-02-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-10-02T08:00:00-04:00",
+      "systolic": 119,
+      "diastolic": 72,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-10-02-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-10-02T08:00:00-04:00",
+      "value": 70,
+      "unit": "beats/min"
+    },
+    {
+      "id": "p-margaret-wt-2026-10-03",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-10-03T07:00:00-04:00",
+      "value": 73.5,
+      "unit": "kg"
+    },
+    {
+      "id": "p-margaret-bp-2026-10-03-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-10-03T08:00:00-04:00",
+      "systolic": 120,
+      "diastolic": 73,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-margaret-hr-2026-10-03-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-10-03T08:00:00-04:00",
+      "value": 71,
+      "unit": "beats/min"
+    }
+  ],
+  "symptoms": [
+    {
+      "id": "p-margaret-sx-2026-09-10",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-10T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-11",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-11T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-12",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-12T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-13",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-13T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-14",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-14T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-15",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-15T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-16",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-16T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-17",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-17T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-18",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-18T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-19",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-19T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-20",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-20T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-21",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-21T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-22",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-22T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-23",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-23T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-24",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-24T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-25",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-25T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-26",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-26T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-27",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-27T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-28",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-28T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-29",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-29T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-09-30",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-30T07:30:00-04:00",
+      "reported": []
+    },
+    {
+      "id": "p-margaret-sx-2026-10-01",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-10-01T07:30:00-04:00",
+      "reported": [
+        "breathlessness"
+      ]
+    },
+    {
+      "id": "p-margaret-sx-2026-10-02",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-10-02T07:30:00-04:00",
+      "reported": [
+        "breathlessness",
+        "swelling"
+      ]
+    },
+    {
+      "id": "p-margaret-sx-2026-10-03",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-10-03T07:30:00-04:00",
+      "reported": [
+        "breathlessness",
+        "swelling",
+        "fatigue"
+      ]
+    }
+  ],
+  "diet_logs": [
+    {
+      "id": "p-margaret-diet-2026-09-10-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-10",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-11-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-11",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-12-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-12",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-13-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-13",
+      "tags": [
+        "high_sodium_meal"
+      ]
+    },
+    {
+      "id": "p-margaret-diet-2026-09-14-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-14",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-15-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-15",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-16-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-16",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-17-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-17",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-18-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-18",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-19-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-19",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-20-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-20",
+      "tags": [
+        "high_sodium_meal"
+      ]
+    },
+    {
+      "id": "p-margaret-diet-2026-09-21-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-21",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-22-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-22",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-23-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-23",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-24-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-24",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-25-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-25",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-26-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-26",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-27-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-27",
+      "tags": []
+    },
+    {
+      "id": "p-margaret-diet-2026-09-28-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-28",
+      "tags": [
+        "potassium_salt_substitute"
+      ]
+    },
+    {
+      "id": "p-margaret-diet-2026-09-29-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-29",
+      "tags": [
+        "potassium_salt_substitute"
+      ]
+    },
+    {
+      "id": "p-margaret-diet-2026-09-30-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-30",
+      "tags": [
+        "potassium_salt_substitute",
+        "high_sodium_meal"
+      ]
+    },
+    {
+      "id": "p-margaret-diet-2026-10-01-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-10-01",
+      "tags": [
+        "potassium_salt_substitute"
+      ]
+    },
+    {
+      "id": "p-margaret-diet-2026-10-02-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-10-02",
+      "tags": [
+        "potassium_salt_substitute"
+      ]
+    },
+    {
+      "id": "p-margaret-diet-2026-10-03-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-10-03",
+      "tags": []
+    }
+  ],
+  "mood": [
+    {
+      "id": "p-margaret-phq-9-2026-09-05",
+      "element_id": "D016",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "date": "2026-09-05",
+      "instrument": "PHQ-9",
+      "score": 7,
+      "item9": 0
+    },
+    {
+      "id": "p-margaret-phq-9-2026-10-01",
+      "element_id": "D016",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "date": "2026-10-01",
+      "instrument": "PHQ-9",
+      "score": 16,
+      "item9": 0
+    }
+  ],
+  "adherence": [
+    {
+      "id": "p-margaret-adh-2026-09-19",
+      "element_id": "D006",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Weekly medicine check-in"
+      },
+      "period_end": "2026-09-19",
+      "period_days": 7,
+      "missed": []
+    },
+    {
+      "id": "p-margaret-adh-2026-09-26",
+      "element_id": "D006",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Weekly medicine check-in"
+      },
+      "period_end": "2026-09-26",
+      "period_days": 7,
+      "missed": []
+    },
+    {
+      "id": "p-margaret-adh-2026-10-03",
+      "element_id": "D006",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Weekly medicine check-in"
+      },
+      "period_end": "2026-10-03",
+      "period_days": 7,
+      "missed": [
+        {
+          "medication_id": "m-furosemide",
+          "date": "2026-09-29",
+          "reason": "diuretic_timing",
+          "note": "bathroom trips"
+        },
+        {
+          "medication_id": "m-furosemide",
+          "date": "2026-10-01",
+          "reason": "diuretic_timing",
+          "note": "bathroom trips"
+        },
+        {
+          "medication_id": "m-furosemide",
+          "date": "2026-10-02",
+          "reason": "diuretic_timing",
+          "note": "bathroom trips"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "p-margaret-er-2026-10-02",
+      "element_id": "D017",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Hospital ED record (simulated)"
+      },
+      "type": "er_visit",
+      "start": "2026-10-02",
+      "reason": "shortness of breath and ankle swelling; treated and discharged home"
+    }
+  ],
+  "care_plan": [
+    {
+      "id": "p-margaret-cp-dry_weight",
+      "element_id": "D011",
+      "provenance": {
+        "source": "care_plan",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Cardiology care plan"
+      },
+      "target": "dry_weight",
+      "unit": "kg",
+      "set_on": "2026-06-01",
+      "set_by": "Treating cardiologist (synthetic)",
+      "value": 70.5
+    },
+    {
+      "id": "p-margaret-cp-egfr_baseline",
+      "element_id": "D009",
+      "provenance": {
+        "source": "care_plan",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Cardiology care plan"
+      },
+      "target": "egfr_baseline",
+      "unit": "mL/min/1.73m²",
+      "set_on": "2026-06-01",
+      "set_by": "Treating cardiologist (synthetic)",
+      "value": 58
+    },
+    {
+      "id": "p-margaret-cp-bp_goal",
+      "element_id": "D012",
+      "provenance": {
+        "source": "care_plan",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Cardiology care plan"
+      },
+      "target": "bp_goal",
+      "unit": "mmHg",
+      "set_on": "2026-06-01",
+      "set_by": "Treating cardiologist (synthetic)",
+      "systolic": 130,
+      "diastolic": 80
+    }
+  ]
+}

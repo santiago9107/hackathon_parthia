@@ -1,0 +1,120 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "Lists",
+  "rows": {
+    "Source type": [
+      "Guideline",
+      "Decision pathway",
+      "Scientific statement",
+      "Consensus definition",
+      "Criteria",
+      "Drug label",
+      "Drug database",
+      "Terminology",
+      "Patient education",
+      "Trial",
+      "Questionnaire"
+    ],
+    "Scope": [
+      "All HF",
+      "HFrEF",
+      "HFpEF",
+      "Older adults",
+      "Kidney / diabetes",
+      "Drug information",
+      "Self-care"
+    ],
+    "Audience": [
+      "Clinician",
+      "Patient",
+      "Both"
+    ],
+    "License status": [
+      "Public domain",
+      "Copyrighted – permission needed",
+      "Licensed product – purchase",
+      "Free with registration",
+      "To check"
+    ],
+    "Full text storable": [
+      "Yes",
+      "No",
+      "To check"
+    ],
+    "Source status": [
+      "Current",
+      "Superseded",
+      "To verify"
+    ],
+    "Rule category": [
+      "Drug–disease",
+      "Drug–drug",
+      "Drug–food",
+      "Lab monitoring",
+      "Home monitoring",
+      "Symptom",
+      "Adherence",
+      "Mental health"
+    ],
+    "Severity": [
+      "High",
+      "Moderate",
+      "Low",
+      "Urgent"
+    ],
+    "Agent": [
+      "Pharmacist",
+      "Cardiology",
+      "Nutrition",
+      "Behavioral health",
+      "Pharmacist + Cardiology",
+      "Pharmacist + Nutrition",
+      "All"
+    ],
+    "Review status": [
+      "Draft – verify",
+      "In review",
+      "Approved",
+      "Retired"
+    ],
+    "Domain": [
+      "1. Drugs that worsen HF",
+      "2. Potassium & kidney",
+      "3. Diuretics & congestion",
+      "4. Core HF medicines",
+      "5. BP & heart rate",
+      "6. Comorbidity medicines",
+      "7. Older adults",
+      "8. Nutrition",
+      "9. Mental health & adherence",
+      "10. Red flags"
+    ],
+    "Domain status": [
+      "Not started",
+      "In progress",
+      "In review",
+      "Done"
+    ],
+    "Data source": [
+      "EHR",
+      "Patient",
+      "Device",
+      "Scan",
+      "EHR / scan",
+      "EHR / patient",
+      "Device / patient",
+      "Calculated"
+    ],
+    "Priority": [
+      "MVP",
+      "Later"
+    ],
+    "Test status": [
+      "Draft",
+      "Ready",
+      "Passed",
+      "Failed"
+    ]
+  }
+}

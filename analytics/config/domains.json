@@ -1,0 +1,49 @@
+{
+  "$comment": "Holistic domain profile (phase 3). Domains are never combined into one score. Mapping per DEC-12. Trend tolerances and windows marked DRAFT are engineering placeholders for the clinical panel.",
+  "kb_domain_map": {
+    "1. Drugs that worsen HF": "medication_safety",
+    "2. Potassium & kidney": "heart_kidney_labs",
+    "3. Diuretics & congestion": "fluid_congestion",
+    "4. Core HF medicines": "medication_safety",
+    "5. BP & heart rate": "bp_heart_rate",
+    "6. Comorbidity medicines": "medication_safety",
+    "7. Older adults": "medication_safety",
+    "8. Nutrition": "nutrition",
+    "9. Mental health & adherence": "mental_health",
+    "10. Red flags": null
+  },
+  "rule_domain_overrides": { "R19": "mental_health", "R20": "adherence" },
+  "urgent_domain_by_pathway": {
+    "$comment": "DRAFT (AMB-06): which domain an urgent item colours.",
+    "self_harm": "mental_health",
+    "red_flag_symptom": "fluid_congestion",
+    "urgent_vital": "bp_heart_rate",
+    "urgent_lab": "heart_kidney_labs"
+  },
+  "status_by_severity": {
+    "$comment": "Brief: Urgent/High -> attention, Moderate -> watch. Low -> watch is DRAFT (AMB-07).",
+    "urgent": "attention", "high": "attention", "moderate": "watch", "low": "watch"
+  },
+  "trend": {
+    "recent_days": 7,
+    "previous_days": 14
+  },
+  "domains": [
+    { "id": "medication_safety", "label": "Medication safety", "required_elements": ["D005"],
+      "trend": null },
+    { "id": "fluid_congestion", "label": "Fluid / congestion", "required_elements": ["D011", "D014"],
+      "trend": { "metric": "weight_kg", "worse": "up", "stable_tolerance": 0.5, "min_points_each": 2, "$comment": "DRAFT tolerance (kg)" } },
+    { "id": "heart_kidney_labs", "label": "Heart-kidney labs", "required_elements": ["D007", "D009"],
+      "trend": { "metric": "labs", "worse": "mixed", "stable_tolerance_potassium": 0.2, "stable_tolerance_egfr": 5, "min_points_each": 1, "$comment": "DRAFT tolerances; potassium uses distance outside the reference range, eGFR worse when lower" } },
+    { "id": "bp_heart_rate", "label": "Blood pressure / heart rate", "required_elements": ["D012", "D013"],
+      "trend": { "metric": "out_of_range_share", "worse": "up", "stable_tolerance": 0.1, "min_points_each": 2, "$comment": "Share of readings outside T06/T07 alert limits. DRAFT tolerance" } },
+    { "id": "mental_health", "label": "Mental health", "required_elements": ["D016"],
+      "trend": { "metric": "phq9_score", "worse": "up", "stable_tolerance": 2, "min_points_each": 1, "recent_days": 30, "previous_days": 60, "$comment": "DRAFT: monthly instrument, so windows follow D016 validity (30 days) instead of 7/14" } },
+    { "id": "adherence", "label": "Adherence", "required_elements": ["D006"],
+      "trend": { "metric": "missed_doses_per_day", "worse": "up", "stable_tolerance": 0.1, "min_points_each": 1, "$comment": "DRAFT tolerance" } },
+    { "id": "nutrition", "label": "Nutrition", "required_elements": ["D015"],
+      "trend": { "metric": "diet_risk_tags_per_log", "worse": "up", "stable_tolerance": 0.25, "min_points_each": 2, "$comment": "DRAFT tolerance" } },
+    { "id": "function_qol", "label": "Function and quality of life", "required_elements": [],
+      "always_insufficient": "KCCQ (S14) is not yet a data-dictionary element.", "trend": null }
+  ]
+}
