@@ -62,9 +62,9 @@ export function AskParthiaDock() {
         onClick={toggle}
         aria-expanded={open}
         aria-controls={PANEL_ID}
-        className="print-hidden fixed bottom-20 right-4 z-40 inline-flex min-h-12 items-center gap-2 rounded-full bg-brand-700 px-4 py-3 text-sm font-semibold text-white shadow-card transition hover:bg-brand-800 safe-bottom md:bottom-6 md:right-6"
+        className="print-hidden fixed bottom-20 right-4 z-40 inline-flex min-h-12 items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-brand-700 py-3 pl-3.5 pr-[17px] text-sm font-semibold leading-none text-white shadow-card transition hover:bg-brand-800 mb-[env(safe-area-inset-bottom)] md:bottom-6 md:right-6"
       >
-        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 stroke-current">
+        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 shrink-0 stroke-current" aria-hidden>
           <path d="M4 5h16v11H9l-5 4z" />
         </svg>
         {open ? "Hide Parthia" : "Ask Parthia"}

@@ -265,7 +265,7 @@ presenter can say it.
 Build `/architecture` as an HTML page walking the five stages from
 `docs/DATA-AI-ARCHITECTURE.md`, two columns per stage: **"Running in this demo"** and **"Next"**.
 Use `PageHeader` and `Card` from `src/components/PageHeader.tsx` like `src/app/about/page.tsx`.
-Copy the diagram to `public/architecture/parthia-architecture.png` and link it at the bottom as
+(Superseded: the page now draws its own SVG system diagram from `src/lib/architecture/stages.ts`; no PNG.) Originally: copy the diagram and link it at the bottom as
 "Full diagram". Credit the architecture to the Parthia team. Add an "Architecture" link next to
 "About" in `src/components/AppShell.tsx` (desktop nav; keep `max-w-[1440px]` on header and main).
 

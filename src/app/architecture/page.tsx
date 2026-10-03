@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Card, PageHeader } from "@/components/PageHeader";
+import { SystemDiagram } from "@/components/architecture/SystemDiagram";
 import { RULES } from "@/lib/safetyEngine";
 
 const stages = [
@@ -12,8 +12,8 @@ const stages = [
 
 export default function ArchitecturePage() {
   return <div><PageHeader eyebrow="Architecture" title="A patient-owned record, with bounded agents around it." subtitle="The demo runs the first five stages as transparent, replayable steps. Each stage says what is live today and what comes next." />
+    <Card className="mb-6 p-4 sm:p-6"><SystemDiagram ruleCount={RULES.length} /></Card>
     <div className="space-y-4">{stages.map(([name, running, next]) => <Card key={name} className="p-5 sm:p-6"><div className="grid gap-5 md:grid-cols-[180px_1fr_1fr]"><h2 className="font-serif text-xl font-semibold text-navy">{name}</h2><div><p className="text-xs font-semibold uppercase tracking-wider text-brand-700">Running in this demo</p><p className="mt-2 text-sm leading-6 text-ink-soft">{running}</p></div><div><p className="text-xs font-semibold uppercase tracking-wider text-ink-muted">Next</p><p className="mt-2 text-sm leading-6 text-ink-muted">{next}</p></div></div></Card>)}</div>
-    <Card className="mt-6 overflow-hidden p-2 sm:p-3"><Image src="/architecture/parthia-architecture.png" alt="Parthia Health architecture diagram" width={1800} height={1000} className="h-auto w-full rounded-xl" /></Card>
-    <p className="mt-3 text-center text-xs text-ink-muted">Architecture by the Parthia team. <a href="/architecture/parthia-architecture.png" className="font-semibold text-brand-700 underline underline-offset-2">Full diagram</a>. Prototype decision support, not clinical validation.</p>
+    <p className="mt-4 text-center text-xs text-ink-muted">Based on the Parthia team&apos;s architecture. Prototype decision support, not clinical validation.</p>
   </div>;
 }
