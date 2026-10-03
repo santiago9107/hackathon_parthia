@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal, flushSync } from "react-dom";
 import { AskParthiaPanel } from "@/components/patient/AskParthiaPanel";
 
@@ -21,6 +21,7 @@ import { AskParthiaPanel } from "@/components/patient/AskParthiaPanel";
 const PANEL_ID = "ask-parthia-panel";
 
 export function AskParthiaDock() {
+  const mounted = useSyncExternalStore(() => () => undefined, () => true, () => false);
   const [open, setOpen] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -50,7 +51,7 @@ export function AskParthiaDock() {
     headingRef.current?.focus();
   }
 
-  if (typeof document === "undefined") return null;
+  if (!mounted) return null;
   return createPortal(
     <>
       {open && <AskParthiaPanel id={PANEL_ID} headingRef={headingRef} onClose={close} />}
