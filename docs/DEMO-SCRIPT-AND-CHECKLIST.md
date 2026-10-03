@@ -14,7 +14,7 @@ Live site: https://parthia-health.vercel.app
 |---|---|---|---|
 | 0:00 | `/start` | Point at the two cards. Click **Open the patient side**. | "Medication safety that starts with the patient. Ten rule-based agents explain and check. A clinician makes every decision. Nothing here starts, stops or changes a medicine." |
 | 0:20 | Patient home | Point at the agent card ("9 findings to ask your doctor about", RULE-BASED). | "This is Margaret, 72, heart failure, nine medicines. Nova, her agent, explains in plain words." |
-| 0:35 | Ask Parthia | Click **Ask Parthia** (bottom right), then **Why is this flagged?** | "Watch the agent team." |
+| 0:35 | Ask Nova | Click **Ask Nova** (bottom right), then **Why is this flagged?** | "Watch the agent team." |
 | 0:45 | Agent huddle | Let it play 5 to 6 seconds, then **See the answer**. | "Reid gathered 19 records into 9 medicines. Dex checked 15 rules. Willem, Elsie and Aaron reviewed in parallel. The safety reviewer blocks anything uncited. Those are the real hand-offs." |
 | 1:05 | Home | Close the panel. Click **Prepare for my visit** (Skip, then See the answer if the huddle opens). | "Five questions for her doctor. Questions, never instructions." |
 | 1:20 | Care team card | Click **Prepare a summary to share**, then **Open as clinician**. | "Now her care team." |
@@ -54,7 +54,7 @@ Live site: https://parthia-health.vercel.app
 
 ### Built and verified
 
-- Patient side: on-device Passport, medicine and symptom logging, 15 safety rules, agent card, Ask Parthia (rule-based), agent huddle with real hand-offs, Prepare for my visit, share and export, reminders and Synthea import (Heather Song).
+- Patient side: on-device Passport, medicine and symptom logging, 15 safety rules, agent card, Ask Nova (rule-based), agent huddle with real hand-offs, Prepare for my visit, share and export, reminders and Synthea import (Heather Song).
 - Clinician side: eight-stage reconciliation agent with a human pause, 9 findings, specialist agents, orchestrator, safety reviewer, body-system map, journey bar, live Photon screening for Margaret and Harold, labelled recorded fallback, policy that refuses stop, change, swap, edit and prescribe.
 - Platform: hosted on Vercel, Photon functions fixed and tested live, secrets only in environment variables, drug allow-list on the screening endpoint, 390 tests, type check and lint clean.
 - Pages: master page `/start`, `/agents` (compact, animated, friendly), `/architecture` (system diagram and sponsors card), `/analytics` (Santiago's engine running live), `/about` (full width, accurate hosting), presentation with the investor joke.
@@ -64,7 +64,7 @@ Live site: https://parthia-health.vercel.app
 - Meal photo AI: dropped (no OpenAI key; not on the demo path).
 - OpenRouter: dropped. Epic: simulated, drawn as "Next".
 - Visualize AI: Iris is named for them; the SDK is not integrated.
-- Assistant page: hidden. Ask Parthia is the one place to ask.
+- Assistant page: hidden. Ask Nova is the one place to ask.
 - QR code: removed.
 
 ### Remaining

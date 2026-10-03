@@ -44,7 +44,7 @@ export const AGENTS: AgentPersona[] = [
     why: "For TechNovaTime. Nova's job is timing: the moment Margaret logs a medicine, it rechecks her record and tells her what changed, and an urgent symptom gets 911 or 988 before anything else.",
     color: "#0e5c56",
     assurance: "I explain what changed in plain words and help you bring the right questions to your doctor.",
-    description: "Answers the patient on any page from their own Passport, and is the agent behind the Ask Parthia chat. Rules decide, templates explain: no language model, no network call, no API key. It never tells anyone to start, stop or change a medicine.",
+    description: "Answers the patient on any page from their own Passport, and is the agent behind the Ask Nova chat. Rules decide, templates explain: no language model, no network call, no API key. It never tells anyone to start, stop or change a medicine.",
     tools: [],
     does: ["Rechecks safety after every log", "Urgent symptoms: 911 / 988 first", "Writes 3 to 5 questions for the visit", "Cites the source of every answer"],
     code: "src/lib/patientAgent",

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { AgentFace } from "@/components/agents/AgentFace";
+import { LiveClock } from "@/components/LiveClock";
 import { usePatient } from "@/lib/context/PatientContext";
 
 /**
@@ -12,7 +13,7 @@ import { usePatient } from "@/lib/context/PatientContext";
 const PATIENT_POINTS = [
   "See what changed in plain words",
   "Log a medicine and get an instant safety re-check",
-  "Ask Parthia, and watch the agents work together",
+  "Ask Nova, and watch the agents work together",
   "Prepare questions for the next visit",
 ];
 
@@ -43,7 +44,7 @@ export default function StartPage() {
   return (
     <div className="mx-auto max-w-5xl py-2 sm:py-6">
       <div className="text-center">
-        <p className="text-xs font-bold uppercase tracking-wider text-brand-700">Welcome to Parthia Health</p>
+        <p className="text-xs font-bold uppercase tracking-wider text-brand-700">Welcome to Parthia Health <span className="ml-2 font-semibold normal-case tracking-normal text-ink-muted">· <LiveClock /></span></p>
         <h1 className="mt-3 font-serif text-3xl font-semibold leading-tight text-navy sm:text-5xl">Medication safety that starts with the patient.</h1>
         <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-ink-soft">
           One record the patient owns. A team of friendly agents that check it against every medicine. A clinician who makes every decision. Choose a side to begin.

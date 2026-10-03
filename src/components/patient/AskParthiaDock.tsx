@@ -67,7 +67,7 @@ export function AskParthiaDock() {
         <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 shrink-0 stroke-current" aria-hidden>
           <path d="M4 5h16v11H9l-5 4z" />
         </svg>
-        {open ? "Hide Parthia" : "Ask Parthia"}
+        {open ? "Hide Nova" : "Ask Nova"}
       </button>
     </>,
     document.body,

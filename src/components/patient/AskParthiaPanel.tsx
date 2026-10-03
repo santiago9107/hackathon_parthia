@@ -89,9 +89,8 @@ export function AskParthiaPanel({
       <div className="flex items-start justify-between gap-2 border-b border-line px-4 py-3">
         <div>
           <h2 id={`${id}-heading`} ref={headingRef} tabIndex={-1} className="font-serif text-base font-semibold text-navy outline-none">
-            Ask Parthia
+            Ask Nova, your Parthia agent
           </h2>
-          <p className="text-xs font-semibold text-brand-700">Chat with Nova, your Parthia agent</p>
           <p className="text-xs font-medium text-ink-soft">On this page: {context.label}</p>
           <p className="mt-1 text-xs leading-snug text-ink-muted">{context.capability}</p>
         </div>
@@ -100,7 +99,7 @@ export function AskParthiaPanel({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close Ask Parthia"
+            aria-label="Close Ask Nova"
             className="grid h-9 w-9 place-items-center rounded-full text-ink-muted transition hover:bg-brand-50 hover:text-brand-800"
           >
             <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" className="h-5 w-5 stroke-current">

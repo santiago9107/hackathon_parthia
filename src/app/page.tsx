@@ -11,6 +11,7 @@ import { useInstall } from "@/lib/pwa/useInstall";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
 import { SourceBadge } from "@/components/passport/SourceBadge";
 import { fmtDateTime } from "@/components/passport/PassportChrome";
+import { LiveClock } from "@/components/LiveClock";
 import { pendingEntries } from "@/lib/passport/ops";
 import { openIssues } from "@/lib/reconcile";
 import { AppIcon } from "@/components/AppIcon";
@@ -44,7 +45,10 @@ export default function DashboardPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">
-            {now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            <LiveClock />
+            <span className="ml-3 font-medium normal-case tracking-normal text-ink-muted">
+              Sample records as of {now.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+            </span>
           </p>
           <h1 className="mt-1 font-serif text-3xl font-semibold tracking-tight text-navy sm:text-4xl">
             {greeting(new Date())}, {first}.
