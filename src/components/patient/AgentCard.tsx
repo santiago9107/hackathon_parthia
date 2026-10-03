@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { AgentHuddle } from "@/components/agents/AgentHuddle";
 import { Card } from "@/components/PageHeader";
 import { Citations } from "@/components/patient/Citations";
 import { VisitQuestions } from "@/components/patient/VisitQuestions";
 import { usePatient } from "@/lib/context/PatientContext";
+import { buildHuddle, huddleEnabled } from "@/lib/agents/huddle";
+import { orchestrate } from "@/lib/agents/orchestrator";
 import { usePatientAgent } from "@/lib/patientAgent/usePatientAgent";
 import { buildVisitQuestions } from "@/lib/patientAgent/visitQuestions";
 import type { AgentCitation } from "@/lib/patientAgent/types";
@@ -21,9 +24,14 @@ import type { AgentCitation } from "@/lib/patientAgent/types";
  * end anything. Every finding is a question for a clinician.
  */
 export function AgentCard() {
-  const { update } = usePatientAgent();
-  const { record, issues } = usePatient();
+  const { update, ask } = usePatientAgent();
+  const { record, issues, now } = usePatient();
   const [prepared, setPrepared] = useState(false);
+  const [huddleOpen, setHuddleOpen] = useState(false);
+  const [huddle, setHuddle] = useState<ReturnType<typeof buildHuddle> | null>(null);
+  const [triggerKind, setTriggerKind] = useState<"prepare" | "watch">("prepare");
+  const prepareRef = useRef<HTMLButtonElement>(null);
+  const watchRef = useRef<HTMLButtonElement>(null);
   const questions = useMemo(() => buildVisitQuestions(update, issues, record), [update, issues, record]);
   const { newCount, newFindings, updatedFindings, patientReportedOnly } = update;
   const nothingNew = newCount === 0 && updatedFindings.length === 0;
@@ -34,6 +42,16 @@ export function AgentCard() {
   ];
   const added = [...new Set(updatedFindings.flatMap((u) => u.addedMedications))];
   const ownEntries = [...new Set(patientReportedOnly.flatMap((f) => f.medications))];
+
+  async function openHuddle(question: string, trigger: "prepare" | "watch") {
+    setPrepared(true);
+    setTriggerKind(trigger);
+    if (!huddleEnabled()) return;
+    const reply = await ask(question);
+    if (reply.urgent) return;
+    setHuddle(buildHuddle(orchestrate(record, now), reply));
+    setHuddleOpen(true);
+  }
 
   return (
     <Card className="mb-6 p-5" accent="border-l-brand-500">
@@ -70,13 +88,22 @@ export function AgentCard() {
           {nothingNew ? "See your safety check" : "See what this is about"} &rarr;
         </Link>
         <button
+          ref={prepareRef}
           type="button"
-          onClick={() => setPrepared((x) => !x)}
+          onClick={() => { if (prepared) setPrepared(false); else void openHuddle("What should I ask my doctor?", "prepare"); }}
           aria-expanded={prepared}
           aria-controls="visit-questions"
           className="min-h-11 rounded-full px-4 text-sm font-semibold text-brand-800 ring-1 ring-line hover:bg-brand-50"
         >
           {prepared ? "Hide my visit questions" : "Prepare for my visit"}
+        </button>
+        <button
+          ref={watchRef}
+          type="button"
+          onClick={() => void openHuddle("What has changed since my last visit?", "watch")}
+          className="text-sm font-semibold text-brand-700 hover:text-brand-900"
+        >
+          Watch your agents work
         </button>
         <span className="text-[11px] text-ink-muted">Answered from your records by Parthia&apos;s rules</span>
       </div>
@@ -93,6 +120,7 @@ export function AgentCard() {
           <p className="mt-1 text-[11px] text-ink-muted">Nothing is sent anywhere. You print the summary or hand it over yourself.</p>
         </div>
       )}
+      <AgentHuddle open={huddleOpen} onClose={() => setHuddleOpen(false)} huddle={huddle ?? undefined} triggerRef={triggerKind === "prepare" ? prepareRef : watchRef} />
     </Card>
   );
 }

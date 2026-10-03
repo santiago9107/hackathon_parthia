@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type RefObject } from "react";
+import { AgentHuddle } from "@/components/agents/AgentHuddle";
 import { Citations } from "@/components/patient/Citations";
 import { UrgentCareNotice } from "@/components/patient/UrgentCareNotice";
+import { usePatient } from "@/lib/context/PatientContext";
+import { buildHuddle, huddleEnabled } from "@/lib/agents/huddle";
+import { orchestrate } from "@/lib/agents/orchestrator";
 import { usePatientAgent } from "@/lib/patientAgent/usePatientAgent";
 import type { PatientReply } from "@/lib/patientAgent/types";
 
@@ -40,12 +44,16 @@ export function AskParthiaPanel({
   headingRef: RefObject<HTMLHeadingElement | null>;
   onClose: () => void;
 }) {
+  const { record, now } = usePatient();
   const { context, ask } = usePatientAgent();
   const [messages, setMessages] = useState<Message[]>(() => [{ id: 0, role: "assistant", text: GREETING }]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [huddleOpen, setHuddleOpen] = useState(false);
+  const [huddle, setHuddle] = useState<ReturnType<typeof buildHuddle> | null>(null);
   const idRef = useRef(1);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -61,10 +69,16 @@ export function AskParthiaPanel({
     await new Promise((r) => setTimeout(r, 350));
     const reply = await ask(q);
     setMessages((m) => [...m, { id: idRef.current++, role: "assistant", reply }]);
+    if (!reply.urgent && huddleEnabled()) {
+      setHuddle(buildHuddle(orchestrate(record, now), reply));
+      setHuddleOpen(true);
+    }
     setBusy(false);
   }
 
   return (
+    <>
+    <AgentHuddle open={huddleOpen} onClose={() => setHuddleOpen(false)} huddle={huddle ?? undefined} urgent={undefined} triggerRef={inputRef} />
     <div
       id={id}
       role="dialog"
@@ -167,6 +181,7 @@ export function AskParthiaPanel({
         }}
       >
         <input
+          ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about this page…"
@@ -186,5 +201,6 @@ export function AskParthiaPanel({
         Answered from your records by Parthia&apos;s rules, no model. Not medical advice.
       </p>
     </div>
+    </>
   );
 }
