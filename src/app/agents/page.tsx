@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { PageHeader, Card } from "@/components/PageHeader";
 import { AGENTS, guardrails, type AgentPersona } from "@/lib/agents/roster";
 import { runClinicianAgent } from "@/lib/clinician/agent";
@@ -135,7 +134,6 @@ export default function AgentsPage() {
         <Link href="/clinician/" className="font-semibold text-brand-700 underline">clinician view</Link> for Reid, Dex, Fotini, Willem, Elsie, Aaron and Iris, and the{" "}
         <Link href="/analytics/" className="font-semibold text-brand-700 underline">holistic analysis</Link> for the heart-failure domains.
       </p>
-      <Card className="mt-6 flex items-center gap-4 p-4"><Image src="/try-it-qr.png" alt="QR code for the Parthia Health demo" width={96} height={96} /><div><p className="text-sm font-semibold text-ink">Try it on your phone</p><p className="mt-1 text-xs text-ink-muted">Scan to open the live demonstration.</p></div></Card>
     </div>
   );
 }

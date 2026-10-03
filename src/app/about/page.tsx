@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { PageHeader, Card, Disclaimer } from "@/components/PageHeader";
 import { RULES } from "@/lib/safetyEngine";
 import { CATEGORY_LABELS } from "@/components/Badges";
@@ -279,7 +278,6 @@ export default function AboutPage() {
           ← Back to dashboard
         </Link>
       </p>
-      <Card className="mt-6 flex items-center gap-4 p-4"><Image src="/try-it-qr.png" alt="QR code for the Parthia Health demo" width={96} height={96} /><div><p className="text-sm font-semibold text-ink">Try it on your phone</p><p className="mt-1 text-xs text-ink-muted">Scan to open the live demonstration.</p></div></Card>
       <Disclaimer />
     </div>
   );

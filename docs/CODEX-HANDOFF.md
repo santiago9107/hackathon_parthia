@@ -499,7 +499,7 @@ Fix only what fails. Commit.
 4. `npx vercel deploy --prod`. Smoke test production at phone width. Send Om the URL.
 
 ### F (2:50 to 3:00): QR code
-`npx qrcode -o public/try-it-qr.png <production url>` (no new runtime dependency). Show it on
+(Dropped by decision: the QR code was removed from /agents and /about, so skip this task.) Originally: `npx qrcode -o public/try-it-qr.png <production url>`. It was to show on
 `/agents` and `/about` under "Try it on your phone". Redeploy. Judges vote for People's Choice by QR.
 
 ## 8. Ground rules
