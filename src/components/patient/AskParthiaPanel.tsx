@@ -13,14 +13,14 @@ import type { PatientReply } from "@/lib/patientAgent/types";
 /**
  * The "Ask Parthia" side panel.
  *
- * Same message list, "AI-generated" chip, suggestion chips and input form as
+ * Same message list, "Rule-based" chip, suggestion chips and input form as
  * src/components/AssistantPanel.tsx, but the answer comes from
  * `answerPatient` through `usePatientAgent()`, so it is the same rule engine
  * and the same policy refusals the rest of the patient agent uses.
  *
  * The capability line and the starter chips are read from the live page
  * context on every render, so they follow the route the patient is on while
- * the panel stays open. Every answer keeps the "AI-generated" label, cites
+ * the panel stays open. Every answer keeps the "Rule-based" label, cites
  * what it read with <Citations />, and an urgent symptom renders the 911 or
  * 988 notice above the answer, before anything else.
  */
@@ -95,7 +95,7 @@ export function AskParthiaPanel({
           <p className="mt-1 text-xs leading-snug text-ink-muted">{context.capability}</p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-700">AI-generated</span>
+          <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-700">Rule-based</span>
           <button
             type="button"
             onClick={onClose}
@@ -124,7 +124,7 @@ export function AskParthiaPanel({
                 <>
                   <UrgentCareNotice kind={m.reply.urgent} />
                   <div className="flex flex-wrap items-center gap-2 text-[11px] text-ink-muted">
-                    <span className="font-semibold uppercase tracking-wider text-gold-700">AI-generated</span>
+                    <span className="font-semibold uppercase tracking-wider text-gold-700">Rule-based</span>
                     <Citations citations={m.reply.citations} />
                   </div>
                 </>
@@ -138,7 +138,7 @@ export function AskParthiaPanel({
                       </p>
                     ))}
                     <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-muted">
-                      <span className="font-semibold uppercase tracking-wider text-gold-700">AI-generated</span>
+                      <span className="font-semibold uppercase tracking-wider text-gold-700">Rule-based</span>
                     </div>
                     {m.reply && m.reply.citations.length > 0 && <Citations citations={m.reply.citations} className="mt-2" />}
                   </div>

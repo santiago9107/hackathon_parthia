@@ -22,7 +22,7 @@ export function VisitQuestions({
   return (
     <div className={className}>
       {showChip && (
-        <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-700">AI-generated</span>
+        <span className="rounded-full bg-gold-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-700">Rule-based</span>
       )}
       <ol className={`list-decimal space-y-3 pl-5 text-sm text-ink ${showChip ? "mt-3" : "mt-2"}`}>
         {questions.map((q) => (
