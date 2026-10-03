@@ -96,7 +96,8 @@ describe("safety flags on the seed Passports", () => {
 
   it("Margaret: the original 6 flags plus 2 from her fuller Passport (PHQ-9 rise, falling eGFR)", () => {
     const f = flagsFor("p-margaret");
-    expect(f).toHaveLength(8);
+    expect(f).toHaveLength(9);
+    expect(f).toContain("moderate:heart-failure/rapid-weight-gain");
     expect(f).toContain("high:burden/anticholinergic-score");
     expect(f).toContain("high:drug-mood/decline-after-change");
     expect(f).toContain("high:drug-mood/phq9-rise-after-change/e-m1");

@@ -530,6 +530,12 @@ export interface PatientRecord {
   socialHistory: SocialHistoryItem[];
   nutritionProfile?: NutritionProfile;
   emergency?: EmergencyInfo;
+  /** Optional heart-failure profile. FHIR analogue: Condition + Observation. */
+  heartFailure?: {
+    phenotype: "HFrEF" | "HFmrEF" | "HFpEF";
+    lvef?: { value: number; date: ISODate };
+    nyhaClass?: 1 | 2 | 3 | 4;
+  };
 }
 
 export type StatusLevel = "good" | "watch" | "attention";

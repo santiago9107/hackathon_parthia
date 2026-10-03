@@ -14,13 +14,14 @@
  * Keep UI code importing from here (or from the PatientContext) only, never
  * from the individual mock modules or the store directly for reads.
  */
-import type { Patient, PatientId, PatientRecord } from "../types";
+import type { LabResult, Patient, PatientId, PatientRecord, VitalSign } from "../types";
 import { mergeRecord } from "../passport/merge";
 import { passportStore } from "../passport/store";
 import { patients } from "./patients";
 import { entriesFor } from "./entries";
 import { passportSeedFor } from "./passportSeed";
 import { REFERENCE_DATE } from "./reference";
+import { seeded } from "./seed";
 
 export { REFERENCE_DATE };
 
@@ -42,7 +43,25 @@ export function getSeedRecord(id: PatientId): PatientRecord | undefined {
     careTeam: [], carePlans: [], documents: [], assessments: [], socialHistory: [],
   };
   const { symptoms, moods, nutrition } = entriesFor(id);
-  return { patient, pastMedications: [], symptoms, moods, nutrition, ...passport };
+  if (id !== "p-margaret") return { patient, pastMedications: [], symptoms, moods, nutrition, ...passport };
+  const now = new Date(`${REFERENCE_DATE}T12:00:00`);
+  const vitals: VitalSign[] = Array.from({ length: 31 }, (_, index) => {
+    const day = 30 - index;
+    const date = new Date(now.getTime() - day * 86_400_000);
+    const dateText = date.toISOString().slice(0, 10);
+    const weightKg = 70 + (day <= 2 ? (2 - day) * 0.75 : 0);
+    return seeded({ id: `hf-m-v-${index + 1}`, patientId: id, timestamp: `${dateText}T07:30:00`, systolic: 124 - Math.min(index, 8), diastolic: 74, heartRate: 66 - Math.min(index, 5), weightKg, bpSetting: "home-cuff" });
+  });
+  const labs: LabResult[] = [
+    seeded({ id: "hf-m-lab-k-1", patientId: id, name: "Potassium", loincCode: "2823-3", panelId: "lp-m-bmp-0828", value: 3.7, unit: "mmol/L", date: "2026-08-28", referenceRange: { low: 3.5, high: 5.1 }, status: "normal" }),
+    seeded({ id: "hf-m-lab-k-2", patientId: id, name: "Potassium", loincCode: "2823-3", panelId: "hf-m-bmp-0911", value: 3.3, unit: "mmol/L", date: REFERENCE_DATE, referenceRange: { low: 3.5, high: 5.1 }, status: "borderline" }),
+  ];
+  return {
+    patient: { ...patient, vitals: [...patient.vitals, ...vitals], labs: [...patient.labs, ...labs] },
+    pastMedications: [], symptoms, moods, nutrition, ...passport,
+    labPanels: [...passport.labPanels, seeded({ id: "hf-m-bmp-0911", patientId: id, name: "Basic metabolic panel", code: "51990-0", date: REFERENCE_DATE, performer: "Lakeside Heart & Vascular" })],
+    heartFailure: { phenotype: "HFpEF", lvef: { value: 58, date: "2021-09-06" }, nyhaClass: 2 },
+  };
 }
 
 /** The patient's Passport: seed data + confirmed local data from this device. */
