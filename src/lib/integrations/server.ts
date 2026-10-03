@@ -134,6 +134,13 @@ interface SandboxPatientRow {
  * Idempotent: `patients(filter: { name })` is the only filter the schema
  * offers, so the externalId match happens here. A second call returns the same
  * Photon patient id and creates nothing.
+ *
+ * Known assumption, accepted for a synthetic demo patient: idempotency rests
+ * on the name filter seeing a create immediately. If that index ever lagged a
+ * create, a call in the same moment would not find him and would create a
+ * second record. Observed behaviour is read-after-write consistent, and the
+ * org holds exactly one Harold Okafor after repeated calls. The lookup also
+ * caps at the first 50 same-named patients.
  */
 export async function syncPhotonPatient(): Promise<PhotonSyncResult> {
   const demo = photonDemoPatient();
