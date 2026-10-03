@@ -8,6 +8,7 @@ import { addEntries } from "@/lib/passport/actions";
 import { newId } from "@/lib/passport/ops";
 import { youSource } from "@/lib/log/entries";
 import type { NutritionEntry, NutritionTag } from "@/lib/types";
+import { AppIcon, type AppIconName } from "@/components/AppIcon";
 
 /** The same closed set of tags the safety rules understand. */
 const TAGS: { value: NutritionTag; label: string }[] = [
@@ -21,11 +22,11 @@ const TAGS: { value: NutritionTag; label: string }[] = [
   { value: "caffeine", label: "Caffeine" },
 ];
 
-const MEALS: { value: NutritionEntry["meal"]; label: string; icon: string }[] = [
-  { value: "breakfast", label: "Breakfast", icon: "🌅" },
-  { value: "lunch", label: "Lunch", icon: "🥪" },
-  { value: "dinner", label: "Dinner", icon: "🍲" },
-  { value: "snack", label: "Snack", icon: "🍎" },
+const MEALS: { value: NutritionEntry["meal"]; label: string; icon: AppIconName }[] = [
+  { value: "breakfast", label: "Breakfast", icon: "breakfast" },
+  { value: "lunch", label: "Lunch", icon: "lunch" },
+  { value: "dinner", label: "Dinner", icon: "dinner" },
+  { value: "snack", label: "Snack", icon: "snack" },
 ];
 
 export default function MealPage() {
@@ -51,7 +52,7 @@ export default function MealPage() {
         <SavedPanel title="Meal saved" onAnother={() => { setSaved(false); setMeal(null); setDescription(""); setTags([]); }} links={[{ href: "/passport/nutrition/", label: "See nutrition" }, { href: "/", label: "Home" }]} />
       ) : (
         <Form label="Log a meal" onSubmit={submit}>
-          <ChoiceGroup legend="Meal" columns={2} value={meal} onChange={(v) => { setMeal(v); setErrs((x) => ({ ...x, meal: undefined })); }} error={errs.meal} options={MEALS} />
+          <ChoiceGroup legend="Meal" columns={2} value={meal} onChange={(v) => { setMeal(v); setErrs((x) => ({ ...x, meal: undefined })); }} error={errs.meal} options={MEALS.map((item) => ({ ...item, icon: <AppIcon name={item.icon} /> }))} />
           <TextField label="What did you have?" value={description} onChange={setDescription} error={errs.description} placeholder="e.g. Spinach salad with chicken" />
           <ChipGroup legend="Tags" hint="Pick any that apply — these are what the safety check looks for." options={TAGS} value={tags} onChange={setTags} />
           <SubmitBar label="Save meal" busy={busy} error={error} />

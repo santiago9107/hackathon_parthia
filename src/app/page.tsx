@@ -12,6 +12,7 @@ import { SourceBadge } from "@/components/passport/SourceBadge";
 import { fmtDateTime } from "@/components/passport/PassportChrome";
 import { pendingEntries } from "@/lib/passport/ops";
 import { openIssues } from "@/lib/reconcile";
+import { AppIcon } from "@/components/AppIcon";
 
 function greeting(now: Date) {
   const h = now.getHours();
@@ -120,7 +121,7 @@ export default function DashboardPage() {
                 { href: "/log/vitals/", label: "BP" },
               ].map((a) => (
                 <Link key={a.href} href={a.href} className="inline-flex min-h-11 items-center rounded-full bg-surface px-3.5 text-sm font-semibold text-brand-800 ring-1 ring-line hover:bg-brand-50">
-                  ＋ {a.label}
+                  <AppIcon name="plus" className="mr-1 h-4 w-4" /> {a.label}
                 </Link>
               ))}
             </div>

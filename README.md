@@ -3,8 +3,9 @@
 Patient-owned, holistic medication safety for people living with several chronic
 conditions and five or more medicines. This repository is the **demo-quality
 prototype** built for partner pitches and as an exhibit. The main personas are
-synthetic, and the optional public SMART Health IT import reads synthetic
-Synthea records from a real FHIR R4 server. There is no production EHR
+synthetic. The clinician workspace and public import flow can also read
+synthetic Synthea records live from a real SMART Health IT FHIR R4 server and
+resolve unfamiliar medication names through NLM RxNorm. There is no production EHR
 connection, real authentication, or trained model.
 
 What *is* real: the safety engine. Every flag you see is produced by readable,
@@ -31,7 +32,9 @@ Node 20+ is required. Icons are pre-generated; regenerate with
 | Trends | `/trends/` | Mood line + meals-logged bars + symptom markers, with medication changes drawn on the same timeline |
 | Share with doctor | `/share/` | Printable one-page visit summary (`Print / Save as PDF`) |
 | Assistant | `/assistant/` | Scripted, data-grounded chat; every reply labelled **AI-generated** |
-| Clinician agent | `/clinician/` | Gathers five sources, validates, normalizes, reconciles, pauses for patient clarification, attaches label evidence, routes decisions to people, and never changes care |
+| Clinician agent | `/clinician/` | Six scripted multi-source cases plus selectable live SMART FHIR sandbox patients, visible autonomous tool run, interactive WebGL body atlas, RxNorm normalization, evidence routing and human-gated care decisions |
+| System design | `/clinician/system-design/` | Implemented components, data flow, safety boundaries and execution sequence |
+| Presentation | `/clinician/presentation/` | Full-screen, keyboard-controlled eight-slide hackathon pitch |
 | Prototype evaluation | `/clinician/eval/` | 12 expected/prohibited-finding cases; explicitly not clinical validation |
 | Install | `/install/` | Platform-aware install flow + reminder settings |
 
@@ -67,10 +70,14 @@ brand mark were built for the event. The agent is deterministic and resumable:
 it performs evidence gathering and reconciliation autonomously, then waits for
 the patient or clinician wherever judgment or authorization is required.
 
-Run the MCP integration with `npm run mcp`; verify all 10 tools end to end with
-`npm run mcp:smoke`. Photon credentials remain server-side in Vercel environment
-variables. When Photon is unavailable, the interface says so and uses a clearly
-labelled recorded sandbox response for the demo.
+Run the MCP integration with `npm run mcp`; verify all 14 tools end to end with
+`npm run mcp:smoke`. SMART Health IT FHIR R4 and NLM RxNorm are live public reads.
+Photon and OpenRouter credentials remain server-side in Vercel environment
+variables. When either credential-gated service is unavailable, the interface
+labels the recorded or deterministic fallback instead of presenting it as live.
+
+The detailed architecture and authority model are in
+[`docs/SYSTEM-DESIGN.md`](docs/SYSTEM-DESIGN.md).
 
 ### Safety engine
 

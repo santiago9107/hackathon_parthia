@@ -6,15 +6,15 @@ const AS_OF = "2026-10-03T10:00:00-04:00";
 
 const IBUPROFEN_EVIDENCE = {
   sourceName: "FDA Advil Drug Facts label",
-  url: "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/017463s115lbl.pdf",
+  url: "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/211733Orig1s007lbl.pdf",
   passage: "The chance is higher if you take a blood thinning (anticoagulant) or steroid drug.",
-  retrievedOn: "2026-10-02",
+  retrievedOn: "2026-10-03",
 };
 const CIPRO_EVIDENCE = {
   sourceName: "DailyMed ciprofloxacin label",
-  url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4b9757f9-cd24-4d47-8972-b75040d5277c",
+  url: "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=b064286b-fedc-be68-e053-2995a90aae52&type=display",
   passage: "Monitor prothrombin time and INR frequently during and shortly after co-administration of ciprofloxacin with an oral anti-coagulant.",
-  retrievedOn: "2026-10-02",
+  retrievedOn: "2026-10-03",
 };
 
 function uniq<T>(items: T[]): T[] { return [...new Set(items)]; }

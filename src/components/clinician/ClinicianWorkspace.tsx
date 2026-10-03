@@ -1,29 +1,54 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { usePatient } from "@/lib/context/PatientContext";
-import { buildClinicianCase, CLINICIAN_AS_OF } from "@/lib/clinician/cases";
+import { buildClinicianCase, CLINICIAN_AS_OF, CLINICIAN_COHORT } from "@/lib/clinician/cases";
 import { runClinicianAgent } from "@/lib/clinician/agent";
 import { answerClinician, CLINICIAN_CHAT_EXAMPLES, type ClinicianChatReply } from "@/lib/clinician/chat";
 import { buildClinicianReport } from "@/lib/clinician/report";
 import { checkTool } from "@/lib/clinician/policy";
+import { buildLiveClinicianCase, type LiveClinicianCaseResult } from "@/lib/clinician/live";
+import { listSandboxPatients, SANDBOX_UNAVAILABLE, type SandboxPatient } from "@/lib/fhir/live";
 import type { CaseSourceId, ClinicianDecision, ClinicianFinding } from "@/lib/clinician/types";
+import { ClinicalBodyAtlas3D } from "./ClinicalBodyAtlas3D";
 
 const STAGES = ["Gather", "Validate", "Normalize", "Reconcile", "Check", "Clarify", "Explain", "Route"];
-const SOURCE_TONES: Record<CaseSourceId, string> = { passport: "bg-brand-100 text-brand-900", hospital: "bg-blue-100 text-blue-900", urgent: "bg-amber-100 text-amber-900", specialist: "bg-violet-100 text-violet-900", photon: "bg-cyan-100 text-cyan-900" };
+const SOURCE_META: Record<CaseSourceId, { short: string; color: string }> = {
+  passport: { short: "P", color: "bg-emerald-600" }, hospital: { short: "H", color: "bg-blue-600" },
+  urgent: { short: "U", color: "bg-amber-500" }, specialist: { short: "S", color: "bg-violet-600" }, photon: { short: "Rx", color: "bg-cyan-600" },
+};
+type IconName = "agent" | "arrow" | "chat" | "download" | "shield" | "spark" | "user";
+
+function Icon({ name, className = "h-4 w-4" }: { name: IconName; className?: string }) {
+  const paths: Record<IconName, ReactNode> = {
+    agent: <><rect x="4" y="6" width="16" height="13" rx="3"/><path d="M9 11h.01M15 11h.01M9 15h6M12 3v3"/></>,
+    arrow: <path d="m9 18 6-6-6-6"/>, chat: <path d="M4 5h16v12H9l-5 4V5Z"/>,
+    download: <><path d="M12 3v12M8 11l4 4 4-4"/><path d="M5 20h14"/></>,
+    shield: <><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></>,
+    spark: <><path d="m12 3 1.2 4.1L17 9l-3.8 1.9L12 15l-1.2-4.1L7 9l3.8-1.9L12 3Z"/><path d="m18 15 .7 2.3 2.3 1.2-2.3 1.2L18 22l-.7-2.3-2.3-1.2 2.3-1.2L18 15Z"/></>,
+    user: <><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-5 3.4-7 8-7s7.2 2 8 7"/></>,
+  };
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>{paths[name]}</svg>;
+}
 
 function download(name: string, body: string) {
   const url = URL.createObjectURL(new Blob([body], { type: "text/markdown;charset=utf-8" }));
-  const a = document.createElement("a"); a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url);
+  const anchor = document.createElement("a"); anchor.href = url; anchor.download = name; anchor.click(); URL.revokeObjectURL(url);
 }
-
-function priorityClass(priority: ClinicianFinding["priority"]) {
-  return priority === "high" ? "bg-attention-soft text-attention" : priority === "moderate" ? "bg-watch-soft text-gold-700" : "bg-cream-dark text-ink-soft";
+function priorityStyle(priority: ClinicianFinding["priority"]) {
+  return priority === "high" ? "border-red-200 bg-red-50 text-red-700" : priority === "moderate" ? "border-amber-200 bg-amber-50 text-amber-800" : "border-slate-200 bg-slate-50 text-slate-600";
 }
 
 export function ClinicianWorkspace() {
   const { patientId } = usePatient();
-  const caseData = useMemo(() => buildClinicianCase(patientId), [patientId]);
+  const [activePatientId, setActivePatientId] = useState(patientId);
+  const [livePatients, setLivePatients] = useState<SandboxPatient[]>([]);
+  const [liveCases, setLiveCases] = useState<Record<string, LiveClinicianCaseResult>>({});
+  const [liveState, setLiveState] = useState<"idle" | "listing" | "loading" | "ready" | "error">("idle");
+  const [liveError, setLiveError] = useState<string | null>(null);
+  const liveResult = liveCases[activePatientId];
+  const caseData = useMemo(() => liveResult?.caseData ?? buildClinicianCase(activePatientId), [activePatientId, liveResult]);
   const [launchedFor, setLaunchedFor] = useState<string | null>(null);
   const [availability, setAvailability] = useState<Partial<Record<CaseSourceId, boolean>>>({});
   const [confirmations, setConfirmations] = useState<Record<string, boolean>>({});
@@ -31,108 +56,113 @@ export function ClinicianWorkspace() {
   const [selected, setSelected] = useState<string | null>(null);
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<{ question: string; reply: ClinicianChatReply }[]>([]);
+  const [agentAnswering, setAgentAnswering] = useState(false);
   const [screen, setScreen] = useState<"idle" | "loading" | "recorded" | "live">("idle");
-  const launched = launchedFor === patientId;
+  const [agentProgress, setAgentProgress] = useState(0);
+  const launched = launchedFor === activePatientId;
   const run = launched ? runClinicianAgent(caseData, { available: availability, confirmations, decisions, resumed: Object.keys(confirmations).length > 0 }) : null;
-  const finding = run?.findings.find((f) => f.id === selected) ?? run?.findings.find((f) => f.priority === "high") ?? run?.findings[0];
+  const finding = run?.findings.find((item) => item.id === selected) ?? run?.findings.find((item) => item.priority === "high") ?? run?.findings[0];
+  const activeStage = launched ? Math.max(0, Math.min(agentProgress - 1, STAGES.length - 1)) : -1;
+  const visibleTrace = run?.trace.slice(0, Math.max(1, Math.ceil(run.trace.length * agentProgress / STAGES.length))) ?? [];
+  const agentRunning = launched && agentProgress < STAGES.length;
 
-  function resetPatientRun() { setLaunchedFor(patientId); setAvailability({}); setConfirmations({}); setDecisions([]); setSelected(null); setMessages([]); setScreen("idle"); }
-  function decide(target: ClinicianFinding, action: ClinicianDecision["action"]) {
-    setDecisions((all) => [...all.filter((d) => d.findingId !== target.id), { findingId: target.id, action, note: "", reviewer: "Dr. Rivera", at: CLINICIAN_AS_OF }]);
+  useEffect(() => { const timer = window.setTimeout(() => setActivePatientId(patientId), 0); return () => window.clearTimeout(timer); }, [patientId]);
+  useEffect(() => { if (!agentRunning) return; const timer = window.setTimeout(() => setAgentProgress((value) => Math.min(STAGES.length, value + 1)), 500); return () => window.clearTimeout(timer); }, [agentProgress, agentRunning]);
+
+  function resetState(id: string) { setActivePatientId(id); setLaunchedFor(null); setAgentProgress(0); setAvailability({}); setConfirmations({}); setDecisions([]); setSelected(null); setMessages([]); setScreen("idle"); }
+  function launch() { setLaunchedFor(activePatientId); setAgentProgress(1); setConfirmations({}); setDecisions([]); setSelected(null); setMessages([]); setScreen("idle"); }
+  async function loadLivePatients() {
+    setLiveState("listing"); setLiveError(null);
+    try { const patients = await listSandboxPatients(6); setLivePatients(patients); setLiveState("ready"); }
+    catch (error) { setLiveError(error instanceof Error ? error.message : SANDBOX_UNAVAILABLE); setLiveState("error"); }
   }
-  function ask(text = question) {
-    if (!text.trim()) return;
-    setMessages((all) => [...all, { question: text, reply: answerClinician(text, run, decisions) }]); setQuestion("");
+  async function selectLivePatient(patient: SandboxPatient) {
+    const id = `smart-${patient.id}`;
+    if (liveCases[id]) { resetState(id); return; }
+    setLiveState("loading"); setLiveError(null);
+    try {
+      const result = await buildLiveClinicianCase(patient);
+      setLiveCases((all) => ({ ...all, [id]: result })); resetState(id); setLiveState("ready");
+    } catch (error) { setLiveError(error instanceof Error ? error.message : SANDBOX_UNAVAILABLE); setLiveState("error"); }
+  }
+  function decide(target: ClinicianFinding, action: ClinicianDecision["action"]) { setDecisions((all) => [...all.filter((item) => item.findingId !== target.id), { findingId: target.id, action, note: "", reviewer: "Dr. Rivera", at: CLINICIAN_AS_OF }]); }
+  async function ask(text = question) {
+    const prompt = text.trim(); if (!prompt || agentAnswering) return; setQuestion("");
+    const deterministic = answerClinician(prompt, run, decisions);
+    if (!run || deterministic.refused) { setMessages((all) => [...all, { question: prompt, reply: { ...deterministic, source: "deterministic" } }]); return; }
+    setAgentAnswering(true);
+    try {
+      const evidence = JSON.stringify({ status: run.status, records: run.records, findings: run.findings, decisions, trace: run.trace });
+      const response = await fetch("/api/openrouter/chat", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ question: prompt, patientName: caseData.patientName, evidence }) });
+      if (!response.ok) throw new Error("OpenRouter unavailable");
+      const result = await response.json() as { text: string; model?: string };
+      setMessages((all) => [...all, { question: prompt, reply: { text: result.text, tools: ["evidence", "provenance", `OpenRouter · ${result.model ?? "configured model"}`], source: "openrouter" } }]);
+    } catch { setMessages((all) => [...all, { question: prompt, reply: { ...deterministic, source: "deterministic" } }]); }
+    finally { setAgentAnswering(false); }
   }
   async function screenPhoton() {
     setScreen("loading");
-    try {
-      const response = await fetch("/api/photon/screen", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ patientId: "demo-harold", treatmentIds: ["ciprofloxacin"] }) });
-      if (!response.ok) throw new Error("screen unavailable");
-      setScreen("live");
-    } catch { setScreen("recorded"); }
+    try { const response = await fetch("/api/photon/screen", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ patientId: "demo-harold", treatmentIds: ["ciprofloxacin"] }) }); if (!response.ok) throw new Error(); setScreen("live"); }
+    catch { setScreen("recorded"); }
   }
 
-  return (
-    <div className="space-y-5 pb-8">
-      <section className="relative overflow-hidden rounded-[1.5rem] bg-navy px-5 py-6 text-white shadow-card sm:px-7">
-        <div className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand-500/20 blur-2xl" />
-        <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-brand-100"><span className="h-2 w-2 animate-pulse rounded-full bg-gold-500" /> CLINICIAN AGENT WORKSPACE</div>
-            <h1 className="font-serif text-3xl font-semibold sm:text-4xl">One patient. Five sources. One review queue.</h1>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-white/75">Parthia gathers and reconciles fragmented medication records, explains every finding with provenance, and stops wherever a person must decide.</p>
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
-            {[{ value: run?.autonomousCount ?? "–", label: "agent steps" }, { value: run?.humanCount ?? "–", label: "human decisions" }, { value: run?.medications.length ?? "–", label: "medications" }, { value: run?.findings.length ?? "–", label: "findings" }].map((item) => <div key={item.label} className="min-w-24 rounded-xl border border-white/10 bg-white/5 px-3 py-2"><p className="text-xl font-semibold text-gold-200">{item.value}</p><p className="text-[10px] uppercase tracking-wider text-white/55">{item.label}</p></div>)}
-          </div>
-        </div>
-      </section>
+  return <div className="-mt-6 pb-10 sm:-mx-3">
+    <nav className="flex items-center justify-between border-b border-slate-200 py-3 text-xs">
+      <div className="flex items-center gap-2 text-slate-500"><span className="font-semibold text-teal-700">Clinical workspace</span><span>/</span><span>Medication reconciliation</span></div>
+      <div className="flex items-center gap-1"><Link href="/clinician/system-design/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">System design</Link><Link href="/clinician/presentation/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">Presentation</Link><Link href="/clinician/eval/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">Evaluation</Link></div>
+    </nav>
+    <header className="flex flex-col gap-4 py-6 lg:flex-row lg:items-end lg:justify-between">
+      <div><div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[.18em] text-teal-700"><Icon name="agent" />Parthia reconciliation agent</div><h1 className="mt-2 text-3xl font-semibold tracking-[-.04em] text-slate-950 sm:text-4xl">A complete medication picture, assembled autonomously.</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">The agent retrieves and checks the evidence. Patients clarify what they take. Clinicians retain every treatment decision.</p></div>
+      <button type="button" onClick={launch} className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-teal-700 px-6 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(15,118,110,.22)] hover:bg-teal-800"><Icon name="spark" />{agentRunning ? "Reconciliation running" : launched ? "Run again" : "Start reconciliation"}</button>
+    </header>
 
-      <section className="rounded-card border border-line bg-surface p-5 shadow-card">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-700 font-serif text-lg font-semibold text-white">{caseData.patientName.split(" ").map((x) => x[0]).join("")}</span><div><p className="font-serif text-xl font-semibold text-navy">{caseData.patientName}, {caseData.age}</p><p className="text-sm text-ink-muted">{caseData.conditions.join(" · ")}</p></div></div>
-          <div className="flex flex-wrap items-center gap-2 text-xs"><span className="rounded-full bg-brand-50 px-3 py-1.5 font-semibold text-brand-800">Shared from Passport · Oct 3</span><span className="rounded-full bg-attention-soft px-3 py-1.5 font-semibold text-attention">Allergies: {caseData.allergies.join(", ") || "None recorded"}</span><span className="rounded-full border border-line px-3 py-1.5 text-ink-muted">Synthetic patient</span></div>
-        </div>
-      </section>
-
-      <section className="grid gap-5 lg:grid-cols-[1.25fr_.75fr]">
-        <div className="rounded-card border border-line bg-surface p-5 shadow-card">
-          <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Agent mission</p><h2 className="mt-1 font-serif text-2xl font-semibold text-navy">Reconcile the complete medication picture</h2></div><button type="button" onClick={resetPatientRun} className="rounded-full bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-800">{launched ? "Run again" : "Launch agent"}</button></div>
-          <div className="mt-5 grid grid-cols-4 gap-1 sm:grid-cols-8">
-            {STAGES.map((stage, i) => { const active = run ? Math.min(STAGES.findIndex((s) => s.toLowerCase() === run.stage), 7) : -1; const done = i <= active; return <div key={stage} className="relative text-center"><div className={`mx-auto grid h-8 w-8 place-items-center rounded-full text-xs font-bold ${done ? "bg-brand-700 text-white" : "bg-cream-dark text-ink-muted"}`}>{i + 1}</div><p className="mt-1 text-[10px] font-semibold text-ink-muted">{stage}</p>{i < 7 && <span className={`absolute left-[60%] top-4 h-px w-[80%] ${i < active ? "bg-brand-500" : "bg-line"}`} />}</div>; })}
+    <div className="overflow-hidden rounded-[26px] border border-slate-200 bg-white shadow-[0_24px_70px_rgba(15,23,42,.08)]">
+      <div className="grid min-h-[840px] xl:grid-cols-[260px_minmax(0,1fr)_410px]">
+        <aside className="border-b border-slate-200 bg-slate-50/80 xl:border-b-0 xl:border-r">
+          <div className="border-b border-slate-200 px-5 py-5"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Patient queue</p><p className="mt-1 text-sm font-semibold text-slate-900">Demo cases + live FHIR</p></div>
+          <div className="p-2">{CLINICIAN_COHORT.map((patient) => <button type="button" key={patient.id} onClick={() => resetState(patient.id)} className={`mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition ${activePatientId === patient.id ? "bg-white shadow-sm ring-1 ring-slate-200" : "hover:bg-white/70"}`}><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-[10px] font-semibold text-white ${patient.acuity === "high" ? "bg-red-600" : patient.acuity === "moderate" ? "bg-amber-500" : "bg-teal-600"}`}>{patient.name.split(" ").map((part) => part[0]).join("")}</span><span className="min-w-0 flex-1"><span className="block truncate text-xs font-semibold text-slate-900">{patient.name}</span><span className="block truncate text-[10px] text-slate-500">{patient.summary}</span></span></button>)}</div>
+          <div className="mx-2 border-y border-slate-200 py-3">
+            <div className="flex items-center justify-between px-3"><div><p className="text-[9px] font-semibold uppercase tracking-[.14em] text-emerald-700">Live public FHIR</p><p className="mt-0.5 text-[9px] text-slate-500">Real API · synthetic Synthea people</p></div><button type="button" onClick={() => void loadLivePatients()} disabled={liveState === "listing" || liveState === "loading"} className="rounded-lg bg-emerald-700 px-2.5 py-2 text-[9px] font-semibold text-white disabled:opacity-50">{liveState === "listing" ? "Connecting" : livePatients.length ? "Refresh" : "Connect"}</button></div>
+            {liveError && <p role="alert" className="mx-3 mt-2 rounded-lg bg-red-50 p-2 text-[9px] leading-4 text-red-700">{liveError}</p>}
+            {liveState === "loading" && <p role="status" className="mx-3 mt-2 flex items-center gap-2 text-[9px] font-medium text-emerald-700"><span className="h-3 w-3 animate-spin rounded-full border-2 border-emerald-200 border-t-emerald-700" />Fetching FHIR resources and resolving RxNorm…</p>}
+            {livePatients.length > 0 && <div className="mt-2 max-h-48 space-y-1 overflow-y-auto px-1">{livePatients.map((patient) => { const id = `smart-${patient.id}`; return <button type="button" key={patient.id} onClick={() => void selectLivePatient(patient)} className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left ${activePatientId === id ? "bg-emerald-50 ring-1 ring-emerald-200" : "hover:bg-white"}`}><span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-emerald-700 text-[8px] font-bold text-white">FHIR</span><span className="min-w-0 flex-1"><span className="block truncate text-[10px] font-semibold text-slate-800">{patient.name}</span><span className="block text-[8px] text-slate-400">{patient.activeMedications} active prescriptions</span></span></button>; })}</div>}
           </div>
-          <div className="mt-5 rounded-xl border border-line bg-cream p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-ink-muted">What I am doing now</p>
-            <p className="mt-1 text-sm font-medium text-ink">{!run ? "Ready to gather records. Nothing has run yet." : run.trace.at(-1)?.summary}</p>
-            {run?.pendingQuestion && <div className="mt-3 rounded-xl border border-gold-200 bg-gold-50 p-3"><p className="font-semibold text-navy">Patient clarification required</p><p className="mt-1 text-sm text-ink-soft">{run.pendingQuestion.question}</p><div className="mt-3 flex gap-2"><button type="button" onClick={() => setConfirmations((x) => ({ ...x, [run.pendingQuestion!.recordId]: true }))} className="rounded-full bg-brand-700 px-4 py-2 text-xs font-semibold text-white">Yes, currently taking it</button><button type="button" onClick={() => setConfirmations((x) => ({ ...x, [run.pendingQuestion!.recordId]: false }))} className="rounded-full border border-line bg-white px-4 py-2 text-xs font-semibold text-ink">No, not taking it</button></div></div>}
-          </div>
-        </div>
+          <div className="mx-4 mt-3 rounded-2xl border border-slate-200 bg-white p-4"><div className="flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Active patient</p>{liveResult && <span className="rounded bg-emerald-50 px-2 py-1 text-[8px] font-bold uppercase text-emerald-700">Live response</span>}</div><div className="mt-3 flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-full bg-slate-950 text-xs font-semibold text-white">{caseData.patientName.split(" ").map((part) => part[0]).join("")}</span><div><p className="text-sm font-semibold text-slate-950">{caseData.patientName}</p><p className="text-xs text-slate-500">{caseData.age || "Age not provided"}{caseData.age ? " years" : ""} · {liveResult ? "Synthea patient" : "demo cohort"}</p></div></div><p className="mt-3 text-xs leading-5 text-slate-600">{caseData.conditions.join(" · ") || "No active conditions returned"}</p><p className="mt-2 text-xs font-medium text-red-700">Allergy: {caseData.allergies.join(", ") || (liveResult ? "Not included in this public query" : "None recorded")}</p>{liveResult && <p className="mt-3 border-t border-slate-100 pt-3 text-[9px] leading-4 text-slate-500">Fetched {new Date(liveResult.fetchedAt).toLocaleTimeString()} · {liveResult.counts.dictionary} local and {liveResult.counts.rxnav} live RxNorm mappings · {liveResult.counts.unmapped} unmapped</p>}</div>
+          <div className="px-5 py-5"><div className="flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Evidence sources</p><span className="text-[9px] font-medium text-teal-700">{caseData.sources.filter((source) => availability[source.id] ?? source.available).length} connected</span></div><div className="mt-3 space-y-1">{caseData.sources.map((source) => { const available = availability[source.id] ?? source.available; return <div key={source.id} className="flex items-center gap-2 rounded-lg py-2"><span className={`grid h-7 w-7 place-items-center rounded-lg text-[9px] font-bold text-white ${SOURCE_META[source.id].color}`}>{SOURCE_META[source.id].short}</span><span className="min-w-0 flex-1"><span className="block truncate text-xs font-medium text-slate-800">{source.label}</span><span className="block text-[9px] text-slate-400">Updated {source.lastUpdated}</span></span><button type="button" aria-label={`Toggle ${source.label}`} aria-pressed={available} onClick={() => setAvailability((all) => ({ ...all, [source.id]: !available }))} className={`relative h-5 w-9 rounded-full ${available ? "bg-teal-600" : "bg-slate-300"}`}><span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition ${available ? "left-[18px]" : "left-0.5"}`} /></button></div>; })}</div></div>
+          <div className="border-t border-slate-200 px-5 py-5"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Infrastructure</p><div className="mt-3 space-y-2">{[["SMART FHIR", liveResult ? "connected" : "available", "bg-emerald-500"], ["NLM RxNorm", liveResult ? "queried" : "available", "bg-emerald-500"], ["Photon Neutron", "gated", "bg-amber-500"], ["OpenRouter", "gated", "bg-amber-500"], ["MCP · 14 tools", "local", "bg-cyan-500"]].map(([name, state, color]) => <div key={name} className="flex items-center gap-2 text-[10px]"><span className={`h-1.5 w-1.5 rounded-full ${color}`} /><span className="flex-1 font-medium text-slate-700">{name}</span><span className="uppercase text-slate-400">{state}</span></div>)}</div><Link href="/passport/add/fhir-sandbox/" className="mt-4 inline-flex items-center gap-1 text-[10px] font-semibold text-teal-700">Open full FHIR importer <Icon name="arrow" className="h-3 w-3" /></Link></div>
+        </aside>
 
-        <div className="rounded-card border border-line bg-surface p-5 shadow-card">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Connected evidence</p>
-          <div className="mt-3 space-y-2">
-            {caseData.sources.map((source) => { const available = availability[source.id] ?? source.available; return <div key={source.id} className="flex items-center gap-3 rounded-xl border border-line p-3"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg text-xs font-bold ${SOURCE_TONES[source.id]}`}>{source.id === "passport" ? "P" : source.id === "photon" ? "Rx" : "EHR"}</span><div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-ink">{source.label}</p><p className="text-xs text-ink-muted">{source.format} · {source.lastUpdated}</p></div><button type="button" aria-label={`Toggle ${source.label}`} onClick={() => setAvailability((all) => ({ ...all, [source.id]: !available }))} className={`relative h-6 w-11 rounded-full transition ${available ? "bg-good" : "bg-line-strong"}`}><span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${available ? "left-6" : "left-1"}`} /></button></div>; })}
-          </div>
-          <p className="mt-3 text-xs text-ink-muted">Turn a source off, then run again to see one retry and an incomplete-case guard.</p>
-        </div>
-      </section>
+        <main className="min-w-0 bg-white">
+          <section className="border-b border-slate-200 px-6 py-6">
+            <div className="flex items-center justify-between"><div><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-teal-700">Agent workspace</p><h2 className="mt-1 text-xl font-semibold tracking-[-.025em] text-slate-950">Evidence reconciliation</h2></div><span className={`rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[.12em] ${agentRunning ? "bg-cyan-50 text-cyan-700" : run ? "bg-amber-50 text-amber-700" : "bg-slate-100 text-slate-500"}`}>{agentRunning ? "Agent working" : run ? "Human input needed" : "Ready"}</span></div>
+            <div className="mt-6 grid grid-cols-4 gap-y-5 md:grid-cols-8">{STAGES.map((stage, index) => { const complete = index <= activeStage; const current = index === activeStage && agentRunning; return <div key={stage}><div className="flex items-center"><span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border text-[10px] font-semibold ${complete ? "border-teal-700 bg-teal-700 text-white" : "border-slate-200 bg-white text-slate-400"}`}>{current ? <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> : index + 1}</span>{index < STAGES.length - 1 && <span className={`h-px flex-1 ${index < activeStage ? "bg-teal-500" : "bg-slate-200"}`} />}</div><p className={`mt-2 text-[9px] font-semibold ${complete ? "text-teal-800" : "text-slate-400"}`}>{stage}</p></div>; })}</div>
+            <div className="mt-6 rounded-2xl bg-slate-950 p-5 text-white"><div className="flex items-start gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-teal-400/15 text-teal-300"><Icon name="agent" className="h-5 w-5" /></span><div className="min-w-0 flex-1"><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-slate-500">Current action</p><p className="mt-1 text-sm font-medium leading-6 text-slate-100">{!run ? "Waiting to retrieve medication evidence from the connected sources." : visibleTrace.at(-1)?.summary ?? "Preparing bounded tools."}</p></div><span className="rounded-lg border border-slate-700 px-2.5 py-1 text-[9px] text-slate-400">{visibleTrace.at(-1)?.tool.replaceAll("_", " ") ?? "idle"}</span></div>{visibleTrace.length > 0 && <div className="mt-5 grid gap-2 sm:grid-cols-2">{visibleTrace.slice(-4).map((entry) => <div key={`${entry.seq}-${entry.tool}`} className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900 px-3 py-2"><span className={`h-1.5 w-1.5 rounded-full ${entry.status === "blocked" || entry.status === "failed" ? "bg-red-400" : entry.status === "waiting" ? "bg-amber-400" : "bg-teal-400"}`} /><span className="truncate text-[10px] text-slate-300">{entry.tool.replaceAll("_", " ")}</span><span className="ml-auto text-[8px] uppercase text-slate-600">{entry.status}</span></div>)}</div>}</div>
+            {run?.pendingQuestion && agentProgress >= 6 && <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4"><div className="flex items-start gap-3"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-amber-500 text-white"><Icon name="user" /></span><div><p className="text-xs font-semibold text-slate-950">One answer needed from the patient</p><p className="mt-1 text-sm text-slate-700">{run.pendingQuestion.question}</p><div className="mt-3 flex gap-2"><button type="button" onClick={() => setConfirmations((all) => ({ ...all, [run.pendingQuestion!.recordId]: true }))} className="rounded-lg bg-slate-950 px-4 py-2 text-xs font-semibold text-white">Currently taking it</button><button type="button" onClick={() => setConfirmations((all) => ({ ...all, [run.pendingQuestion!.recordId]: false }))} className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700">Not taking it</button></div></div></div></div>}
+          </section>
 
-      {run && <>
-        <section className="rounded-card border border-line bg-surface shadow-card">
-          <div className="flex flex-col gap-2 border-b border-line px-5 py-4 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Reconciled medication list</p><h2 className="font-serif text-xl font-semibold text-navy">Every source record stays visible</h2></div><span className={`w-fit rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${run.status === "complete" ? "bg-good-soft text-good" : run.status === "incomplete" ? "bg-cream-dark text-ink-soft" : "bg-watch-soft text-gold-700"}`}>{run.status.replace("-", " ")}</span></div>
-          <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-cream text-[10px] uppercase tracking-wider text-ink-muted"><tr><th className="px-5 py-3">Ingredient</th><th className="px-3 py-3">As written</th><th className="px-3 py-3">Type</th><th className="px-3 py-3">Source</th><th className="px-3 py-3">State</th></tr></thead><tbody className="divide-y divide-line">{run.medications.flatMap((item) => item.records.map((record, index) => <tr key={record.id} className="hover:bg-brand-50/40"><td className="px-5 py-3">{index === 0 && <><p className="font-semibold capitalize text-ink">{item.ingredient}</p><p className="text-xs text-ink-muted">RxCUI {item.rxcui ?? "unmapped"}</p></>}</td><td className="px-3 py-3 text-ink">{record.display}</td><td className="px-3 py-3 text-ink-soft">{record.recordType}</td><td className="px-3 py-3"><span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${SOURCE_TONES[record.sourceId]}`}>{record.sourceLabel}</span></td><td className="px-3 py-3"><span className="font-medium text-ink">{record.status}</span>{index === 0 && <span className="ml-2 text-xs text-ink-muted">· {item.state}</span>}</td></tr>))}</tbody></table></div>
-        </section>
+          {!run ? <div className="grid min-h-[390px] place-items-center px-8 text-center"><div><span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-teal-50 text-teal-700"><Icon name="spark" className="h-7 w-7" /></span><h3 className="mt-4 text-lg font-semibold text-slate-950">Ready to reconcile {caseData.patientName}&apos;s record</h3><p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">The agent will gather five sources, normalize identity, preserve provenance, run configured rules, and stop wherever a person must decide.</p></div></div> : <RunResults run={run} finding={finding} selected={selected} setSelected={setSelected} decisions={decisions} decide={decide} caseData={caseData} activePatientId={activePatientId} messages={messages} question={question} setQuestion={setQuestion} ask={ask} agentAnswering={agentAnswering} />}
+        </main>
 
-        <section className="grid gap-5 lg:grid-cols-[.9fr_1.1fr]">
-          <div className="rounded-card border border-line bg-surface p-5 shadow-card">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Clinician review queue</p><h2 className="mt-1 font-serif text-xl font-semibold text-navy">{run.findings.length} source-backed findings</h2>
-            <div className="mt-4 space-y-2">{run.findings.map((item) => { const decision = decisions.find((d) => d.findingId === item.id); return <button type="button" key={item.id} onClick={() => setSelected(item.id)} className={`w-full rounded-xl border p-3 text-left transition ${finding?.id === item.id ? "border-brand-500 bg-brand-50" : "border-line hover:border-brand-300"}`}><div className="flex items-start justify-between gap-2"><p className="text-sm font-semibold text-ink">{item.title}</p><span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${priorityClass(item.priority)}`}>{item.priority}</span></div><p className="mt-1 text-xs text-ink-muted">{decision ? `Decision: ${decision.action}` : `Waiting for ${item.route}`}</p></button>; })}</div>
-          </div>
-          <div className="rounded-card border border-line bg-surface p-5 shadow-card">
-            {finding ? <><div className="flex flex-wrap items-center gap-2"><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase ${priorityClass(finding.priority)}`}>{finding.priority}</span><span className="rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-bold uppercase text-brand-800">Route: {finding.route}</span></div><h2 className="mt-3 font-serif text-2xl font-semibold text-navy">{finding.title}</h2><p className="mt-2 text-sm leading-6 text-ink-soft">{finding.detail}</p>{finding.citation && <div className="mt-4 rounded-xl border-l-4 border-gold-500 bg-gold-50 p-4"><p className="text-[10px] font-bold uppercase tracking-wider text-gold-700">Label evidence</p><blockquote className="mt-1 text-sm font-medium leading-6 text-ink">“{finding.citation.passage}”</blockquote><a href={finding.citation.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs font-semibold text-brand-700 underline">{finding.citation.sourceName}</a></div>}<div className="mt-4 rounded-xl bg-cream p-3"><p className="text-xs font-bold uppercase tracking-wider text-ink-muted">Question for the reviewer</p><p className="mt-1 text-sm font-medium text-ink">{finding.question}</p></div><div className="mt-4 flex flex-wrap gap-2"><button type="button" onClick={() => decide(finding, "acknowledged")} className="rounded-full border border-line px-4 py-2 text-xs font-semibold text-ink hover:bg-cream">Acknowledge</button><button type="button" onClick={() => decide(finding, "marked-for-review")} className="rounded-full bg-brand-700 px-4 py-2 text-xs font-semibold text-white">Mark for review</button><button type="button" onClick={() => decide(finding, "deferred")} className="rounded-full border border-line px-4 py-2 text-xs font-semibold text-ink">Defer</button><button type="button" onClick={() => { const policy = checkTool("open_photon_workflow", { approved: true }); if (policy.allowed) { decide(finding, "approved-photon-handoff"); window.open("https://app.neutron.health", "_blank", "noopener,noreferrer"); } }} className="rounded-full bg-navy px-4 py-2 text-xs font-semibold text-white">Continue in Photon ↗</button></div></> : <p className="text-sm text-ink-muted">Choose a finding.</p>}
-          </div>
-        </section>
-
-        <section className="grid gap-5 lg:grid-cols-2">
-          <div className="rounded-card border border-line bg-surface p-5 shadow-card">
-            <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Photon safety screen</p><h2 className="mt-1 font-serif text-xl font-semibold text-navy">Independent sandbox check</h2></div><button type="button" onClick={screenPhoton} disabled={screen === "loading"} className="rounded-full bg-navy px-4 py-2 text-xs font-semibold text-white disabled:opacity-50">{screen === "loading" ? "Screening…" : "Screen draft"}</button></div>
-            {screen === "idle" ? <p className="mt-4 text-sm text-ink-muted">Screen a drafted ciprofloxacin prescription before opening the provider workflow.</p> : screen === "loading" ? <div className="mt-4 h-20 animate-pulse rounded-xl bg-cream" /> : <div className="mt-4 rounded-xl border border-attention/20 bg-attention-soft p-4"><div className="flex items-center justify-between"><span className="rounded-full bg-attention px-2 py-0.5 text-[10px] font-bold text-white">DRUG · MODERATE</span><span className="text-[10px] font-semibold uppercase text-ink-muted">{screen === "live" ? "Live Neutron sandbox" : "Recorded sandbox fallback"}</span></div><p className="mt-2 text-sm font-semibold text-ink">Ciprofloxacin may enhance the anticoagulant effect of warfarin.</p><p className="mt-1 text-xs text-ink-muted">Shown separately from Parthia&apos;s rule finding. The app does not hide disagreement between systems.</p></div>}
-          </div>
-          <div className="rounded-card border border-line bg-surface p-5 shadow-card">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Agent audit trail</p><div className="mt-3 max-h-72 space-y-3 overflow-y-auto pr-1">{run.trace.map((entry) => <div key={`${entry.seq}-${entry.tool}`} className="flex gap-3"><span className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${entry.status === "failed" || entry.status === "blocked" ? "bg-attention" : entry.status === "waiting" ? "bg-gold-500" : "bg-good"}`} /><div><p className="text-xs font-bold text-ink">{entry.tool.replaceAll("_", " ")} <span className="font-normal text-ink-muted">· {entry.status}</span></p><p className="mt-0.5 text-xs leading-5 text-ink-soft">{entry.summary}</p></div></div>)}</div>
-          </div>
-        </section>
-
-        <section className="rounded-card border border-line bg-surface p-5 shadow-card">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Ask the clinician agent</p><h2 className="mt-1 font-serif text-xl font-semibold text-navy">Grounded answers, visible tools</h2><p className="mt-1 text-sm text-ink-muted">Every answer uses the reconciled case. Requests to change care are refused.</p></div><button type="button" onClick={() => download(`parthia-${patientId}-reconciliation.md`, buildClinicianReport(caseData, run, decisions))} className="rounded-full border border-brand-300 px-4 py-2 text-xs font-semibold text-brand-800 hover:bg-brand-50">Export report ↓</button></div>
-          <div className="mt-4 flex flex-wrap gap-2">{CLINICIAN_CHAT_EXAMPLES.map((example) => <button type="button" key={example} onClick={() => ask(example)} className="rounded-full border border-line bg-cream px-3 py-1.5 text-xs font-medium text-ink hover:border-brand-300">{example}</button>)}</div>
-          <div className="mt-4 max-h-80 space-y-3 overflow-y-auto">{messages.map((message, i) => <div key={`${message.question}-${i}`}><p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-navy px-4 py-2.5 text-sm text-white">{message.question}</p><div className={`mt-2 max-w-[90%] rounded-2xl rounded-bl-sm border px-4 py-3 ${message.reply.refused ? "border-attention/25 bg-attention-soft" : "border-line bg-brand-50"}`}><p className="whitespace-pre-line text-sm leading-6 text-ink">{message.reply.text}</p>{message.reply.tools.length > 0 && <p className="mt-2 text-[10px] font-semibold uppercase tracking-wider text-brand-700">Tools: {message.reply.tools.join(" → ")}</p>}</div></div>)}</div>
-          <div className="mt-4 flex gap-2"><input value={question} onChange={(e) => setQuestion(e.target.value)} onKeyDown={(e) => e.key === "Enter" && ask()} placeholder="Ask about evidence, sources, disagreements or agent actions…" className="min-w-0 flex-1 rounded-full border border-line bg-white px-4 py-3 text-sm outline-none focus:border-brand-500" /><button type="button" onClick={() => ask()} className="rounded-full bg-brand-700 px-5 py-3 text-sm font-semibold text-white">Ask</button></div>
-        </section>
-      </>}
-
-      <p className="text-center text-xs text-ink-muted">Synthetic demonstration data. Systems associated with medication warnings are context, not a patient diagnosis. Prototype evaluation, not clinical validation.</p>
+        <aside className="border-t border-slate-200 bg-slate-950 xl:border-l xl:border-t-0">
+          <ClinicalBodyAtlas3D findingTitle={finding?.title} compact embedded />
+          <div className="border-t border-slate-800 px-5 py-5 text-white"><div className="flex items-center gap-2 text-teal-300"><Icon name="shield" /><p className="text-[10px] font-semibold uppercase tracking-[.16em]">Authority boundary</p></div><div className="mt-4 space-y-3">{[["Read and reconcile evidence", "Agent", true], ["Detect configured risks", "Rules", true], ["Explain and route", "Agent", true], ["Change medication", "Clinician", false]].map(([label, owner, allowed]) => <div key={String(label)} className="flex items-center gap-3"><span className={`h-1.5 w-1.5 rounded-full ${allowed ? "bg-teal-400" : "bg-red-400"}`} /><span className="flex-1 text-xs text-slate-300">{label}</span><span className="text-[9px] uppercase text-slate-600">{owner}</span></div>)}</div></div>
+          <div className="border-t border-slate-800 p-5"><div className="flex items-center justify-between"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-slate-500">Photon check</p><p className="mt-1 text-xs text-slate-300">Independent draft screening</p></div><button type="button" onClick={screenPhoton} disabled={screen === "loading"} className="rounded-lg border border-slate-700 px-3 py-2 text-[9px] font-semibold text-white hover:border-teal-400 disabled:opacity-50">{screen === "loading" ? "Checking" : "Run check"}</button></div>{screen !== "idle" && screen !== "loading" && <div className="mt-4 rounded-xl border border-red-400/30 bg-red-400/10 p-3"><div className="flex items-center justify-between"><span className="text-[9px] font-semibold text-red-300">MODERATE INTERACTION</span><span className="text-[8px] uppercase text-slate-500">{screen === "live" ? "Live Neutron" : "Recorded fallback"}</span></div><p className="mt-2 text-[10px] leading-5 text-slate-300">Ciprofloxacin may enhance warfarin&apos;s anticoagulant effect.</p></div>}</div>
+        </aside>
+      </div>
     </div>
-  );
+    <p className="mt-4 text-center text-[10px] text-slate-400">{liveResult ? "Current record was fetched live from the SMART Health IT public FHIR R4 sandbox; its patient is synthetic and Synthea-generated." : "Built-in patient cohort is demonstration data."} Connector state is labeled at the point of use. Prototype decision support—not clinical validation.</p>
+  </div>;
+}
+
+function RunResults({ run, finding, setSelected, decisions, decide, caseData, activePatientId, messages, question, setQuestion, ask, agentAnswering }: {
+  run: NonNullable<ReturnType<typeof runClinicianAgent>>; finding?: ClinicianFinding; selected: string | null; setSelected: (id: string) => void; decisions: ClinicianDecision[]; decide: (finding: ClinicianFinding, action: ClinicianDecision["action"]) => void; caseData: ReturnType<typeof buildClinicianCase>; activePatientId: string; messages: { question: string; reply: ClinicianChatReply }[]; question: string; setQuestion: (value: string) => void; ask: (text?: string) => Promise<void>; agentAnswering: boolean;
+}) {
+  return <>
+    <section className="grid border-b border-slate-200 2xl:grid-cols-[.78fr_1.22fr]">
+      <div className="border-b border-slate-200 2xl:border-b-0 2xl:border-r"><div className="flex items-center justify-between px-5 py-4"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-slate-400">Review queue</p><p className="mt-1 text-sm font-semibold text-slate-950">{run.findings.length} evidence-backed findings</p></div><span className="text-[10px] text-slate-400">{decisions.length} reviewed</span></div><div className="border-t border-slate-100">{run.findings.map((item) => <button type="button" key={item.id} onClick={() => setSelected(item.id)} className={`w-full border-l-2 px-5 py-4 text-left ${finding?.id === item.id ? "border-teal-600 bg-teal-50/60" : "border-transparent hover:bg-slate-50"}`}><div className="flex items-start justify-between gap-3"><p className="text-xs font-semibold leading-5 text-slate-900">{item.title}</p><span className={`rounded-md border px-2 py-0.5 text-[8px] font-semibold uppercase ${priorityStyle(item.priority)}`}>{item.priority}</span></div><p className="mt-1 text-[10px] text-slate-500">{decisions.find((decision) => decision.findingId === item.id) ? "Decision recorded" : `Route to ${item.route}`}</p></button>)}</div></div>
+      <div className="p-5">{finding && <><div className="flex gap-2"><span className={`rounded-md border px-2 py-1 text-[8px] font-semibold uppercase ${priorityStyle(finding.priority)}`}>{finding.priority}</span><span className="rounded-md bg-teal-50 px-2 py-1 text-[8px] font-semibold uppercase text-teal-700">{finding.route}</span></div><h3 className="mt-4 text-xl font-semibold tracking-[-.025em] text-slate-950">{finding.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{finding.detail}</p>{finding.citation && <div className="mt-4 rounded-xl bg-amber-50 p-4"><p className="text-[9px] font-semibold uppercase text-amber-700">Source evidence</p><p className="mt-2 text-xs font-medium leading-5 text-slate-800">“{finding.citation.passage}”</p><a href={finding.citation.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-[10px] font-semibold text-teal-700 underline">{finding.citation.sourceName}</a></div>}<p className="mt-4 rounded-xl bg-slate-50 p-3 text-xs font-medium text-slate-800">{finding.question}</p><div className="mt-4 flex flex-wrap gap-2"><button type="button" onClick={() => decide(finding, "acknowledged")} className="rounded-lg border border-slate-300 px-3 py-2 text-[10px] font-semibold text-slate-700">Acknowledge</button><button type="button" onClick={() => decide(finding, "marked-for-review")} className="rounded-lg bg-teal-700 px-3 py-2 text-[10px] font-semibold text-white">Mark for review</button><button type="button" onClick={() => decide(finding, "deferred")} className="rounded-lg border border-slate-300 px-3 py-2 text-[10px] font-semibold text-slate-700">Defer</button><button type="button" onClick={() => { const policy = checkTool("open_photon_workflow", { approved: true }); if (policy.allowed) { decide(finding, "approved-photon-handoff"); window.open("https://app.neutron.health", "_blank", "noopener,noreferrer"); } }} className="rounded-lg bg-slate-950 px-3 py-2 text-[10px] font-semibold text-white">Open provider workflow</button></div></>}</div>
+    </section>
+    <section className="border-b border-slate-200"><div className="flex items-center justify-between px-6 py-4"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-slate-400">Medication truth</p><p className="mt-1 text-sm font-semibold text-slate-950">Normalized without erasing the source</p></div><span className="rounded-full bg-slate-100 px-3 py-1 text-[9px] font-semibold uppercase text-slate-600">{run.status.replace("-", " ")}</span></div><div className="overflow-x-auto"><table className="w-full min-w-[680px] text-left"><thead className="border-y border-slate-100 bg-slate-50/70 text-[9px] uppercase tracking-[.12em] text-slate-400"><tr><th className="px-6 py-3">Ingredient</th><th className="px-3 py-3">As recorded</th><th className="px-3 py-3">Source</th><th className="px-3 py-3">State</th></tr></thead><tbody className="divide-y divide-slate-100">{run.medications.flatMap((item) => item.records.map((record, index) => <tr key={record.id}><td className="px-6 py-3">{index === 0 && <><p className="text-xs font-semibold capitalize text-slate-900">{item.ingredient}</p><p className="text-[9px] text-slate-400">RxCUI {item.rxcui ?? "unmapped"}</p></>}</td><td className="px-3 py-3 text-xs text-slate-700">{record.display}</td><td className="px-3 py-3 text-[10px] font-medium text-slate-600">{record.sourceLabel}</td><td className="px-3 py-3 text-[10px] font-medium text-slate-600">{record.status}</td></tr>))}</tbody></table></div></section>
+    <section className="p-6"><div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-teal-700">Evidence copilot</p><h3 className="mt-1 text-lg font-semibold text-slate-950">Ask the reconciled record</h3></div><button type="button" onClick={() => download(`parthia-${activePatientId}-reconciliation.md`, buildClinicianReport(caseData, run, decisions))} className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-[10px] font-semibold text-slate-700"><Icon name="download" />Export audit report</button></div><div className="mt-4 flex gap-2 overflow-x-auto pb-1">{CLINICIAN_CHAT_EXAMPLES.slice(0, 5).map((example) => <button type="button" key={example} onClick={() => void ask(example)} className="shrink-0 rounded-lg bg-slate-100 px-3 py-2 text-[10px] font-medium text-slate-600 hover:bg-teal-50">{example}</button>)}</div><div className="mt-4 max-h-72 space-y-3 overflow-y-auto">{messages.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-8 text-center"><Icon name="chat" className="mx-auto h-5 w-5 text-teal-700"/><p className="mt-2 text-xs font-medium text-slate-600">Ask about evidence, provenance, disagreements, or agent actions.</p></div> : messages.map((message, index) => <div key={`${message.question}-${index}`}><p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-slate-950 px-4 py-2.5 text-xs text-white">{message.question}</p><div className={`mt-2 max-w-[90%] rounded-2xl rounded-tl-md border px-4 py-3 ${message.reply.refused ? "border-red-200 bg-red-50" : "border-teal-100 bg-teal-50"}`}><p className="mb-1 text-[8px] font-semibold uppercase text-slate-400">{message.reply.source === "openrouter" ? "OpenRouter · grounded" : "Deterministic evidence path"}</p><p className="whitespace-pre-line text-xs leading-5 text-slate-700">{message.reply.text}</p></div></div>)}</div><div className="mt-4 flex overflow-hidden rounded-xl border border-slate-300 bg-white focus-within:border-teal-600"><input value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={(event) => event.key === "Enter" && void ask()} placeholder="Ask Parthia about this record…" className="min-w-0 flex-1 px-4 py-3 text-xs outline-none"/><button type="button" onClick={() => void ask()} disabled={agentAnswering} className="inline-flex items-center gap-2 bg-teal-700 px-5 text-xs font-semibold text-white disabled:opacity-60">{agentAnswering ? "Thinking" : "Ask"}<Icon name="arrow" /></button></div></section>
+  </>;
 }

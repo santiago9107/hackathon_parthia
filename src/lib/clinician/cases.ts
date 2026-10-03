@@ -5,6 +5,15 @@ import type { ClinicianCase, SourceMedication } from "./types";
 const AS_OF = "2026-10-03";
 const sourceLabel = { passport: "Parthia Passport", hospital: "Hospital EHR", urgent: "Urgent-care EHR", specialist: "Cardiology EHR", photon: "Photon sandbox" } as const;
 
+export const CLINICIAN_COHORT = [
+  { id: "p-harold", name: "Harold Okafor", age: 68, summary: "Anticoagulation review", acuity: "high" },
+  { id: "p-margaret", name: "Margaret Lindqvist", age: 72, summary: "Polypharmacy + mental health", acuity: "moderate" },
+  { id: "p-rosa", name: "Rosa Delgado", age: 65, summary: "New diabetes care", acuity: "stable" },
+  { id: "p-aisha", name: "Aisha Rahman", age: 58, summary: "CKD + diabetes reconciliation", acuity: "moderate" },
+  { id: "p-daniel", name: "Daniel Kim", age: 44, summary: "Neurology medication transition", acuity: "stable" },
+  { id: "p-luis", name: "Luis Martinez", age: 76, summary: "COPD + AFib after discharge", acuity: "high" },
+] as const;
+
 function med(id: string, ingredient: string, dose: string | undefined, status: SourceMedication["status"], recordType: SourceMedication["recordType"], sourceId: SourceMedication["sourceId"], recordedOn: string, display?: string): SourceMedication {
   const concept = lookupDrug(ingredient);
   return { id, ingredient, display: display ?? `${concept?.display ?? ingredient} ${dose ?? ""}`.trim(), rxcui: concept?.rxcui, dose, status, recordType, sourceId, sourceLabel: sourceLabel[sourceId], recordedOn };
@@ -19,7 +28,57 @@ function passportRecords(patientId: string): SourceMedication[] {
   }));
 }
 
+function sources(stale = false): ClinicianCase["sources"] {
+  return [
+    { id: "passport", label: sourceLabel.passport, format: "passport-share", available: true, lastUpdated: AS_OF, simulated: true },
+    { id: "hospital", label: sourceLabel.hospital, format: "fhir", available: true, lastUpdated: "2026-09-18", simulated: true },
+    { id: "urgent", label: sourceLabel.urgent, format: "fhir", available: true, lastUpdated: "2026-10-02", simulated: true },
+    { id: "specialist", label: sourceLabel.specialist, format: "fhir", available: true, lastUpdated: stale ? "2025-10-21" : "2026-08-30", simulated: true },
+    { id: "photon", label: sourceLabel.photon, format: "photon-adapter", available: true, lastUpdated: "2026-09-26", simulated: true },
+  ];
+}
+
+function extendedCase(patientId: string): ClinicianCase | undefined {
+  if (patientId === "p-aisha") return {
+    patientId, patientName: "Aisha Rahman", age: 58,
+    conditions: ["Type 2 diabetes", "Stage 3 chronic kidney disease", "Hypertension"], allergies: ["Sulfonamides"], sharedAt: `${AS_OF}T09:14:00-04:00`, sources: sources(),
+    records: [
+      med("passport:a-metformin", "metformin", "1000 mg", "active", "patient-reported", "passport", AS_OF),
+      med("hospital:a-metformin", "metformin", "500 mg", "active", "prescribed", "hospital", "2026-09-18"),
+      med("hospital:a-lisinopril", "lisinopril", "20 mg", "active", "prescribed", "hospital", "2026-09-18"),
+      med("specialist:a-metformin", "metformin", "500 mg", "stopped", "prescribed", "specialist", "2026-08-30"),
+      med("photon:a-metformin", "metformin", "1000 mg", "fulfilled", "fulfillment", "photon", "2026-09-26"),
+    ],
+  };
+  if (patientId === "p-daniel") return {
+    patientId, patientName: "Daniel Kim", age: 44,
+    conditions: ["Focal epilepsy", "Migraine", "Generalized anxiety"], allergies: [], sharedAt: `${AS_OF}T09:14:00-04:00`, sources: sources(),
+    records: [
+      med("passport:d-lamotrigine", "lamotrigine", "150 mg", "active", "patient-reported", "passport", AS_OF),
+      med("hospital:d-lamotrigine", "lamotrigine", "150 mg", "active", "prescribed", "hospital", "2026-09-18"),
+      med("urgent:d-topiramate", "topiramate", "25 mg", "stopped", "prescribed", "urgent", "2026-10-02"),
+      med("specialist:d-topiramate", "topiramate", "50 mg", "active", "prescribed", "specialist", "2026-08-30"),
+      med("photon:d-lamotrigine", "lamotrigine", "150 mg", "fulfilled", "fulfillment", "photon", "2026-09-26"),
+    ],
+  };
+  if (patientId === "p-luis") return {
+    patientId, patientName: "Luis Martinez", age: 76,
+    conditions: ["Atrial fibrillation", "COPD", "Stage 2 chronic kidney disease"], allergies: ["Penicillin"], sharedAt: `${AS_OF}T09:14:00-04:00`, sources: sources(true),
+    records: [
+      med("passport:l-warfarin", "warfarin", "3 mg", "active", "patient-reported", "passport", AS_OF),
+      med("hospital:l-warfarin", "warfarin", "3 mg", "active", "prescribed", "hospital", "2026-09-18"),
+      med("urgent:l-cipro", "ciprofloxacin", "500 mg", "active", "prescribed", "urgent", "2026-10-02"),
+      med("specialist:l-metoprolol", "metoprolol", "25 mg", "stopped", "prescribed", "specialist", "2025-10-21"),
+      med("hospital:l-metoprolol", "metoprolol", "25 mg", "active", "prescribed", "hospital", "2026-09-18"),
+      med("photon:l-warfarin", "warfarin", "3 mg", "fulfilled", "fulfillment", "photon", "2026-09-26"),
+    ],
+  };
+  return undefined;
+}
+
 export function buildClinicianCase(patientId: string): ClinicianCase {
+  const extended = extendedCase(patientId);
+  if (extended) return extended;
   const base = getRecord(patientId) ?? getRecord("p-harold")!;
   const p = base.patient;
   const passport = passportRecords(p.id);
@@ -52,13 +111,7 @@ export function buildClinicianCase(patientId: string): ClinicianCase {
   return {
     patientId: p.id, patientName: p.name, age: p.age, conditions: p.conditions.map((c) => c.name), allergies,
     sharedAt: "2026-10-03T09:14:00-04:00",
-    sources: [
-      { id: "passport", label: sourceLabel.passport, format: "passport-share", available: true, lastUpdated: AS_OF, simulated: true },
-      { id: "hospital", label: sourceLabel.hospital, format: "fhir", available: true, lastUpdated: "2026-09-18", simulated: true },
-      { id: "urgent", label: sourceLabel.urgent, format: "fhir", available: true, lastUpdated: "2026-10-02", simulated: true },
-      { id: "specialist", label: sourceLabel.specialist, format: "fhir", available: true, lastUpdated: p.id === "p-harold" ? "2026-02-12" : "2026-08-30", simulated: true },
-      { id: "photon", label: sourceLabel.photon, format: "photon-adapter", available: true, lastUpdated: "2026-09-26", simulated: true },
-    ],
+    sources: sources(p.id === "p-harold"),
     records: [...passport, ...clinical, ...extras],
   };
 }
