@@ -23,11 +23,12 @@ const PASSPORT: NavItem = { href: "/passport/", label: "Passport", icon: Passpor
 const SAFETY: NavItem = { href: "/medications/", label: "Safety", icon: PillIcon };
 const TRENDS: NavItem = { href: "/trends/", label: "Trends", icon: TrendIcon };
 const ASSISTANT: NavItem = { href: "/assistant/", label: "Assistant", icon: ChatIcon };
+const AGENTS: NavItem = { href: "/agents/", label: "Agents", icon: AgentsIcon, prefix: "/agents/" };
 const CLINICIAN: NavItem = { href: "/clinician/", label: "Clinician", icon: ClinicianIcon, prefix: "/clinician/" };
 const LOG: NavItem = { href: "/log/", label: "Log", icon: PlusIcon, prefix: "/log/" };
 
 /** Desktop header: the Passport is a primary item; "Log" is a separate button. */
-const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, CLINICIAN];
+const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, AGENTS, CLINICIAN];
 /** Mobile tab bar (max 5): Log sits in the middle as a raised quick action. */
 const MOBILE_NAV: NavItem[] = [HOME, PASSPORT, LOG, SAFETY, ASSISTANT];
 
@@ -185,6 +186,14 @@ function ChatIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <path d="M4 5h16v11H9l-5 4z" />
+    </svg>
+  );
+}
+function AgentsIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="6" cy="8" r="2.2" /><circle cx="18" cy="8" r="2.2" /><circle cx="12" cy="17" r="2.2" />
+      <path d="M8.2 8h7.6M7.4 9.9 10.6 15.3M16.6 9.9 13.4 15.3" />
     </svg>
   );
 }

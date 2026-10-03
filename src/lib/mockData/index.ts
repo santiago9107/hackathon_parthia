@@ -35,8 +35,12 @@ export function getPatient(id: PatientId): Patient | undefined {
 /** The bundled sample Passport for a persona, before any local changes. */
 export function getSeedRecord(id: PatientId): PatientRecord | undefined {
   const patient = getPatient(id);
-  const passport = passportSeedFor(id);
-  if (!patient || !passport) return undefined;
+  if (!patient) return undefined;
+  // Import-only demo patients intentionally begin with an empty Passport.
+  const passport = passportSeedFor(id) ?? {
+    allergies: [], appointments: [], encounters: [], labPanels: [], immunizations: [], procedures: [],
+    careTeam: [], carePlans: [], documents: [], assessments: [], socialHistory: [],
+  };
   const { symptoms, moods, nutrition } = entriesFor(id);
   return { patient, pastMedications: [], symptoms, moods, nutrition, ...passport };
 }

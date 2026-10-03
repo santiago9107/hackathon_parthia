@@ -14,6 +14,8 @@ function allItems(r: PatientRecord): Sourced[] {
 }
 
 const records = listPatients().map((p) => getSeedRecord(p.id)!);
+/** The demo personas. The Synthea patient is an import-only shell, so the fully populated checks do not apply to it. */
+const fullySeededRecords = records.filter((r) => r.patient.id !== "p-synthea-shaun");
 
 describe("seed Passport", () => {
   it.each(records.map((r) => [r.patient.name, r] as const))("%s: every item carries seed provenance", (_n, r) => {
@@ -22,7 +24,14 @@ describe("seed Passport", () => {
     }
   });
 
-  it.each(records.map((r) => [r.patient.name, r] as const))("%s: has every Passport section", (_n, r) => {
+  it("the Synthea patient starts empty so its Passport is built by the FHIR review flow", () => {
+    const r = records.find((record) => record.patient.id === "p-synthea-shaun")!;
+    expect(r.patient.medications).toEqual([]);
+    expect(r.allergies).toEqual([]);
+    expect(r.patient.labs).toEqual([]);
+  });
+
+  it.each(fullySeededRecords.map((r) => [r.patient.name, r] as const))("%s: has every Passport section", (_n, r) => {
     for (const key of ["allergies", "appointments", "encounters", "labPanels", "immunizations", "procedures", "careTeam", "carePlans", "documents", "assessments", "socialHistory"] as const) {
       expect(r[key].length, key).toBeGreaterThan(0);
     }
