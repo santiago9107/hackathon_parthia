@@ -13,7 +13,7 @@ export interface RecordedPhotonScreen {
 }
 export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
   "ciprofloxacin-500-mg": {
-    "recordedAt": "2026-10-03T14:49:51.804Z",
+    "recordedAt": "2026-10-03T15:15:38.910Z",
     "treatmentKey": "ciprofloxacin-500-mg",
     "alerts": [
       {
@@ -36,7 +36,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
     ]
   },
   "amoxicillin-500-mg": {
-    "recordedAt": "2026-10-03T14:49:52.728Z",
+    "recordedAt": "2026-10-03T15:15:39.713Z",
     "treatmentKey": "amoxicillin-500-mg",
     "alerts": [
       {
@@ -76,7 +76,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
     ]
   },
   "ibuprofen-200-mg": {
-    "recordedAt": "2026-10-03T14:49:53.349Z",
+    "recordedAt": "2026-10-03T15:15:41.355Z",
     "treatmentKey": "ibuprofen-200-mg",
     "alerts": [
       {
