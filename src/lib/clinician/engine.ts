@@ -87,7 +87,9 @@ function toFinding(flag: RiskFlag, ingredients: string[], records: SourceMedicat
       severity: flag.severity,
       evidence: flag.evidence.map(plain),
     }],
-    blocking: flag.severity === "high",
+    // Every finding is a question for a human, so every finding is routed.
+    // Severity sets priority and route, never whether a reviewer sees it.
+    blocking: true,
   };
 }
 

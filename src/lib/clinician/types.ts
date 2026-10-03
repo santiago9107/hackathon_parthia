@@ -80,6 +80,11 @@ export interface ClinicianFinding {
   recordIds: string[];
   citation?: Citation;
   supportingRules?: SupportingRule[];
+  /**
+   * Routed to a human and gating completion. Every finding sets this, at any
+   * severity: a finding is a question, so a case cannot be complete until a
+   * reviewer has answered it.
+   */
   blocking: boolean;
 }
 
