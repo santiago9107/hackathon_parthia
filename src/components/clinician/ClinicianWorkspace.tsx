@@ -15,6 +15,8 @@ import { ClinicalBodyAtlas3D } from "./ClinicalBodyAtlas3D";
 import { PhotonScreenPanel } from "./PhotonScreenPanel";
 import { getRecord } from "@/lib/mockData";
 import { computeMeasures } from "@/lib/measures";
+import { orchestrate } from "@/lib/agents/orchestrator";
+import { reviewSpecialistItems } from "@/lib/agents/safetyReviewer";
 
 const STAGES = ["Gather", "Validate", "Normalize", "Reconcile", "Check", "Clarify", "Explain", "Route"];
 const SOURCE_META: Record<CaseSourceId, { short: string; color: string }> = {
@@ -70,6 +72,13 @@ export function ClinicianWorkspace() {
   const measures = useMemo(() => {
     const record = activePatientId.startsWith("smart-") ? undefined : getRecord(activePatientId);
     return record ? computeMeasures(record, new Date(`${CLINICIAN_AS_OF}T12:00:00`)) : [];
+  }, [activePatientId]);
+  const specialistReview = useMemo(() => {
+    const record = activePatientId.startsWith("smart-") ? undefined : getRecord(activePatientId);
+    if (!record) return undefined;
+    const orchestration = orchestrate(record, new Date(`${CLINICIAN_AS_OF}T12:00:00`));
+    const items = [...orchestration.linked, ...orchestration.outputs.flatMap((output) => output.items)];
+    return { orchestration, review: reviewSpecialistItems(items, orchestration.facts) };
   }, [activePatientId]);
 
   useEffect(() => { const timer = window.setTimeout(() => setActivePatientId(patientId), 0); return () => window.clearTimeout(timer); }, [patientId]);
@@ -144,6 +153,8 @@ export function ClinicianWorkspace() {
           {!run ? <div className="grid min-h-[390px] place-items-center px-8 text-center"><div><span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-teal-50 text-teal-700"><Icon name="spark" className="h-7 w-7" /></span><h3 className="mt-4 text-lg font-semibold text-slate-950">Ready to reconcile {caseData.patientName}&apos;s record</h3><p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">The agent will gather five sources, normalize identity, preserve provenance, run configured rules, and stop wherever a person must decide.</p></div></div> : <RunResults run={run} finding={finding} selected={selected} setSelected={setSelected} decisions={decisions} decide={decide} caseData={caseData} activePatientId={activePatientId} messages={messages} question={question} setQuestion={setQuestion} ask={ask} agentAnswering={agentAnswering} />}
 
           {measures.length > 0 && <section className="border-t border-slate-200 px-6 py-5"><div className="flex items-baseline justify-between gap-3"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-teal-700">Read-only measures</p><p className="mt-1 text-sm font-semibold text-slate-950">Trends the agent can cite</p></div><span className="text-[9px] text-slate-400">Passport records only</span></div><div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">{measures.slice(0, 4).map((measure) => <div key={measure.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-[10px] font-medium text-slate-600">{measure.label}</p><p className="mt-1 text-base font-semibold text-slate-950">{measure.value === null ? "Insufficient data" : `${measure.value > 0 ? "+" : ""}${measure.value} ${measure.unit}`}</p><p className="mt-1 text-[9px] text-slate-400">{measure.status === "ok" ? `${measure.basis.length} readings` : "No value calculated"}</p></div>)}</div></section>}
+
+          {specialistReview && <section className="border-t border-slate-200 px-6 py-5"><div className="flex flex-wrap items-baseline justify-between gap-2"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-teal-700">Specialist review</p><p className="mt-1 text-sm font-semibold text-slate-950">Four deterministic reviewers, one handoff log</p></div><span className="text-[10px] font-medium text-slate-500">Safety reviewer: {specialistReview.review.passed.length} passed, {specialistReview.review.blocked.length} blocked</span></div>{specialistReview.orchestration.linked.length > 0 && <div className="mt-3 rounded-xl border border-teal-200 bg-teal-50 p-3"><p className="text-[9px] font-semibold uppercase tracking-[.12em] text-teal-700">Linked across specialists</p>{specialistReview.orchestration.linked.map((item) => <p key={item.id} className="mt-1 text-xs text-slate-700">{item.clinicianText}</p>)}</div>}<div className="mt-3 grid gap-3 md:grid-cols-2">{specialistReview.orchestration.outputs.map((output) => <div key={output.specialist} className="rounded-xl border border-slate-200 p-3"><p className="text-[10px] font-semibold uppercase tracking-[.12em] text-slate-500">{output.specialist}</p><p className="mt-2 text-xs text-slate-700">{output.items.length ? output.items[0].clinicianText : "No routed facts for this specialist."}</p></div>)}</div><details className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3"><summary className="cursor-pointer text-[10px] font-semibold text-slate-700">Show agent handoffs ({specialistReview.orchestration.messages.length})</summary><ul className="mt-2 space-y-1">{specialistReview.orchestration.messages.map((message, index) => <li key={`${message.from}-${message.to}-${index}`} className="text-[10px] text-slate-600">{message.from} → {message.to}: {message.summary}</li>)}</ul></details></section>}
 
           {/* Read-only Photon screening. Always reachable, so a drafted
               prescription can be screened before or after a reconciliation run.
