@@ -76,9 +76,9 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x07111e, 0.05);
     const camera = new THREE.PerspectiveCamera(33, 1, 0.005, 100);
-    camera.position.set(1.15, 1.02, 3.35);
+    camera.position.set(0, 0, 3);
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 0.86, 0);
+    controls.target.set(0, 0, 0);
     controls.enableDamping = true; controls.dampingFactor = 0.075; controls.minDistance = 1.4; controls.maxDistance = 6;
     controls.maxPolarAngle = Math.PI * 0.96; controls.autoRotateSpeed = 0.65;
 
@@ -101,6 +101,8 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     const materials = new Map<AtlasSystem, THREE.MeshStandardMaterial>();
     const meshes: THREE.Mesh[] = [];
     const geometries: THREE.BufferGeometry[] = [];
+    const anatomy = new THREE.Group();
+    scene.add(anatomy);
     Object.keys(ATLAS_COLORS).forEach((value) => {
       const name = value as AtlasSystem;
       materials.set(name, new THREE.MeshStandardMaterial({ color: ATLAS_COLORS[name], metalness: 0.05, roughness: 0.5, transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide }));
@@ -118,6 +120,20 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
         material.needsUpdate = true;
       }
       lastRiskSystem = systemRef.current;
+    }
+
+    function fitAnatomy() {
+      if (!meshes.length) return;
+      const bounds = new THREE.Box3().setFromObject(anatomy);
+      const center = bounds.getCenter(new THREE.Vector3());
+      anatomy.position.sub(center);
+      const fitted = new THREE.Box3().setFromObject(anatomy);
+      const size = fitted.getSize(new THREE.Vector3());
+      const height = Math.max(size.y, 0.1);
+      const distance = (height / 2) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * 1.1;
+      camera.position.set(0, 0, Math.max(1.4, distance));
+      controls.target.set(0, 0, 0);
+      controls.update();
     }
 
     (async () => {
@@ -151,12 +167,12 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
               if (!merged) return;
               geometries.push(merged);
               const mesh = new THREE.Mesh(merged, materials.get(atlasSystem));
-              mesh.userData.atlasSystem = atlasSystem; mesh.frustumCulled = false; meshes.push(mesh); scene.add(mesh);
+              mesh.userData.atlasSystem = atlasSystem; mesh.frustumCulled = false; meshes.push(mesh); anatomy.add(mesh);
             });
             loaded++; setProgress(Math.round((loaded / atlas.chunks.length) * 100));
           }
         }));
-        updateMaterials();
+        fitAnatomy(); updateMaterials();
       } catch (reason) {
         if (!disposed && !(reason instanceof DOMException && reason.name === "AbortError")) setError(reason instanceof Error ? reason.message : "The anatomy could not be loaded.");
       }
@@ -179,7 +195,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     renderer.domElement.addEventListener("pointerdown", onDown);
     renderer.domElement.addEventListener("pointerup", onUp);
 
-    const resize = () => { const width = el.clientWidth; const height = el.clientHeight; renderer.setSize(width, height, false); camera.aspect = width / Math.max(1, height); camera.updateProjectionMatrix(); };
+    const resize = () => { const width = el.clientWidth; const height = el.clientHeight; renderer.setSize(width, height, false); camera.aspect = width / Math.max(1, height); camera.updateProjectionMatrix(); fitAnatomy(); };
     const observer = new ResizeObserver(resize); observer.observe(el); resize();
     const animate = () => {
       if (disposed) return;
@@ -201,14 +217,14 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
 
   const selected = RISK_SYSTEMS.find((item) => item.id === system)!;
   return <div className={`overflow-hidden bg-[#07111e] text-white ${embedded ? "" : "border border-slate-800 shadow-[0_24px_80px_rgba(2,8,23,.22)]"}`}>
-    <div className="flex items-start justify-between gap-3 border-b border-slate-800 px-4 py-4"><div><p className="text-[10px] font-semibold uppercase tracking-[.18em] text-teal-300">BodyParts3D anatomy</p><h2 className="mt-1 text-base font-semibold">Medication-risk context</h2></div><div className="text-right"><span className="block text-[9px] uppercase tracking-[.12em] text-emerald-300">{progress < 100 ? `${progress}% loading` : `${structureCount.toLocaleString()} structures`}</span><button type="button" onClick={() => setPaused((value) => !value)} className="mt-1 text-[9px] text-slate-400 hover:text-white">{paused ? "Resume rotation" : "Pause rotation"}</button></div></div>
+    <div className="flex items-start justify-between gap-3 border-b border-slate-800 px-4 py-4"><div><p className="text-[10px] font-semibold uppercase tracking-[.18em] text-teal-300">Anatomy</p><h2 className="mt-1 text-base font-semibold">Medication-risk context</h2></div><div className="text-right"><span className="block text-[9px] uppercase tracking-[.12em] text-emerald-300">{progress < 100 ? `${progress}% loading` : `${structureCount.toLocaleString()} structures`}</span><button type="button" onClick={() => setPaused((value) => !value)} className="mt-1 text-[9px] text-slate-400 hover:text-white">{paused ? "Resume rotation" : "Pause rotation"}</button></div></div>
     <div className="flex gap-1 overflow-x-auto border-b border-slate-800 p-2">{RISK_SYSTEMS.map((item) => <button type="button" key={item.id} onClick={() => setSystem(item.id)} className={`shrink-0 border-b-2 px-2 py-2 text-[10px] font-medium transition ${system === item.id ? "border-teal-300 bg-white/10 text-white" : "border-transparent text-slate-400 hover:bg-white/5"}`}><span className="mr-2 inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />{item.label}</button>)}</div>
     <div className={`relative ${compact ? "min-h-[520px]" : "min-h-[600px]"}`}>
       <div ref={host} className="absolute inset-0 cursor-grab active:cursor-grabbing" />
       {progress < 100 && !error && <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#07111e]/80"><div className="text-center"><span className="mx-auto block h-8 w-8 animate-spin rounded-full border-2 border-slate-700 border-t-teal-300"/><p className="mt-3 text-[10px] font-semibold uppercase tracking-[.14em] text-slate-400">Loading reference anatomy</p></div></div>}
       {error && <div className="absolute inset-0 grid place-items-center p-6 text-center"><div><p className="text-sm font-semibold text-red-300">Anatomy unavailable</p><p className="mt-2 text-xs leading-5 text-slate-400">{error}</p></div></div>}
-      <div className="pointer-events-none absolute inset-x-0 bottom-3 text-center text-[9px] uppercase tracking-[.16em] text-slate-500">Drag to orbit · scroll to zoom · select a highlighted system</div>
     </div>
+    <div className="border-t border-slate-800 px-4 py-2 text-center text-[9px] uppercase tracking-[.16em] text-slate-500">Drag to orbit · scroll to zoom · select a highlighted system</div>
     <div className="border-t border-slate-800 p-4"><div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ background: selected.color }}/><p className="text-[9px] font-semibold uppercase tracking-[.16em] text-slate-500">{selected.label} context</p></div><p className="mt-2 text-xs leading-5 text-slate-300">{findingTitle ?? selected.detail}</p><div className="mt-3 border-l-2 border-amber-400 bg-amber-400/10 p-3 text-[10px] leading-4 text-amber-100">Associated medication-warning context only. This is reference anatomy, not a patient-specific model or diagnosis.</div><a href="/anatomy/ATTRIBUTION.md" target="_blank" className="mt-3 inline-block text-[9px] text-slate-500 underline hover:text-slate-300">BodyParts3D · CC BY 4.0 · Human Atlas renderer</a></div>
   </div>;
 }

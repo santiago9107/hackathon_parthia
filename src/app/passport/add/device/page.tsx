@@ -11,6 +11,7 @@ import { addReviewedBatch, importForReview, saveConnection } from "@/lib/passpor
 import { planImport } from "@/lib/passport/importPlan";
 import { bluetoothSupport, connectBluetoothCuff, simulateBpSync, vitalFromMeasurement } from "@/lib/devices/bpMonitor";
 import type { VitalSign } from "@/lib/types";
+import { AppIcon } from "@/components/AppIcon";
 
 const noop = () => () => {};
 // useSyncExternalStore needs a stable snapshot: compute browser support once.
@@ -70,7 +71,7 @@ export default function DevicePage() {
 
       {status && (
         <Card className="p-5" accent="border-l-good">
-          <p role="status" className="font-serif text-lg font-semibold text-navy">✓ {status}</p>
+          <p role="status" className="flex items-center gap-2 font-serif text-lg font-semibold text-navy"><AppIcon name="check" className="h-5 w-5" />{status}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link href="/passport/clinical/" className="inline-flex min-h-11 items-center rounded-full bg-brand-700 px-4 text-sm font-semibold text-white">See vitals</Link>
             <Link href="/trends/" className="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-brand-700 ring-1 ring-line">See trends</Link>

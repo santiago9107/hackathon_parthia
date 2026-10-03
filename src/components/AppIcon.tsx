@@ -5,7 +5,7 @@ export type AppIconName =
   | "symptom" | "meal" | "breakfast" | "lunch" | "dinner" | "snack"
   | "vitals" | "medication" | "calendar" | "warning" | "document"
   | "nutrition" | "emergency" | "physical" | "mental" | "book"
-  | "camera" | "plus" | "edit";
+  | "camera" | "plus" | "edit" | "check" | "close" | "cross-medical" | "alert" | "info";
 
 export function AppIcon({ name, className = "h-5 w-5" }: { name: AppIconName; className?: string }) {
   const paths: Record<AppIconName, ReactNode> = {
@@ -33,6 +33,11 @@ export function AppIcon({ name, className = "h-5 w-5" }: { name: AppIconName; cl
     camera: <><path d="M4 7h4l2-3h4l2 3h4v13H4z"/><circle cx="12" cy="13" r="4"/></>,
     plus: <><path d="M12 5v14M5 12h14"/></>,
     edit: <><path d="m4 20 4-1 11-11-3-3L5 16l-1 4Z"/><path d="m14 7 3 3"/></>,
+    check: <path d="m5 12 4 4L19 6"/>,
+    close: <><path d="m6 6 12 12M18 6 6 18"/></>,
+    "cross-medical": <path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>,
+    alert: <><path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5M12 17h.01"/></>,
+    info: <><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7h.01"/></>,
   };
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">{paths[name]}</svg>;
 }

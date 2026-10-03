@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePatient } from "@/lib/context/PatientContext";
 import { fmtDate } from "@/components/passport/PassportChrome";
+import { AppIcon } from "@/components/AppIcon";
 
 /**
  * Emergency card: the critical information on one compact, printable card,
@@ -52,7 +53,7 @@ export default function EmergencyCardPage() {
         <article aria-label="Emergency card" className="mx-auto max-w-xl overflow-hidden rounded-2xl border-2 border-attention bg-white shadow-card">
           <header className="flex items-center justify-between bg-attention px-5 py-3 text-white">
             <p className="text-sm font-bold uppercase tracking-widest">Emergency medical information</p>
-            <span aria-hidden className="text-xl font-black">✚</span>
+            <AppIcon name="cross-medical" className="h-5 w-5" />
           </header>
           <div className="space-y-4 p-5 text-sm">
             <div className="flex flex-wrap items-end justify-between gap-2 border-b border-line pb-3">
