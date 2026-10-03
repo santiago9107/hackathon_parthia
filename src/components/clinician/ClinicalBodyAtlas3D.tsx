@@ -77,7 +77,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     renderer.domElement.style.height = "100%";
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x07111e, 0.05);
+    scene.background = new THREE.Color(0x07111e);
     const camera = new THREE.PerspectiveCamera(33, 1, 0.005, 100);
     camera.position.set(0, 0, 3);
     const controls = new OrbitControls(camera, renderer.domElement);
