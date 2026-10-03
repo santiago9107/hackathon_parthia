@@ -49,3 +49,6 @@ next-env.d.ts
 
 # On-device OCR assets (copied from node_modules by scripts/copy-ocr-assets.mjs)
 /public/ocr/
+
+# git worktrees used by agents during the hackathon
+/.worktrees/
