@@ -6,6 +6,7 @@ import { usePatient } from "@/lib/context/PatientContext";
 import { editEntry } from "@/lib/passport/actions";
 import { looksLikePhone, youSource } from "@/lib/log/entries";
 import type { EmergencyContact, EmergencyInfo } from "@/lib/types";
+import { AppIcon } from "@/components/AppIcon";
 
 const BLOOD_TYPES = ["", "A+", "A−", "B+", "B−", "AB+", "AB−", "O+", "O−"];
 
@@ -60,7 +61,7 @@ function EmergencyForm({ existing }: { existing?: EmergencyInfo }) {
             </div>
           ))}
           {contactErr && <p role="alert" className="text-sm font-medium text-attention">{contactErr}</p>}
-          <button type="button" onClick={() => setContacts((cs) => [...cs, { name: "", relationship: "", phone: "" }])} className="min-h-11 text-sm font-semibold text-brand-700 hover:text-brand-900">＋ Add another contact</button>
+          <button type="button" onClick={() => setContacts((cs) => [...cs, { name: "", relationship: "", phone: "" }])} className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-900"><AppIcon name="plus" className="h-4 w-4" />Add another contact</button>
         </fieldset>
         <ListEditor label="Critical allergies" items={allergies} onChange={setAllergies} placeholder="e.g. Penicillin — hives" />
         <ListEditor label="Critical conditions" items={conditions} onChange={setConditions} placeholder="e.g. Takes a blood thinner" hint={`From your Passport: ${record.patient.conditions.map((c) => c.name).join(", ")}`} />

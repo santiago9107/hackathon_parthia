@@ -8,13 +8,14 @@ import { addEntries } from "@/lib/passport/actions";
 import { newId } from "@/lib/passport/ops";
 import { youSource } from "@/lib/log/entries";
 import type { MoodCheckIn, Scale1to5 } from "@/lib/types";
+import { AppIcon, type AppIconName } from "@/components/AppIcon";
 
-const MOODS: { value: Scale1to5; label: string; icon: string }[] = [
-  { value: 1, label: "Very low", icon: "😞" },
-  { value: 2, label: "Low", icon: "🙁" },
-  { value: 3, label: "Okay", icon: "😐" },
-  { value: 4, label: "Good", icon: "🙂" },
-  { value: 5, label: "Very good", icon: "😄" },
+const MOODS: { value: Scale1to5; label: string; icon: AppIconName }[] = [
+  { value: 1, label: "Very low", icon: "mood-low" },
+  { value: 2, label: "Low", icon: "mood-low" },
+  { value: 3, label: "Okay", icon: "mood-neutral" },
+  { value: 4, label: "Good", icon: "mood-good" },
+  { value: 5, label: "Very good", icon: "mood-high" },
 ];
 
 export default function MoodPage() {
@@ -43,7 +44,7 @@ export default function MoodPage() {
       ) : (
         <Form label="Mood check-in" onSubmit={submit}>
           <ChoiceGroup legend="How are you feeling today?" columns={5} value={score} onChange={(v) => { setScore(v); setErr(undefined); }} error={err}
-            options={MOODS.map((m) => ({ value: m.value, label: m.label, icon: m.icon }))} />
+            options={MOODS.map((m) => ({ value: m.value, label: m.label, icon: <AppIcon name={m.icon} /> }))} />
           <TextArea label="Anything on your mind?" value={note} onChange={setNote} placeholder="e.g. Slept badly, worried about tomorrow's appointment" />
           <SubmitBar label="Save check-in" busy={busy} error={error} />
         </Form>

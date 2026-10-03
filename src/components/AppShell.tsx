@@ -42,11 +42,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const current = normalize(pathname ?? "/");
   const { passportStatus } = usePatient();
+  const clinicianSurface = current.startsWith("/clinician/");
 
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="print-hidden sticky top-0 z-30 border-b border-line bg-cream/90 backdrop-blur safe-top">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+        <div className={`mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6 ${clinicianSurface ? "max-w-[1720px]" : "max-w-6xl"}`}>
           <Link href="/" className="shrink-0" aria-label="Parthia Health home">
             <Wordmark />
           </Link>
@@ -75,7 +76,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               href="/log/"
               className="hidden items-center gap-1 rounded-full bg-gold-500 px-3.5 py-1.5 text-sm font-semibold text-navy transition hover:bg-gold-600 md:inline-flex"
             >
-              <span aria-hidden>＋</span> Log
+              <PlusIcon className="h-4 w-4" /> Log
             </Link>
             <Link
               href="/about/"
@@ -91,7 +92,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:px-6 md:pb-12">{passportStatus === "locked" ? <LockScreen /> : children}</main>
+      <main className={`mx-auto w-full flex-1 px-4 pb-24 pt-6 sm:px-6 md:pb-12 ${clinicianSurface ? "max-w-[1720px]" : "max-w-6xl"}`}>{passportStatus === "locked" ? <LockScreen /> : children}</main>
 
       {/* Mobile tab bar */}
       <nav

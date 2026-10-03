@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Lora } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { PatientProvider } from "@/lib/context/PatientContext";
 import { PWAProvider } from "@/components/PWAProvider";
 import { AppShell } from "@/components/AppShell";
 
-const lora = Lora({ variable: "--font-lora", subsets: ["latin"], display: "swap" });
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
+const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: { default: "Parthia Health", template: "%s · Parthia Health" },
@@ -35,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${lora.variable} ${inter.variable} h-full`}>
+    <html lang="en" className={`${geist.variable} h-full`} data-scroll-behavior="smooth">
       <body className="min-h-full flex flex-col">
         <PatientProvider>
           <PWAProvider>

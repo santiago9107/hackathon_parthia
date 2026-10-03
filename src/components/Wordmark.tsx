@@ -23,7 +23,7 @@ export function Wordmark({ size = "md", suffix }: { size?: "sm" | "md" | "lg"; s
   return (
     <span className="inline-flex items-center gap-2.5">
       <Mark className={mark} />
-      <span className={`font-serif ${text} tracking-tight leading-none`}>
+      <span className={`${text} tracking-[-0.035em] leading-none`}>
         <span className="text-navy font-semibold">Parthia</span>{" "}
         <span className="text-brand-700 font-medium">Health</span>
         {suffix ? <span className="text-ink-muted font-medium"> · {suffix}</span> : null}

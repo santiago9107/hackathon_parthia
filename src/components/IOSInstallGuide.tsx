@@ -22,7 +22,7 @@ export function IOSInstallGuide() {
         <div className="w-full overflow-hidden rounded-xl bg-[#f2f2f7] text-[15px] text-[#1c1c1e]">
           <div className="flex items-center justify-between border-b border-black/5 bg-white px-4 py-2.5">
             <span>Add Bookmark</span>
-            <span className="text-[#8e8e93]">📖</span>
+            <span className="text-[#8e8e93]"><BookIcon /></span>
           </div>
           <div className="flex items-center justify-between bg-[#0a84ff]/10 px-4 py-2.5 font-medium ring-2 ring-inset ring-[#0a84ff]/60">
             <span>Add to Home Screen</span>
@@ -32,7 +32,7 @@ export function IOSInstallGuide() {
           </div>
           <div className="flex items-center justify-between bg-white px-4 py-2.5">
             <span>Markup</span>
-            <span className="text-[#8e8e93]">✎</span>
+            <span className="text-[#8e8e93]"><EditIcon /></span>
           </div>
         </div>
       </Step>
@@ -87,6 +87,13 @@ function BookIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z" /><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z" />
+    </svg>
+  );
+}
+function EditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m4 20 4-1L19 8l-3-3L5 16l-1 4Z" /><path d="m14 7 3 3" />
     </svg>
   );
 }

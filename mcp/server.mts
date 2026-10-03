@@ -3,18 +3,21 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { runClinicianAgent } from "../src/lib/clinician/agent";
 import { answerClinician } from "../src/lib/clinician/chat";
-import { buildClinicianCase } from "../src/lib/clinician/cases";
+import { buildClinicianCase, CLINICIAN_COHORT } from "../src/lib/clinician/cases";
 import { runEvaluation } from "../src/lib/clinician/eval";
 import { checkTool, toolForRequest } from "../src/lib/clinician/policy";
+import { fetchSandboxBundle, listSandboxPatients, resolveIngredient } from "../src/lib/fhir/live";
+import { askOpenRouter, screenPhoton } from "../src/lib/integrations/server";
 import type { CaseSourceId, SourceMedication } from "../src/lib/clinician/types";
 
-const PATIENTS = [
-  { id: "p-harold", name: "Harold Okafor", scenario: "OTC clarification, two label-backed interactions, status conflict and stale source" },
-  { id: "p-margaret", name: "Margaret Lindqvist", scenario: "Patient-reported OTC clarification and conflicting SSRI history" },
-  { id: "p-rosa", name: "Rosa Delgado", scenario: "Consistent lower-risk record that demonstrates no unnecessary alarm" },
-] as const;
-type PatientId = (typeof PATIENTS)[number]["id"];
-const PATIENT_IDS = PATIENTS.map((p) => p.id) as [PatientId, ...PatientId[]];
+const PATIENTS = CLINICIAN_COHORT.map((patient) => ({
+  id: patient.id,
+  name: patient.name,
+  scenario: patient.summary,
+  acuity: patient.acuity,
+}));
+type PatientId = "p-harold" | "p-margaret" | "p-rosa" | "p-aisha" | "p-daniel" | "p-luis";
+const PATIENT_IDS: [PatientId, ...PatientId[]] = ["p-harold", "p-margaret", "p-rosa", "p-aisha", "p-daniel", "p-luis"];
 const ALL_SOURCES: CaseSourceId[] = ["passport", "hospital", "urgent", "specialist", "photon"];
 interface Session { confirmations: Record<string, boolean>; unavailable: CaseSourceId[]; added: SourceMedication[] }
 const sessions = new Map<PatientId, Session>();
@@ -70,9 +73,48 @@ server.registerTool("request_medication_change", {
   inputSchema: { patientId, request: z.string() },
 }, async ({ request }) => { const tool = toolForRequest(request) ?? "update_medication"; return response({ tool, ...checkTool(tool) }); });
 server.registerTool("screen_with_photon", {
-  description: "Describe the read-only Photon screening handoff. Live screening requires the Vercel server function and sandbox credentials; no prescription is submitted.",
+  description: "Run Photon Neutron's read-only interaction screen when sandbox credentials and allow-listed treatment IDs are configured. It never submits a prescription.",
   inputSchema: { patientId, treatmentIds: z.array(z.string()).min(1) },
-}, async ({ treatmentIds }) => response({ allowed: checkTool("screen_with_photon").allowed, treatmentIds, mode: "server-function-required", endpoint: "/api/photon/screen", writesPrescription: false }));
+}, async ({ patientId: id, treatmentIds }) => {
+  try {
+    return response({ ...(await screenPhoton({ patientId: id, treatmentIds })), allowed: true, writesPrescription: false });
+  } catch (error) {
+    return response({ allowed: true, live: false, mode: "unavailable", detail: error instanceof Error ? error.message : "Unknown error", writesPrescription: false });
+  }
+});
+server.registerTool("list_public_fhir_patients", {
+  description: "List patients with active prescriptions from the live SMART Health IT public FHIR R4 sandbox. The public sandbox uses synthetic Synthea records.",
+  inputSchema: { limit: z.number().int().min(1).max(20).optional() },
+}, async ({ limit }) => response({ source: "SMART Health IT R4 public sandbox", live: true, patients: await listSandboxPatients(limit ?? 8) }));
+server.registerTool("fetch_public_fhir_patient", {
+  description: "Fetch one live patient bundle from the SMART Health IT public FHIR R4 sandbox and summarize its resource types.",
+  inputSchema: { sandboxPatientId: z.string().min(1).max(120) },
+}, async ({ sandboxPatientId }) => {
+  const bundle = await fetchSandboxBundle(sandboxPatientId);
+  const resources = bundle.entry?.map((entry) => entry.resource).filter(Boolean) ?? [];
+  const counts = resources.reduce<Record<string, number>>((all, resource) => {
+    const type = resource?.resourceType ?? "Unknown";
+    all[type] = (all[type] ?? 0) + 1;
+    return all;
+  }, {});
+  return response({ source: "SMART Health IT R4 public sandbox", live: true, sandboxPatientId, counts, bundle });
+});
+server.registerTool("lookup_rxnorm", {
+  description: "Resolve a drug name or RxCUI through Parthia's curated dictionary and the live U.S. NLM RxNorm API.",
+  inputSchema: { text: z.string().optional(), rxcui: z.string().optional() },
+}, async ({ text, rxcui }) => response({ source: "U.S. NLM RxNorm", liveWhenNotDictionary: true, mapping: await resolveIngredient({ text, rxcui }) }));
+server.registerTool("ask_openrouter", {
+  description: "Ask the configured OpenRouter model a grounded question about a reconciled record. Falls back to the deterministic answer engine when no key is configured.",
+  inputSchema: { patientId, question: z.string().min(1).max(600) },
+}, async ({ patientId: id, question }) => {
+  const result = run(id);
+  const evidence = JSON.stringify({ status: result.status, records: result.records, findings: result.findings, trace: result.trace });
+  try {
+    return response({ ...(await askOpenRouter({ question, patientName: buildClinicianCase(id).patientName, evidence })), source: "OpenRouter" });
+  } catch (error) {
+    return response({ ...answerClinician(question, result, []), live: false, source: "deterministic fallback", detail: error instanceof Error ? error.message : "Unknown error" });
+  }
+});
 server.registerTool("run_evaluation", { description: "Run the 12 configured prototype cases. Not clinical validation." }, async () => { const results = runEvaluation(); return response({ passed: results.filter((r) => r.passed).length, total: results.length, cases: results }); });
 
 await server.connect(new StdioServerTransport());

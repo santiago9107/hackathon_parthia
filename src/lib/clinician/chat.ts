@@ -11,7 +11,7 @@ export const CLINICIAN_CHAT_EXAMPLES = [
   "Stop ibuprofen",
 ];
 
-export interface ClinicianChatReply { text: string; tools: string[]; refused?: boolean; findingId?: string }
+export interface ClinicianChatReply { text: string; tools: string[]; refused?: boolean; findingId?: string; source?: "deterministic" | "openrouter" }
 
 export function answerClinician(question: string, run: AgentRun | null, decisions: ClinicianDecision[]): ClinicianChatReply {
   const q = question.trim();

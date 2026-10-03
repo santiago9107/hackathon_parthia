@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { Card, Disclaimer } from "@/components/PageHeader";
 import { LocalOnlyNotice } from "@/components/passport/PassportChrome";
+import { AppIcon } from "@/components/AppIcon";
 import { usePatient } from "@/lib/context/PatientContext";
 import { addReviewedBatch } from "@/lib/passport/actions";
 import { confidenceLevel, extractDocument, type Extraction } from "@/lib/ocr/extract";
@@ -129,7 +130,7 @@ export default function ScanPage() {
         <>
           <Card className="p-5">
             <div className="flex flex-wrap gap-3">
-              <button type="button" onClick={() => cameraRef.current?.click()} className="min-h-12 rounded-full bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800">📷 Take a photo</button>
+              <button type="button" onClick={() => cameraRef.current?.click()} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-brand-700 px-5 text-sm font-semibold text-white hover:bg-brand-800"><AppIcon name="camera" className="h-4 w-4" />Take a photo</button>
               <button type="button" onClick={() => fileRef.current?.click()} className="min-h-12 rounded-full bg-surface px-5 text-sm font-semibold text-brand-700 ring-1 ring-line hover:bg-brand-50">Choose an image</button>
               <input ref={cameraRef} type="file" accept="image/*" capture="environment" onChange={onFile} className="sr-only" aria-label="Take a photo of a document" tabIndex={-1} />
               <input ref={fileRef} type="file" accept="image/*" onChange={onFile} className="sr-only" aria-label="Choose an image of a document" tabIndex={-1} />

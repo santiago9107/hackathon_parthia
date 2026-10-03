@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { usePatient } from "@/lib/context/PatientContext";
 import { pendingEntries } from "@/lib/passport/ops";
+import { AppIcon } from "@/components/AppIcon";
 
 export const PASSPORT_TABS = [
   { href: "/passport/", label: "Overview" },
@@ -46,7 +47,7 @@ export function PassportHeader() {
       </div>
       <div className="flex flex-wrap gap-2">
         <Link href="/passport/add/" className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800">
-          <span aria-hidden>＋</span> Add to my Passport
+          <AppIcon name="plus" className="h-4 w-4" /> Add to my Passport
         </Link>
         <Link
           href="/passport/review/"

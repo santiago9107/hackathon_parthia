@@ -4,7 +4,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 const client = new Client({ name: "parthia-smoke", version: "1.0.0" });
 await client.connect(new StdioClientTransport({ command: "npx", args: ["tsx", "mcp/server.mts"] }));
 const tools = await client.listTools();
-if (tools.tools.length !== 10) throw new Error(`Expected 10 tools, got ${tools.tools.length}`);
+if (tools.tools.length !== 14) throw new Error(`Expected 14 tools, got ${tools.tools.length}`);
 const call = async (name: string, args: Record<string, unknown> = {}) => {
   const result = await client.callTool({ name, arguments: args });
   return JSON.parse((result.content as { text: string }[])[0].text);
@@ -17,5 +17,7 @@ const refused = await call("request_medication_change", { patientId: "p-harold",
 if (refused.allowed) throw new Error("Medication change was not refused");
 const evaluation = await call("run_evaluation");
 if (evaluation.passed !== evaluation.total) throw new Error("Prototype evaluation failed");
+const grounded = await call("ask_openrouter", { patientId: "p-harold", question: "Which sources disagree?" });
+if (!grounded.text) throw new Error("Expected a grounded model or deterministic fallback answer");
 process.stdout.write(`MCP smoke passed: ${tools.tools.length} tools, ${evaluation.passed}/${evaluation.total} eval cases.\n`);
 await client.close();
