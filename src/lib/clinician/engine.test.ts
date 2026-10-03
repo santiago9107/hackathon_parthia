@@ -75,6 +75,21 @@ describe("full Parthia engine in the clinician agent", () => {
     for (const finding of run.findings) expect(finding.question).not.toMatch(/^(stop|start|increase|decrease|switch|prescribe)\b/i);
   });
 
+  it("reports the merge count that merge() actually performed", () => {
+    const harold = haroldConfirmed();
+    const step = harold.trace.find((entry) => entry.tool === "run_parthia_engine");
+    // One engine flag folded into the label-backed warfarin plus ibuprofen finding.
+    expect(step?.summary).toContain("3 rule flag(s), 3 new finding(s), 1 merged");
+    const haroldRules = harold.findings.flatMap((f) => f.supportingRules ?? []).length;
+    expect(haroldRules).toBe(4);
+
+    // Nothing to merge into here, so every engine finding is reported as new.
+    const margaret = runClinicianAgent(buildClinicianCase("p-margaret"), { confirmations: { "passport:otc-diphenhydramine": true }, resumed: true });
+    const margaretStep = margaret.trace.find((entry) => entry.tool === "run_parthia_engine");
+    const margaretRules = margaret.findings.flatMap((f) => f.supportingRules ?? []).length;
+    expect(margaretStep?.summary).toContain(`${margaretRules} new finding(s), 0 merged`);
+  });
+
   it("does not reach complete on a moderate-only case, because the finding still needs a human", () => {
     const run = runClinicianAgent(moderateOnlyCase());
     const priorities = new Set(run.findings.map((f) => f.priority));
