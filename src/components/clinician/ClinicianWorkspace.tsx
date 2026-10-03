@@ -130,7 +130,7 @@ export function ClinicianWorkspace() {
   return <div className="-mt-6 w-full pb-10">
     <nav className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-slate-200 py-3 text-xs">
       <div className="flex items-center gap-2 text-slate-500"><span className="font-semibold text-teal-700">Clinical workspace</span><span>/</span><span>Medication reconciliation</span></div>
-      <div className="flex items-center gap-1"><Link href="/clinician/system-design/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">System design</Link><Link href="/clinician/presentation/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">Presentation</Link><Link href="/clinician/eval/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">Evaluation</Link></div>
+      <div className="flex items-center gap-1"><Link href="/clinician/presentation/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">Presentation</Link><Link href="/clinician/eval/" className="rounded-lg px-3 py-2 font-medium text-slate-600 hover:bg-white">Evaluation</Link></div>
     </nav>
     <header className="flex flex-col gap-4 py-6 lg:flex-row lg:items-end lg:justify-between">
       <div><div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[.18em] text-teal-700"><Icon name="agent" />Parthia reconciliation agent</div><h1 className="mt-2 text-3xl font-semibold tracking-[-.04em] text-slate-950 sm:text-4xl">A complete medication picture, assembled autonomously.</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">The agent retrieves and checks the evidence. Patients clarify what they take. Clinicians retain every treatment decision.</p></div>

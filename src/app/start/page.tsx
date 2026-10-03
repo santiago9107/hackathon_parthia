@@ -26,7 +26,7 @@ const CLINICIAN_POINTS = [
 
 const BEHIND_THE_SCENES = [
   { href: "/agents/", label: "Meet the agents", hint: "Who does what" },
-  { href: "/architecture/", label: "System design", hint: "Five stages, one flow" },
+  { href: "/architecture/", label: "Architecture", hint: "Five stages, one flow" },
   { href: "/analytics/", label: "Holistic analysis", hint: "Every health domain" },
   { href: "/clinician/presentation/", label: "Presentation", hint: "For the investors" },
 ];
