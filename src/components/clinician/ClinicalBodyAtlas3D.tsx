@@ -96,16 +96,13 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
 
     const ground = new THREE.Mesh(new THREE.CircleGeometry(3, 96), new THREE.MeshStandardMaterial({ color: 0x0b1b28, roughness: 0.95 }));
     ground.rotation.x = -Math.PI / 2; ground.position.y = -0.019; scene.add(ground);
-    const platform = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.7, 0.028, 96), new THREE.MeshStandardMaterial({ color: 0x18303e, metalness: 0.35, roughness: 0.62 }));
-    platform.position.y = -0.016; scene.add(platform);
-    const ring = new THREE.Mesh(new THREE.RingGeometry(0.63, 0.635, 128), new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.65, side: THREE.DoubleSide }));
-    ring.rotation.x = -Math.PI / 2; ring.position.y = 0.001; scene.add(ring);
 
     const materials = new Map<AtlasSystem, THREE.MeshStandardMaterial>();
     const meshes: THREE.Mesh[] = [];
     const geometries: THREE.BufferGeometry[] = [];
     const anatomy = new THREE.Group();
     scene.add(anatomy);
+    let atlasReady = false;
     Object.keys(ATLAS_COLORS).forEach((value) => {
       const name = value as AtlasSystem;
       materials.set(name, new THREE.MeshStandardMaterial({ color: ATLAS_COLORS[name], metalness: 0.05, roughness: 0.5, transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide }));
@@ -126,7 +123,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     }
 
     function fitAnatomy() {
-      if (!meshes.length) return;
+      if (!atlasReady || !meshes.length) return;
       const bounds = new THREE.Box3().setFromObject(anatomy);
       const center = bounds.getCenter(new THREE.Vector3());
       anatomy.position.set(-center.x, -center.y, -center.z);
@@ -134,8 +131,6 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
       const size = fitted.getSize(new THREE.Vector3());
       const floorY = fitted.min.y - 0.02;
       ground.position.y = floorY;
-      platform.position.y = floorY + 0.003;
-      ring.position.y = floorY + 0.02;
       const height = Math.max(size.y, 0.1);
       const width = Math.max(size.x, 0.1);
       const verticalFov = THREE.MathUtils.degToRad(camera.fov);
@@ -184,6 +179,8 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
             loaded++; setProgress(Math.round((loaded / atlas.chunks.length) * 100));
           }
         }));
+        atlasReady = true;
+        setProgress(100);
         fitAnatomy(); updateMaterials();
       } catch (reason) {
         if (!disposed && !(reason instanceof DOMException && reason.name === "AbortError")) setError(reason instanceof Error ? reason.message : "The anatomy could not be loaded.");
@@ -210,7 +207,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     const resize = () => {
       const width = Math.max(1, el.clientWidth);
       const height = Math.max(1, el.clientHeight);
-      renderer.setSize(width, height, false);
+      renderer.setSize(width, height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       fitAnatomy();
@@ -229,7 +226,7 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
       disposed = true; abort.abort(); cancelAnimationFrame(frame); observer.disconnect(); controls.dispose();
       renderer.domElement.removeEventListener("pointerdown", onDown); renderer.domElement.removeEventListener("pointerup", onUp);
       geometries.forEach((geometry) => geometry.dispose()); materials.forEach((material) => material.dispose());
-      ground.geometry.dispose(); (ground.material as THREE.Material).dispose(); platform.geometry.dispose(); (platform.material as THREE.Material).dispose(); ring.geometry.dispose(); (ring.material as THREE.Material).dispose();
+      ground.geometry.dispose(); (ground.material as THREE.Material).dispose();
       environment.dispose(); renderer.dispose(); renderer.domElement.remove();
     };
   }, []);

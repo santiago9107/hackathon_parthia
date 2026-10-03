@@ -14,13 +14,13 @@ const DOMAIN_LINKS: Record<DomainIndicator["domain"], { href: string; icon: AppI
 export function StatusCard({ indicator }: { indicator: DomainIndicator }) {
   const link = DOMAIN_LINKS[indicator.domain];
   return (
-    <Card accent={LEVEL_STYLES[indicator.level].accent} className="flex flex-col p-5">
-      <div className="mb-3 flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2">
+    <Card accent={LEVEL_STYLES[indicator.level].accent} className="flex h-full flex-col p-5">
+      <div className="mb-3">
+        <div className="flex min-w-0 items-center gap-2">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand-700"><AppIcon name={link.icon} className="h-4 w-4" /></span>
-          <h3 className="font-serif text-lg font-semibold text-navy">{indicator.label}</h3>
+          <h3 className="min-w-0 truncate font-serif text-lg font-semibold text-navy">{indicator.label}</h3>
         </div>
-        <LevelBadge level={indicator.level} />
+        <div className="mt-2"><LevelBadge level={indicator.level} /></div>
       </div>
       {indicator.metric && <p className="text-2xl font-semibold tracking-tight text-ink">{indicator.metric}</p>}
       <p className="mt-1.5 text-sm font-medium leading-snug text-ink-soft">{indicator.headline}</p>
