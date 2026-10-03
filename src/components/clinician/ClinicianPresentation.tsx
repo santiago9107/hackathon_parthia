@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Duck } from "./Duck";
 
 type Slide = { label: string; eyebrow: string; title: ReactNode; body: ReactNode };
 
 const slides: Slide[] = [
   { label: "Opening", eyebrow: "HACKERS & HEALERS · MEDICATION SAFETY", title: <>Five medication records.<br/><span className="text-teal-300">No shared truth.</span></>, body: <><p className="max-w-3xl text-xl leading-8 text-slate-300">Parthia turns fragmented EHR, pharmacy and patient-reported medication data into one source-backed clinician review queue.</p><div className="mt-10 grid max-w-3xl grid-cols-3 border border-slate-700"><Metric value="5" label="evidence sources"/><Metric value="8" label="bounded agent stages"/><Metric value="0" label="autonomous care changes"/></div><p className="mt-8 max-w-3xl border-l-2 border-amber-300 pl-4 text-base italic leading-7 text-amber-100">A presentation, at a hackathon that said no presentations. Relax, organizers: it is not for you. It is for the investors.</p></> },
-  { label: "That's all", eyebrow: "PARTHIA HEALTH", title: <>I&apos;m kidding.<br/><span className="text-teal-300">That&apos;s all.</span></>, body: <p className="mt-8 max-w-3xl text-xl leading-8 text-slate-300">Thank you. The demo was the presentation.</p> },
+  { label: "That's all", eyebrow: "PARTHIA HEALTH", title: <>I&apos;m kidding.<br/><span className="text-teal-300">That&apos;s all.</span></>, body: <div className="mt-8 flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between"><p className="max-w-xl text-xl leading-8 text-slate-300">Thank you. The demo was the presentation.</p><Duck className="w-48 shrink-0 sm:w-60" /></div> },
 ];
 
 function Metric({ value, label }: { value: string; label: string }) { return <div className="border-r border-slate-700 px-6 py-5 last:border-0"><p className="text-3xl font-semibold text-white">{value}</p><p className="mt-1 text-xs uppercase tracking-[.14em] text-slate-400">{label}</p></div>; }
