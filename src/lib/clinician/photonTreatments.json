@@ -1,7 +1,7 @@
 {
   "lookedUpOn": "2026-10-03",
   "source": "Photon Neutron sandbox clinical API. Treatment ids from treatments(filter: { term }), allergen ids from allergens(filter: { name }).",
-  "note": "Synthetic demo catalog for one synthetic patient. Ids are sandbox identifiers, not a formulary. Screening is read-only decision support.",
+  "note": "Synthetic demo catalog for two synthetic patients. Ids are sandbox identifiers, not a formulary. Screening is read-only decision support.",
   "treatments": {
     "warfarin-5-mg": { "id": "med_01KZEXS5037PM8ND32W632Q9Q4", "name": "Warfarin Sodium Oral Tablet 5 MG", "label": "Warfarin 5 mg" },
     "ibuprofen-200-mg": { "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J", "name": "Ibuprofen Oral Capsule 200 MG", "label": "Ibuprofen 200 mg capsule" },
@@ -9,7 +9,12 @@
     "ciprofloxacin-500-mg": { "id": "med_01JVT1WGAMK8H6M0KRPYTQ989A", "name": "Ciprofloxacin HCl Oral Tablet 500 MG", "label": "Ciprofloxacin 500 mg" },
     "amoxicillin-500-mg": { "id": "med_01KAY4KR7NRMWJWPDV7J8Z994G", "name": "Amoxicillin Oral Capsule 500 MG", "label": "Amoxicillin 500 mg" },
     "atorvastatin-40-mg": { "id": "med_01KZEKT8HVMJRTHT5FE32QHR2B", "name": "Atorvastatin Calcium Oral Tablet 40 MG", "label": "Atorvastatin 40 mg" },
-    "metoprolol-50-mg": { "id": "med_01KZFP97S7VPF1XM4ARGRHG7ZG", "name": "Metoprolol Succinate ER Oral Tablet Extended Release 24 Hour 50 MG", "label": "Metoprolol succinate 50 mg" }
+    "metoprolol-50-mg": { "id": "med_01KZFP97S7VPF1XM4ARGRHG7ZG", "name": "Metoprolol Succinate ER Oral Tablet Extended Release 24 Hour 50 MG", "label": "Metoprolol succinate 50 mg" },
+    "tramadol-50-mg": { "id": "med_01M032SWE1Q86HDCTAJFB3C3W9", "name": "traMADol HCl Oral Tablet 50 MG", "label": "Tramadol 50 mg" },
+    "diphenhydramine-25-mg": { "id": "med_01M41B7S58KS8T4NA0AK9Z2JNK", "name": "diphenhydrAMINE HCl Oral Tablet 25 MG", "label": "Diphenhydramine 25 mg" },
+    "sertraline-100-mg": { "id": "med_01M3B1Y2Q3FEF5XSR5DPKXDXTN", "name": "Sertraline HCl Oral Tablet 100 MG", "label": "Sertraline 100 mg" },
+    "zolpidem-5-mg": { "id": "med_01JWCAWZ6CC3GKWJFABHZC2AZW", "name": "Zolpidem Tartrate Oral Tablet 5 MG", "label": "Zolpidem 5 mg" },
+    "furosemide-40-mg": { "id": "med_01JNM4QJQ73PCGBP910Y87JMV7", "name": "Furosemide Oral Tablet 40 MG", "label": "Furosemide 40 mg" }
   },
   "allergens": {
     "penicillin": { "id": "alg_01GBAPSGF62Q3WBET1QD2J3F0F", "name": "penicillin G", "label": "Penicillin" },
@@ -29,5 +34,29 @@
     { "treatmentKey": "ciprofloxacin-500-mg", "expects": "DRUG alert involving warfarin" },
     { "treatmentKey": "amoxicillin-500-mg", "expects": "ALLERGEN alert involving penicillin" },
     { "treatmentKey": "ibuprofen-200-mg", "expects": "DRUG alert involving warfarin plus ALLERGEN alert involving the NSAID allergy" }
-  ]
+  ],
+  "demoPatients": {
+    "p-harold": {
+      "externalId": "parthia-harold-okafor",
+      "firstName": "Harold",
+      "lastName": "Okafor",
+      "dateOfBirth": "1958-03-14",
+      "sex": "MALE",
+      "phone": "+12125550123",
+      "allergenKeys": ["penicillin", "nsaid-ibuprofen"],
+      "medicationHistoryKeys": ["warfarin-5-mg", "atorvastatin-40-mg", "metoprolol-50-mg", "aspirin-81-mg"],
+      "demoDrafts": ["ciprofloxacin-500-mg", "amoxicillin-500-mg", "ibuprofen-200-mg"]
+    },
+    "p-margaret": {
+      "externalId": "parthia-margaret-lindqvist",
+      "firstName": "Margaret",
+      "lastName": "Lindqvist",
+      "dateOfBirth": "1954-07-22",
+      "sex": "FEMALE",
+      "phone": "+12125550124",
+      "allergenKeys": [],
+      "medicationHistoryKeys": ["sertraline-100-mg", "zolpidem-5-mg", "furosemide-40-mg"],
+      "demoDrafts": ["tramadol-50-mg", "ibuprofen-200-mg", "diphenhydramine-25-mg"]
+    }
+  }
 }

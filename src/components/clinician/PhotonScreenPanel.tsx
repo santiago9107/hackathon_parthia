@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
+import { photonDemoDrafts, photonDemoPatientName, type PhotonDemoPatientId } from "@/lib/clinician/photonCatalog";
 import {
   PHOTON_CATALOG_LABEL,
-  PHOTON_DRAFT_OPTIONS,
   type PhotonScreenOutcome,
   type PhotonSyncOutcome,
   runPhotonScreen,
@@ -75,8 +75,9 @@ export function PhotonScreenResultView({ outcome }: { outcome: PhotonScreenOutco
     </div>
   );
 }
-export function PhotonScreenPanel({ className = "" }: { className?: string }) {
-  const [selected, setSelected] = useState<string[]>([PHOTON_DRAFT_OPTIONS[0]?.treatmentKey ?? ""]);
+export function PhotonScreenPanel({ className = "", patientId = "p-harold" }: { className?: string; patientId?: PhotonDemoPatientId }) {
+  const draftOptions = photonDemoDrafts(patientId);
+  const [selected, setSelected] = useState<string[]>([draftOptions[0]?.treatmentKey ?? ""]);
   const [outcome, setOutcome] = useState<PhotonScreenOutcome | null>(null);
   const [sync, setSync] = useState<PhotonSyncOutcome | null>(null);
   const [busy, setBusy] = useState<"idle" | "screening" | "syncing">("idle");
@@ -88,25 +89,25 @@ export function PhotonScreenPanel({ className = "" }: { className?: string }) {
   async function screen() {
     if (!selected.length) return;
     setBusy("screening");
-    setOutcome(await runPhotonScreen(selected));
+    setOutcome(await runPhotonScreen(selected, { patientId }));
     setBusy("idle");
   }
   async function connectPatient() {
     setBusy("syncing");
-    setSync(await syncPhotonPatient());
+    setSync(await syncPhotonPatient({ patientId }));
     setBusy("idle");
   }
   return (
     <section className={`rounded-2xl border border-slate-200 bg-white p-5 ${className}`} aria-labelledby="photon-screen-heading">
       <h2 id="photon-screen-heading" className="text-base font-semibold text-slate-900">Photon screening</h2>
       <p className="mt-1 text-sm text-slate-600">
-        Drug-drug and drug-allergy screening of a drafted prescription against the sandbox patient&apos;s medication history and
+        Drug-drug and drug-allergy screening of a drafted prescription against {photonDemoPatientName(patientId)}&apos;s medication history and
         allergies. Synthetic patient. Read-only.
       </p>
       <p className="mt-1 text-xs text-slate-500">{PHOTON_CATALOG_LABEL}</p>
       <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-medium text-slate-800">Sandbox patient</p>
+          <p className="text-sm font-medium text-slate-800">Sandbox patient: {photonDemoPatientName(patientId)}</p>
           <button
             type="button"
             onClick={connectPatient}
@@ -135,7 +136,7 @@ export function PhotonScreenPanel({ className = "" }: { className?: string }) {
       <fieldset className="mt-4">
         <legend className="text-sm font-medium text-slate-800">Draft a prescription to screen</legend>
         <div className="mt-2 flex flex-wrap gap-2">
-          {PHOTON_DRAFT_OPTIONS.map((draft) => {
+          {draftOptions.map((draft) => {
             const active = selected.includes(draft.treatmentKey);
             return (
               <button

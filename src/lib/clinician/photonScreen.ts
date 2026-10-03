@@ -1,6 +1,6 @@
-import { PHOTON_CATALOG_LOOKED_UP_ON, PHOTON_DEMO_DRAFTS, photonTreatment, photonTreatmentId } from "./photonCatalog";
+import { PHOTON_CATALOG_LOOKED_UP_ON, PHOTON_DEMO_DRAFTS, photonDemoDrafts, photonTreatment, photonTreatmentId, type PhotonDemoPatientId } from "./photonCatalog";
 import { PHOTON_EXAMPLE_SCREENS } from "./photonExamples";
-import { PHOTON_RECORDED_SCREENS, type RecordedPhotonScreen } from "./photonRecorded";
+import { PHOTON_MARGARET_RECORDED_SCREENS, PHOTON_RECORDED_SCREENS, type RecordedPhotonScreen } from "./photonRecorded";
 /**
  * Typed client for the root `api/photon/*` functions.
  *
@@ -57,9 +57,10 @@ export function photonProvenanceLabel(provenance: PhotonProvenance): string {
   if (provenance === "recorded") return PHOTON_RECORDED_LABEL;
   return PHOTON_SYNTHETIC_LABEL;
 }
-function draftsFor(treatmentKeys: string[]): PhotonDraft[] {
+function draftsFor(treatmentKeys: string[], patientId: PhotonDemoPatientId = "p-harold"): PhotonDraft[] {
+  const options = photonDemoDrafts(patientId);
   return treatmentKeys.map((treatmentKey) => {
-    const option = PHOTON_DEMO_DRAFTS.find((draft) => draft.treatmentKey === treatmentKey);
+    const option = options.find((draft) => draft.treatmentKey === treatmentKey) ?? PHOTON_DEMO_DRAFTS.find((draft) => draft.treatmentKey === treatmentKey);
     return option ?? { treatmentKey, label: photonTreatment(treatmentKey)?.label ?? treatmentKey, expects: "" };
   });
 }
@@ -72,13 +73,14 @@ export function photonFallback(
   treatmentKeys: string[],
   reason: string,
   recorded: Record<string, RecordedPhotonScreen> = PHOTON_RECORDED_SCREENS,
+  patientId: PhotonDemoPatientId = "p-harold",
 ): PhotonScreenOutcome {
   const captures = treatmentKeys.map((key) => recorded[key]).filter(Boolean) as RecordedPhotonScreen[];
   if (captures.length === treatmentKeys.length && captures.length > 0) {
     return {
       provenance: "recorded",
       label: PHOTON_RECORDED_LABEL,
-      drafts: draftsFor(treatmentKeys),
+      drafts: draftsFor(treatmentKeys, patientId),
       alerts: captures.flatMap((capture) => capture.alerts),
       // Several drafts can merge several captures, so report the latest
       // capture time rather than the first one's. No alert here was captured
@@ -90,7 +92,7 @@ export function photonFallback(
   return {
     provenance: "synthetic",
     label: PHOTON_SYNTHETIC_LABEL,
-    drafts: draftsFor(treatmentKeys),
+    drafts: draftsFor(treatmentKeys, patientId),
     alerts: treatmentKeys.flatMap((key) => PHOTON_EXAMPLE_SCREENS[key] ?? []),
     reason,
   };
@@ -120,23 +122,25 @@ function statusReason(status: number, detail?: string): string {
  */
 export async function runPhotonScreen(
   treatmentKeys: string[],
-  options: { recorded?: Record<string, RecordedPhotonScreen>; fetchImpl?: typeof fetch } = {},
+  options: { patientId?: PhotonDemoPatientId; recorded?: Record<string, RecordedPhotonScreen>; fetchImpl?: typeof fetch } = {},
 ): Promise<PhotonScreenOutcome> {
+  const patientId = options.patientId ?? "p-harold";
+  const recorded = options.recorded ?? (patientId === "p-margaret" ? PHOTON_MARGARET_RECORDED_SCREENS : PHOTON_RECORDED_SCREENS);
   const doFetch = options.fetchImpl ?? fetch;
   let treatmentIds: string[];
   try {
     treatmentIds = treatmentKeys.map((key) => photonTreatmentId(key));
   } catch {
-    return photonFallback(treatmentKeys, "That draft is not in the demo screening catalog.", options.recorded);
+    return photonFallback(treatmentKeys, "That draft is not in the demo screening catalog.", recorded, patientId);
   }
   try {
     const response = await doFetch("/api/photon/screen", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ treatmentIds }),
+      body: JSON.stringify({ demoPatientId: patientId, treatmentIds }),
     });
     if (!response.ok) {
-      return photonFallback(treatmentKeys, statusReason(response.status, await failureDetail(response)), options.recorded);
+      return photonFallback(treatmentKeys, statusReason(response.status, await failureDetail(response)), recorded, patientId);
     }
     const payload = await response.json() as {
       alerts?: PhotonScreenAlert[];
@@ -146,23 +150,23 @@ export async function runPhotonScreen(
     return {
       provenance: "live",
       label: PHOTON_LIVE_LABEL,
-      drafts: draftsFor(treatmentKeys),
+      drafts: draftsFor(treatmentKeys, patientId),
       alerts: payload.alerts ?? [],
       screenedAt: payload.screenedAt,
       patientId: payload.patientId,
     };
   } catch {
-    return photonFallback(treatmentKeys, "The screening call could not be reached from this browser.", options.recorded);
+    return photonFallback(treatmentKeys, "The screening call could not be reached from this browser.", recorded, patientId);
   }
 }
 /**
  * Creates the synthetic sandbox patient once and returns his Photon id. Safe
  * to call repeatedly: the server function is idempotent.
  */
-export async function syncPhotonPatient(options: { fetchImpl?: typeof fetch } = {}): Promise<PhotonSyncOutcome> {
+export async function syncPhotonPatient(options: { patientId?: PhotonDemoPatientId; fetchImpl?: typeof fetch } = {}): Promise<PhotonSyncOutcome> {
   const doFetch = options.fetchImpl ?? fetch;
   try {
-    const response = await doFetch("/api/photon/sync-patient", { method: "POST" });
+    const response = await doFetch("/api/photon/sync-patient", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ patientId: options.patientId ?? "p-harold" }) });
     if (!response.ok) {
       return { live: false, label: "Sandbox patient sync unavailable", reason: statusReason(response.status, await failureDetail(response)) };
     }

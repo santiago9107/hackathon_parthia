@@ -22,6 +22,7 @@ export interface PhotonDemoPatient {
   allergenIds: string[];
   medicationIds: string[];
 }
+export type PhotonDemoPatientId = "p-harold" | "p-margaret";
 export const PHOTON_CATALOG_LOOKED_UP_ON = catalog.lookedUpOn;
 const treatments = catalog.treatments as Record<string, PhotonCatalogEntry>;
 const allergens = catalog.allergens as Record<string, PhotonCatalogEntry>;
@@ -50,8 +51,8 @@ export const PHOTON_DEMO_DRAFTS: { treatmentKey: string; label: string; expects:
   expects: draft.expects,
 }));
 /** Synthetic sandbox patient, resolved from catalog keys to sandbox ids. */
-export function photonDemoPatient(): PhotonDemoPatient {
-  const demo = catalog.demoPatient;
+export function photonDemoPatient(patientId: PhotonDemoPatientId = "p-harold"): PhotonDemoPatient {
+  const demo = (catalog.demoPatients?.[patientId] ?? catalog.demoPatient) as typeof catalog.demoPatient;
   return {
     externalId: demo.externalId,
     firstName: demo.firstName,
@@ -66,4 +67,17 @@ export function photonDemoPatient(): PhotonDemoPatient {
     }),
     medicationIds: demo.medicationHistoryKeys.map((key) => photonTreatmentId(key)),
   };
+}
+export function photonDemoDrafts(patientId: PhotonDemoPatientId = "p-harold"): { treatmentKey: string; label: string; expects: string }[] {
+  const patient = catalog.demoPatients?.[patientId];
+  if (!patient) return PHOTON_DEMO_DRAFTS;
+  return patient.demoDrafts.map((treatmentKey) => ({
+    treatmentKey,
+    label: photonTreatment(treatmentKey)?.label ?? treatmentKey,
+    expects: patientId === "p-margaret" ? "Live Photon drug-drug screening for Margaret's medication history" : "",
+  }));
+}
+export function photonDemoPatientName(patientId: PhotonDemoPatientId = "p-harold"): string {
+  const patient = photonDemoPatient(patientId);
+  return `${patient.firstName} ${patient.lastName}`;
 }

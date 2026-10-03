@@ -1,0 +1,11 @@
+{
+  "recordedAt": "2026-10-03T17:01:04.755Z",
+  "patientId": "pat_01M41BCCXE4YV6E9Z3C3PFYRBQ",
+  "response": {
+    "data": {
+      "prescriptionScreen": {
+        "alerts": []
+      }
+    }
+  }
+}
