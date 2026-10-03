@@ -103,25 +103,33 @@ export function AskParthiaPanel({
             </div>
           ) : (
             <div key={m.id} className="space-y-2">
-              {m.reply?.urgent && <UrgentCareNotice kind={m.reply.urgent} />}
-              <div className="flex justify-start">
-                <div
-                  className={`max-w-[92%] rounded-2xl rounded-bl-md border px-4 py-3 text-sm leading-relaxed ${
-                    m.reply?.urgent ? "border-attention/30 bg-attention-soft text-ink" : "border-line bg-cream text-ink"
-                  }`}
-                >
-                  {m.text && <p>{m.text}</p>}
-                  {m.reply?.segments.map((s, i) => (
-                    <p key={i} className={i > 0 ? "mt-1.5" : undefined}>
-                      {s.text}
-                    </p>
-                  ))}
-                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-muted">
+              {/* An urgent symptom is the whole answer: the notice carries the
+                  911 and 988 wording, so the segments, which are that same
+                  fixed copy, are not repeated underneath it. */}
+              {m.reply?.urgent ? (
+                <>
+                  <UrgentCareNotice kind={m.reply.urgent} />
+                  <div className="flex flex-wrap items-center gap-2 text-[11px] text-ink-muted">
                     <span className="font-semibold uppercase tracking-wider text-gold-700">AI-generated</span>
+                    <Citations citations={m.reply.citations} />
                   </div>
-                  {m.reply && m.reply.citations.length > 0 && <Citations citations={m.reply.citations} className="mt-2" />}
+                </>
+              ) : (
+                <div className="flex justify-start">
+                  <div className="max-w-[92%] rounded-2xl rounded-bl-md border border-line bg-cream px-4 py-3 text-sm leading-relaxed text-ink">
+                    {m.text && <p>{m.text}</p>}
+                    {m.reply?.segments.map((s, i) => (
+                      <p key={i} className={i > 0 ? "mt-1.5" : undefined}>
+                        {s.text}
+                      </p>
+                    ))}
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-muted">
+                      <span className="font-semibold uppercase tracking-wider text-gold-700">AI-generated</span>
+                    </div>
+                    {m.reply && m.reply.citations.length > 0 && <Citations citations={m.reply.citations} className="mt-2" />}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ),
         )}
