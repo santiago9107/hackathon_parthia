@@ -11,6 +11,7 @@ export const EVALUATION_CASES: EvaluationCase[] = [
   { id: "h-status", name: "Cross-source stopped conflict", patientId: "p-harold", confirmations: { "passport:otc-ibuprofen": false }, expected: ["status:metoprolol"], prohibited: [] },
   { id: "h-stale", name: "Stale specialist is data quality", patientId: "p-harold", confirmations: { "passport:otc-ibuprofen": false }, expected: ["stale:specialist"], prohibited: [] },
   { id: "m-unconfirmed", name: "Second patient's OTC waits", patientId: "p-margaret", expected: ["confirm:passport:otc-diphenhydramine"], prohibited: ["interaction:ibuprofen+warfarin"] },
+  { id: "m-confirmed", name: "Confirmed OTC burden and drowsiness", patientId: "p-margaret", confirmations: { "passport:otc-diphenhydramine": true }, expected: ["rule:burden/anticholinergic-score:carvedilol+diphenhydramine+furosemide+oxybutynin", "interaction:diphenhydramine+sertraline", "interaction:sertraline+zolpidem"], prohibited: [] },
   { id: "m-denied", name: "Denied report does not become current", patientId: "p-margaret", confirmations: { "passport:otc-diphenhydramine": false }, expected: [], prohibited: ["interaction:ibuprofen+warfarin"] },
   { id: "r-safe", name: "Consistent record does not cry wolf", patientId: "p-rosa", expected: [], prohibited: ["interaction:ibuprofen+warfarin", "interaction:ciprofloxacin+warfarin"] },
   { id: "r-outage", name: "Safe patient still reports outage", patientId: "p-rosa", unavailable: "photon", expected: ["unavailable:photon"], prohibited: ["interaction:ibuprofen+warfarin"] },

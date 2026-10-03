@@ -34,7 +34,7 @@ interface PatientContextValue {
 
 /* ---- Selected-patient store (persisted in localStorage) ------------------ */
 const STORAGE_KEY = "parthia.selectedPatient";
-const DEFAULT_ID: PatientId = listPatients()[0].id;
+const DEFAULT_ID: PatientId = "p-margaret";
 let current: PatientId | null = null;
 const listeners = new Set<() => void>();
 

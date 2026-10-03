@@ -8,22 +8,22 @@ import { RULES } from "@/lib/safetyEngine";
 
 /**
  * The agent roster. Every count on this page comes from a real run of the
- * clinician agent on Harold's case, done at build time, so it reads the same
+ * clinician agent on Margaret's case, done at build time, so it reads the same
  * code the clinician view runs.
  */
-const harold = runClinicianAgent(buildClinicianCase("p-harold"));
+const margaret = runClinicianAgent(buildClinicianCase("p-margaret"), { confirmations: { "passport:otc-diphenhydramine": true }, resumed: true });
 
 function stepsFor(agent: AgentPersona) {
-  return harold.trace.filter((t) => (agent.tools as string[]).includes(t.tool)).length;
+  return margaret.trace.filter((t) => (agent.tools as string[]).includes(t.tool)).length;
 }
 
 function stat(agent: AgentPersona): string {
   switch (agent.id) {
     case "patient": return "No model, no API key";
-    case "records": return `${harold.records.length} records into ${harold.medications.length} medicines for Harold`;
-    case "safety": return `${RULES.length} Parthia rules · ${harold.findings.length} questions for Harold's care team`;
+    case "records": return `${margaret.records.length} records into ${margaret.medications.length} medicines for Margaret`;
+    case "safety": return `${RULES.length} Parthia rules · ${margaret.findings.length} questions for Margaret's care team`;
     case "photon": return `${PHOTON_DEMO_DRAFTS.length} drafts screened in the live Photon sandbox`;
-    default: return `${harold.findings.length} findings routed, none skipped`;
+    default: return `${margaret.findings.length} findings routed, none skipped`;
   }
 }
 
@@ -67,7 +67,7 @@ function AgentCard({ agent }: { agent: AgentPersona }) {
             ))}
           </div>
           <p className="mt-2 text-[12px] text-ink-muted">
-            {steps > 0 && <><strong className="text-ink">{steps}</strong> steps in Harold&apos;s run · </>}
+            {steps > 0 && <><strong className="text-ink">{steps}</strong> steps in Margaret&apos;s run · </>}
             {stat(agent)}
           </p>
           <p className="mt-1 font-mono text-[11px] text-ink-muted">{agent.code}</p>
@@ -84,12 +84,12 @@ export default function AgentsPage() {
       <PageHeader
         eyebrow="The agent team"
         title="Five agents, one patient, the same guardrails"
-        subtitle="Each agent owns one part of the job, from Harold's own questions to a clinician's Photon check. They hand work to each other and to people, and every one of them calls the same policy before it acts."
+        subtitle="Each agent owns one part of the job, from Margaret's own questions to a clinician's Photon check. They hand work to each other and to people, and every one of them calls the same policy before it acts."
       />
 
       <div className="mb-6 flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-ink-soft">
         <span><strong className="text-ink">{AGENTS.length}</strong> agents</span>
-        <span><strong className="text-ink">{harold.trace.length}</strong> steps in Harold&apos;s run</span>
+        <span><strong className="text-ink">{margaret.trace.length}</strong> steps in Margaret&apos;s run</span>
         <span><strong className="text-ink">{blocked.length}</strong> actions no agent can take</span>
         <span><strong className="text-ink">1</strong> shared policy</span>
       </div>
@@ -112,7 +112,7 @@ export default function AgentsPage() {
       </Card>
 
       <p className="mt-6 text-sm text-ink-muted">
-        See them work: <Link href="/" className="font-semibold text-brand-700 underline">Harold&apos;s home</Link> for Nova, and the{" "}
+        See them work: <Link href="/" className="font-semibold text-brand-700 underline">Margaret&apos;s home</Link> for Nova, and the{" "}
         <Link href="/clinician/" className="font-semibold text-brand-700 underline">clinician view</Link> for Reid, Dex, Fotini and Iris.
       </p>
     </div>
