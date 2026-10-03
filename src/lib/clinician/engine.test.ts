@@ -101,6 +101,31 @@ describe("full Parthia engine in the clinician agent", () => {
     expect(run.humanCount).toBe(run.findings.length);
   });
 
+  it("leaves a case with an unmappable medication not clean, and guesses nothing about it", () => {
+    const base = buildClinicianCase("p-rosa");
+    const clean = runClinicianAgent(base);
+    expect(clean.status).toBe("complete");
+
+    const run = runClinicianAgent({
+      ...base,
+      records: [...base.records, {
+        id: "hospital:r-rivaroxaban", ingredient: "rivaroxaban", display: "Rivaroxaban 20 mg", dose: "20 mg",
+        status: "active", recordType: "prescribed", sourceId: "hospital", sourceLabel: "Hospital EHR", recordedOn: "2026-09-18",
+      }],
+    });
+    const finding = run.findings.find((f) => f.id === "unmapped:rivaroxaban");
+    expect(finding).toBeDefined();
+    expect(finding!.kind).toBe("unmapped-medication");
+    expect(finding!.priority).toBe("data-quality");
+    expect(finding!.blocking).toBe(true);
+    expect(finding!.supportingRules).toBeUndefined();
+    expect(finding!.ingredients).toEqual(["rivaroxaban"]);
+    expect(run.status).toBe("incomplete");
+    expect(run.stage).not.toBe("complete");
+    const step = run.trace.find((entry) => entry.tool === "run_parthia_engine");
+    expect(step?.summary).toContain("could not be mapped to a verified ingredient (rivaroxaban)");
+  });
+
   it("routes every finding to a human at any severity, on both the engine and the agent path", () => {
     for (const patient of CLINICIAN_COHORT) {
       for (const options of [{}, { confirmations: { "passport:otc-ibuprofen": true, "passport:otc-diphenhydramine": true } }]) {
