@@ -13,7 +13,7 @@ export interface RecordedPhotonScreen {
 }
 export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
   "ciprofloxacin-500-mg": {
-    "recordedAt": "2026-10-03T15:15:38.910Z",
+    "recordedAt": "2026-10-03T15:28:08.927Z",
     "treatmentKey": "ciprofloxacin-500-mg",
     "alerts": [
       {
@@ -36,7 +36,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
     ]
   },
   "amoxicillin-500-mg": {
-    "recordedAt": "2026-10-03T15:15:39.713Z",
+    "recordedAt": "2026-10-03T15:28:09.988Z",
     "treatmentKey": "amoxicillin-500-mg",
     "alerts": [
       {
@@ -76,13 +76,13 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
     ]
   },
   "ibuprofen-200-mg": {
-    "recordedAt": "2026-10-03T15:15:41.355Z",
+    "recordedAt": "2026-10-03T15:28:10.664Z",
     "treatmentKey": "ibuprofen-200-mg",
     "alerts": [
       {
         "type": "DRUG",
         "severity": "MAJOR",
-        "description": "Non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Tablet 200 MG) may diminish the cardioprotective effect of aspirin. Non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Tablet 200 MG) may enhance the adverse/toxic effect of aspirin. An increased risk of bleeding may be associated with use of this combination. Aspirin may decrease the serum concentration of non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Tablet 200 MG).",
+        "description": "Non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG) may diminish the cardioprotective effect of aspirin. Non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG) may enhance the adverse/toxic effect of aspirin. An increased risk of bleeding may be associated with use of this combination. Aspirin may decrease the serum concentration of non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG).",
         "involvedEntities": [
           {
             "id": "mht_01M412P6VFP47NJ16RG4PQ1E8S",
@@ -90,7 +90,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
             "kind": "existing"
           },
           {
-            "id": "med_01KZEG3HFG5M9FYXPGJHS67FMR",
+            "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
             "name": "Ibuprofen",
             "kind": "drafted"
           }
@@ -99,10 +99,10 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
       {
         "type": "DRUG",
         "severity": "MODERATE",
-        "description": "Nonselective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Tablet 200 MG) may enhance the anticoagulant effect of vitamin K antagonists (eg, Warfarin Sodium Oral Tablet 5 MG).",
+        "description": "Nonselective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG) may enhance the anticoagulant effect of vitamin K antagonists (eg, Warfarin Sodium Oral Tablet 5 MG).",
         "involvedEntities": [
           {
-            "id": "med_01KZEG3HFG5M9FYXPGJHS67FMR",
+            "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
             "name": "Ibuprofen",
             "kind": "drafted"
           },
@@ -116,10 +116,10 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
       {
         "type": "DRUG",
         "severity": "MODERATE",
-        "description": "Ibuprofen Oral Tablet 200 MG may impair the hypotensive effect of Metoprolol Succinate ER Oral Tablet Extended Release 24 Hour 50 MG.",
+        "description": "Ibuprofen Oral Capsule 200 MG may impair the hypotensive effect of Metoprolol Succinate ER Oral Tablet Extended Release 24 Hour 50 MG.",
         "involvedEntities": [
           {
-            "id": "med_01KZEG3HFG5M9FYXPGJHS67FMR",
+            "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
             "name": "Ibuprofen",
             "kind": "drafted"
           },
@@ -133,7 +133,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
       {
         "type": "ALLERGEN",
         "severity": "MODERATE",
-        "description": "The use of Ibuprofen Oral Tablet 200 MG may result in an allergic reaction based on a reported history of allergy to ibuprofen.",
+        "description": "The use of Ibuprofen Oral Capsule 200 MG may result in an allergic reaction based on a reported history of allergy to ibuprofen.",
         "involvedEntities": [
           {
             "id": "alg_01GBAPSGE2TV2JSWR3BAYPP15E",
@@ -141,7 +141,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
             "kind": "allergen"
           },
           {
-            "id": "med_01KZEG3HFG5M9FYXPGJHS67FMR",
+            "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
             "name": "Ibuprofen",
             "kind": "drafted"
           }
