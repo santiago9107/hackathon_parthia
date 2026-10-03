@@ -87,7 +87,7 @@ function unmappedFinding(ingredient: string, records: SourceMedication[]): Clini
     priority: "data-quality",
     route: "clinician",
     title: `${ingredient}: not in the verified drug dictionary`,
-    detail: `${matching.map((r) => `${r.sourceLabel}: ${r.display}`).join("; ") || "No source record carries a recognized ingredient."} The dictionary has no entry for it, so no Parthia rule could consider it. The name was not guessed and no risk was inferred, so this case stays incomplete.`,
+    detail: `Recorded as ${matching.map((r) => `${r.sourceLabel}: ${r.display}`).join("; ")}. The dictionary has no entry for it, so no Parthia rule could consider it. The name was not guessed and no risk was inferred, so this case stays incomplete.`,
     question: `Can ${ingredient} be identified against a verified drug dictionary before this list is finalized?`,
     ingredients: [ingredient],
     recordIds: matching.map((r) => r.id),
