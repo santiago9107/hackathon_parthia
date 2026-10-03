@@ -1,0 +1,16 @@
+SAMPLE — SYNTHETIC — NOT A REAL DOCUMENT
+LAKESIDE MEDICAL LABORATORY
+Clinical Laboratory Report
+Patient: Margaret Lindqvist DOB: 06/19/1954
+Collected: 09/09/2026 Reported: 09/10/2026
+Ordering provider: Dr. Samuel Reyes, MD
+BASIC METABOLIC PANEL
+Test Result Units Reference Range
+Sodium 133 L mmol/L 135 - 145
+Potassium 3.3 L mmol/L 3.5 - 5.1
+Creatinine 1.2 Hmg/dL0.5-1.0
+eGFR 49 L mL/min > 60
+Glucose, fasting 162 H mg/dL 70 - 100
+Results flagged H (high) or L (low) are outside the reference range.
+
+Synthetic sample for the Parthia Health demo. No real patient.

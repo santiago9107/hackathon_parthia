@@ -1,0 +1,16 @@
+SAMPLE — SYNTHETIC — NOT A REAL DOCUMENT
+NORTHSIDE URGENT CARE
+1450 Harbor Road, Riverside Tel (555) 010-8800
+PRESCRIPTION
+Date: 09/10/2026
+Patient: Harold Okafor DOB: 03/02/1958
+Rx
+Naproxen 500 mg tablet
+Sig: Take 1 tablet by mouth twice daily with food for 10 days
+for back pain
+Disp: #20 (twenty) tablets Refills: 0
+Prescriber: Dr. Kevin Liu, MD
+NPI 0000000000 (sample)
+Signature: K. Liu
+
+Synthetic sample for the Parthia Health demo. No real patient.
