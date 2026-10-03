@@ -1,3 +1,5 @@
+import type { PatientRecord, RiskSeverity } from "@/lib/types";
+
 export type CaseSourceId = "passport" | "hospital" | "urgent" | "specialist" | "photon";
 export type AgentStage = "gather" | "validate" | "normalize" | "reconcile" | "check" | "clarify" | "explain" | "route" | "complete";
 export type TraceStatus = "ok" | "retry" | "failed" | "waiting" | "blocked" | "info";
@@ -41,7 +43,31 @@ export interface Citation {
   retrievedOn: string;
 }
 
-export type FindingKind = "interaction" | "status-conflict" | "strength-mismatch" | "stale-source" | "unavailable-source" | "needs-confirmation";
+export type FindingKind =
+  | "interaction"
+  | "status-conflict"
+  | "strength-mismatch"
+  | "stale-source"
+  | "unavailable-source"
+  | "needs-confirmation"
+  | "drug-allergy"
+  | "drug-nutrient"
+  | "drug-mood"
+  | "drug-vitals"
+  | "drug-kidney"
+  | "anticholinergic-burden";
+
+/**
+ * A Parthia safety-engine rule that contributed to a finding. Carried so the
+ * review queue can show which rule decided, at what severity, on what data.
+ */
+export interface SupportingRule {
+  ruleId: string;
+  ruleName: string;
+  severity: RiskSeverity;
+  evidence: string[];
+}
+
 export interface ClinicianFinding {
   id: string;
   kind: FindingKind;
@@ -53,6 +79,7 @@ export interface ClinicianFinding {
   ingredients: string[];
   recordIds: string[];
   citation?: Citation;
+  supportingRules?: SupportingRule[];
   blocking: boolean;
 }
 
@@ -82,6 +109,12 @@ export interface ClinicianCase {
   sharedAt: string;
   sources: CaseSource[];
   records: SourceMedication[];
+  /**
+   * The patient's Passport record, when one exists. The Parthia safety engine
+   * needs it for allergies, symptoms, nutrition, labs, vitals and screenings.
+   * Passed in on the case so the agent stays a pure function of its input.
+   */
+  passport?: PatientRecord;
 }
 
 export interface AgentRun {

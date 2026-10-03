@@ -1,21 +1,10 @@
+import { engineFindings, type EngineResult } from "./engine";
+import { CIPRO_EVIDENCE, IBUPROFEN_EVIDENCE } from "./evidence";
 import { checkTool, type ClinicianTool } from "./policy";
 import type { AgentRun, CaseSourceId, ClinicianCase, ClinicianDecision, ClinicianFinding, ReconciledMedication, SourceMedication, TraceEntry } from "./types";
 
 const DAY = 86_400_000;
 const AS_OF = "2026-10-03T10:00:00-04:00";
-
-const IBUPROFEN_EVIDENCE = {
-  sourceName: "FDA Advil Drug Facts label",
-  url: "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/211733Orig1s007lbl.pdf",
-  passage: "The chance is higher if you take a blood thinning (anticoagulant) or steroid drug.",
-  retrievedOn: "2026-10-03",
-};
-const CIPRO_EVIDENCE = {
-  sourceName: "DailyMed ciprofloxacin label",
-  url: "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=b064286b-fedc-be68-e053-2995a90aae52&type=display",
-  passage: "Monitor prothrombin time and INR frequently during and shortly after co-administration of ciprofloxacin with an oral anti-coagulant.",
-  retrievedOn: "2026-10-03",
-};
 
 function uniq<T>(items: T[]): T[] { return [...new Set(items)]; }
 function parseDose(dose?: string) { return dose?.match(/[\d.]+\s*(?:mg|mcg|g|mEq|units)/i)?.[0].toLowerCase(); }
@@ -35,7 +24,21 @@ function reconcile(records: SourceMedication[]): ReconciledMedication[] {
   }).sort((a, b) => a.ingredient.localeCompare(b.ingredient));
 }
 
-function makeFindings(c: ClinicianCase, sources: ClinicianCase["sources"], records: SourceMedication[], confirmations: Record<string, boolean>): ClinicianFinding[] {
+/**
+ * Folds an engine finding into the list. A label-backed finding and an engine
+ * finding for the same pair share one id, so the engine's rule evidence is
+ * appended to the existing finding rather than emitted as a second item. The
+ * existing title, detail, question, priority and citation are never touched.
+ */
+function merge(findings: ClinicianFinding[], incoming: ClinicianFinding): void {
+  const existing = findings.find((f) => f.id === incoming.id);
+  if (!existing) { findings.push(incoming); return; }
+  existing.supportingRules = [...(existing.supportingRules ?? []), ...(incoming.supportingRules ?? [])];
+  existing.ingredients = uniq([...existing.ingredients, ...incoming.ingredients]);
+  existing.recordIds = uniq([...existing.recordIds, ...incoming.recordIds]);
+}
+
+function makeFindings(sources: ClinicianCase["sources"], records: SourceMedication[], confirmations: Record<string, boolean>, engine: EngineResult): ClinicianFinding[] {
   const findings: ClinicianFinding[] = [];
   const active = (ingredient: string) => records.some((r) => r.ingredient === ingredient && (r.status === "active" || confirmations[r.id]));
   const add = (finding: ClinicianFinding) => { if (!findings.some((f) => f.id === finding.id)) findings.push(finding); };
@@ -53,6 +56,7 @@ function makeFindings(c: ClinicianCase, sources: ClinicianCase["sources"], recor
   }
   if (active("warfarin") && active("ibuprofen")) add({ id: "interaction:ibuprofen+warfarin", kind: "interaction", priority: "high", route: "pharmacist", title: "Warfarin + ibuprofen needs review", detail: "The configured label-backed rule associates this combination with a higher chance of stomach bleeding.", question: "Could a pharmacist review the warfarin and patient-reported ibuprofen together?", ingredients: ["warfarin", "ibuprofen"], recordIds: records.filter((r) => ["warfarin", "ibuprofen"].includes(r.ingredient)).map((r) => r.id), citation: IBUPROFEN_EVIDENCE, blocking: true });
   if (active("warfarin") && active("ciprofloxacin")) add({ id: "interaction:ciprofloxacin+warfarin", kind: "interaction", priority: "moderate", route: "pharmacist", title: "Warfarin + ciprofloxacin monitoring review", detail: "The configured DailyMed rule calls for INR monitoring during and shortly after co-administration.", question: "What INR monitoring plan is appropriate for this patient?", ingredients: ["warfarin", "ciprofloxacin"], recordIds: records.filter((r) => ["warfarin", "ciprofloxacin"].includes(r.ingredient)).map((r) => r.id), citation: CIPRO_EVIDENCE, blocking: true });
+  for (const finding of engine.findings) merge(findings, finding);
   return findings.sort((a, b) => ({ high: 0, moderate: 1, "data-quality": 2 }[a.priority] - { high: 0, moderate: 1, "data-quality": 2 }[b.priority]));
 }
 
@@ -71,8 +75,13 @@ export function runClinicianAgent(caseData: ClinicianCase, options: { available?
   step("normalize", "normalize_medications", "ok", `Normalized ${records.length} source records to ${uniq(records.map((r) => r.ingredient)).length} verified ingredients. Unknown names are never guessed.`);
   const medications = reconcile(records);
   step("reconcile", "reconcile_records", "ok", `Built one source-aware list of ${medications.length} ingredients. Orders, patient statements and pharmacy fulfillment remain distinct.`);
-  const findings = makeFindings(caseData, sources, records, confirmations);
+  const engine = engineFindings(caseData, medications, records, AS_OF);
+  const findings = makeFindings(sources, records, confirmations, engine);
   step("check", "run_safety_rules", "ok", `Ran deterministic rules: ${findings.length} finding(s), including ${findings.filter((f) => f.priority === "high").length} high-priority review item(s).`);
+  const merged = engine.findings.filter((f) => findings.some((existing) => existing.id === f.id && existing.citation)).length;
+  step("check", "run_parthia_engine", engine.ran ? "ok" : "info", engine.ran
+    ? `Ran the full Parthia rule set (drug-drug, drug-allergy, drug-nutrient, burden, mood and Passport rules) on the reconciled current list plus the Passport entries: ${engine.flagCount} rule flag(s), ${engine.findings.length - merged} new finding(s), ${merged} merged into a label-backed finding as supporting rule evidence.`
+    : "This case carries no Passport record, so the Parthia rules did not run. Nothing was inferred in their place.");
   const pending = findings.find((f) => f.kind === "needs-confirmation");
   if (pending) {
     step("clarify", "ask_patient", "waiting", `Paused before applying rules to ${pending.ingredients[0]}. Asked: “${pending.question}”`);

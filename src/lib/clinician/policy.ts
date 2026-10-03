@@ -1,4 +1,4 @@
-export type ClinicianTool = "fetch_source" | "validate_records" | "normalize_medications" | "reconcile_records" | "run_safety_rules" | "ask_patient" | "assemble_evidence" | "route_to_reviewer" | "screen_with_photon" | "open_photon_workflow" | "export_report" | "update_medication" | "stop_medication" | "change_dose" | "substitute_medication" | "write_prescription";
+export type ClinicianTool = "fetch_source" | "validate_records" | "normalize_medications" | "reconcile_records" | "run_safety_rules" | "run_parthia_engine" | "ask_patient" | "assemble_evidence" | "route_to_reviewer" | "screen_with_photon" | "open_photon_workflow" | "export_report" | "update_medication" | "stop_medication" | "change_dose" | "substitute_medication" | "write_prescription";
 
 const DENIED: Partial<Record<ClinicianTool, string>> = {
   update_medication: "Medication changes require an authorized clinician's review.",
