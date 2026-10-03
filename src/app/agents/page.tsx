@@ -44,7 +44,7 @@ function AgentCard({ agent }: { agent: AgentPersona }) {
               <p className="text-base font-semibold text-ink">{agent.name}</p>
               <p className="text-[13px] font-medium" style={{ color: agent.color }}>{agent.role}</p>
             </div>
-            <span className="rounded-full bg-gold-100 px-2 py-0.5 text-[11px] font-semibold text-[#5c430d]"><SponsorLogo name={agent.tribute} /></span>
+            {agent.tribute && <span className="rounded-full bg-gold-100 px-2 py-0.5 text-[11px] font-semibold text-[#5c430d]"><SponsorLogo name={agent.tribute} /></span>}
           </div>
           <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">{agent.audience}</p>
 
@@ -54,7 +54,7 @@ function AgentCard({ agent }: { agent: AgentPersona }) {
           <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">{agent.description}</p>
 
           <p className="mt-3 border-l-2 pl-3 text-[12px] italic leading-relaxed text-ink-muted" style={{ borderColor: `${agent.color}66` }}>
-            Named {agent.why.charAt(0).toLowerCase() + agent.why.slice(1)}
+            {agent.why}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-1.5 border-t border-line pt-3">
@@ -111,7 +111,7 @@ export default function AgentsPage() {
 
       <p className="mt-6 text-sm text-ink-muted">
         See them work: <Link href="/" className="font-semibold text-brand-700 underline">Margaret&apos;s home</Link> for Nova, and the{" "}
-        <Link href="/clinician/" className="font-semibold text-brand-700 underline">clinician view</Link> for Reid, Dex, Fotini, Willem, Elsie, Aaron and Iris.
+        <Link href="/clinician/" className="font-semibold text-brand-700 underline">clinician view</Link> for Reid, Dex, Fotini, Willem, Elsie, Aaron and Iris. <Link href="/analytics/" className="font-semibold text-brand-700 underline">Open the live analytics view</Link>.
       </p>
       <Card className="mt-6 flex items-center gap-4 p-4"><Image src="/try-it-qr.png" alt="QR code for the Parthia Health demo" width={96} height={96} /><div><p className="text-sm font-semibold text-ink">Try it on your phone</p><p className="mt-1 text-xs text-ink-muted">Scan to open the live demonstration.</p></div></Card>
     </div>

@@ -12,6 +12,9 @@ describe("specialist orchestration", () => {
     expect(result.outputs.map((output) => output.specialist)).toEqual(expect.arrayContaining(["pharmacist", "cardiology", "nutrition", "behavioral"]));
     expect(result.linked.length).toBeGreaterThan(0);
     expect(result.messages.length).toBeGreaterThan(0);
+    expect(new Set(result.linked.map((item) => item.id)).size).toBe(result.linked.length);
+    expect(result.outputs.find((output) => output.specialist === "behavioral")?.items.some((item) => item.factIds.some((id) => id.startsWith("burden/anticholinergic")))).toBe(false);
+    expect(result.outputs.find((output) => output.specialist === "cardiology")?.items.some((item) => item.factIds.some((id) => id === "weight-change-3d"))).toBe(true);
   });
 
   it("blocks unknown facts, directives, diagnosis wording and invented numbers", () => {

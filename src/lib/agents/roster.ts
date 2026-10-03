@@ -19,7 +19,7 @@ export interface AgentPersona {
   role: string;
   /** Who this agent talks to. */
   audience: "Patient" | "Behind the scenes" | "Clinician";
-  tribute: Tribute;
+  tribute?: Tribute;
   why: string;
   color: string;
   /** The promise shown on the card, in the agent's own voice. */
@@ -101,19 +101,19 @@ export const AGENTS: AgentPersona[] = [
     code: "src/components/clinician/ClinicianWorkspace.tsx",
   },
   {
-    id: "cardiology", name: "Willem", role: "Cardiology specialist", audience: "Clinician", tribute: "Visualize AI",
+    id: "cardiology", name: "Willem", role: "Cardiology specialist", audience: "Clinician",
     why: "Named for Willem Einthoven, who developed the ECG.", color: "#167d8d", assurance: "I collect heart-failure measures and cardiovascular findings for clinician review.",
     description: "Reads weight, blood-pressure and heart-rate measures plus cardiovascular rules. Rule-based, no language model.",
     tools: [], does: ["Heart-failure measures", "Blood pressure and heart rate", "Rule-based, no language model"], code: "src/lib/agents/specialists.ts",
   },
   {
-    id: "nutrition", name: "Elsie", role: "Nutrition specialist", audience: "Clinician", tribute: "Redesign Health",
+    id: "nutrition", name: "Elsie", role: "Nutrition specialist", audience: "Clinician",
     why: "Named for Elsie Widdowson, a pioneer in nutrition science.", color: "#8b6b27", assurance: "I surface food, nutrient and potassium evidence without turning it into a prescription.",
     description: "Reads drug-nutrient findings and potassium measures. Rule-based, no language model.",
     tools: [], does: ["Drug-nutrient findings", "Potassium trend", "Rule-based, no language model"], code: "src/lib/agents/specialists.ts",
   },
   {
-    id: "behavioral", name: "Aaron", role: "Behavioral health specialist", audience: "Clinician", tribute: "TechNovaTime",
+    id: "behavioral", name: "Aaron", role: "Behavioral health specialist", audience: "Clinician",
     why: "Named for Aaron Beck, who founded cognitive therapy.", color: "#7d5ab8", assurance: "I put mood scores and psychotropic changes in the same review, with the patient in control.",
     description: "Reads PHQ-9, GAD-7, mood and psychotropic-change findings. Rule-based, no language model.",
     tools: [], does: ["PHQ-9 and GAD-7", "Mood changes", "Rule-based, no language model"], code: "src/lib/agents/specialists.ts",

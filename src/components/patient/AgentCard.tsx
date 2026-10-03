@@ -34,7 +34,7 @@ export function AgentCard() {
   const watchRef = useRef<HTMLButtonElement>(null);
   const questions = useMemo(() => buildVisitQuestions(update, issues, record), [update, issues, record]);
   const { newCount, newFindings, updatedFindings, patientReportedOnly } = update;
-  const nothingNew = newCount === 0 && updatedFindings.length === 0;
+  const nothingNew = newCount === 0 && updatedFindings.length === 0 && update.findings.length === 0;
 
   const citations: AgentCitation[] = [
     ...newFindings.map((f) => ({ label: f.title, ruleId: f.ruleId })),
@@ -67,6 +67,11 @@ export function AgentCard() {
           {newCount > 0 && (
             <p className="mt-2 text-[15px] font-semibold text-ink">
               Since your last visit: {newCount} new thing{newCount === 1 ? "" : "s"} to ask your doctor about
+            </p>
+          )}
+          {newCount === 0 && update.findings.length > 0 && (
+            <p className="mt-2 text-[15px] font-semibold text-ink">
+              Your safety check has {update.findings.length} finding{update.findings.length === 1 ? "" : "s"} to ask your doctor about.
             </p>
           )}
           {added.length > 0 && (

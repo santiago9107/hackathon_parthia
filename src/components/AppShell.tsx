@@ -81,22 +81,13 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               <PlusIcon className="h-4 w-4" /> Log
             </Link>
-            <Link
-              href={ARCHITECTURE.href}
-              className={`hidden rounded-full px-3 py-1.5 text-sm font-medium transition lg:inline-block ${
-                isActive(ARCHITECTURE, current) ? "bg-brand-700 text-white" : "text-ink-muted hover:bg-brand-50 hover:text-brand-800"
-              }`}
-            >
-              Architecture
-            </Link>
-            <Link
-              href="/about/"
-              className={`hidden rounded-full px-3 py-1.5 text-sm font-medium transition lg:inline-block ${
-                current === "/about/" ? "bg-brand-700 text-white" : "text-ink-muted hover:bg-brand-50 hover:text-brand-800"
-              }`}
-            >
-              About
-            </Link>
+            <details className="relative hidden lg:block">
+              <summary className="cursor-pointer list-none rounded-full px-3 py-1.5 text-sm font-medium text-ink-muted hover:bg-brand-50 hover:text-brand-800">More</summary>
+              <div className="absolute right-0 top-full z-40 mt-2 w-40 rounded-xl border border-line bg-surface p-1 shadow-card">
+                <Link href={ARCHITECTURE.href} className={`block rounded-lg px-3 py-2 text-sm font-medium ${isActive(ARCHITECTURE, current) ? "bg-brand-50 text-brand-800" : "text-ink-soft hover:bg-brand-50 hover:text-brand-800"}`}>Architecture</Link>
+                <Link href="/about/" className={`block rounded-lg px-3 py-2 text-sm font-medium ${current === "/about/" ? "bg-brand-50 text-brand-800" : "text-ink-soft hover:bg-brand-50 hover:text-brand-800"}`}>About</Link>
+              </div>
+            </details>
             <span className="hidden sm:inline-flex"><InstallCTA /></span>
             <PatientSwitcher />
           </div>
