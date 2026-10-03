@@ -80,7 +80,10 @@ export function photonFallback(
       label: PHOTON_RECORDED_LABEL,
       drafts: draftsFor(treatmentKeys),
       alerts: captures.flatMap((capture) => capture.alerts),
-      screenedAt: captures[0].recordedAt,
+      // Several drafts can merge several captures, so report the latest
+      // capture time rather than the first one's. No alert here was captured
+      // after this moment.
+      screenedAt: captures.map((capture) => capture.recordedAt).sort().at(-1),
       reason,
     };
   }
@@ -91,6 +94,20 @@ export function photonFallback(
     alerts: treatmentKeys.flatMap((key) => PHOTON_EXAMPLE_SCREENS[key] ?? []),
     reason,
   };
+}
+/**
+ * Reads the `detail` of a failed response without letting a non-JSON body
+ * swallow the status. A missing Vercel function answers with HTML, so parsing
+ * the body before the status is read would throw and hide the 404 guidance
+ * below behind the generic unreachable message.
+ */
+async function failureDetail(response: Response): Promise<string | undefined> {
+  if (!response.headers.get("content-type")?.toLowerCase().includes("application/json")) return undefined;
+  try {
+    return (await response.json() as { detail?: string } | null)?.detail;
+  } catch {
+    return undefined;
+  }
 }
 function statusReason(status: number, detail?: string): string {
   if (status === 404) return "The screening function is not served here. Run it on Vercel or with vercel dev.";
@@ -118,13 +135,14 @@ export async function runPhotonScreen(
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ treatmentIds }),
     });
+    if (!response.ok) {
+      return photonFallback(treatmentKeys, statusReason(response.status, await failureDetail(response)), options.recorded);
+    }
     const payload = await response.json() as {
       alerts?: PhotonScreenAlert[];
       patientId?: string;
       screenedAt?: string;
-      detail?: string;
     };
-    if (!response.ok) return photonFallback(treatmentKeys, statusReason(response.status, payload?.detail), options.recorded);
     return {
       provenance: "live",
       label: PHOTON_LIVE_LABEL,
@@ -145,17 +163,16 @@ export async function syncPhotonPatient(options: { fetchImpl?: typeof fetch } = 
   const doFetch = options.fetchImpl ?? fetch;
   try {
     const response = await doFetch("/api/photon/sync-patient", { method: "POST" });
+    if (!response.ok) {
+      return { live: false, label: "Sandbox patient sync unavailable", reason: statusReason(response.status, await failureDetail(response)) };
+    }
     const payload = await response.json() as {
       patientId?: string;
       externalId?: string;
       created?: boolean;
       updated?: boolean;
       syncedAt?: string;
-      detail?: string;
     };
-    if (!response.ok) {
-      return { live: false, label: "Sandbox patient sync unavailable", reason: statusReason(response.status, payload?.detail) };
-    }
     return {
       live: true,
       label: PHOTON_SYNC_LIVE_LABEL,

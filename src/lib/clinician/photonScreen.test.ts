@@ -48,6 +48,23 @@ describe("Photon screening client", () => {
     expect(outcome.alerts.filter((alert) => alert.type === "ALLERGEN")).toHaveLength(1);
     expect(outcome.alerts.some((alert) => alert.severity === "MAJOR" && /aspirin/i.test(alert.description))).toBe(true);
   });
+  it("says where to run the function when it is not served, even though the 404 body is HTML", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(new Response("<!DOCTYPE html><title>404</title>", { status: 404, headers: { "content-type": "text/html" } }));
+    const outcome = await runPhotonScreen(["ibuprofen-200-mg"], { fetchImpl: fetchImpl as unknown as typeof fetch });
+    expect(outcome.provenance).toBe("recorded");
+    expect(outcome.reason).toContain("vercel dev");
+    expect(outcome.reason).not.toContain("could not be reached");
+  });
+  it("stamps a merged fallback with the latest capture time, not the first one", () => {
+    const recorded: Record<string, RecordedPhotonScreen> = {
+      "ciprofloxacin-500-mg": { recordedAt: "2026-10-03T14:00:00.000Z", treatmentKey: "ciprofloxacin-500-mg", alerts: [liveAlert] },
+      "amoxicillin-500-mg": { recordedAt: "2026-10-03T14:05:00.000Z", treatmentKey: "amoxicillin-500-mg", alerts: [liveAlert] },
+    };
+    const outcome = photonFallback(["ciprofloxacin-500-mg", "amoxicillin-500-mg"], "live call failed", recorded);
+    expect(outcome.provenance).toBe("recorded");
+    expect(outcome.alerts).toHaveLength(2);
+    expect(outcome.screenedAt).toBe("2026-10-03T14:05:00.000Z");
+  });
   it("falls back when the function is not reachable at all", async () => {
     const fetchImpl = vi.fn().mockRejectedValue(new Error("network down"));
     const outcome = await runPhotonScreen(["amoxicillin-500-mg"], { fetchImpl: fetchImpl as unknown as typeof fetch });
