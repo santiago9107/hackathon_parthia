@@ -70,6 +70,42 @@ jobs:
         if: env.AZURE_STATIC_WEB_APPS_API_TOKEN == ''
         run: echo "Build checks passed, but deployment was skipped because AZURE_STATIC_WEB_APPS_API_TOKEN is not configured."
 
+  analytics:
+    # Holistic analysis module (analytics/): a self-contained package with its own
+    # dependencies, so it is excluded from the root lint/typecheck above and checked here.
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Analytics module (typecheck + tests)
+    defaults:
+      run:
+        working-directory: analytics
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: analytics/package-lock.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          npm ci
+          pip install -r knowledge/requirements.txt
+
+      - name: Knowledge JSON matches the Excel knowledge base
+        run: python knowledge/export_knowledge.py --check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
   close_pull_request:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest

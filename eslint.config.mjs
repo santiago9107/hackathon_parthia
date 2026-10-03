@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Third-party OCR engine files copied from node_modules (scripts/copy-ocr-assets.mjs)
     "public/ocr/**",
+    // Holistic analysis module: self-contained package with its own deps, typecheck and tests (CI job "analytics")
+    "analytics/**",
   ]),
 ]);
 
