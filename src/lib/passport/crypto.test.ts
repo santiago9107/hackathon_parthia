@@ -9,7 +9,7 @@ const FAST = 1_000; // iterations for tests; the app uses 600,000
 const P = "p-harold";
 const med: Medication = {
   id: "m-1", name: "Naproxen", genericName: "naproxen", class: "nsaid", dose: "500 mg", frequency: "twice daily", startDate: "2026-09-10",
-  source: { kind: "patient-entered", label: "You", importedAt: "2026-09-11T09:00:00", verified: true },
+  source: { kind: "patient-entered", label: "You", importedAt: "2026-10-03T09:00:00", verified: true },
 };
 
 describe("AES-GCM + PBKDF2", () => {

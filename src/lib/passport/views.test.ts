@@ -10,7 +10,7 @@ import { buildTimeline, filterTimeline } from "./timeline";
 
 const now = referenceNow();
 const harold = getSeedRecord("p-harold")!;
-const watch: DataSource = { kind: "wearable", label: "Apple Health", importedAt: "2026-09-11T08:00:00", verified: true };
+const watch: DataSource = { kind: "wearable", label: "Apple Health", importedAt: "2026-10-03T08:00:00", verified: true };
 
 describe("timeline", () => {
   const events = buildTimeline(harold, now);
@@ -44,7 +44,7 @@ describe("timeline", () => {
     expect(filterTimeline(events, { categories: ["lab"] }).every((e) => e.category === "lab")).toBe(true);
     const withWatch = mergeRecord(
       harold,
-      upsertItems(emptyPassport("p-harold"), "vitals", [{ id: "v-w1", patientId: "p-harold", timestamp: "2026-09-10T07:00:00", restingHeartRate: 52, source: watch } as VitalSign], "confirmed", "2026-09-11T08:00:00"),
+      upsertItems(emptyPassport("p-harold"), "vitals", [{ id: "v-w1", patientId: "p-harold", timestamp: "2026-09-10T07:00:00", restingHeartRate: 52, source: watch } as VitalSign], "confirmed", "2026-10-03T08:00:00"),
     );
     const onlyWatch = filterTimeline(buildTimeline(withWatch, now), { sourceKinds: ["wearable"] });
     expect(onlyWatch.map((e) => e.id)).toEqual(["v-w1"]);
@@ -69,7 +69,7 @@ describe("what's missing", () => {
 
 describe("sources summary", () => {
   it("counts seed items and pending imports separately", () => {
-    const local = upsertItems(emptyPassport("p-harold"), "vitals", [{ id: "v-w2", patientId: "p-harold", timestamp: "2026-09-10T07:00:00", steps: 4200, source: watch } as VitalSign], "pending", "2026-09-11T08:00:00");
+    const local = upsertItems(emptyPassport("p-harold"), "vitals", [{ id: "v-w2", patientId: "p-harold", timestamp: "2026-09-10T07:00:00", steps: 4200, source: watch } as VitalSign], "pending", "2026-10-03T08:00:00");
     const s = summarizeSources(mergeRecord(harold, local), local);
     const seed = s.find((x) => x.kind === "seed")!;
     const apple = s.find((x) => x.label === "Apple Health")!;

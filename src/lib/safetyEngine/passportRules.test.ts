@@ -15,7 +15,7 @@ import { allergyConflictRule, decliningEgfrRule, lowBpMultipleAgentsRule, lowRes
 
 const now = referenceNow();
 const ctx = { now };
-const AT = "2026-09-11T09:00:00";
+const AT = "2026-10-03T09:00:00";
 const src = (kind: "device" | "wearable" | "patient-entered" = "device", label = "Test") => ({ kind, label, importedAt: AT, verified: true });
 
 function withConfirmed(r: PatientRecord, items: Partial<Record<"vitals" | "medications" | "labs" | "allergies" | "assessments", unknown[]>>) {
@@ -32,7 +32,7 @@ describe("low blood pressure on several BP medicines", () => {
   });
 
   it("fires once her home cuff syncs repeated low morning readings", () => {
-    const r = withConfirmed(margaret, { vitals: simulateBpSync("p-margaret", "2026-09-11", 14, AT) });
+    const r = withConfirmed(margaret, { vitals: simulateBpSync("p-margaret", "2026-10-03", 14, AT) });
     const [f] = lowBpMultipleAgentsRule.evaluate(r, ctx);
     expect(f.severity).toMatch(/moderate|high/);
     expect(f.medications).toEqual(expect.arrayContaining(["Amlodipine", "Furosemide", "Carvedilol"]));
@@ -43,7 +43,7 @@ describe("low blood pressure on several BP medicines", () => {
   it("needs two or more BP-lowering medicines", () => {
     const rosa = getSeedRecord("p-rosa")!;
     const oneMed = { ...rosa, patient: { ...rosa.patient, medications: rosa.patient.medications.filter((m) => m.class !== "diuretic") } };
-    const lows: VitalSign[] = [1, 2, 3, 4].map((d) => ({ id: `v${d}`, patientId: "p-rosa", timestamp: `2026-09-0${d + 4}T08:00:00`, systolic: 92, diastolic: 58, source: src() }));
+    const lows: VitalSign[] = [1, 2, 3, 4].map((d) => ({ id: `v${d}`, patientId: "p-rosa", timestamp: `2026-09-${d + 25}T08:00:00`, systolic: 92, diastolic: 58, source: src() }));
     expect(lowBpMultipleAgentsRule.evaluate(withConfirmed(oneMed, { vitals: lows }), ctx)).toEqual([]);
     expect(lowBpMultipleAgentsRule.evaluate(withConfirmed(rosa, { vitals: lows }), ctx)).toHaveLength(1);
   });
@@ -53,7 +53,7 @@ describe("low resting heart rate on a beta-blocker", () => {
   it("fires for Harold (metoprolol) after importing the sample Apple Health export", async () => {
     const zip = new Blob([readFileSync(join(__dirname, "..", "..", "..", "public", "samples", "apple-health-export-sample.zip"))]);
     const { stream } = await openAppleHealthXml(zip);
-    const { vitals } = await parseAppleHealth(decodeWithProgress(stream), { patientId: "p-harold", since: "2026-08-13", until: "2026-09-11" });
+    const { vitals } = await parseAppleHealth(decodeWithProgress(stream), { patientId: "p-harold", since: "2026-08-13", until: "2026-10-03" });
     const r = withConfirmed(getSeedRecord("p-harold")!, { vitals });
     const [f] = lowRestingHrBetaBlockerRule.evaluate(r, ctx);
     expect(f).toMatchObject({ severity: "moderate", medications: ["Metoprolol succinate"], category: "drug-vitals" });
@@ -103,13 +103,13 @@ describe("PHQ-9 rising after a medication change", () => {
   it("MARGARET: 7 before the sertraline increase, 16 after → high", () => {
     const [f] = phq9RiseAfterChangeRule.evaluate(getSeedRecord("p-margaret")!, ctx);
     expect(f).toMatchObject({ severity: "high", medications: ["Sertraline"], category: "drug-mood" });
-    expect(f.evidence[1]).toBe("PHQ-9 before: 7 on Aug 22. After: 12 on Sep 2, 16 on Sep 9.");
+    expect(f.evidence[1]).toBe("PHQ-9 before: 7 on Sep 13. After: 12 on Sep 24, 16 on Oct 1.");
     expect(f.explanation).toMatch(/isn't a diagnosis/);
   });
 
   it("mentions 988 when a later screening had a self-harm answer", () => {
     const m = getSeedRecord("p-margaret")!;
-    const a: MentalHealthAssessment = { id: "as-x", patientId: "p-margaret", instrument: "PHQ-9", date: "2026-09-10", score: 11, severity: "Moderate", answers: [1, 1, 1, 1, 1, 2, 2, 1, 1], administeredBy: "self", source: src("patient-entered", "You") };
+    const a: MentalHealthAssessment = { id: "as-x", patientId: "p-margaret", instrument: "PHQ-9", date: "2026-09-30", score: 11, severity: "Moderate", answers: [1, 1, 1, 1, 1, 2, 2, 1, 1], administeredBy: "self", source: src("patient-entered", "You") };
     const [f] = phq9RiseAfterChangeRule.evaluate(withConfirmed(m, { assessments: [a] }), ctx);
     expect(f.severity).toBe("high");
     expect(f.explanation).toMatch(/988/);

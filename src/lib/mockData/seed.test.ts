@@ -14,6 +14,7 @@ function allItems(r: PatientRecord): Sourced[] {
 }
 
 const records = listPatients().map((p) => getSeedRecord(p.id)!);
+const fullySeededRecords = records.filter((r) => r.patient.id !== "p-synthea-shaun");
 
 describe("seed Passport", () => {
   it.each(records.map((r) => [r.patient.name, r] as const))("%s: every item carries seed provenance", (_n, r) => {
@@ -22,16 +23,23 @@ describe("seed Passport", () => {
     }
   });
 
-  it.each(records.map((r) => [r.patient.name, r] as const))("%s: has every Passport section", (_n, r) => {
+  it.each(fullySeededRecords.map((r) => [r.patient.name, r] as const))("%s: has every Passport section", (_n, r) => {
     for (const key of ["allergies", "appointments", "encounters", "labPanels", "immunizations", "procedures", "careTeam", "carePlans", "documents", "assessments", "socialHistory"] as const) {
       expect(r[key].length, key).toBeGreaterThan(0);
     }
     expect(r.nutritionProfile).toBeDefined();
     expect(r.emergency?.contacts.length).toBeGreaterThan(0);
-    expect(r.appointments.some((a) => a.status === "booked" && a.start > "2026-09-11")).toBe(true);
+    expect(r.appointments.some((a) => a.status === "booked" && a.start > "2026-10-03")).toBe(true);
     expect(r.appointments.some((a) => a.status === "fulfilled")).toBe(true);
     expect(r.assessments.some((a) => a.instrument === "PHQ-9")).toBe(true);
     expect(r.assessments.some((a) => a.instrument === "GAD-7")).toBe(true);
+  });
+
+  it("the Synthea patient starts empty so its Passport is built by the FHIR review flow", () => {
+    const r = records.find((record) => record.patient.id === "p-synthea-shaun")!;
+    expect(r.patient.medications).toEqual([]);
+    expect(r.allergies).toEqual([]);
+    expect(r.patient.labs).toEqual([]);
   });
 
   it.each(records.map((r) => [r.patient.name, r] as const))("%s: cross-references resolve", (_n, r) => {
@@ -56,11 +64,11 @@ describe("seed Passport", () => {
     }
   });
 
-  it("Margaret's PHQ-9 rises after the sertraline dose change on 2026-08-22", () => {
+  it("Margaret's PHQ-9 rises after the sertraline dose change on 2026-09-13", () => {
     const m = records.find((r) => r.patient.id === "p-margaret")!;
     const phq = m.assessments.filter((a) => a.instrument === "PHQ-9").sort((a, b) => a.date.localeCompare(b.date));
-    const before = phq.filter((a) => a.date <= "2026-08-22").map((a) => a.score);
-    const after = phq.filter((a) => a.date > "2026-08-22").map((a) => a.score);
+    const before = phq.filter((a) => a.date <= "2026-09-13").map((a) => a.score);
+    const after = phq.filter((a) => a.date > "2026-09-13").map((a) => a.score);
     expect(after.length).toBeGreaterThanOrEqual(2);
     expect(Math.min(...after)).toBeGreaterThan(Math.max(...before));
     expect(after).toEqual([...after].sort((a, b) => a - b)); // keeps rising

@@ -5,14 +5,19 @@ conditions and five or more medicines. This repository is the **demo-quality
 prototype** built for partner pitches and as an exhibit: synthetic data only,
 no real EHR connection, no real authentication, no trained model.
 
-What *is* real: the safety engine. Every flag you see is produced by readable,
-rule-based logic in `src/lib/safetyEngine` — no black-box score.
+What *is* real: the local Passport pipeline and safety engine. Every flag you
+see is produced by readable, rule-based logic in `src/lib/safetyEngine` — no
+black-box score. A curated Bundle from the open-source Synthea generator runs
+through the same FHIR mapping, review and confirmation flow intended for a
+future EHR connection.
 
 ## Run it
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+cp .env.example .env.local
+# Add OPENAI_API_KEY to .env.local for meal-photo recognition.
+npm run dev        # web: http://localhost:3000; local meal API: :7071
 npm run build      # static export → ./out
 npx serve out      # serve the export locally (service worker needs http://localhost or https)
 ```
@@ -30,12 +35,21 @@ Node 20+ is required. Icons are pre-generated; regenerate with
 | Share with doctor | `/share/` | Printable one-page visit summary (`Print / Save as PDF`) |
 | Assistant | `/assistant/` | Scripted, data-grounded chat; every reply labelled **AI-generated** |
 | Install | `/install/` | Platform-aware install flow + reminder settings |
+| Synthea import | `/passport/add/synthea/` | Imports a bundled FHIR R4 patient into the review queue; no real person or EHR is involved |
+| Meal capture | `/log/meal/` | Camera/file photo, OpenAI vision suggestions for foods/portion/nutrients, and required patient confirmation; AI cannot establish allergen safety |
 
-**Patient switcher** (top right) flips between three synthetic personas:
+The dashboard also derives today's medication schedule from confirmed active
+prescriptions and stores Taken / Snoozed / Skipped events locally. It displays
+the prescribed dose only; it never calculates or recommends a dose from age or
+weight.
+
+**Patient switcher** (top right) flips between three hand-authored synthetic
+personas and an empty Passport shell for the Synthea import:
 
 - **Harold Okafor, 68** — AFib on warfarin + atorvastatin, 7 medicines. Leafy-green intake swings week to week, grapefruit some mornings, aspirin recently added → drug-nutrient and drug-drug flags, INR above range.
 - **Margaret Lindqvist, 72** — heart failure + depression, 9 medicines incl. sertraline and zolpidem, plus oxybutynin and OTC diphenhydramine → high anticholinergic burden; mood declining since a sertraline dose change → drug-mood flag.
 - **Rosa Delgado, 65** — newly diagnosed type 2 diabetes, 5 medicines, patchy nutrition logging → low-risk profile, nutrition "worth watching".
+- **Shaun461 Javier97 Cormier289, 73** — Synthea-generated patient whose conditions, medicines, allergies, results and visits appear only after import and review.
 
 ## Architecture
 
@@ -46,6 +60,9 @@ src/
   lib/
     types.ts           Domain model (FHIR analogues noted in comments)
     mockData/          SYNTHETIC patients + seeded daily entries   ← replace with FHIR/EHR client
+    fhir/              FHIR R4 types, mapper, importer, simulated sources + Synthea fixture
+    nutrition/         Photo compaction, AI recognition client + deterministic food guidance
+    reminders/         Confirmed-prescription schedule + local dose events
     safetyEngine/      Rule-based scanner — knowledge tables + rules + evaluate()
     status/            The four domain indicators
     assistant/         Scripted responder behind an AssistantProvider interface  ← swap for a model
@@ -53,6 +70,8 @@ src/
     pwa/               Platform detection, install hook, push/reminder helpers
 public/
   manifest.json, sw.js, icons/, staticwebapp.config.json
+api/
+  recognize-meal/      Rate-limited Azure Function; OpenAI key stays server-side
 ```
 
 ### Safety engine
@@ -88,8 +107,8 @@ for a licensed interaction database.
 
 ## Deployment: Azure Static Web Apps
 
-The site is a pure static export (`output: "export"` in `next.config.ts`); no
-Azure Functions, no SSR, no hybrid features. The GitHub Actions workflow in
+The UI is a static export (`output: "export"` in `next.config.ts`) with one
+Azure Function for meal-photo recognition. The GitHub Actions workflow in
 `.github/workflows/azure-static-web-apps.yml` builds on every push to `main`
 and uploads `out/` with `Azure/static-web-apps-deploy@v1`.
 
@@ -99,7 +118,7 @@ and uploads `out/` with `Azure/static-web-apps-deploy@v1`.
 
 1. Create resource → *Static Web App*.
 2. Plan: **Free**. Deployment source: **GitHub**; authorise and pick this repo and the `main` branch.
-3. Build presets: **Custom**. App location `out`, API location *(empty)*, Output location *(empty)*.
+3. Build presets: **Custom**. App location `out`, API location `api`, Output location *(empty)*.
 4. Create. Azure commits its own workflow file — delete it and keep the one in this repo (ours runs the build in Actions and uploads the finished `out/`).
 5. In the resource → *Manage deployment token*, copy the token.
 6. GitHub repo → Settings → Secrets and variables → Actions → new secret `AZURE_STATIC_WEB_APPS_API_TOKEN`.
@@ -123,6 +142,8 @@ az staticwebapp secrets list --name parthia-health --resource-group rg-parthia-h
 ```
 
 Put the printed token in the `AZURE_STATIC_WEB_APPS_API_TOKEN` repository secret.
+In Azure Static Web Apps → Configuration, add `OPENAI_API_KEY` as an application
+setting. Optionally set `OPENAI_VISION_MODEL` and `MEAL_AI_ALLOWED_ORIGINS`.
 If the CLI also created a workflow file in `.github/workflows/`, delete it in favour of ours.
 
 Push to `main` → the workflow builds, lints, typechecks and deploys. Pull

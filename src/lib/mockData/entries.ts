@@ -161,7 +161,7 @@ function generateMargaret(): Generated {
   const rand = mulberry32(72);
   const out: Generated = { symptoms: [], moods: [], nutrition: [] };
   let n = 0;
-  const DOSE_CHANGE_DAYS_AGO = 20; // 2026-08-22
+  const DOSE_CHANGE_DAYS_AGO = 20; // 2026-09-13
 
   for (let d = DAYS_OF_HISTORY; d >= 0; d--) {
     const date = dayString(d);

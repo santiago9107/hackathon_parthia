@@ -27,6 +27,7 @@ import { interpretLab, lookupLab } from "../terminology/labs";
 import { lookupDrug, lookupRxcui } from "../terminology/medications";
 import {
   SYSTEMS,
+  type Attachment,
   type CodeableConcept,
   type Dosage,
   type FhirAllergyIntolerance,
@@ -39,6 +40,7 @@ import {
   type FhirDocumentReference,
   type FhirEncounter,
   type FhirImmunization,
+  type FhirMedication,
   type FhirMedicationRequest,
   type FhirMedicationStatement,
   type FhirObservation,
@@ -117,7 +119,8 @@ const SALTS = /\b(sodium|hydrochloride|hcl|calcium|tartrate|maleate|besylate|mes
 
 /** "metoprolol succinate 25 MG Extended Release Oral Tablet" → "Metoprolol succinate" */
 export function medicationNameFromDisplay(display: string): string {
-  const beforeStrength = display.split(/\s\d/)[0].replace(SALTS, "").replace(/\s+/g, " ").trim();
+  const normalized = display.replace(/^\d+\s*HR\s+/i, "");
+  const beforeStrength = normalized.split(/\s\d/)[0].replace(SALTS, "").replace(/\s+/g, " ").trim();
   return beforeStrength.charAt(0).toUpperCase() + beforeStrength.slice(1);
 }
 
@@ -165,6 +168,8 @@ export function conditionCategory(icd: string | undefined, name: string): Condit
 }
 
 const NOTE_TYPES: Record<string, DocumentType> = {
+  "34117-2": "visit-summary",
+  "51847-2": "visit-summary",
   "34765-3": "dietitian-note",
   "34748-9": "behavioral-health-note",
   "11488-4": "visit-summary",
@@ -193,25 +198,61 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
     conditions: [], medications: [], allergies: [], labs: [], labPanels: [], vitals: [], socialHistory: [], assessments: [],
     encounters: [], documents: [], appointments: [], immunizations: [], procedures: [], careTeam: [], carePlans: [], warnings: [],
   };
-  const resources = (bundle.entry ?? []).map((e) => e.resource) as FhirResource[];
-  const byRef = new Map<string, FhirResource>(resources.map((r) => [`${r.resourceType}/${r.id}`, r]));
-  const practitioner = (ref?: Reference) => (ref?.reference ? (byRef.get(ref.reference) as FhirPractitioner | undefined) : undefined);
+  const entries = bundle.entry ?? [];
+  const resources = entries.map((e) => e.resource) as FhirResource[];
+  // Transaction bundles (including Synthea's) frequently use urn:uuid fullUrls
+  // everywhere instead of relative ResourceType/id references. Index both forms.
+  const byRef = new Map<string, FhirResource>();
+  for (const entry of entries) {
+    const resource = entry.resource as FhirResource;
+    if (resource.id) byRef.set(`${resource.resourceType}/${resource.id}`, resource);
+    if (entry.fullUrl) byRef.set(entry.fullUrl, resource);
+  }
+  const resolve = (ref?: Reference) => (ref?.reference ? byRef.get(ref.reference) : undefined);
+  const referenceKey = (ref?: Reference) => {
+    const resource = resolve(ref);
+    return resource?.id ? `${resource.resourceType}/${resource.id}` : ref?.reference;
+  };
+  const practitioner = (ref?: Reference) => {
+    const resource = resolve(ref);
+    return resource?.resourceType === "Practitioner" ? resource : undefined;
+  };
   const nameOf = (ref?: Reference) => practitionerName(practitioner(ref), ref?.display);
   const src = (r: FhirResource): DataSource => ({ kind: "ehr", label: opts.sourceLabel, importedAt: opts.importedAt, verified: false, refId: `${r.resourceType}/${r.id}` });
   const id = (r: FhirResource) => `ehr-${r.id}`;
   const pid = opts.patientId;
 
-  // Notes are looked up by encounter so visit summaries can carry them.
-  const notesByEncounter = new Map<string, FhirDocumentReference>();
+  // Notes are looked up by encounter so visit summaries can carry them. Prefer
+  // DocumentReference, but accept DiagnosticReport.presentedForm (Synthea emits
+  // the same clinical note in both shapes, and some exports contain only one).
+  type EncounterNote = { resource: FhirDocumentReference | FhirDiagnosticReport; attachment?: Attachment };
+  const notesByEncounter = new Map<string, EncounterNote>();
   for (const r of resources) {
-    if (r.resourceType === "DocumentReference") for (const e of r.context?.encounter ?? []) if (e.reference) notesByEncounter.set(e.reference, r);
+    if (r.resourceType === "DocumentReference") {
+      for (const encounter of r.context?.encounter ?? []) {
+        const key = referenceKey(encounter);
+        if (key) notesByEncounter.set(key, { resource: r, attachment: r.content[0]?.attachment });
+      }
+    }
+  }
+  for (const r of resources) {
+    if (r.resourceType === "DiagnosticReport" && r.presentedForm?.length) {
+      const key = referenceKey(r.encounter);
+      if (key && !notesByEncounter.has(key)) notesByEncounter.set(key, { resource: r, attachment: r.presentedForm[0] });
+    }
   }
   // Lab → panel, from DiagnosticReport.result.
   const panelOf = new Map<string, string>();
   for (const r of resources) {
-    if (r.resourceType === "DiagnosticReport") for (const res of r.result ?? []) if (res.reference) panelOf.set(res.reference, id(r));
+    if (r.resourceType === "DiagnosticReport") {
+      for (const result of r.result ?? []) {
+        const key = referenceKey(result);
+        if (key) panelOf.set(key, id(r));
+      }
+    }
   }
   const vitalsByTime = new Map<string, VitalSign>();
+  const unsupported = new Map<string, number>();
 
   for (const r of resources) {
     switch (r.resourceType) {
@@ -222,6 +263,7 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
         break;
       }
       case "Practitioner":
+      case "Medication":
         break; // used via references
       case "Condition": {
         const c = r as FhirCondition;
@@ -237,17 +279,27 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
       case "MedicationRequest":
       case "MedicationStatement": {
         const m = r as FhirMedicationRequest | FhirMedicationStatement;
-        const rx = coding(m.medicationCodeableConcept, SYSTEMS.rxnorm);
-        const display = textOf(m.medicationCodeableConcept);
+        const referencedMedication = resolve(m.medicationReference) as FhirMedication | undefined;
+        const medicationConcept = m.medicationCodeableConcept ?? referencedMedication?.code;
+        const rx = coding(medicationConcept, SYSTEMS.rxnorm);
+        const display = textOf(medicationConcept) || m.medicationReference?.display || "";
+        if (!display) {
+          const ref = m.medicationReference?.reference;
+          out.warnings.push(`Medication ${m.id}${ref ? ` references ${ref}, which could not be resolved` : " has no coded name"} — skipped.`);
+          break;
+        }
         const drug = (rx?.code && lookupRxcui(rx.code)) || lookupDrug(display) || lookupDrug(medicationNameFromDisplay(display));
         const isStatement = m.resourceType === "MedicationStatement";
         const dosage = isStatement ? m.dosage?.[0] : m.dosageInstruction?.[0];
         const q = dosage?.doseAndRate?.[0]?.doseQuantity;
         const unit = (q?.unit ?? "").replace(/^meq$/i, "mEq");
+        const inferredUnit = !unit && /\btablet\b/i.test(display) ? "tablet" : !unit && /\bcapsule\b/i.test(display) ? "capsule" : "";
+        const doseUnit = unit || inferredUnit;
+        const dose = q?.value !== undefined ? `${q.value}${doseUnit ? ` ${doseUnit}${q.value === 1 || unit ? "" : "s"}` : " dose unit"}` : "";
         const status = m.status === "active" ? "active" : m.status === "on-hold" ? "on-hold" : "stopped";
         out.medications.push({
           id: id(m), name: medicationNameFromDisplay(display), genericName: drug?.generic ?? medicationNameFromDisplay(display).toLowerCase(),
-          class: drug?.class ?? "other", rxNormCode: drug?.rxcui ?? rx?.code, dose: q?.value !== undefined ? `${q.value} ${unit}`.trim() : dosage?.text ?? "",
+          class: drug?.class ?? "other", rxNormCode: drug?.rxcui ?? rx?.code, dose,
           frequency: frequencyText(dosage), startDate: dateOnly(isStatement ? m.effectivePeriod?.start ?? m.dateAsserted : m.authoredOn), indication: m.reasonCode?.[0]?.text,
           prescriber: (isStatement ? m.informationSource?.display : nameOf(m.requester)) || undefined,
           stoppedOn: isStatement && status === "stopped" ? dateOnly(m.effectivePeriod?.end) || undefined : undefined,
@@ -306,10 +358,28 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
       }
       case "DiagnosticReport": {
         const d = r as FhirDiagnosticReport;
-        out.labPanels.push({
-          id: id(d), patientId: pid, name: textOf(d.code), code: coding(d.code, SYSTEMS.loinc)?.code, date: dateOnly(d.effectiveDateTime),
-          orderedBy: d.resultsInterpreter?.[0] ? nameOf(d.resultsInterpreter[0]) : undefined, performer: d.performer?.[0]?.display, source: src(d),
-        });
+        const attachment = d.presentedForm?.find((a) => (a.contentType ?? "text/plain").startsWith("text/"));
+        const encounterKey = referenceKey(d.encounter);
+        const preferredNote = !encounterKey || notesByEncounter.get(encounterKey)?.resource === d;
+        if (attachment && preferredNote) {
+          const loinc = coding(d.code, SYSTEMS.loinc)?.code;
+          out.documents.push({
+            id: id(d), patientId: pid, title: attachment.title ?? (textOf(d.code) || "Clinical note"), type: (loinc && NOTE_TYPES[loinc]) || "other",
+            date: dateOnly(d.effectiveDateTime ?? d.effectivePeriod?.start ?? d.issued),
+            author: d.resultsInterpreter?.[0] ? nameOf(d.resultsInterpreter[0]) : d.performer?.[0]?.display,
+            text: attachment.data ? decodeBase64Utf8(attachment.data) : undefined, source: src(d),
+          });
+        }
+        // A note-shaped DiagnosticReport has no results. Do not invent an empty
+        // lab panel for it; reports with results retain the existing behavior.
+        if (d.result?.length) {
+          out.labPanels.push({
+            id: id(d), patientId: pid, name: textOf(d.code), code: coding(d.code, SYSTEMS.loinc)?.code, date: dateOnly(d.effectiveDateTime ?? d.effectivePeriod?.start),
+            orderedBy: d.resultsInterpreter?.[0] ? nameOf(d.resultsInterpreter[0]) : undefined, performer: d.performer?.[0]?.display, source: src(d),
+          });
+        } else if (!attachment) {
+          out.warnings.push(`DiagnosticReport/${d.id} has neither results nor a readable presented form — skipped.`);
+        }
         break;
       }
       case "Encounter": {
@@ -318,12 +388,12 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
         const typeText = textOf(e.type?.[0]).toLowerCase();
         const type: EncounterType = e.class?.code === "VR" ? "telehealth" : /psychotherapy|therapy/.test(typeText) ? "therapy" : e.class?.code === "EMER" ? "emergency" : e.class?.code === "IMP" ? "hospital" : "office";
         const note = notesByEncounter.get(`Encounter/${e.id}`);
-        const noteText = note?.content[0]?.attachment.data ? decodeBase64Utf8(note.content[0].attachment.data) : undefined;
+        const noteText = note?.attachment?.data && (note.attachment.contentType ?? "text/plain").startsWith("text/") ? decodeBase64Utf8(note.attachment.data) : undefined;
         out.encounters.push({
           id: id(e), patientId: pid, date: dateOnly(e.period?.start), type, clinician: nameOf(e.participant?.[0]?.individual), specialty,
           organization: e.serviceProvider?.display, reason: e.reasonCode?.[0]?.text ?? textOf(e.type?.[0]),
           summary: noteText ? noteText.split("\n").slice(1).join(" ").trim() : e.reasonCode?.[0]?.text ?? "",
-          documentId: note ? id(note) : undefined, source: src(e),
+          documentId: note ? id(note.resource) : undefined, source: src(e),
         });
         break;
       }
@@ -341,7 +411,7 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
       case "Appointment": {
         const a = r as FhirAppointment;
         const actors = (a.participant ?? []).map((p) => p.actor).filter(Boolean) as Reference[];
-        const prac = actors.find((x) => x.reference?.startsWith("Practitioner/"));
+        const prac = actors.find((x) => resolve(x)?.resourceType === "Practitioner" || x.reference?.startsWith("Practitioner/"));
         // Display-only actors: the location — or, with no Practitioner reference, the clinician then the location.
         const displayOnly = actors.filter((x) => !x.reference);
         const clinician = prac ? nameOf(prac) : displayOnly.shift()?.display ?? "";
@@ -366,7 +436,7 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
       case "Procedure": {
         const p = r as FhirProcedure;
         out.procedures.push({
-          id: id(p), patientId: pid, name: textOf(p.code), date: dateOnly(p.performedDateTime), code: coding(p.code, SYSTEMS.snomed)?.code,
+          id: id(p), patientId: pid, name: textOf(p.code), date: dateOnly(p.performedDateTime ?? p.performedPeriod?.start), code: coding(p.code, SYSTEMS.snomed)?.code,
           performer: p.performer?.[0]?.actor ? nameOf(p.performer[0].actor) : undefined, outcome: textOf(p.outcome) || undefined, source: src(p),
         });
         break;
@@ -385,19 +455,23 @@ export function mapBundle(bundle: FhirBundle, opts: MapOptions): MappedPassport 
       }
       case "CarePlan": {
         const cp = r as FhirCarePlan;
-        const cat = textOf(cp.category?.[0]).toLowerCase();
+        const categoryText = (cp.category ?? []).map(textOf).filter(Boolean);
+        const cat = categoryText.join(" ").toLowerCase();
         const category: CarePlan["category"] = /medic/.test(cat) ? "medication" : /monitor/.test(cat) ? "monitoring" : /nutri|diet/.test(cat) ? "nutrition" : /mental|behav/.test(cat) ? "mental-health" : /follow/.test(cat) ? "follow-up" : "lifestyle";
         out.carePlans.push({
-          id: id(cp), patientId: pid, title: cp.title ?? "Care plan", category, author: nameOf(cp.author), date: dateOnly(cp.created ?? cp.period?.start),
-          instructions: (cp.activity ?? []).map((a) => a.detail?.description).filter((x): x is string => !!x), status: cp.status === "completed" ? "completed" : "active", source: src(cp),
+          id: id(cp), patientId: pid, title: cp.title ?? categoryText.find((text) => !/^assess-plan$/i.test(text)) ?? "Care plan", category, author: nameOf(cp.author), date: dateOnly(cp.created ?? cp.period?.start),
+          instructions: (cp.activity ?? []).map((a) => a.detail?.description ?? textOf(a.detail?.code)).filter((x): x is string => !!x), status: cp.status === "completed" ? "completed" : "active", source: src(cp),
         });
         break;
       }
       default: {
         const unknown = r as { resourceType: string; id?: string };
-        out.warnings.push(`${unknown.resourceType}/${unknown.id ?? "?"} is not part of the Passport yet — skipped.`);
+        unsupported.set(unknown.resourceType, (unsupported.get(unknown.resourceType) ?? 0) + 1);
       }
     }
+  }
+  for (const [resourceType, count] of unsupported) {
+    out.warnings.push(`${count} ${resourceType} resource${count === 1 ? " is" : "s are"} not part of the Passport yet — skipped.`);
   }
   out.vitals = [...vitalsByTime.values()];
   return out;

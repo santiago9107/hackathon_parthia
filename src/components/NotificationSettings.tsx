@@ -56,8 +56,8 @@ export function NotificationSettings() {
 
   async function onTest() {
     const ok = await showLocalNotification("Time for your morning medicines", {
-      body: `${record.patient.name.split(" ")[0]}, tap to see today's list — ${record.patient.medications.length} medicines.`,
-      url: "/medications/",
+      body: `${record.patient.name.split(" ")[0]}, tap to review today's confirmed prescription schedule and mark doses taken.`,
+      url: "/#todays-medications",
     });
     setStatus(ok ? "Sent a test reminder." : "Notifications aren't enabled yet.");
   }
@@ -71,7 +71,7 @@ export function NotificationSettings() {
     <Card className="p-5">
       <h2 className="font-serif text-xl font-semibold text-navy">Reminders & nudges</h2>
       <p className="mt-1 text-sm text-ink-muted">
-        A medication reminder each morning and a short mood check-in each evening. Delivered as notifications, even when the app is closed.
+        Choose one daily medication reminder and a short evening check-in. Your dashboard keeps the individual Taken, Snoozed and Skipped history on this device.
       </p>
 
       {gate === "ios-not-installed" && (

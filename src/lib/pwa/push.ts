@@ -168,7 +168,7 @@ export async function scheduleDailyReminders(settings: ReminderSettings, patient
     msUntil(settings.medicationTime),
     "Time for your morning medicines",
     `${patientFirstName}, tap to see today's list and mark them taken.`,
-    "/medications/",
+    "/#todays-medications",
   );
   await scheduleNotification(
     msUntil(settings.checkInTime),

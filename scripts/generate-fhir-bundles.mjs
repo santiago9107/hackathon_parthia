@@ -146,7 +146,7 @@ function builder(prefix, patientRef) {
 
 function bundle(pid, patient, resources, org) {
   return {
-    resourceType: "Bundle", id: `everything-${pid}`, type: "searchset", timestamp: "2026-09-11T07:00:00Z",
+    resourceType: "Bundle", id: `everything-${pid}`, type: "searchset", timestamp: "2026-10-03T07:00:00Z",
     meta: { tag: [{ system: "https://parthiahealth.com/fhir/tags", code: "SYNTHETIC", display: `SYNTHETIC — simulated ${org} (Epic MyChart) export, no real patient` }] },
     entry: [patient, ...resources].map((r) => ({ fullUrl: `urn:uuid:${r.id}`, resource: r })),
   };
@@ -214,9 +214,9 @@ function harold() {
   b.note({ date: "2026-07-10", loinc: "11506-3", typeDisplay: "Progress note", title: "Anticoagulation clinic note", author: park, org: ORG, encounter: e5,
     text: "ANTICOAGULATION CLINIC\nINR 2.4, in range. Continue warfarin 5 mg daily. Recheck in 2 weeks." });
 
-  b.appointment({ start: "2026-09-18T08:30:00", status: "booked", practitioner: park, specialty: "Anticoagulation clinic", reason: "INR recheck", location: "Riverside Heart Center" });
-  b.appointment({ start: "2026-09-18T08:15:00", status: "booked", practitioner: park, specialty: "Laboratory", reason: "CBC recheck (lab draw before INR visit)", location: "Riverside Heart Center lab" }); // NEW
-  b.appointment({ start: "2026-10-02T09:15:00", status: "booked", practitioner: nwosu, specialty: "Internal Medicine", reason: "Follow-up: bruising, INR, new aspirin", location: "Riverside Health — Primary Care" });
+  b.appointment({ start: "2026-10-10T08:30:00", status: "booked", practitioner: park, specialty: "Anticoagulation clinic", reason: "INR recheck", location: "Riverside Heart Center" });
+  b.appointment({ start: "2026-10-10T08:15:00", status: "booked", practitioner: park, specialty: "Laboratory", reason: "CBC recheck (lab draw before INR visit)", location: "Riverside Heart Center lab" }); // NEW
+  b.appointment({ start: "2026-10-24T09:15:00", status: "booked", practitioner: nwosu, specialty: "Internal Medicine", reason: "Follow-up: bruising, INR, new aspirin", location: "Riverside Health — Primary Care" });
   b.appointment({ start: "2026-11-12T11:00:00", status: "booked", practitioner: cho, specialty: "Cardiology", reason: "Cardiology follow-up", location: "Riverside Heart Center" });
 
   b.immunization("197", "Influenza, high-dose, quadrivalent, preservative free", "2025-10-08", "Riverside Pharmacy");

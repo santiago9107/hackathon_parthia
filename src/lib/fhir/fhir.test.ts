@@ -6,11 +6,15 @@ import type { FhirBundle } from "./types";
 import haroldJson from "./bundles/p-harold.json";
 import margaretJson from "./bundles/p-margaret.json";
 import rosaJson from "./bundles/p-rosa.json";
+import syntheaJson from "./fixtures/synthea-r4-compact.json";
+import syntheaDemoJson from "./bundles/synthea-shaun.json";
 
 const harold = haroldJson as unknown as FhirBundle;
 const margaret = margaretJson as unknown as FhirBundle;
 const rosa = rosaJson as unknown as FhirBundle;
-const opts = (patientId: string) => ({ patientId, sourceLabel: "Epic MyChart (simulated)", importedAt: "2026-09-11T09:00:00Z" });
+const synthea = syntheaJson as unknown as FhirBundle;
+const syntheaDemo = syntheaDemoJson as unknown as FhirBundle;
+const opts = (patientId: string) => ({ patientId, sourceLabel: "Epic MyChart (simulated)", importedAt: "2026-10-03T09:00:00Z" });
 
 describe("synthetic bundles", () => {
   it.each([["Harold", harold], ["Margaret", margaret], ["Rosa", rosa]] as const)("%s's bundle is tagged SYNTHETIC and covers every resource type", (_n, b) => {
@@ -34,6 +38,7 @@ describe("mapper helpers", () => {
     expect(medicationNameFromDisplay("metoprolol succinate 25 MG Extended Release Oral Tablet")).toBe("Metoprolol succinate");
     expect(medicationNameFromDisplay("potassium chloride 10 MEQ Extended Release Oral Tablet")).toBe("Potassium chloride");
     expect(medicationNameFromDisplay("metformin hydrochloride 500 MG Oral Tablet")).toBe("Metformin");
+    expect(medicationNameFromDisplay("24 HR metoprolol succinate 100 MG Extended Release Oral Tablet")).toBe("Metoprolol succinate");
   });
 
   it("turns FHIR timing into plain language", () => {
@@ -42,6 +47,69 @@ describe("mapper helpers", () => {
     expect(frequencyText({ text: "at bedtime", timing: { repeat: { frequency: 1, period: 1, periodUnit: "d" } } })).toBe("at bedtime");
     expect(frequencyText({ asNeededBoolean: true, timing: { repeat: { frequency: 1, period: 1, periodUnit: "d" } } })).toBe("once daily as needed");
     expect(frequencyText({ timing: { repeat: { frequency: 1, period: 1, periodUnit: "wk" } } })).toBe("once weekly");
+  });
+});
+
+describe("bundled Synthea demo patient", () => {
+  const seed = getSeedRecord("p-synthea-shaun")!;
+  const prepared = prepareFhirImport(syntheaDemo, seed, "Synthea FHIR R4 sample", "2026-10-03T09:00:00Z");
+
+  it("matches the import-only patient and creates a substantial review batch", () => {
+    expect(prepared.identityMismatch).toBeNull();
+    expect(prepared.mapped.patient?.name).toBe("Shaun461 Javier97 Cormier289");
+    expect(prepared.mapped.medications).toHaveLength(8);
+    expect(prepared.mapped.allergies).toHaveLength(3);
+    expect(prepared.mapped.labs.length).toBeGreaterThan(30);
+    expect(prepared.mapped.procedures.length).toBeGreaterThan(10);
+    expect(Object.values(prepared.plan.newCounts).reduce((sum, count) => sum + (count ?? 0), 0)).toBeGreaterThan(100);
+  });
+
+  it("keeps every imported clinical item unverified until patient review", () => {
+    expect([...prepared.mapped.medications, ...prepared.mapped.allergies, ...prepared.mapped.labs].every((item) => !item.source.verified)).toBe(true);
+    expect(prepared.mapped.medications.find((medication) => medication.genericName === "simvastatin")?.dose).toBe("1 tablet");
+  });
+});
+
+describe("mapBundle (current Synthea R4 shapes)", () => {
+  const m = mapBundle(synthea, opts("p-synthea"));
+
+  it("resolves urn:uuid Medication references while preserving review-before-use provenance", () => {
+    expect(m.patient).toMatchObject({ name: "Sam Synthetic", birthDate: "1980-01-01", gender: "other" });
+    expect(m.medications).toHaveLength(1);
+    expect(m.medications[0]).toMatchObject({
+      name: "Acetaminophen",
+      genericName: "acetaminophen",
+      startDate: "2025-01-02",
+      frequency: "as directed",
+      prescriber: "Dr. Synthia172 Keebler762",
+      status: "stopped",
+      source: { kind: "ehr", verified: false, refId: "MedicationRequest/medication-request-1", originalText: "Acetaminophen 325 MG Oral Tablet" },
+    });
+  });
+
+  it("uses performedPeriod and coded care-plan activities", () => {
+    expect(m.procedures[0]).toMatchObject({ name: "Medication reconciliation (procedure)", date: "2025-02-03", code: "430193006" });
+    expect(m.carePlans[0]).toMatchObject({
+      title: "Head injury rehabilitation (regime/therapy)",
+      date: "2025-02-03",
+      status: "completed",
+      instructions: ["Recommendation to rest (procedure)"],
+    });
+  });
+
+  it("links encounter notes through urn references and falls back to DiagnosticReport.presentedForm", () => {
+    const documentEncounter = m.encounters.find((e) => e.id === "ehr-encounter-document")!;
+    expect(documentEncounter).toMatchObject({ documentId: "ehr-document-1", summary: "DOCUMENT NOTE Take with food." });
+
+    const presentedFormEncounter = m.encounters.find((e) => e.id === "ehr-encounter-presented-form")!;
+    expect(presentedFormEncounter).toMatchObject({ documentId: "ehr-diagnostic-note-1", summary: "PRESENTED FORM NOTE Follow up as needed." });
+    expect(m.documents.find((d) => d.id === "ehr-diagnostic-note-1")).toMatchObject({ type: "visit-summary", date: "2025-02-03" });
+    expect(m.labPanels).toHaveLength(1);
+  });
+
+  it("links lab results to their panel through a urn reference and summarizes unsupported resources", () => {
+    expect(m.labs[0].panelId).toBe("ehr-diagnostic-lab-1");
+    expect(m.warnings).toContain("1 Claim resource is not part of the Passport yet — skipped.");
   });
 });
 
@@ -130,7 +198,7 @@ describe("mapBundle (Margaret, Rosa)", () => {
 
 describe("import planning against the Passport", () => {
   const record = getSeedRecord("p-harold")!;
-  const { plan, identityMismatch } = prepareFhirImport(harold, record, "Epic MyChart (simulated)", "2026-09-11T09:00:00Z");
+  const { plan, identityMismatch } = prepareFhirImport(harold, record, "Epic MyChart (simulated)", "2026-10-03T09:00:00Z");
 
   it("skips what the Passport already has", () => {
     expect(identityMismatch).toBeNull();

@@ -8,12 +8,17 @@ import {
   allergyMatches,
   buildAllergy,
   buildMedication,
+  buildNutritionEntry,
+  isSafeMealPhotoDataUrl,
   looksLikePhone,
   medicationChangeEvent,
+  parseIngredientList,
   toKg,
   validateMedication,
+  validateNutrition,
   validateVitals,
   type MedicationInput,
+  type NutritionInput,
 } from "./entries";
 
 const med = (over: Partial<MedicationInput> = {}): MedicationInput => ({
@@ -72,16 +77,16 @@ describe("medications you enter", () => {
     const before = buildMedication(med({ name: "Lisinopril", dose: "10" }));
     const higher = buildMedication(med({ name: "Lisinopril", dose: "20" }), before);
     const stopped = buildMedication(med({ name: "Lisinopril", dose: "20", status: "stopped", stoppedOn: "2026-09-10" }), higher);
-    expect(medicationChangeEvent("p", undefined, before, "2026-09-11")?.type).toBe("started");
-    expect(medicationChangeEvent("p", before, higher, "2026-09-11")).toMatchObject({ type: "dose-changed", detail: expect.stringContaining("10 mg to 20 mg") });
-    expect(medicationChangeEvent("p", higher, stopped, "2026-09-11")).toMatchObject({ type: "stopped", date: "2026-09-10" });
-    expect(medicationChangeEvent("p", higher, { ...higher }, "2026-09-11")).toBeNull();
+    expect(medicationChangeEvent("p", undefined, before, "2026-10-03")?.type).toBe("started");
+    expect(medicationChangeEvent("p", before, higher, "2026-10-03")).toMatchObject({ type: "dose-changed", detail: expect.stringContaining("10 mg to 20 mg") });
+    expect(medicationChangeEvent("p", higher, stopped, "2026-10-03")).toMatchObject({ type: "stopped", date: "2026-09-10" });
+    expect(medicationChangeEvent("p", higher, { ...higher }, "2026-10-03")).toBeNull();
   });
 
   it("a medicine you add is checked by the safety engine (naproxen on warfarin → high flag)", () => {
     const harold = getSeedRecord("p-harold")!;
     const naproxen = buildMedication(med());
-    const record = mergeRecord(harold, upsertItems(emptyPassport("p-harold"), "medications", [naproxen], "confirmed", "2026-09-11T09:00:00"));
+    const record = mergeRecord(harold, upsertItems(emptyPassport("p-harold"), "medications", [naproxen], "confirmed", "2026-10-03T09:00:00"));
     const flag = evaluatePatient(record, { now: referenceNow() }).find((f) => f.ruleId === "drug-drug/known-pairs/warfarin+antiplatelet");
     expect(flag?.severity).toBe("high");
     expect(flag?.medications).toContain("Naproxen");
@@ -99,6 +104,65 @@ describe("allergies you enter", () => {
     const a = buildAllergy({ substance: "Peanuts", category: "food", reaction: "Hives", severity: "severe", type: "allergy" }, "p-rosa");
     expect(a.matches).toBeUndefined();
     expect(a.source.kind).toBe("patient-entered");
+  });
+});
+
+const meal = (over: Partial<NutritionInput> = {}): NutritionInput => ({
+  meal: "lunch",
+  description: "Spinach salad with chicken",
+  tags: ["balanced", "high-vitamin-k"],
+  tagsConfirmed: true,
+  portion: "1 large bowl",
+  ingredients: "spinach, chicken, walnuts",
+  caloriesKcal: "420",
+  proteinG: "32",
+  carbohydratesG: "24",
+  sodiumMg: "310",
+  sugarG: "6",
+  potassiumMg: "",
+  vitaminKMcg: "",
+  ...over,
+});
+
+describe("meals you enter", () => {
+  it("requires a meal, description, and explicit review of user-chosen tags", () => {
+    expect(validateNutrition(meal({ meal: null, description: "", tagsConfirmed: false }))).toMatchObject({
+      meal: expect.any(String),
+      description: expect.any(String),
+      confirmation: expect.any(String),
+    });
+    expect(validateNutrition(meal())).toEqual({});
+  });
+
+  it("allows blank estimates and rejects invalid or negative values", () => {
+    expect(validateNutrition(meal({ caloriesKcal: "", sodiumMg: "" }))).toEqual({});
+    expect(validateNutrition(meal({ caloriesKcal: "many", sodiumMg: "-2" }))).toMatchObject({
+      caloriesKcal: expect.any(String),
+      sodiumMg: expect.any(String),
+    });
+  });
+
+  it("builds optional estimates and de-duplicates confirmed ingredients", () => {
+    const entry = buildNutritionEntry(meal({ ingredients: "Spinach, chicken; spinach\nWalnuts" }), "p-test", "2026-10-03T12:30:00", new Date("2026-10-03T13:00:00Z"));
+    expect(entry).toMatchObject({
+      patientId: "p-test",
+      meal: "lunch",
+      description: "Spinach salad with chicken",
+      portion: "1 large bowl",
+      ingredients: ["Spinach", "chicken", "Walnuts"],
+      estimatedNutrients: { caloriesKcal: 420, proteinG: 32, sodiumMg: 310 },
+      source: { kind: "patient-entered", verified: true },
+    });
+  });
+
+  it("accepts only raster image data URLs for stored meal photos", () => {
+    expect(isSafeMealPhotoDataUrl("data:image/jpeg;base64,/9j/AA==")).toBe(true);
+    expect(isSafeMealPhotoDataUrl("data:image/svg+xml;base64,PHN2Zz4=")).toBe(false);
+    expect(validateNutrition(meal({ photoDataUrl: "javascript:alert(1)" })).photoDataUrl).toBeDefined();
+  });
+
+  it("parses no ingredients as undefined", () => {
+    expect(parseIngredientList(" , ; \n")).toBeUndefined();
   });
 });
 

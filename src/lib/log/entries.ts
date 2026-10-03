@@ -4,6 +4,9 @@ import type {
   Medication,
   MedicationClass,
   MedicationEvent,
+  NutrientEstimate,
+  NutritionEntry,
+  NutritionTag,
   PatientId,
 } from "../types";
 import { lookupDrug } from "../terminology/medications";
@@ -176,6 +179,101 @@ export function buildAllergy(input: AllergyInput, patientId: PatientId, existing
     severity: input.severity,
     recordedOn: existing?.recordedOn ?? now.toISOString().slice(0, 10),
     code: drug?.rxcui ?? existing?.code,
+    source: youSource(now),
+  };
+}
+
+/* ---- Meals -------------------------------------------------------------- */
+
+export interface NutritionInput {
+  meal: NutritionEntry["meal"] | null;
+  description: string;
+  tags: NutritionTag[];
+  tagsConfirmed: boolean;
+  portion: string;
+  ingredients: string;
+  caloriesKcal: string;
+  proteinG: string;
+  carbohydratesG: string;
+  sodiumMg: string;
+  sugarG: string;
+  potassiumMg: string;
+  vitaminKMcg: string;
+  photoDataUrl?: string;
+}
+
+type NutritionNumberKey = keyof NutrientEstimate;
+export type NutritionErrors = Errors<"meal" | "description" | "confirmation" | "photoDataUrl" | NutritionNumberKey>;
+
+const NUTRIENT_INPUTS: readonly [NutritionNumberKey, keyof NutritionInput][] = [
+  ["caloriesKcal", "caloriesKcal"],
+  ["proteinG", "proteinG"],
+  ["carbohydratesG", "carbohydratesG"],
+  ["sodiumMg", "sodiumMg"],
+  ["sugarG", "sugarG"],
+  ["potassiumMg", "potassiumMg"],
+  ["vitaminKMcg", "vitaminKMcg"],
+];
+
+/** Data URLs are rendered back into the page, so allow only non-SVG image formats. */
+export function isSafeMealPhotoDataUrl(value: string): boolean {
+  return /^data:image\/(?:jpeg|png|webp);base64,[a-z0-9+/]+=*$/i.test(value);
+}
+
+export function validateNutrition(input: NutritionInput): NutritionErrors {
+  const errors: NutritionErrors = {};
+  if (!input.meal) errors.meal = "Which meal was it?";
+  if (!input.description.trim()) errors.description = "What did you have? A few words is enough.";
+  if (!input.tagsConfirmed) errors.confirmation = "Review the description and tags, then confirm them.";
+  if (input.photoDataUrl && !isSafeMealPhotoDataUrl(input.photoDataUrl)) errors.photoDataUrl = "That photo could not be stored safely. Please choose it again.";
+
+  for (const [nutrient, field] of NUTRIENT_INPUTS) {
+    const raw = input[field] as string;
+    if (!raw.trim()) continue;
+    const value = parseNumber(raw);
+    if (value === undefined || value < 0) errors[nutrient] = "Use zero or a positive number.";
+  }
+  return errors;
+}
+
+export function parseIngredientList(value: string): string[] | undefined {
+  const seen = new Set<string>();
+  const ingredients = value
+    .split(/[,;\n]/)
+    .map((item) => item.trim())
+    .filter((item) => {
+      const key = item.toLowerCase();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  return ingredients.length ? ingredients : undefined;
+}
+
+export function buildNutritionEntry(
+  input: NutritionInput,
+  patientId: PatientId,
+  timestamp: string,
+  now = new Date(),
+): NutritionEntry {
+  if (!input.meal) throw new Error("A meal type is required.");
+  const estimatedNutrients = Object.fromEntries(
+    NUTRIENT_INPUTS.flatMap(([nutrient, field]) => {
+      const value = parseNumber(input[field] as string);
+      return value === undefined ? [] : [[nutrient, value]];
+    }),
+  ) as NutrientEstimate;
+  return {
+    id: newId("nu-you"),
+    patientId,
+    timestamp,
+    meal: input.meal,
+    description: input.description.trim(),
+    tags: [...input.tags],
+    portion: input.portion.trim() || undefined,
+    ingredients: parseIngredientList(input.ingredients),
+    estimatedNutrients: Object.keys(estimatedNutrients).length ? estimatedNutrients : undefined,
+    photoDataUrl: input.photoDataUrl && isSafeMealPhotoDataUrl(input.photoDataUrl) ? input.photoDataUrl : undefined,
     source: youSource(now),
   };
 }

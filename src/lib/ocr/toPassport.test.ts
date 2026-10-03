@@ -16,9 +16,9 @@ function scanAndConfirm(sample: string, patientId: string, saveDocument = false)
   const x = extractDocument(fixture(sample));
   const { meds, labs } = rowsFromExtraction(x, record);
   const details: ScanDetails = { type: x.documentType, date: x.date!, prescriber: x.prescriber ?? "", organization: x.organization ?? "", title: defaultTitle(x), panelName: x.panelName, saveDocument };
-  const items = buildScanItems(details, meds, labs, { patientId, text: "…", textConfidence: x.textConfidence, now: new Date("2026-09-11T10:00:00") });
+  const items = buildScanItems(details, meds, labs, { patientId, text: "…", textConfidence: x.textConfidence, now: new Date("2026-10-03T10:00:00") });
   let local = emptyPassport(patientId);
-  for (const [c, list] of Object.entries(items)) local = upsertItems(local, c as never, list as never, "confirmed", "2026-09-11T10:00:00");
+  for (const [c, list] of Object.entries(items)) local = upsertItems(local, c as never, list as never, "confirmed", "2026-10-03T10:00:00");
   return { record, x, meds, labs, items, merged: mergeRecord(record, local) };
 }
 

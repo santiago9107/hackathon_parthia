@@ -6,9 +6,9 @@
  * analogue exists it is noted in a comment so the mapping layer is obvious.
  */
 
-/** ISO-8601 date-time string, e.g. "2026-09-11T08:30:00.000Z". */
+/** ISO-8601 date-time string, e.g. "2026-10-03T08:30:00.000Z". */
 export type ISODateTime = string;
-/** ISO-8601 calendar date, e.g. "2026-09-11". */
+/** ISO-8601 calendar date, e.g. "2026-10-03". */
 export type ISODate = string;
 
 export type PatientId = string;
@@ -227,6 +227,17 @@ export type NutritionTag =
   | "caffeine"
   | "balanced";
 
+/** Patient-confirmed approximations, optionally prefilled by meal-photo AI. */
+export interface NutrientEstimate {
+  caloriesKcal?: number;
+  proteinG?: number;
+  carbohydratesG?: number;
+  sodiumMg?: number;
+  sugarG?: number;
+  potassiumMg?: number;
+  vitaminKMcg?: number;
+}
+
 export interface NutritionEntry extends Sourced {
   id: string;
   patientId: PatientId;
@@ -234,6 +245,14 @@ export interface NutritionEntry extends Sourced {
   meal: "breakfast" | "lunch" | "dinner" | "snack";
   description: string;
   tags: NutritionTag[];
+  /** A compact on-device preview; the original photo is never retained. */
+  photoDataUrl?: string;
+  /** Free-text serving approximation, e.g. "1 bowl" or "about 2 cups". */
+  portion?: string;
+  /** Ingredients the patient knows are present; a photo cannot establish these. */
+  ingredients?: string[];
+  /** Optional estimates from a label, the patient, or AI and then confirmed by the patient. */
+  estimatedNutrients?: NutrientEstimate;
 }
 
 /* ---- Patient Passport ----------------------------------------------------- */

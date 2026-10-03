@@ -24,7 +24,7 @@ import { seeded, seededAll, type Unsourced } from "./seed";
  * team, allergies, immunizations, procedures, lab panels, care plans,
  * documents, nutrition profile, screening history and emergency info.
  * Everything is coherent with the persona stories in `patients.ts` /
- * `entries.ts` and dated relative to REFERENCE_DATE (2026-09-11).
+ * `entries.ts` and dated relative to REFERENCE_DATE (2026-10-03).
  */
 
 interface SeedPassport {
@@ -97,8 +97,8 @@ const harold: SeedPassport = {
     { id: "ap-h2", patientId: H, start: "2026-08-15T09:00:00", status: "fulfilled", clinician: NWOSU, specialty: "Internal Medicine", location: "Riverside Health — Primary Care", reason: "Diabetes and blood pressure follow-up", encounterId: "en-h2" },
     { id: "ap-h3", patientId: H, start: "2026-08-20T10:30:00", status: "fulfilled", clinician: CHO, specialty: "Cardiology", location: "Riverside Heart Center", reason: "Atrial fibrillation follow-up", encounterId: "en-h3" },
     { id: "ap-h4", patientId: H, start: "2026-09-04T08:30:00", status: "fulfilled", clinician: "Linda Park, PharmD", specialty: "Anticoagulation clinic", location: "Riverside Heart Center", reason: "INR check", encounterId: "en-h4" },
-    { id: "ap-h5", patientId: H, start: "2026-09-18T08:30:00", status: "booked", clinician: "Linda Park, PharmD", specialty: "Anticoagulation clinic", location: "Riverside Heart Center", reason: "INR recheck" },
-    { id: "ap-h6", patientId: H, start: "2026-10-02T09:15:00", status: "booked", clinician: NWOSU, specialty: "Internal Medicine", location: "Riverside Health — Primary Care", reason: "Follow-up: bruising, INR, new aspirin" },
+    { id: "ap-h5", patientId: H, start: "2026-10-10T08:30:00", status: "booked", clinician: "Linda Park, PharmD", specialty: "Anticoagulation clinic", location: "Riverside Heart Center", reason: "INR recheck" },
+    { id: "ap-h6", patientId: H, start: "2026-10-24T09:15:00", status: "booked", clinician: NWOSU, specialty: "Internal Medicine", location: "Riverside Health — Primary Care", reason: "Follow-up: bruising, INR, new aspirin" },
     { id: "ap-h7", patientId: H, start: "2026-11-12T11:00:00", status: "booked", clinician: CHO, specialty: "Cardiology", location: "Riverside Heart Center", reason: "Cardiology follow-up" },
   ],
   encounters: [
@@ -230,12 +230,12 @@ const margaret: SeedPassport = {
   appointments: [
     { id: "ap-m1", patientId: M, start: "2026-05-14T13:30:00", status: "fulfilled", clinician: "Carmen Ruiz, RDN", specialty: "Nutrition", location: "Lakeside Medical — Nutrition", reason: "Heart failure diet", encounterId: "en-m1" },
     { id: "ap-m2", patientId: M, start: "2026-07-10T10:00:00", status: "fulfilled", clinician: GRANT, specialty: "Cardiology (heart failure clinic)", location: "Lakeside Heart & Vascular", reason: "Heart failure follow-up", encounterId: "en-m2" },
-    { id: "ap-m3", patientId: M, start: "2026-08-22T15:00:00", status: "fulfilled", clinician: PETROV, specialty: "Psychiatry", location: "Lakeside Behavioral Health", reason: "Medication review — depression", encounterId: "en-m3" },
+    { id: "ap-m3", patientId: M, start: "2026-09-13T15:00:00", status: "fulfilled", clinician: PETROV, specialty: "Psychiatry", location: "Lakeside Behavioral Health", reason: "Medication review — depression", encounterId: "en-m3" },
     { id: "ap-m4", patientId: M, start: "2026-08-28T09:00:00", status: "fulfilled", clinician: REYES, specialty: "Family Medicine", location: "Lakeside Medical — Primary Care", reason: "Labs and diabetes check", encounterId: "en-m4" },
-    { id: "ap-m5", patientId: M, start: "2026-09-02T11:00:00", status: "fulfilled", clinician: MOREAU, specialty: "Psychology", location: "Lakeside Behavioral Health", reason: "Therapy session", encounterId: "en-m5" },
-    { id: "ap-m6", patientId: M, start: "2026-09-15T11:00:00", status: "booked", clinician: MOREAU, specialty: "Psychology", location: "Lakeside Behavioral Health", reason: "Therapy session" },
-    { id: "ap-m7", patientId: M, start: "2026-09-24T15:30:00", status: "booked", clinician: PETROV, specialty: "Psychiatry", location: "Lakeside Behavioral Health", reason: "Follow-up after sertraline dose change" },
-    { id: "ap-m8", patientId: M, start: "2026-10-06T09:00:00", status: "booked", clinician: REYES, specialty: "Family Medicine", location: "Lakeside Medical — Primary Care", reason: "Diabetes and kidney function follow-up" },
+    { id: "ap-m5", patientId: M, start: "2026-09-24T11:00:00", status: "fulfilled", clinician: MOREAU, specialty: "Psychology", location: "Lakeside Behavioral Health", reason: "Therapy session", encounterId: "en-m5" },
+    { id: "ap-m6", patientId: M, start: "2026-10-07T11:00:00", status: "booked", clinician: MOREAU, specialty: "Psychology", location: "Lakeside Behavioral Health", reason: "Therapy session" },
+    { id: "ap-m7", patientId: M, start: "2026-10-16T15:30:00", status: "booked", clinician: PETROV, specialty: "Psychiatry", location: "Lakeside Behavioral Health", reason: "Follow-up after sertraline dose change" },
+    { id: "ap-m8", patientId: M, start: "2026-10-28T09:00:00", status: "booked", clinician: REYES, specialty: "Family Medicine", location: "Lakeside Medical — Primary Care", reason: "Diabetes and kidney function follow-up" },
   ],
   encounters: [
     {
@@ -251,7 +251,7 @@ const margaret: SeedPassport = {
       diagnoses: ["Heart failure with preserved ejection fraction"],
     },
     {
-      id: "en-m3", patientId: M, date: "2026-08-22", type: "office", clinician: PETROV, specialty: "Psychiatry", organization: "Lakeside Behavioral Health",
+      id: "en-m3", patientId: M, date: "2026-09-13", type: "office", clinician: PETROV, specialty: "Psychiatry", organization: "Lakeside Behavioral Health",
       reason: "Medication review — depression",
       summary: "Residual low mood and poor sleep on sertraline 50 mg. PHQ-9 today 7. Increased sertraline to 100 mg daily. Discussed that it can take several weeks to notice a benefit and to report any worsening mood sooner. Follow up in about 4 weeks.",
       diagnoses: ["Major depressive disorder, recurrent, moderate"], documentId: "doc-m2",
@@ -263,7 +263,7 @@ const margaret: SeedPassport = {
       diagnoses: ["Type 2 diabetes", "Chronic kidney disease stage 3a (to confirm)"],
     },
     {
-      id: "en-m5", patientId: M, date: "2026-09-02", type: "therapy", clinician: MOREAU, specialty: "Psychology", organization: "Lakeside Behavioral Health",
+      id: "en-m5", patientId: M, date: "2026-09-24", type: "therapy", clinician: MOREAU, specialty: "Psychology", organization: "Lakeside Behavioral Health",
       reason: "Therapy session",
       summary: "Reports lower energy and less interest in her usual activities over the past two weeks; spending more time in bed. PHQ-9 12, GAD-7 8. No thoughts of self-harm. Worked on scheduling small pleasant activities. Encouraged her to share these changes with Dr. Petrov.",
       diagnoses: ["Major depressive disorder, recurrent"], documentId: "doc-m3",
@@ -305,7 +305,7 @@ const margaret: SeedPassport = {
       instructions: ["Weigh yourself every morning after using the bathroom.", "Call the clinic if weight is up 2 lb in a day or 5 lb in a week.", "Sodium under 2 g a day; fluids about 1.5–2 L."],
     },
     {
-      id: "cp-m2", patientId: M, title: "Depression care", category: "mental-health", author: PETROV, date: "2026-08-22", status: "active",
+      id: "cp-m2", patientId: M, title: "Depression care", category: "mental-health", author: PETROV, date: "2026-09-13", status: "active",
       instructions: ["Sertraline 100 mg once daily.", "Weekly therapy with Dr. Moreau.", "Report worsening mood, new or stronger thoughts of self-harm, or unusual restlessness right away."],
     },
     {
@@ -319,11 +319,11 @@ const margaret: SeedPassport = {
       text: "NUTRITION NOTE\nDiagnoses: HFpEF, type 2 diabetes.\nSodium goal under 2 g/day; fluids 1.5–2 L/day.\nMain sodium sources: canned soup, deli meat, restaurant meals.\nCarbohydrate portions reviewed (plate method).",
     },
     {
-      id: "doc-m2", patientId: M, title: "Psychiatry visit — medication review", type: "visit-summary", date: "2026-08-22", author: PETROV, organization: "Lakeside Behavioral Health",
+      id: "doc-m2", patientId: M, title: "Psychiatry visit — medication review", type: "visit-summary", date: "2026-09-13", author: PETROV, organization: "Lakeside Behavioral Health",
       text: "PSYCHIATRY FOLLOW-UP\nPHQ-9: 7. Residual low mood, poor sleep.\nPlan: increase sertraline 50 mg → 100 mg daily. Continue therapy.\nFollow up in ~4 weeks; report worsening mood sooner.",
     },
     {
-      id: "doc-m3", patientId: M, title: "Therapy session note", type: "behavioral-health-note", date: "2026-09-02", author: MOREAU, organization: "Lakeside Behavioral Health",
+      id: "doc-m3", patientId: M, title: "Therapy session note", type: "behavioral-health-note", date: "2026-09-24", author: MOREAU, organization: "Lakeside Behavioral Health",
       text: "BEHAVIORAL HEALTH NOTE\nLower energy and interest over two weeks, more time in bed.\nPHQ-9: 12 (moderate). GAD-7: 8 (mild). Denies thoughts of self-harm.\nIntervention: behavioral activation, small scheduled activities.\nPlan: continue weekly; patient to share changes with psychiatrist.",
     },
   ],
@@ -331,11 +331,11 @@ const margaret: SeedPassport = {
     screening("as-m1", M, "PHQ-9", "2026-03-10", 5, "clinician"),
     screening("as-m2", M, "GAD-7", "2026-03-10", 4, "clinician"),
     screening("as-m3", M, "PHQ-9", "2026-06-15", 5, "self"),
-    screening("as-m4", M, "PHQ-9", "2026-08-22", 7, "clinician"),
-    screening("as-m5", M, "GAD-7", "2026-08-22", 5, "clinician"),
-    screening("as-m6", M, "PHQ-9", "2026-09-02", 12, "clinician"),
-    screening("as-m7", M, "GAD-7", "2026-09-02", 8, "clinician"),
-    screening("as-m8", M, "PHQ-9", "2026-09-09", 16, "self"),
+    screening("as-m4", M, "PHQ-9", "2026-09-13", 7, "clinician"),
+    screening("as-m5", M, "GAD-7", "2026-09-13", 5, "clinician"),
+    screening("as-m6", M, "PHQ-9", "2026-09-24", 12, "clinician"),
+    screening("as-m7", M, "GAD-7", "2026-09-24", 8, "clinician"),
+    screening("as-m8", M, "PHQ-9", "2026-10-01", 16, "self"),
   ],
   socialHistory: [
     { id: "sh-m1", patientId: M, category: "tobacco", value: "Never smoked", date: "2026-08-28", code: "72166-2" },

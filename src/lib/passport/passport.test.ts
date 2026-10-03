@@ -11,7 +11,7 @@ import { latestLab, latestLabs } from "./selectors";
 import { PassportStore } from "./store";
 
 const P = "p-harold";
-const AT = "2026-09-11T09:00:00";
+const AT = "2026-10-03T09:00:00";
 const typed = (kind: DataSource["kind"], label: string): DataSource => ({ kind, label, importedAt: AT, verified: false });
 
 const naproxen: Medication = {

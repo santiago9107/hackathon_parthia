@@ -46,7 +46,7 @@ describe("the fuller Passport moves the indicators", () => {
 
   it("low home blood pressure readings reach Physical & Labs", () => {
     const rosa = getSeedRecord("p-rosa")!;
-    const lows = simulateBpSync("p-margaret", "2026-09-11", 14).map((v) => ({ ...v, patientId: "p-rosa" }));
+    const lows = simulateBpSync("p-margaret", "2026-10-03", 14).map((v) => ({ ...v, patientId: "p-rosa" }));
     const r = { ...rosa, patient: { ...rosa.patient, vitals: [...rosa.patient.vitals, ...lows] } };
     const p = byDomain(r).physical;
     expect(p.level).toBe("attention");

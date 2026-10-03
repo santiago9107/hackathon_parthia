@@ -12,6 +12,7 @@ import { SourceBadge } from "@/components/passport/SourceBadge";
 import { fmtDateTime } from "@/components/passport/PassportChrome";
 import { pendingEntries } from "@/lib/passport/ops";
 import { openIssues } from "@/lib/reconcile";
+import { TodayMedications } from "@/lib/reminders/TodayMedications";
 
 function greeting(now: Date) {
   const h = now.getHours();
@@ -68,6 +69,8 @@ export default function DashboardPage() {
           <StatusCard key={ind.domain} indicator={ind} />
         ))}
       </div>
+
+      <TodayMedications patientId={patient.id} medications={patient.medications} date={now} />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">

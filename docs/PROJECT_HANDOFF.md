@@ -1,6 +1,6 @@
 # Parthia Health — Project Handoff
 
-_Last updated: 2026-09-11. Written to give another assistant or engineer full context on the prototype: what it is, how it is built, how it works, where it runs, and what comes next._
+_Last updated: 2026-10-03. Written to give another assistant or engineer full context on the prototype: what it is, how it is built, how it works, where it runs, and what comes next._
 
 ---
 
@@ -21,7 +21,7 @@ It is **not** a production or clinical system. It uses **synthetic data only**. 
 
 ---
 
-## 2. Current status (as of 2026-09-11)
+## 2. Current status (as of 2026-10-03)
 
 | Item | State |
 | --- | --- |
@@ -156,7 +156,7 @@ Nutrition tags are a closed set on purpose: rules match on tags, and a real food
 
 ## 6. Synthetic data (`src/lib/mockData/`)
 
-**Fixed reference date:** `REFERENCE_DATE = "2026-09-11"`. The whole demo evaluates "as of" this date (`referenceNow()`), so seeded data stays coherent regardless of the real clock. Entries are generated deterministically with a seeded PRNG (mulberry32) for 35 days back from the reference date.
+**Fixed reference date:** `REFERENCE_DATE = "2026-10-03"`. The whole demo evaluates "as of" this date (`referenceNow()`), so seeded data stays coherent regardless of the real clock. Entries are generated deterministically with a seeded PRNG (mulberry32) for 35 days back from the reference date.
 
 ### Personas
 
@@ -371,7 +371,7 @@ Triggers: push to `main`; PR opened/synchronize/reopened/closed. Job `build_and_
 
 ### Azure account
 - Tenant `santiagoparthiahealth.onmicrosoft.com`, user `santiago@parthiahealth.com`, Owner.
-- Subscription `d8d471a5-d9a5-4734-9361-868eb42a4fb3` "Azure subscription 1", Microsoft for Startups sponsorship, $10,000 credit, expires 2028-04-21, $0 spent as of 2026-09-11.
+- Subscription `d8d471a5-d9a5-4734-9361-868eb42a4fb3` "Azure subscription 1", Microsoft for Startups sponsorship, $10,000 credit, expires 2028-04-21, $0 spent as of 2026-10-03.
 - Azure CLI 2.87 installed on the Mac and signed in.
 
 ### GitHub
@@ -404,7 +404,7 @@ No real authentication, no real FHIR/EHR calls, no trained ML model, no database
 
 ## 17. Key facts to keep straight
 
-- Demo "today" is **2026-09-11** (`REFERENCE_DATE`), not the real clock.
+- Demo "today" is **2026-10-03** (`REFERENCE_DATE`), not the real clock.
 - Flags on seed data: Harold 4, Margaret 8, Rosa 1 (as of phase H).
 - The password protects the site; it is **not** stored in the repo, in notes, or in memory. Owner has it.
 - Two working URLs: `https://app.parthiahealth.com` (share this) and the `azurestaticapps.net` default.

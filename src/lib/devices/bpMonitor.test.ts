@@ -47,8 +47,8 @@ describe("Blood Pressure Measurement (0x2A35)", () => {
   });
 
   it("becomes a Passport reading from a device", () => {
-    const v = vitalFromMeasurement({ systolic: 118, diastolic: 72, meanArterial: 87, pulse: 61 }, "p-rosa", "BP7000", "2026-09-11T08:00:00");
-    expect(v).toMatchObject({ systolic: 118, diastolic: 72, heartRate: 61, timestamp: "2026-09-11T08:00:00", bpSetting: "home-cuff", source: { kind: "device", label: "BP7000", verified: false } });
+    const v = vitalFromMeasurement({ systolic: 118, diastolic: 72, meanArterial: 87, pulse: 61 }, "p-rosa", "BP7000", "2026-10-03T08:00:00");
+    expect(v).toMatchObject({ systolic: 118, diastolic: 72, heartRate: 61, timestamp: "2026-10-03T08:00:00", bpSetting: "home-cuff", source: { kind: "device", label: "BP7000", verified: false } });
   });
 });
 
@@ -67,14 +67,14 @@ describe("Web Bluetooth support", () => {
 
 describe("simulated sync", () => {
   it("produces 14 days of morning and evening readings, deterministic per persona", () => {
-    const a = simulateBpSync("p-margaret", "2026-09-11", 14, "x");
+    const a = simulateBpSync("p-margaret", "2026-10-03", 14, "x");
     expect(a).toHaveLength(28);
-    expect(simulateBpSync("p-margaret", "2026-09-11", 14, "x")).toEqual(a);
+    expect(simulateBpSync("p-margaret", "2026-10-03", 14, "x")).toEqual(a);
     expect(a[0].source).toMatchObject({ kind: "device", label: "Blood pressure monitor (simulated)" });
     expect(a.every((v) => v.diastolic! < v.systolic!)).toBe(true);
   });
   it("Margaret has several low morning readings; Harold doesn't", () => {
-    const low = (id: string) => simulateBpSync(id, "2026-09-11").filter((v) => v.systolic! < 100).length;
+    const low = (id: string) => simulateBpSync(id, "2026-10-03").filter((v) => v.systolic! < 100).length;
     expect(low("p-margaret")).toBeGreaterThanOrEqual(4);
     expect(low("p-harold")).toBe(0);
   });

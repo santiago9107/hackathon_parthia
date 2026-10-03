@@ -4,7 +4,7 @@
  * structure the Health app produces (apple_health_export/export.xml inside a
  * zip), small enough to ship as a sample. No real person.
  *
- * 60 days ending 2026-09-11: hourly heart rate, daily resting heart rate
+ * 60 days ending 2026-10-03: hourly heart rate, daily resting heart rate
  * (dipping into the high 40s on a few recent days — he takes metoprolol),
  * steps from both iPhone and Watch (overlapping, as in real exports), sleep
  * stages, weekly weight, and home blood-pressure readings wrapped in a
@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
 import { crc32, deflateRawSync } from "node:zlib";
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), "..", "public", "samples", "apple-health-export-sample.zip");
-const END = new Date("2026-09-11T12:00:00");
+const END = new Date("2026-10-03T12:00:00");
 const DAYS = 60;
 let seed = 1958;
 const rand = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);

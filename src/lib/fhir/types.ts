@@ -31,6 +31,12 @@ export interface Period {
   end?: string;
 }
 
+export interface Attachment {
+  contentType?: string;
+  data?: string;
+  title?: string;
+}
+
 export interface HumanName {
   use?: string;
   text?: string;
@@ -80,6 +86,7 @@ export interface FhirMedicationRequest extends ResourceBase {
   status: "active" | "on-hold" | "cancelled" | "completed" | "entered-in-error" | "stopped" | "draft" | "unknown";
   intent: string;
   medicationCodeableConcept?: CodeableConcept;
+  medicationReference?: Reference;
   authoredOn?: string;
   requester?: Reference;
   reasonCode?: CodeableConcept[];
@@ -91,12 +98,20 @@ export interface FhirMedicationStatement extends ResourceBase {
   resourceType: "MedicationStatement";
   status: "active" | "completed" | "entered-in-error" | "intended" | "stopped" | "on-hold" | "unknown" | "not-taken";
   medicationCodeableConcept?: CodeableConcept;
+  medicationReference?: Reference;
   subject?: Reference;
   effectivePeriod?: Period;
   dateAsserted?: string;
   informationSource?: Reference;
   reasonCode?: CodeableConcept[];
   dosage?: Dosage[];
+}
+
+/** A separately-addressable medication, as emitted by Synthea for some prescriptions. */
+export interface FhirMedication extends ResourceBase {
+  resourceType: "Medication";
+  code?: CodeableConcept;
+  status?: "active" | "inactive" | "entered-in-error";
 }
 
 export interface FhirAllergyIntolerance extends ResourceBase {
@@ -130,9 +145,13 @@ export interface FhirDiagnosticReport extends ResourceBase {
   category?: CodeableConcept[];
   code: CodeableConcept;
   effectiveDateTime?: string;
+  effectivePeriod?: Period;
+  issued?: string;
+  encounter?: Reference;
   performer?: Reference[];
   resultsInterpreter?: Reference[];
   result?: Reference[];
+  presentedForm?: Attachment[];
 }
 
 export interface FhirEncounter extends ResourceBase {
@@ -172,6 +191,7 @@ export interface FhirProcedure extends ResourceBase {
   status: string;
   code?: CodeableConcept;
   performedDateTime?: string;
+  performedPeriod?: Period;
   performer?: { actor?: Reference }[];
   outcome?: CodeableConcept;
 }
@@ -199,7 +219,7 @@ export interface FhirCarePlan extends ResourceBase {
   author?: Reference;
   created?: string;
   period?: Period;
-  activity?: { detail?: { description?: string; status?: string } }[];
+  activity?: { detail?: { code?: CodeableConcept; description?: string; status?: string } }[];
 }
 
 export interface FhirDocumentReference extends ResourceBase {
@@ -211,13 +231,14 @@ export interface FhirDocumentReference extends ResourceBase {
   author?: Reference[];
   custodian?: Reference;
   description?: string;
-  content: { attachment: { contentType?: string; data?: string; title?: string } }[];
+  content: { attachment: Attachment }[];
   context?: { encounter?: Reference[]; period?: Period };
 }
 
 export type FhirResource =
   | FhirPatient
   | FhirCondition
+  | FhirMedication
   | FhirMedicationRequest
   | FhirMedicationStatement
   | FhirAllergyIntolerance

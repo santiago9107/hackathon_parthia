@@ -5,10 +5,12 @@ import { seeded, type Unsourced } from "./seed";
 /**
  * SYNTHETIC PATIENTS — no real people, no real records.
  *
- * Three personas chosen to exercise different risk profiles:
+ * Three hand-authored personas plus one import-ready Synthea patient:
  *  - p-harold:   68, AFib + diabetes, 7 meds incl. warfarin + statin
  *  - p-margaret: 72, heart failure + depression, 9 meds incl. 2 psychotropics
  *  - p-rosa:     65, newly diagnosed diabetic, 5 meds, patchy nutrition log
+ *  - p-synthea-shaun: empty Passport shell populated from a real Synthea
+ *    FHIR R4 Bundle through the same review workflow used by other imports
  *
  * Lab history goes back far enough to show a trend per test. The rest of
  * each persona's Passport (appointments, visits, care team, allergies…)
@@ -102,7 +104,7 @@ const seedPatients: SeedPatient[] = [
       { id: "m-m9", name: "Diphenhydramine", genericName: "diphenhydramine", class: "antihistamine", dose: "25 mg", frequency: "at bedtime as needed", startDate: "2025-12-02", indication: "Sleep (over the counter)", prescriber: "Self (over the counter)" },
     ],
     medicationHistory: [
-      { id: "e-m1", patientId: "p-margaret", date: "2026-08-22", medicationName: "Sertraline", type: "dose-changed", detail: "Sertraline increased from 50 mg to 100 mg daily." },
+      { id: "e-m1", patientId: "p-margaret", date: "2026-09-13", medicationName: "Sertraline", type: "dose-changed", detail: "Sertraline increased from 50 mg to 100 mg daily." },
       { id: "e-m2", patientId: "p-margaret", date: "2025-12-02", medicationName: "Diphenhydramine", type: "started", detail: "Patient began taking over-the-counter diphenhydramine for sleep." },
     ],
     labs: [
@@ -170,6 +172,19 @@ const seedPatients: SeedPatient[] = [
       { id: "v-r2", patientId: "p-rosa", timestamp: "2026-08-25T09:10:00", systolic: 132, diastolic: 80, heartRate: 76, weightKg: 80.2, bpSetting: "home-cuff" },
       { id: "v-r3", patientId: "p-rosa", timestamp: "2026-07-30T10:15:00", systolic: 136, diastolic: 82, heartRate: 78, weightKg: 81.0, bpSetting: "clinic" },
     ],
+  },
+  {
+    id: "p-synthea-shaun",
+    name: "Shaun461 Javier97 Cormier289",
+    age: 73,
+    sex: "male",
+    summary: "Synthetic Synthea patient — import the FHIR record to build this Passport.",
+    primaryClinician: "Not imported yet",
+    conditions: [],
+    medications: [],
+    medicationHistory: [],
+    labs: [],
+    vitals: [],
   },
 ];
 

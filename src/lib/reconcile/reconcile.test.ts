@@ -76,7 +76,7 @@ describe("resolving issues", () => {
     const { store, view } = await afterEpicImport("p-harold");
     const issue = view().issues.find((i) => i.kind === "dose-conflict")!;
     const keep50 = issue.options.find((o) => o.label.startsWith("50 mg"))!;
-    await resolveReconIssue("p-harold", issue, keep50, "2026-09-11", store);
+    await resolveReconIssue("p-harold", issue, keep50, "2026-10-03", store);
     const after = view();
     expect(after.issues.find((i) => i.id === issue.id)).toBeUndefined();
     expect(after.record.patient.medications.filter((m) => m.genericName === "metoprolol").map((m) => m.dose)).toEqual(["50 mg"]);
@@ -86,7 +86,7 @@ describe("resolving issues", () => {
   it("keep-only the imported dose: removes the seed entry and confirms Epic's", async () => {
     const { store, view } = await afterEpicImport("p-harold");
     const issue = view().issues.find((i) => i.kind === "dose-conflict")!;
-    await resolveReconIssue("p-harold", issue, issue.options.find((o) => o.label.startsWith("25 mg"))!, "2026-09-11", store);
+    await resolveReconIssue("p-harold", issue, issue.options.find((o) => o.label.startsWith("25 mg"))!, "2026-10-03", store);
     const meto = view().record.patient.medications.filter((m) => m.genericName === "metoprolol");
     expect(meto.map((m) => [m.dose, m.source.kind])).toEqual([["25 mg", "ehr"]]);
   });
@@ -94,10 +94,10 @@ describe("resolving issues", () => {
   it("mark-stopped moves the medicine to past medications with a history entry", async () => {
     const { store, view } = await afterEpicImport("p-harold");
     const issue = view().issues.find((i) => i.kind === "possibly-stopped")!;
-    await resolveReconIssue("p-harold", issue, issue.options.find((o) => o.id === "stopped")!, "2026-09-11", store);
+    await resolveReconIssue("p-harold", issue, issue.options.find((o) => o.id === "stopped")!, "2026-10-03", store);
     const { record, issues } = view();
     expect(record.patient.medications.map((m) => m.genericName)).not.toContain("omeprazole");
-    expect(record.pastMedications.find((m) => m.genericName === "omeprazole")).toMatchObject({ status: "stopped", stoppedOn: "2026-09-11" });
+    expect(record.pastMedications.find((m) => m.genericName === "omeprazole")).toMatchObject({ status: "stopped", stoppedOn: "2026-10-03" });
     expect(record.patient.medicationHistory.some((e) => e.type === "stopped" && e.medicationName === "Omeprazole")).toBe(true);
     expect(openIssues(issues).map((i) => i.kind)).not.toContain("possibly-stopped");
   });
@@ -105,7 +105,7 @@ describe("resolving issues", () => {
   it("ask-clinician closes the issue on the dashboard but keeps the question for the visit summary", async () => {
     const { store, view } = await afterEpicImport("p-harold");
     const missing = view().issues.find((i) => i.kind === "missing-from-source")!;
-    await resolveReconIssue("p-harold", missing, missing.options.find((o) => o.id === "ask")!, "2026-09-11", store);
+    await resolveReconIssue("p-harold", missing, missing.options.find((o) => o.id === "ask")!, "2026-10-03", store);
     const { issues } = view();
     expect(openIssues(issues).map((i) => i.id)).not.toContain(missing.id);
     expect(questionsForClinician(issues)).toContain("Can you add Aspirin 81 mg to my record? I take it, but it isn't on my medication list with you.");
@@ -114,7 +114,7 @@ describe("resolving issues", () => {
   it("acknowledge closes the issue without a question", async () => {
     const { store, view } = await afterEpicImport("p-margaret");
     const missing = view().issues.find((i) => i.kind === "missing-from-source")!;
-    await resolveReconIssue("p-margaret", missing, missing.options.find((o) => o.id === "ack")!, "2026-09-11", store);
+    await resolveReconIssue("p-margaret", missing, missing.options.find((o) => o.id === "ack")!, "2026-10-03", store);
     expect(questionsForClinician(view().issues).join(" ")).not.toMatch(/Diphenhydramine/);
   });
 });

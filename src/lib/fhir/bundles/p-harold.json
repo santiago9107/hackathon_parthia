@@ -2,7 +2,7 @@
   "resourceType": "Bundle",
   "id": "everything-p-harold",
   "type": "searchset",
-  "timestamp": "2026-09-11T07:00:00Z",
+  "timestamp": "2026-10-03T07:00:00Z",
   "meta": {
     "tag": [
       {
@@ -2546,7 +2546,7 @@
           }
         ],
         "description": "INR recheck",
-        "start": "2026-09-18T08:30:00",
+        "start": "2026-10-10T08:30:00",
         "participant": [
           {
             "actor": {
@@ -2588,7 +2588,7 @@
           }
         ],
         "description": "CBC recheck (lab draw before INR visit)",
-        "start": "2026-09-18T08:15:00",
+        "start": "2026-10-10T08:15:00",
         "participant": [
           {
             "actor": {
@@ -2630,7 +2630,7 @@
           }
         ],
         "description": "Follow-up: bruising, INR, new aspirin",
-        "start": "2026-10-02T09:15:00",
+        "start": "2026-10-24T09:15:00",
         "participant": [
           {
             "actor": {

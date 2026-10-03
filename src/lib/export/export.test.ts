@@ -15,7 +15,7 @@ const now = referenceNow();
 const PATIENTS = ["p-harold", "p-margaret", "p-rosa"];
 const naproxen: Medication = {
   id: "m-scan-1", name: "Naproxen", genericName: "naproxen", class: "nsaid", dose: "500 mg", frequency: "twice daily", startDate: "2026-09-10",
-  status: "active", rxNormCode: "7258", source: { kind: "document-scan", label: "Scanned prescription", importedAt: "2026-09-11T09:00:00", verified: true },
+  status: "active", rxNormCode: "7258", source: { kind: "document-scan", label: "Scanned prescription", importedAt: "2026-10-03T09:00:00", verified: true },
 };
 const store = () => new PassportStore(createMemoryBackend());
 
