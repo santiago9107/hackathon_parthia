@@ -93,7 +93,7 @@ export const AGENTS: AgentPersona[] = [
     role: "Clinician liaison",
     audience: "Clinician",
     tribute: "Visualize AI",
-    why: "For Visualize AI. Iris makes the case visible: she routes each finding to the right person and lays it out for the clinician, body atlas included. A tribute name only: the 3D atlas is built on BodyParts3D, not the Visualize SDK.",
+    why: "For Visualize AI. Iris makes the case visible: she routes each finding to the right person and lays it out for the clinician, body atlas included. A tribute name only: the atlas uses an open anatomy model credited on the About page, not the Visualize SDK.",
     color: "#2e7d5b",
     assurance: "I get each question to the person who should answer it, and I wait for their decision.",
     description: "Routes every finding to the patient, a pharmacist or the clinician by priority, records each decision, and keeps the case open until every question has an answer.",

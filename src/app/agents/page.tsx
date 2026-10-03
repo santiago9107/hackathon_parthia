@@ -7,6 +7,8 @@ import { buildClinicianCase } from "@/lib/clinician/cases";
 import { PHOTON_DEMO_DRAFTS } from "@/lib/clinician/photonCatalog";
 import { RULES } from "@/lib/safetyEngine";
 import { AppIcon } from "@/components/AppIcon";
+import { AgentFace } from "@/components/agents/AgentFace";
+import { SponsorLogo } from "@/components/agents/SponsorLogo";
 
 /**
  * The agent roster. Every count on this page comes from a real run of the
@@ -35,20 +37,14 @@ function AgentCard({ agent }: { agent: AgentPersona }) {
     <Card className="overflow-hidden">
       <div className="h-1" style={{ backgroundColor: agent.color }} />
       <div className="flex items-start gap-4 p-5">
-        <span
-          aria-hidden
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-lg font-semibold text-white ring-4 ring-surface"
-          style={{ backgroundColor: agent.color }}
-        >
-          {agent.name[0]}
-        </span>
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-surface ring-4 ring-surface" aria-hidden><AgentFace id={agent.id} size={48} /></span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
               <p className="text-base font-semibold text-ink">{agent.name}</p>
               <p className="text-[13px] font-medium" style={{ color: agent.color }}>{agent.role}</p>
             </div>
-            <span className="rounded-full bg-gold-100 px-2 py-0.5 text-[11px] font-semibold text-[#5c430d]">for {agent.tribute}</span>
+            <span className="rounded-full bg-gold-100 px-2 py-0.5 text-[11px] font-semibold text-[#5c430d]"><SponsorLogo name={agent.tribute} /></span>
           </div>
           <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">{agent.audience}</p>
 
@@ -85,7 +81,7 @@ export default function AgentsPage() {
     <div className="mx-auto max-w-5xl">
       <PageHeader
         eyebrow="The agent team"
-        title="Five agents, one patient, the same guardrails"
+        title={`${AGENTS.length} agents, one patient, the same guardrails`}
         subtitle="Each agent owns one part of the job, from Margaret's own questions to a clinician's Photon check. They hand work to each other and to people, and every one of them calls the same policy before it acts."
       />
 
@@ -115,7 +111,7 @@ export default function AgentsPage() {
 
       <p className="mt-6 text-sm text-ink-muted">
         See them work: <Link href="/" className="font-semibold text-brand-700 underline">Margaret&apos;s home</Link> for Nova, and the{" "}
-        <Link href="/clinician/" className="font-semibold text-brand-700 underline">clinician view</Link> for Reid, Dex, Fotini and Iris.
+        <Link href="/clinician/" className="font-semibold text-brand-700 underline">clinician view</Link> for Reid, Dex, Fotini, Willem, Elsie, Aaron and Iris.
       </p>
       <Card className="mt-6 flex items-center gap-4 p-4"><Image src="/try-it-qr.png" alt="QR code for the Parthia Health demo" width={96} height={96} /><div><p className="text-sm font-semibold text-ink">Try it on your phone</p><p className="mt-1 text-xs text-ink-muted">Scan to open the live demonstration.</p></div></Card>
     </div>
