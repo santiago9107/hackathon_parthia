@@ -13,8 +13,8 @@ import { buildStages, type ArchNode } from "@/lib/architecture/stages";
 type Tone = "light" | "dark";
 
 const PALETTE = {
-  light: { node: "#fffdf9", edge: "#d3cbbb", run: "#17706a", link: "#17706a", text: "#2b2a28", sub: "#6b675f", accent: "#0e5c56", onAccent: "#ffffff", next: "#8a8478", chip: "#efeae0" },
-  dark: { node: "#0f172a", edge: "#334155", run: "#5eead4", link: "#2dd4bf", text: "#f8fafc", sub: "#94a3b8", accent: "#5eead4", onAccent: "#042f2e", next: "#64748b", chip: "#1e293b" },
+  light: { node: "#fffdf9", edge: "#d3cbbb", run: "#17706a", link: "#17706a", text: "#2b2a28", sub: "#6b675f", accent: "#0e5c56", onAccent: "#ffffff", next: "#8a8478", chip: "#efeae0", gold: "#c9962b", goldFill: "#fbf1d6", goldText: "#5c430d" },
+  dark: { node: "#0f172a", edge: "#334155", run: "#5eead4", link: "#2dd4bf", text: "#f8fafc", sub: "#94a3b8", accent: "#5eead4", onAccent: "#042f2e", next: "#64748b", chip: "#1e293b", gold: "#f5c542", goldFill: "#2a2208", goldText: "#fde68a" },
 } as const;
 
 const COL_W = 208;
@@ -34,6 +34,7 @@ export function SystemDiagram({ ruleCount, tone = "light", className = "" }: { r
   const c = PALETTE[tone];
   const marker = `arch-arrow-${tone}`;
   const markerNext = `arch-arrow-next-${tone}`;
+  const markerGold = `arch-arrow-gold-${tone}`;
   const statusOf = (stage: number, index: number) => stages[stage]!.nodes[index]!.status;
   const stroke = (status: "running" | "next") => (status === "running" ? c.link : c.next);
   const dash = (status: "running" | "next") => (status === "next" ? "5 4" : undefined);
@@ -72,6 +73,7 @@ export function SystemDiagram({ ruleCount, tone = "light", className = "" }: { r
       <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-label={label} className="hidden h-auto w-full md:block" style={{ fontFamily: "inherit" }}>
         <defs>
           <marker id={marker} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 z" fill={c.link} /></marker>
+          <marker id={markerGold} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 z" fill={c.gold} /></marker>
           <marker id={markerNext} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 z" fill={c.next} /></marker>
         </defs>
 
@@ -85,10 +87,17 @@ export function SystemDiagram({ ruleCount, tone = "light", className = "" }: { r
               const x = colX(si);
               const y = nodeY(ni);
               const running = node.status === "running";
+              const sponsor = Boolean(node.sponsor);
               return (
                 <g key={node.id}>
-                  <rect x={x} y={y} width={COL_W} height={NODE_H} rx={12} fill={running ? c.node : "none"} stroke={running ? c.run : c.next} strokeWidth={running ? 1.5 : 1.3} strokeDasharray={running ? undefined : "6 4"} />
-                  {running && <rect x={x} y={y + 14} width={4} height={NODE_H - 28} rx={2} fill={c.run} />}
+                  <rect x={x} y={y} width={COL_W} height={NODE_H} rx={12} fill={sponsor ? c.goldFill : running ? c.node : "none"} stroke={sponsor ? c.gold : running ? c.run : c.next} strokeWidth={sponsor ? 2.4 : running ? 1.5 : 1.3} strokeDasharray={running ? undefined : "6 4"} />
+                  {running && <rect x={x} y={y + 14} width={4} height={NODE_H - 28} rx={2} fill={sponsor ? c.gold : c.run} />}
+                  {sponsor && (
+                    <g>
+                      <rect x={x + COL_W - 112} y={y - 9} width={102} height={18} rx={9} fill={c.gold} />
+                      <text x={x + COL_W - 61} y={y + 4} textAnchor="middle" fontSize={10.5} fontWeight={800} letterSpacing=".4" fill="#2b2a28">PHOTON HEALTH</text>
+                    </g>
+                  )}
                   <text x={x + 16} y={y + 26} fontSize={15} fontWeight={600} fill={running ? c.text : c.sub}>{node.title}</text>
                   <text x={x + 16} y={y + 46} fontSize={12} fill={c.sub}>{node.lines[0]}</text>
                   {node.lines[1] && <text x={x + 16} y={y + 62} fontSize={12} fill={c.sub}>{node.lines[1]}</text>}
@@ -108,15 +117,16 @@ export function SystemDiagram({ ruleCount, tone = "light", className = "" }: { r
         {down(1, 0)}
         {down(1, 1)}
         {down(1, 2, "next")}
-        {fan(1, [2], 2, [0, 1, 3])}
-        <path d={`M${colX(2) + COL_W / 2} ${nodeY(2)} V${nodeY(1) + NODE_H + 2}`} fill="none" stroke={c.link} strokeWidth={1.6} markerEnd={arrow("running")} />
-        {fan(2, [0, 1, 3], 3, [0])}
+        {fan(1, [2], 2, [0, 1, 2, 4])}
+        <path d={`M${colX(2) + COL_W / 2} ${nodeY(1) + NODE_H} V${nodeY(2) - 2}`} fill="none" stroke={c.gold} strokeWidth={2} markerEnd={`url(#${markerGold})`} />
+        <path d={`M${colX(2) + COL_W / 2} ${nodeY(3)} V${nodeY(2) + NODE_H + 2}`} fill="none" stroke={c.link} strokeWidth={1.6} markerEnd={arrow("running")} />
+        {fan(2, [0, 1, 2, 4], 3, [0])}
         {down(3, 0)}
         {down(3, 1)}
         {down(3, 2, "next")}
         {fan(3, [2], 4, [0, 1, 2, 3, 4])}
 
-        <path d={`M${shareCenter} ${nodeY(4) + NODE_H + 2} V${loopY} H${centerLoop} V${nodeY(3) + NODE_H + 4}`} fill="none" stroke={c.next} strokeWidth={1.6} strokeDasharray="5 4" markerEnd={arrow("next")} />
+        <path d={`M${shareCenter} ${nodeY(4) + NODE_H + 2} V${loopY} H${centerLoop} V${nodeY(4) + NODE_H + 4}`} fill="none" stroke={c.next} strokeWidth={1.6} strokeDasharray="5 4" markerEnd={arrow("next")} />
         <rect x={(shareCenter + centerLoop) / 2 - 190} y={loopY - 12} width={380} height={24} rx={12} fill={c.chip} />
         <text x={(shareCenter + centerLoop) / 2} y={loopY + 4} textAnchor="middle" fontSize={12.5} fill={c.sub}>Next: clinician decisions refine the rules</text>
 
@@ -125,6 +135,8 @@ export function SystemDiagram({ ruleCount, tone = "light", className = "" }: { r
           <text x={44} y={13} fontSize={12.5} fill={c.sub}>Runs in this demo</text>
           <rect x={190} y={0} width={34} height={16} rx={5} fill="none" stroke={c.next} strokeWidth={1.3} strokeDasharray="5 3" />
           <text x={234} y={13} fontSize={12.5} fill={c.sub}>Planned</text>
+          <rect x={330} y={0} width={34} height={16} rx={5} fill={c.goldFill} stroke={c.gold} strokeWidth={2.2} />
+          <text x={374} y={13} fontSize={12.5} fontWeight={600} fill={c.goldText}>Sponsor: Photon Health, live API</text>
         </g>
       </svg>
 
@@ -141,10 +153,11 @@ export function SystemDiagram({ ruleCount, tone = "light", className = "" }: { r
               </div>
               <ul className="mt-3 space-y-2">
                 {stage.nodes.map((node) => (
-                  <li key={node.id} className="rounded-lg border px-3 py-2" style={{ borderColor: node.status === "running" ? c.run : c.next, borderStyle: node.status === "running" ? "solid" : "dashed" }}>
+                  <li key={node.id} className="rounded-lg border px-3 py-2" style={{ borderColor: node.sponsor ? c.gold : node.status === "running" ? c.run : c.next, borderStyle: node.status === "running" ? "solid" : "dashed", borderWidth: node.sponsor ? 2 : 1, background: node.sponsor ? c.goldFill : undefined }}>
                     <p className="flex items-center justify-between gap-2 text-sm font-semibold" style={{ color: node.status === "running" ? c.text : c.sub }}>
                       {node.title}
                       {node.status === "next" && <span className="rounded-full px-2 py-0.5 text-[11px] font-bold" style={{ background: c.chip, color: c.sub }}>NEXT</span>}
+                      {node.sponsor && <span className="rounded-full px-2 py-0.5 text-[11px] font-extrabold" style={{ background: c.gold, color: "#2b2a28" }}>PHOTON HEALTH</span>}
                     </p>
                     <p className="text-xs" style={{ color: c.sub }}>{node.lines.filter(Boolean).join(" ")}</p>
                   </li>

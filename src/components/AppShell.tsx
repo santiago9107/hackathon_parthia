@@ -51,7 +51,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-dvh flex-col">
       <header className="print-hidden sticky top-0 z-30 border-b border-line bg-cream/90 backdrop-blur safe-top">
         <div className={`mx-auto flex h-16 items-center justify-between gap-3 px-4 sm:px-6 ${clinicianSurface ? "max-w-[1440px]" : "max-w-6xl"}`}>
-          <Link href="/" className="shrink-0" aria-label="Parthia Health home">
+          <Link href="/start/" className="shrink-0" aria-label="Parthia Health: choose the patient or clinician side">
             <Wordmark />
           </Link>
 
@@ -99,7 +99,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* The patient agent dock. The clinician workspace keeps its own chat, so
           it is not rendered there, and it stays hidden while the Passport is
           locked because it answers from the record. */}
-      {!clinicianSurface && passportStatus !== "locked" && <AskParthiaDock />}
+      {!clinicianSurface && !current.startsWith("/start") && passportStatus !== "locked" && <AskParthiaDock />}
 
       {/* Mobile tab bar */}
       <nav

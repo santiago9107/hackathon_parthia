@@ -97,13 +97,38 @@ export function PhotonScreenPanel({ className = "", patientId = "p-harold" }: { 
     setSync(await syncPhotonPatient({ patientId }));
     setBusy("idle");
   }
+  const steps = [
+    { label: "Connect sandbox patient", done: Boolean(sync) },
+    { label: "Pick a draft", done: selected.length > 0 },
+    { label: "Photon screens it", done: Boolean(outcome) },
+    { label: "Read the alerts", done: Boolean(outcome) },
+    { label: "A clinician decides", done: false },
+  ];
+  const current = steps.findIndex((step) => !step.done);
   return (
-    <section className={`rounded-2xl border border-slate-200 bg-white p-5 ${className}`} aria-labelledby="photon-screen-heading">
+    <section className={`overflow-hidden rounded-2xl border-2 border-amber-300 bg-white p-5 ${className}`} aria-labelledby="photon-screen-heading">
+      <div className="-mx-5 -mt-5 mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-amber-200 bg-amber-50 px-5 py-2.5">
+        <span className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-amber-900">
+          <span aria-hidden className="grid h-5 w-5 place-items-center rounded bg-amber-400 text-[11px] font-black text-slate-900">P</span>
+          Photon Health
+        </span>
+        <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">Live integration, Photon Neutron sandbox</span>
+      </div>
       <h2 id="photon-screen-heading" className="text-base font-semibold text-slate-900">Photon screening</h2>
       <p className="mt-1 text-sm text-slate-600">
         Drug-drug and drug-allergy screening of a drafted prescription against {photonDemoPatientName(patientId)}&apos;s medication history and
-        allergies. Synthetic patient. Read-only.
+        allergies. Synthetic patient. Read-only. Fotini, the Photon screening agent, runs this step.
       </p>
+      <ol className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-xs" aria-label="Screening steps">
+        {steps.map((step, i) => (
+          <li key={step.label} className="flex items-center gap-1.5">
+            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-semibold ${step.done ? "border-emerald-300 bg-emerald-50 text-emerald-800" : i === current ? "border-amber-400 bg-amber-100 text-amber-900" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
+              <span className="tabular-nums">{i + 1}</span>{step.label}
+            </span>
+            {i < steps.length - 1 && <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-slate-300" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M9 6l6 6-6 6" /></svg>}
+          </li>
+        ))}
+      </ol>
       <p className="mt-1 text-xs text-slate-500">{PHOTON_CATALOG_LABEL}</p>
       <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">

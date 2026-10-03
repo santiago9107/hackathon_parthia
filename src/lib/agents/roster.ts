@@ -19,6 +19,7 @@ export interface AgentPersona {
   role: string;
   /** Who this agent talks to. */
   audience: "Patient" | "Behind the scenes" | "Clinician";
+  /** Only the five agents named for the host, venue and sponsors carry one. */
   tribute?: Tribute;
   why: string;
   color: string;
@@ -93,7 +94,7 @@ export const AGENTS: AgentPersona[] = [
     role: "Clinician liaison",
     audience: "Clinician",
     tribute: "Visualize AI",
-    why: "For Visualize AI. Iris makes the case visible: she routes each finding to the right person and lays it out for the clinician, body atlas included. A tribute name only: the atlas uses an open anatomy model credited on the About page, not the Visualize SDK.",
+    why: "For Visualize AI. Iris makes the case visible: she routes each finding to the right person and lays it out for the clinician, in the spirit of the Visualize SDK.",
     color: "#2e7d5b",
     assurance: "I get each question to the person who should answer it, and I wait for their decision.",
     description: "Routes every finding to the patient, a pharmacist or the clinician by priority, records each decision, and keeps the case open until every question has an answer.",
@@ -119,13 +120,13 @@ export const AGENTS: AgentPersona[] = [
     tools: [], does: ["PHQ-9 and GAD-7", "Mood changes", "Rule-based, no language model"], code: "src/lib/agents/specialists.ts",
   },
   {
-    id: "orchestrator", name: "Reid's handoff", role: "Specialist orchestrator", audience: "Behind the scenes", tribute: "Redesign Health",
+    id: "orchestrator", name: "Reid's handoff", role: "Specialist orchestrator", audience: "Behind the scenes",
     why: "Extends Reid's record handoff by linking shared ingredients across specialist reviews.", color: "#315b8c", assurance: "I route each fact to the right specialist and show every handoff.",
     description: "Routes facts deterministically, links shared ingredients across reviewers and records the message log. Rule-based, no language model.",
     tools: [], does: ["Deterministic routing", "Cross-specialist links", "Rule-based, no language model"], code: "src/lib/agents/orchestrator.ts",
   },
   {
-    id: "reviewer", name: "Iris's review", role: "Safety reviewer", audience: "Behind the scenes", tribute: "Visualize AI",
+    id: "reviewer", name: "Iris's review", role: "Safety reviewer", audience: "Behind the scenes",
     why: "Extends Iris's clinician boundary by checking every specialist sentence before it is shown.", color: "#3b765d", assurance: "I block unsupported facts, diagnoses and medication directives before review.",
     description: "Checks fact ids, neutral wording and cited numbers. Rule-based, no language model.",
     tools: [], does: ["Fact-id validation", "Neutral wording gate", "Rule-based, no language model"], code: "src/lib/agents/safetyReviewer.ts",
