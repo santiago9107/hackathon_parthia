@@ -13,7 +13,15 @@ no tokens are stored here.
 
 These are the offline fallback shown as "Recorded sandbox response" when the
 live call cannot run. `src/lib/clinician/photonRecorded.ts` is the generated
-module the UI imports; it holds the same captures.
+module the UI imports; it holds the same captures. This directory and that
+generated module are the only capture set in the repo: if a capture is not
+here, the UI must not call it recorded.
+
+The ibuprofen draft screens one product, `med_01KZEG3HFG5M9FYXPGJHS67FMR`,
+"Ibuprofen Oral Tablet 200 MG". The sandbox also carries
+`med_01KZEG3HFJQF4VK0AXCYAVS77J`, "Ibuprofen Oral Capsule 200 MG", which the
+demo does not use; an earlier capture of that capsule was removed so only the
+screened id is in the tree.
 
 Re-capture after changing the catalog or the demo patient:
 
