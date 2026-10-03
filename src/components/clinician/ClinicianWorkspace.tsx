@@ -14,7 +14,7 @@ import type { CaseSourceId, ClinicianDecision, ClinicianFinding } from "@/lib/cl
 import { ClinicalBodyAtlas3D } from "./ClinicalBodyAtlas3D";
 import { PhotonScreenPanel } from "./PhotonScreenPanel";
 import { ClinicianJourney } from "./ClinicianJourney";
-import { getRecord } from "@/lib/mockData";
+import { getRecord, REFERENCE_DATE } from "@/lib/mockData";
 import { computeMeasures } from "@/lib/measures";
 import { orchestrate } from "@/lib/agents/orchestrator";
 import { reviewSpecialistItems } from "@/lib/agents/safetyReviewer";
@@ -82,12 +82,12 @@ export function ClinicianWorkspace() {
   );
   const measures = useMemo(() => {
     const record = activePatientId.startsWith("smart-") ? undefined : getRecord(activePatientId);
-    return record ? computeMeasures(record, new Date(`${CLINICIAN_AS_OF}T12:00:00`)) : [];
+    return record ? computeMeasures(record, new Date(`${REFERENCE_DATE}T12:00:00`)) : [];
   }, [activePatientId]);
   const specialistReview = useMemo(() => {
     const record = activePatientId.startsWith("smart-") ? undefined : getRecord(activePatientId);
     if (!record) return undefined;
-    const orchestration = orchestrate(record, new Date(`${CLINICIAN_AS_OF}T12:00:00`));
+    const orchestration = orchestrate(record, new Date(`${REFERENCE_DATE}T12:00:00`));
     const items = [...orchestration.linked, ...orchestration.outputs.flatMap((output) => output.items)];
     return { orchestration, review: reviewSpecialistItems(items, orchestration.facts) };
   }, [activePatientId]);
@@ -152,7 +152,7 @@ export function ClinicianWorkspace() {
           </div>
           <div className="mx-4 mt-3 rounded-2xl border border-slate-200 bg-white p-4"><div className="flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Active patient</p>{liveResult && <span className="rounded bg-emerald-50 px-2 py-1 text-[8px] font-bold uppercase text-emerald-700">Live response</span>}</div><div className="mt-3 flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-full bg-slate-950 text-xs font-semibold text-white">{caseData.patientName.split(" ").map((part) => part[0]).join("")}</span><div><p className="text-sm font-semibold text-slate-950">{caseData.patientName}</p><p className="text-xs text-slate-500">{caseData.age || "Age not provided"}{caseData.age ? " years" : ""} · {liveResult ? "Synthea patient" : "demo cohort"}</p></div></div><p className="mt-3 text-xs leading-5 text-slate-600">{caseData.conditions.join(" · ") || "No active conditions returned"}</p><p className="mt-2 text-xs font-medium text-red-700">Allergy: {caseData.allergies.join(", ") || (liveResult ? "Not included in this public query" : "None recorded")}</p>{liveResult && <p className="mt-3 border-t border-slate-100 pt-3 text-[9px] leading-4 text-slate-500">Fetched {new Date(liveResult.fetchedAt).toLocaleTimeString()} · {liveResult.counts.dictionary} local and {liveResult.counts.rxnav} live RxNorm mappings · {liveResult.counts.unmapped} unmapped</p>}</div>
           <div className="px-5 py-5"><div className="flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Evidence sources</p><span className="text-[9px] font-medium text-teal-700">{caseData.sources.filter((source) => availability[source.id] ?? source.available).length} connected</span></div><div className="mt-3 space-y-1">{caseData.sources.map((source) => { const available = availability[source.id] ?? source.available; return <div key={source.id} className="flex items-center gap-2 rounded-lg py-2"><span className={`grid h-7 w-7 place-items-center rounded-lg text-[9px] font-bold text-white ${SOURCE_META[source.id].color}`}>{SOURCE_META[source.id].short}</span><span className="min-w-0 flex-1"><span className="block truncate text-xs font-medium text-slate-800">{source.label}</span><span className="block text-[9px] text-slate-400">Updated {source.lastUpdated}</span></span><button type="button" aria-label={`Toggle ${source.label}`} aria-pressed={available} onClick={() => setAvailability((all) => ({ ...all, [source.id]: !available }))} className={`relative h-5 w-9 rounded-full ${available ? "bg-teal-600" : "bg-slate-300"}`}><span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition ${available ? "left-[18px]" : "left-0.5"}`} /></button></div>; })}</div></div>
-          <div className="border-t border-slate-200 px-5 py-5"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Infrastructure</p><div className="mt-3 space-y-2">{[["SMART FHIR", liveResult ? "connected" : "available", "bg-emerald-500"], ["NLM RxNorm", liveResult ? "queried" : "available", "bg-emerald-500"], ["Photon Neutron", "gated", "bg-amber-500"], ["OpenRouter", "gated", "bg-amber-500"], ["MCP · 14 tools", "local", "bg-cyan-500"]].map(([name, state, color]) => <div key={name} className="flex items-center gap-2 text-[10px]"><span className={`h-1.5 w-1.5 rounded-full ${color}`} /><span className="flex-1 font-medium text-slate-700">{name}</span><span className="uppercase text-slate-400">{state}</span></div>)}</div><Link href="/passport/add/fhir-sandbox/" className="mt-4 inline-flex items-center gap-1 text-[10px] font-semibold text-teal-700">Open full FHIR importer <Icon name="arrow" className="h-3 w-3" /></Link></div>
+          <div className="border-t border-slate-200 px-5 py-5"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Infrastructure</p><div className="mt-3 space-y-2">{[["SMART FHIR", liveResult ? "connected" : "available", "bg-emerald-500"], ["NLM RxNorm", liveResult ? "queried" : "available", "bg-emerald-500"], ["Photon Neutron", "gated", "bg-amber-500"], ["MCP · 14 tools", "local", "bg-cyan-500"]].map(([name, state, color]) => <div key={name} className="flex items-center gap-2 text-[10px]"><span className={`h-1.5 w-1.5 rounded-full ${color}`} /><span className="flex-1 font-medium text-slate-700">{name}</span><span className="uppercase text-slate-400">{state}</span></div>)}</div><Link href="/passport/add/fhir-sandbox/" className="mt-4 inline-flex items-center gap-1 text-[10px] font-semibold text-teal-700">Open full FHIR importer <Icon name="arrow" className="h-3 w-3" /></Link></div>
         </aside>
 
         <main className="min-w-0 bg-white">

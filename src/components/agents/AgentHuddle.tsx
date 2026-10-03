@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
-import { buildHuddle, usePlayback, urgentNotice, type Huddle, type HuddleAgentId } from "@/lib/agents/huddle";
+import { buildHuddle, huddleEnabled, setHuddleEnabled, usePlayback, urgentNotice, type Huddle, type HuddleAgentId } from "@/lib/agents/huddle";
 import { MARGARET_HUDDLE_FIXTURE } from "@/lib/agents/huddle.fixture";
 
 const NAMES: Record<HuddleAgentId, { name: string; role: string }> = {
@@ -59,6 +59,7 @@ export function AgentHuddle({ open, onClose, huddle = DEFAULT_HUDDLE, urgent, tr
   const [elapsed, setElapsed] = useState(0);
   const [skipped, setSkipped] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [showNextTime, setShowNextTime] = useState(() => huddleEnabled());
   const previousOpen = useRef(open);
   const notice = urgentNotice(urgent);
   const playback = usePlayback(huddle, { elapsedMs: elapsed, skipped, reducedMotion });
@@ -116,7 +117,7 @@ export function AgentHuddle({ open, onClose, huddle = DEFAULT_HUDDLE, urgent, tr
     <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="agent-huddle-title" className="mx-auto my-3 w-full max-w-[960px] overflow-hidden rounded-2xl border border-line bg-cream shadow-2xl sm:my-10">
       <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4">
         <div><p className="text-[11px] font-semibold uppercase tracking-[.18em] text-brand-700">Agent huddle</p><h2 id="agent-huddle-title" className="mt-1 font-serif text-2xl font-semibold text-navy">Your care picture is being checked</h2><p className="mt-1 text-xs text-ink-muted">Rule-based agents, no language model.</p></div>
-        <div className="flex gap-2"><button type="button" onClick={() => { setSkipped(true); setElapsed(99999); }} className="min-h-11 rounded-lg border border-line px-3 text-sm font-semibold text-ink hover:bg-cream-dark">Skip</button><button type="button" aria-label="Close agent huddle" onClick={onClose} className="min-h-11 min-w-11 rounded-lg border border-line text-ink hover:bg-cream-dark"><svg viewBox="0 0 24 24" className="mx-auto h-4 w-4" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg></button></div>
+        <div className="flex flex-wrap justify-end gap-2"><button type="button" onClick={() => { setSkipped(true); setElapsed(99999); }} className="min-h-11 rounded-lg border border-line px-3 text-sm font-semibold text-ink hover:bg-cream-dark">Skip</button><button type="button" onClick={() => { setHuddleEnabled(false); setShowNextTime(false); onClose(); }} className="min-h-11 rounded-lg border border-line px-3 text-xs font-semibold text-ink-muted hover:bg-cream-dark">Don&apos;t show again</button><button type="button" aria-label="Close agent huddle" onClick={onClose} className="min-h-11 min-w-11 rounded-lg border border-line text-ink hover:bg-cream-dark"><svg viewBox="0 0 24 24" className="mx-auto h-4 w-4" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg></button></div>
       </div>
       <div className="px-5 py-5">
         <div className="relative hidden min-h-[380px] md:block">
@@ -131,6 +132,7 @@ export function AgentHuddle({ open, onClose, huddle = DEFAULT_HUDDLE, urgent, tr
         <div className="mt-5 border-t border-line pt-4"><div className="grid gap-2 md:grid-cols-7">{huddle.steps.map((step, index) => <div key={step.id} className={"rounded-lg border p-2 " + (index <= playback.currentStep ? "border-brand-200 bg-brand-50" : "border-line bg-white")}><div className="flex items-center gap-2"><span className={"flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold " + (index < playback.currentStep || playback.complete ? "bg-good-soft text-good" : index === playback.currentStep ? "bg-brand-700 text-white" : "bg-cream-dark text-ink-muted")}>{index < playback.currentStep || playback.complete ? <svg viewBox="0 0 24 24" className="h-3 w-3" aria-hidden="true"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg> : index + 1}</span><span className="text-xs font-semibold text-navy">{step.label}</span></div>{step.detail && <p className="mt-1 pl-7 text-[11px] text-ink-muted">{step.detail}</p>}</div>)}</div></div>
         {playback.complete && <div className="mt-4 rounded-xl border border-good bg-good-soft p-4"><p className="text-sm font-semibold text-navy">Answer ready</p><p className="mt-1 text-sm leading-relaxed text-ink">{huddle.answer}</p>{huddle.citations.length > 0 && <ul className="mt-2 space-y-1 text-xs text-ink-muted">{huddle.citations.map((citation) => <li key={citation.label}>Source: {citation.label}</li>)}</ul>}<button type="button" onClick={onClose} className="mt-3 min-h-11 rounded-lg bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800">See the answer</button></div>}
         <p className="sr-only" aria-live="polite">{current ? NAMES[current.from].name + " says: " + current.summary : ""}</p>
+        {!showNextTime && <p className="mt-3 text-xs text-ink-muted">Agent huddles are off. Re-enable them from your browser site settings.</p>}
       </div>
     </div>
   </div>;

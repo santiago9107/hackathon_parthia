@@ -16,9 +16,9 @@
  */
 
 export const DIRECTIVE_WORDING =
-  /\b(stop|start|discontinue|resume|increase|decrease|reduce|switch|substitute|replace|hold|avoid|should|must|recommend|take|double|halve)\b/i;
+  /(?:^(?:stop|start|discontinue|resume|increase|decrease|reduce|switch|substitute|replace|hold|avoid|take|double|halve)\b|\b(?:you|patient|clinician|care team)\s+(?:should|must|need to|take|stop|start|change)\b|\b(?:should|must)\s+(?:take|stop|start|change|switch|increase|decrease|reduce)\b)/i;
 
-const MAX_LENGTH = 360;
+const MAX_LENGTH = 600;
 
 /** Returns null when the text is a short, neutral sentence, otherwise the reason. */
 export function validateNeutral(text: unknown): string | null {

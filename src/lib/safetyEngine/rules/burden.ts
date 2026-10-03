@@ -108,7 +108,7 @@ export const anticholinergicBurdenRule: RuleDefinition = {
             `Several of your medicines have "anticholinergic" effects — they block a chemical messenger the body uses for memory, saliva, digestion and bladder control. Each one alone is mild, but the effects add up. A total score of ${total} is in the range linked with dry mouth, fogginess, constipation and a higher risk of falls in older adults.` +
             (strong.length > 0 ? ` ${strong.map((c) => c.med.name).join(" and ")} contribute the most.` : ""),
           suggestedNextStep:
-            "Ask your doctor or pharmacist whether any of the higher-scoring medicines have a gentler alternative — over-the-counter sleep aids like diphenhydramine are often the easiest to swap.",
+            "Ask your doctor or pharmacist whether any of the higher-scoring medicines have a gentler alternative, including over-the-counter sleep aids like diphenhydramine.",
           evidence: [
             ...contributors.map((c) => `${c.med.name}: score ${c.score}`),
             ...(matching.length > 0

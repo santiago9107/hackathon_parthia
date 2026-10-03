@@ -15,21 +15,21 @@ export function orchestrate(record: PatientRecord, now: Date): Orchestration {
   const byIngredient = new Map<string, SpecialistItem[]>();
   const linkedKeys = new Set<string>();
   for (const item of all) for (const ingredient of item.ingredients) byIngredient.set(ingredient.toLowerCase(), [...(byIngredient.get(ingredient.toLowerCase()) ?? []), item]);
-  for (const items of byIngredient.values()) {
+  for (const [ingredient, items] of byIngredient.entries()) {
     const distinct = [...new Map(items.map((item) => [item.specialist, item])).values()];
     if (distinct.length < 2) continue;
-    const ingredients = distinct[0].ingredients.filter((ingredient) => distinct.every((item) => item.ingredients.map((x) => x.toLowerCase()).includes(ingredient.toLowerCase())));
-    const linkedKey = ingredients.map((ingredient) => ingredient.toLowerCase()).sort().join("+");
-    if (!linkedKey || linkedKeys.has(linkedKey)) continue;
+    const linkedKey = ingredient.toLowerCase();
+    if (linkedKeys.has(linkedKey)) continue;
     linkedKeys.add(linkedKey);
     const factIds = distinct.flatMap((item) => item.factIds);
+    const evidence = distinct.map((item) => item.clinicianText.split(/(?<=[.!?])\s+/)[0]).join(" ");
     const linkedItem: SpecialistItem = {
-      id: `linked:${ingredients.join("+")}`, specialist: "pharmacist", ingredients, factIds,
-      patientText: `Several reviewers found related evidence about ${ingredients.join(" and ")}. Your care team can review it together.`,
-      clinicianText: `${ingredients.join(" and ")}: related findings were linked across ${distinct.map((item) => item.specialist).join(" and ")}.`,
+      id: `linked:${ingredient}`, specialist: "pharmacist", ingredients: [ingredient], factIds,
+      patientText: `Several reviewers found related evidence about ${ingredient}. Your care team can review it together.`,
+      clinicianText: `${ingredient}: ${evidence}`,
     };
     linked.push(linkedItem);
-    messages.push({ from: distinct[0].specialist, to: distinct[1].specialist, factIds, summary: `Linked ${ingredients.join(" and ")} across specialist reviews.` });
+    messages.push({ from: distinct[0].specialist, to: distinct[1].specialist, factIds, summary: `Linked ${ingredient} across specialist reviews.` });
   }
   return { facts, outputs, linked, messages };
 }

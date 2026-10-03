@@ -8,7 +8,10 @@ export interface OrchestratorResult { messages: Array<{ from: string; to: string
 
 const AGENT_IDS = new Set<HuddleAgentId>(["patient", "records", "safety", "cardiology", "nutrition", "behavioral", "reviewer", "photon"]);
 const LABELS: Record<HuddleStep["id"], string> = { question: "Question received", records: "Records gathered", rules: "Safety rules checked", specialists: "Specialists reviewing", linked: "Linked across specialists", review: "Safety review", answer: "Answer ready" };
-function agentId(value: string): HuddleAgentId { return AGENT_IDS.has(value as HuddleAgentId) ? value as HuddleAgentId : "records"; }
+function agentId(value: string): HuddleAgentId {
+  if (value === "pharmacist") return "safety";
+  return AGENT_IDS.has(value as HuddleAgentId) ? value as HuddleAgentId : "records";
+}
 function answerText(reply: PatientReply): string { return reply.segments.map((segment) => segment.text).join(" ").trim(); }
 
 export function buildHuddle(input: OrchestratorResult, reply: PatientReply): Huddle {
@@ -32,7 +35,7 @@ export function buildHuddle(input: OrchestratorResult, reply: PatientReply): Hud
 export interface PlaybackState { messageIndex: number; activeAgent?: HuddleAgentId; statuses: Record<HuddleAgentId, "idle" | "working" | "done" | "blocked">; currentStep: number; complete: boolean; }
 const ALL_AGENTS: HuddleAgentId[] = ["patient", "records", "safety", "cardiology", "nutrition", "behavioral", "reviewer", "photon"];
 export function usePlayback(huddle: Huddle, options: { stepMs?: number; reducedMotion?: boolean; elapsedMs?: number; skipped?: boolean } = {}): PlaybackState {
-  const stepMs = options.stepMs ?? 700;
+  const stepMs = options.stepMs ?? 800;
   const totalMs = Math.max(huddle.steps.length * stepMs, huddle.messages.length * 520);
   const final = options.reducedMotion === true || options.skipped === true || (options.elapsedMs ?? 0) >= totalMs;
   const elapsed = final ? totalMs : Math.max(0, options.elapsedMs ?? 0);
@@ -47,4 +50,23 @@ export function urgentNotice(kind: PatientReply["urgent"]): string | undefined {
   if (kind === "self-harm") return "If you may hurt yourself, call or text 988 now.";
   if (kind === "physical") return "If this could be an emergency, call 911 now.";
   return undefined;
+}
+
+const HUDDLE_SETTING = "parthia.agentHuddle.enabled";
+
+export function huddleEnabled(): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    return window.localStorage.getItem(HUDDLE_SETTING) !== "false";
+  } catch {
+    return true;
+  }
+}
+
+export function setHuddleEnabled(enabled: boolean): void {
+  try {
+    window.localStorage.setItem(HUDDLE_SETTING, String(enabled));
+  } catch {
+    // Storage is optional in private browsing and embedded previews.
+  }
 }

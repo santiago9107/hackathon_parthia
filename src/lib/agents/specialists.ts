@@ -22,7 +22,7 @@ export interface SpecialistOutput { specialist: SpecialistId; items: SpecialistI
 
 export const ROUTING: Record<string, SpecialistId[]> = {
   "drug-drug": ["pharmacist"], "drug-allergy": ["pharmacist"], "drug-kidney": ["pharmacist"],
-  "anticholinergic-burden": ["pharmacist", "behavioral"], "drug-mood": ["pharmacist", "behavioral"],
+  "anticholinergic-burden": ["pharmacist"], "drug-mood": ["pharmacist", "behavioral"],
   "drug-vitals": ["cardiology"], "drug-nutrient": ["nutrition", "pharmacist"],
   "measure/weight-change-3d": ["cardiology"], "measure/bp-trend-14d": ["cardiology"],
   "measure/hr-trend-14d": ["cardiology"], "measure/potassium-trend": ["nutrition"],
