@@ -4,7 +4,7 @@
   "as_of": "2026-10-03T12:00:00Z",
   "module_version": "0.3.0",
   "knowledge_version": "234dfffb4aee",
-  "overrides_version": "2026-10-03.2",
+  "overrides_version": "2026-10-03.3",
   "knowledge_mode": "development",
   "phenotype": {
     "element_id": "D003",

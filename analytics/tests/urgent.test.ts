@@ -127,3 +127,13 @@ describe("urgent short-circuit", () => {
     vi.doUnmock("../src/engine/rules");
   });
 });
+
+describe("approved urgent wording (DEC-19)", () => {
+  it("urgent-lab items carry the approved message and cite DEC-19", () => {
+    const s = fixture("harold");
+    s.labs.push({ id: "na-low", element_id: "D008", provenance: confirmed, analyte: "sodium", value: 123, unit: "mEq/L", date: "2026-10-02" });
+    const u = run(s).urgent[0]!;
+    expect(u.patient_message).toBe("One of your recent lab results needs prompt attention. Please contact your care team today. If you feel very unwell, have chest pain, fainting, or severe trouble breathing, call 911.");
+    expect(u.decision_ids).toContain("DEC-19");
+  });
+});

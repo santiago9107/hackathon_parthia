@@ -1,7 +1,7 @@
 {
-  "$comment": "Patient-facing urgent messages. R21 and R22 wording approved by the clinical lead on 2026-10-03 (DEC-16). The urgent-lab wording is still DRAFT for clinical-lead review (AMB-08). Urgent messages may say 'call 911/988'; that is a safety instruction, not a treatment instruction.",
+  "$comment": "Patient-facing urgent messages, approved by the clinical lead on 2026-10-03: R21 and R22 (DEC-16), urgent lab (DEC-19). Urgent messages may say 'call 911/988'; that is a safety instruction, not a treatment instruction.",
   "R21": "Some of what you reported can be a sign of a serious problem. If you have chest pain, fainted, have severe trouble breathing, or feel confused, call 911 now. Otherwise, contact your care team today.",
   "R22": "Thank you for telling us. You don't have to go through this alone. If you are thinking about hurting yourself, call or text 988 (Suicide & Crisis Lifeline) now, or call 911 if you are in immediate danger. Please also let your care team know how you are feeling.",
-  "urgent_lab": "One of your recent blood test results needs prompt attention. Please contact your care team today. If you feel very unwell, call 911.",
+  "urgent_lab": "One of your recent lab results needs prompt attention. Please contact your care team today. If you feel very unwell, have chest pain, fainting, or severe trouble breathing, call 911.",
   "urgent_lab_clinician": "Lab value at the urgent limit per DEC-06; urgent pathway, not ranked with other findings."
 }

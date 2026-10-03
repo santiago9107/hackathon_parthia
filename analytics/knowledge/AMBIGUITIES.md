@@ -15,7 +15,7 @@ safety-conservative choices, flagged so you can confirm or correct them. IDs are
 ## Resolved on 2026-10-03
 
 AMB-01 and AMB-02 (BP "x/y" thresholds) -> DEC-15. AMB-09 (R13 wording) and R21/R22 message wording -> DEC-16.
-Clinical-mode urgent pathway -> DEC-17. AMB-18 (unconfirmed red flags) -> DEC-18.
+AMB-08 (urgent-lab message wording) -> DEC-19. Clinical-mode urgent pathway -> DEC-17. AMB-18 (unconfirmed red flags) -> DEC-18.
 
 ## Applied provisionally (please confirm)
 
@@ -26,7 +26,6 @@ Clinical-mode urgent pathway -> DEC-17. AMB-18 (unconfirmed red flags) -> DEC-18
 | AMB-05 | Urgent BP/HR recency | A BP/HR reading triggers the urgent pathway only if taken within the last **24 h** (`config/analysis.json`). | A 6-day-old reading is "valid" (D012/D013 = 7 days) but is not an emergency now. |
 | AMB-06 | Domain of urgent items | self-harm → Mental health; red-flag symptom → Fluid/congestion; urgent vital → BP/HR; urgent lab → Heart-kidney labs (`config/domains.json`). | Needed for domain colours. |
 | AMB-07 | Low severity → domain status | Low → "watch" (brief defines only Urgent/High/Moderate). | Only R16 is Low; with R16 now on (DEC-15), a domain with only R16 shows "watch". |
-| AMB-08 | Urgent-lab message wording | `config/messages.json` "urgent_lab" (R21/R22 wording approved, DEC-16). | Please approve or rewrite. |
 | AMB-10 | R22 which PHQ-9 | Any PHQ-9 within the D016 window (30 days) with item 9 > 0 triggers, not only the latest. | Safety-conservative. |
 | AMB-11 | DEC-03 edge cases | A result dated the **same day** as the change counts as pre-change (order within the day is unknown). During the first 14 days the element is reported missing with reason `post_change_monitoring_due`; after day 14 `…_overdue`. | |
 | AMB-12 | D002 vs D003 validity | D003 is calculated from the latest LVEF of any age (D003 "until LVEF changes"); a D002 older than 12 months is reported missing only by rules that need it. | KB windows conflict. |

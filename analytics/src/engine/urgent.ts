@@ -191,7 +191,7 @@ export function evaluateUrgent(ctx: Ctx): { urgent: UrgentItem[]; evaluations: R
         source_ids: k.thresholds.get(c.threshold_id)!.source_ids,
         threshold_ids: [c.threshold_id],
         card_ids: [],
-        decision_ids: [ul.decision, "DEC-17", "DEC-18"],
+        decision_ids: [ul.decision, "DEC-17", "DEC-18", "DEC-19"],
         thresholds_used: [t],
         knowledge: [ref(ctx, "threshold", c.threshold_id), ref(ctx, "element", c.element), ref(ctx, "decision", ul.decision), ref(ctx, "override", "messages.urgent_lab")],
         triggered_at: dayKey(l.date),
