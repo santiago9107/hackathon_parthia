@@ -13,7 +13,7 @@ export interface RecordedPhotonScreen {
 }
 export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
   "ciprofloxacin-500-mg": {
-    "recordedAt": "2026-10-03T15:28:08.927Z",
+    "recordedAt": "2026-10-03T16:57:37.599Z",
     "treatmentKey": "ciprofloxacin-500-mg",
     "alerts": [
       {
@@ -36,7 +36,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
     ]
   },
   "amoxicillin-500-mg": {
-    "recordedAt": "2026-10-03T15:28:09.988Z",
+    "recordedAt": "2026-10-03T16:57:41.920Z",
     "treatmentKey": "amoxicillin-500-mg",
     "alerts": [
       {
@@ -76,7 +76,7 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
     ]
   },
   "ibuprofen-200-mg": {
-    "recordedAt": "2026-10-03T15:28:10.664Z",
+    "recordedAt": "2026-10-03T16:57:43.236Z",
     "treatmentKey": "ibuprofen-200-mg",
     "alerts": [
       {
@@ -148,5 +148,30 @@ export const PHOTON_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
         ]
       }
     ]
+  },
+};
+
+/** Captures for Margaret Lindqvist's synthetic Photon sandbox patient. */
+export const PHOTON_MARGARET_RECORDED_SCREENS: Record<string, RecordedPhotonScreen> = {
+  "tramadol-50-mg": {
+    recordedAt: "2026-10-03T17:01:03.002Z",
+    treatmentKey: "tramadol-50-mg",
+    alerts: [
+      { type: "DRUG", severity: "MAJOR", description: "Serotonergic effects may be additive when tramadol and selective serotonin reuptake inhibitors (SSRIs) are coadministered. The risk of serotonin syndrome/toxicity may be increased.", involvedEntities: [{ id: "mht_01M41BCCXX0S2DVTAE98RS7AX9", name: "Sertraline HCl", kind: "existing" }, { id: "med_01M032SWE1Q86HDCTAJFB3C3W9", name: "traMADol HCl", kind: "drafted" }] },
+      { type: "DRUG", severity: "MAJOR", description: "Zolpidem may increase CNS depressant effects of opioid agonists, such as traMADol HCl Oral Tablet 50 MG.", involvedEntities: [{ id: "med_01M032SWE1Q86HDCTAJFB3C3W9", name: "traMADol HCl", kind: "drafted" }, { id: "mht_01M41BCCY1N1JW8GEXGM8320X2", name: "Zolpidem Tartrate", kind: "existing" }] },
+    ],
+  },
+  "ibuprofen-200-mg": {
+    recordedAt: "2026-10-03T17:01:04.082Z",
+    treatmentKey: "ibuprofen-200-mg",
+    alerts: [
+      { type: "DRUG", severity: "MAJOR", description: "Toxic effects may be increased with concurrent administration of ibuprofen and Sertraline HCl Oral Tablet 100 MG. The risk of upper gastrointestinal bleeding may be increased. Patients taking both drugs concurrently should be educated about the signs and symptoms of GI bleeding.", involvedEntities: [{ id: "med_01KZEG3HFJQF4VK0AXCYAVS77J", name: "Ibuprofen", kind: "drafted" }, { id: "mht_01M41BCCXX0S2DVTAE98RS7AX9", name: "Sertraline HCl", kind: "existing" }] },
+      { type: "DRUG", severity: "MODERATE", description: "Nonsteroidal Anti-Inflammatory Agents (eg, Ibuprofen Oral Capsule 200 MG) may diminish the diuretic effect of Loop Diuretics (eg, Furosemide Oral Tablet 40 MG). Loop Diuretics (eg, Furosemide Oral Tablet 40 MG) may enhance the nephrotoxic effect of Nonsteroidal Anti-Inflammatory Agents (eg, Ibuprofen Oral Capsule 200 MG).", involvedEntities: [{ id: "mht_01M41BCCY3RGA54E5E88Y7PDQ2", name: "Furosemide", kind: "existing" }, { id: "med_01KZEG3HFJQF4VK0AXCYAVS77J", name: "Ibuprofen", kind: "drafted" }] },
+    ],
+  },
+  "diphenhydramine-25-mg": {
+    recordedAt: "2026-10-03T17:01:04.755Z",
+    treatmentKey: "diphenhydramine-25-mg",
+    alerts: [],
   },
 };

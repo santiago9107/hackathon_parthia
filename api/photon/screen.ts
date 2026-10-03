@@ -20,10 +20,12 @@ export default async function handler(request: RequestLike, response: ResponseLi
   if (request.method !== "POST") return response.status(405).json({ error: "Method not allowed" });
   const body = request.body as { patientId?: unknown; treatmentIds?: unknown } | undefined;
   const patientId = body?.patientId;
+  const demoPatientId = (body as { demoPatientId?: unknown } | undefined)?.demoPatientId;
   const treatmentIds = body?.treatmentIds;
   if (
     !body
     || (patientId !== undefined && (typeof patientId !== "string" || !safeId.test(patientId)))
+    || (demoPatientId !== undefined && demoPatientId !== "p-harold" && demoPatientId !== "p-margaret")
     || !Array.isArray(treatmentIds)
     || treatmentIds.length < 1
     || treatmentIds.length > 5
@@ -34,6 +36,7 @@ export default async function handler(request: RequestLike, response: ResponseLi
   try {
     return response.status(200).json(await screenPhoton({
       patientId: typeof patientId === "string" ? patientId : undefined,
+      demoPatientId: demoPatientId as "p-harold" | "p-margaret" | undefined,
       treatmentIds: treatmentIds as string[],
     }));
   } catch (error) {
