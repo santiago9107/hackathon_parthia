@@ -7,6 +7,7 @@ import { Wordmark } from "./Wordmark";
 import { PatientSwitcher } from "./PatientSwitcher";
 import { InstallCTA } from "./InstallCTA";
 import { LockScreen } from "./passport/LockScreen";
+import { AskParthiaDock } from "./patient/AskParthiaDock";
 import { usePatient } from "@/lib/context/PatientContext";
 
 interface NavItem {
@@ -93,6 +94,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       </header>
 
       <main className={`mx-auto w-full flex-1 px-4 pb-24 pt-6 sm:px-6 md:pb-12 ${clinicianSurface ? "max-w-[1720px]" : "max-w-6xl"}`}>{passportStatus === "locked" ? <LockScreen /> : children}</main>
+
+      {/* The patient agent dock. The clinician workspace keeps its own chat, so
+          it is not rendered there, and it stays hidden while the Passport is
+          locked because it answers from the record. */}
+      {!clinicianSurface && passportStatus !== "locked" && <AskParthiaDock />}
 
       {/* Mobile tab bar */}
       <nav

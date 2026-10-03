@@ -180,3 +180,56 @@ describe("page-aware intents answer from the record with citations", () => {
     }
   });
 });
+
+/* ---- The dock answers for the page the patient is on --------------------- */
+
+describe("every route group the global dock appears on has its own context", () => {
+  /** pathname, resolved route, label, and a phrase the capability must carry. */
+  const ROUTES: [string, string, string, RegExp][] = [
+    ["/", "/", "Your dashboard", /four indicators/i],
+    ["/passport/", "/passport/", "My Passport", /where any item in your Passport came from/i],
+    ["/passport/review/", "/passport/review/", "Review differences", /difference between your records/i],
+    ["/passport/share/", "/passport/share/", "Share with your care team", /summary for your visit/i],
+    ["/medications/", "/medications/", "Medication safety", /every flag on this page, the rule behind it and the evidence/i],
+    ["/safety", "/safety", "Medication safety", /every flag on this page, the rule behind it and the evidence/i],
+    ["/log/medication/", "/log/", "Log something", /what changed in your safety check after you log/i],
+    ["/trends/", "/trends/", "Trends", /no diagnosis/i],
+  ];
+
+  for (const [pathname, route, label, capability] of ROUTES) {
+    it(`${pathname} resolves to the ${label} context with example questions`, () => {
+      const page = resolvePageContext(pathname);
+      expect(page.route).toBe(route);
+      expect(page.label).toBe(label);
+      expect(page.capability).toMatch(capability);
+      expect(page.examples.length).toBeGreaterThan(0);
+      expect(page.examples.every((q) => q.trim().endsWith("?"))).toBe(true);
+    });
+  }
+
+  it("the clinician surface resolves to the clinician context and keeps its own examples", () => {
+    const page = resolvePageContext("/clinician/case/p-harold/", context().update);
+    expect(page.route).toBe("/clinician/");
+    expect(page.label).toBe("Clinician workspace");
+    expect(page.capability).toMatch(/clinician view/i);
+    expect(page.examples.length).toBeGreaterThan(0);
+    // The real new count rewrites the first patient-side example, never this one.
+    expect(page.examples[0]).toBe("What changed since my last visit?");
+  });
+
+  it("names the real new count in the first example once something was logged", () => {
+    const page = resolvePageContext("/log/medication/", context().update);
+    expect(page.route).toBe("/log/");
+    expect(page.examples[0]).toBe("What are the 1 new thing since my last visit?");
+  });
+
+  it("reports what changed on /log/ from the same SafetyUpdate as the dashboard", async () => {
+    const base = context();
+    const onLog = { ...base, page: resolvePageContext("/log/medication/", base.update) };
+    const reply = await answerPatient("What changed since my last visit?", onLog);
+    expect(allText(reply)).toMatch(/1 new thing to ask your doctor about/);
+    expect(allText(reply)).toMatch(/now also involves Advil/);
+    expect(reply.citations.some((c) => c.ruleId === "allergy/medication-conflict/al-h1")).toBe(true);
+    expect(reply.suggestions).toEqual(onLog.page.examples);
+  });
+});
