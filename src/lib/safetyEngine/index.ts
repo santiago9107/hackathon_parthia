@@ -22,6 +22,7 @@ import { drugDrugRules } from "./rules/drugDrug";
 import { drugNutrientRules } from "./rules/drugNutrient";
 import { moodRules } from "./rules/moodAdherence";
 import { passportRules } from "./rules/passport";
+import { heartFailureRules } from "./rules/heartFailure";
 import type { RuleDefinition } from "./rules/types";
 
 export type { RuleDefinition } from "./rules/types";
@@ -33,6 +34,7 @@ export const RULES: readonly RuleDefinition[] = [
   ...moodRules,
   ...drugDrugRules,
   ...passportRules,
+  ...heartFailureRules,
 ];
 
 const SEVERITY_RANK: Record<RiskSeverity, number> = { high: 0, moderate: 1, low: 2 };

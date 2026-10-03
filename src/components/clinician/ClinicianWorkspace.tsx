@@ -13,6 +13,8 @@ import { listSandboxPatients, SANDBOX_UNAVAILABLE, type SandboxPatient } from "@
 import type { CaseSourceId, ClinicianDecision, ClinicianFinding } from "@/lib/clinician/types";
 import { ClinicalBodyAtlas3D } from "./ClinicalBodyAtlas3D";
 import { PhotonScreenPanel } from "./PhotonScreenPanel";
+import { getRecord } from "@/lib/mockData";
+import { computeMeasures } from "@/lib/measures";
 
 const STAGES = ["Gather", "Validate", "Normalize", "Reconcile", "Check", "Clarify", "Explain", "Route"];
 const SOURCE_META: Record<CaseSourceId, { short: string; color: string }> = {
@@ -65,6 +67,10 @@ export function ClinicianWorkspace() {
   const activeStage = launched ? Math.max(0, Math.min(agentProgress - 1, STAGES.length - 1)) : -1;
   const visibleTrace = run?.trace.slice(0, Math.max(1, Math.ceil(run.trace.length * agentProgress / STAGES.length))) ?? [];
   const agentRunning = launched && agentProgress < STAGES.length;
+  const measures = useMemo(() => {
+    const record = activePatientId.startsWith("smart-") ? undefined : getRecord(activePatientId);
+    return record ? computeMeasures(record, new Date(`${CLINICIAN_AS_OF}T12:00:00`)) : [];
+  }, [activePatientId]);
 
   useEffect(() => { const timer = window.setTimeout(() => setActivePatientId(patientId), 0); return () => window.clearTimeout(timer); }, [patientId]);
   useEffect(() => { if (!agentRunning) return; const timer = window.setTimeout(() => setAgentProgress((value) => Math.min(STAGES.length, value + 1)), 500); return () => window.clearTimeout(timer); }, [agentProgress, agentRunning]);
@@ -136,6 +142,8 @@ export function ClinicianWorkspace() {
           </section>
 
           {!run ? <div className="grid min-h-[390px] place-items-center px-8 text-center"><div><span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-teal-50 text-teal-700"><Icon name="spark" className="h-7 w-7" /></span><h3 className="mt-4 text-lg font-semibold text-slate-950">Ready to reconcile {caseData.patientName}&apos;s record</h3><p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">The agent will gather five sources, normalize identity, preserve provenance, run configured rules, and stop wherever a person must decide.</p></div></div> : <RunResults run={run} finding={finding} selected={selected} setSelected={setSelected} decisions={decisions} decide={decide} caseData={caseData} activePatientId={activePatientId} messages={messages} question={question} setQuestion={setQuestion} ask={ask} agentAnswering={agentAnswering} />}
+
+          {measures.length > 0 && <section className="border-t border-slate-200 px-6 py-5"><div className="flex items-baseline justify-between gap-3"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-teal-700">Read-only measures</p><p className="mt-1 text-sm font-semibold text-slate-950">Trends the agent can cite</p></div><span className="text-[9px] text-slate-400">Passport records only</span></div><div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">{measures.slice(0, 4).map((measure) => <div key={measure.id} className="rounded-xl border border-slate-200 bg-slate-50 p-3"><p className="text-[10px] font-medium text-slate-600">{measure.label}</p><p className="mt-1 text-base font-semibold text-slate-950">{measure.value === null ? "Insufficient data" : `${measure.value > 0 ? "+" : ""}${measure.value} ${measure.unit}`}</p><p className="mt-1 text-[9px] text-slate-400">{measure.status === "ok" ? `${measure.basis.length} readings` : "No value calculated"}</p></div>)}</div></section>}
 
           {/* Read-only Photon screening. Always reachable, so a drafted
               prescription can be screened before or after a reconciliation run.

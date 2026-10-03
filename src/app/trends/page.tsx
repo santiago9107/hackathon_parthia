@@ -7,6 +7,7 @@ import { TrendChart, ChartLegend } from "@/components/charts/TrendChart";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
 import { SourceBadges } from "@/components/passport/SourceBadge";
 import { DeviceTrends } from "@/components/passport/DeviceTrends";
+import { computeMeasures } from "@/lib/measures";
 
 export default function TrendsPage() {
   const { record, flags, now } = usePatient();
@@ -35,6 +36,7 @@ export default function TrendsPage() {
     return [...m.entries()].sort((a, b) => b[1] - a[1]);
   }, [nutritionRecent]);
   const moodFlags = flags.filter((f) => f.category === "drug-mood" || f.category === "drug-nutrient");
+  const measures = computeMeasures(record, now);
 
   return (
     <div>
@@ -141,6 +143,21 @@ export default function TrendsPage() {
       <Card className="mt-6 p-5">
         <h3 className="mb-3 font-serif text-lg font-semibold text-navy">From your wearables and devices</h3>
         <DeviceTrends vitals={record.patient.vitals} now={now} days={days} />
+      </Card>
+
+      <Card className="mt-6 p-5">
+        <h3 className="font-serif text-lg font-semibold text-navy">Measures</h3>
+        <p className="mt-1 text-sm text-ink-muted">Read-only calculations from the records in this Passport.</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {measures.map((measure) => (
+            <div key={measure.id} className="rounded-xl border border-line bg-cream/40 p-3">
+              <p className="text-sm font-semibold text-ink">{measure.label}</p>
+              <p className="mt-2 text-xl font-semibold text-ink">{measure.value === null ? "Not enough data" : `${measure.value > 0 ? "+" : ""}${measure.value} ${measure.unit}`}</p>
+              <p className="mt-1 text-xs text-ink-muted">{measure.status === "ok" ? `Based on ${measure.basis.length} readings` : "No value calculated"}</p>
+              <p className="mt-1 text-xs text-ink-muted">{measure.window.from} to {measure.window.to}</p>
+            </div>
+          ))}
+        </div>
       </Card>
 
       <Disclaimer />
