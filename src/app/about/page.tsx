@@ -249,6 +249,31 @@ export default function AboutPage() {
         </Card>
       </section>
 
+      <section className="mt-8" id="credits">
+        <h2 className="font-serif text-2xl font-semibold text-navy">Credits</h2>
+        <Card className="mt-3 space-y-4 p-5 sm:p-6">
+          <div>
+            <h3 className="font-semibold text-ink">Anatomy atlas</h3>
+            <blockquote className="mt-2 border-l-2 border-brand-500 pl-4 text-sm leading-relaxed text-ink-soft">
+              BodyParts3D, © The Database Center for Life Science, licensed under the Creative Commons Attribution-ShareAlike 2.1 Japan license.{" "}
+              <a className="text-brand-700 underline" href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html" target="_blank" rel="noreferrer">Source and license</a>.
+              {" "}Web renderer: Human Atlas, MIT licensed.{" "}
+              <a className="text-brand-700 underline" href="https://github.com/ashemag/human-atlas" target="_blank" rel="noreferrer">Human Atlas</a>.
+            </blockquote>
+          </div>
+          <div>
+            <h3 className="font-semibold text-ink">Health data and safety integrations</h3>
+            <ul className="mt-2 space-y-1 text-sm leading-relaxed text-ink-soft">
+              <li><a className="text-brand-700 underline" href="https://r4.smarthealthit.org" target="_blank" rel="noreferrer">SMART Health IT sandbox</a> for synthetic FHIR R4 records.</li>
+              <li><a className="text-brand-700 underline" href="https://github.com/synthetichealth/synthea" target="_blank" rel="noreferrer">Synthea</a>, with thanks to Heather Song for the sample import.</li>
+              <li><a className="text-brand-700 underline" href="https://rxnav.nlm.nih.gov/REST" target="_blank" rel="noreferrer">RxNav from the National Library of Medicine</a> for ingredient mapping.</li>
+              <li><a className="text-brand-700 underline" href="https://photon.health" target="_blank" rel="noreferrer">Photon Health sandbox</a> for read-only prescription screening.</li>
+              <li>Thanks to Santiago Enriquez and the Parthia team for the prototype architecture and demo build.</li>
+            </ul>
+          </div>
+        </Card>
+      </section>
+
       <p className="mt-8 text-sm">
         <Link href="/" className="font-semibold text-brand-700 hover:text-brand-900">
           ← Back to dashboard
