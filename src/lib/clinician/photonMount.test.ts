@@ -23,7 +23,9 @@ describe("Photon screening panel, mounted in the clinician workspace", () => {
   it("is imported and rendered by the clinician workspace", () => {
     const source = workspaceSource();
     expect(source).toContain('import { PhotonScreenPanel } from "./PhotonScreenPanel"');
-    expect(source).toContain("<PhotonScreenPanel />");
+    // Rendered once, with the active synthetic patient passed in, and shown under the review queue once a run exists.
+    expect(source).toMatch(/<PhotonScreenPanel\s[^>]*patientId=/);
+    expect(source).toContain("photon={photonSection}");
   });
 
   it("is the only Photon screening result in the workspace", () => {

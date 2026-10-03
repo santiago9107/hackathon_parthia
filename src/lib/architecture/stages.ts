@@ -11,6 +11,8 @@ export interface ArchNode {
   /** Two short lines, written to fit the diagram's node width. */
   lines: [string, string?];
   status: NodeStatus;
+  /** Set when the part is a live integration with a sponsor, so the diagram can say so. */
+  sponsor?: "Photon Health";
 }
 
 export interface ArchStage {
@@ -46,8 +48,9 @@ export function buildStages(ruleCount: number): ArchStage[] {
       id: "analyze", number: 3, title: "Analyze", caption: "Deterministic. No AI.",
       nodes: [
         { id: "reconcile", title: "Reconcile sources", lines: ["Conflicts shown, never", "silently merged"], status: "running" },
+        { id: "photon-screen", title: "Photon screening", lines: ["Live drug-drug and drug-", "allergy check (Neutron)"], status: "running", sponsor: "Photon Health" },
         { id: "rules", title: "Safety rules", lines: [`${ruleCount} deterministic rules,`, "each flag cites its data"], status: "running" },
-        { id: "knowledge", title: "Clinical knowledge", lines: ["FDA labels, RxNav, live Photon", "drug screening"], status: "running" },
+        { id: "knowledge", title: "Clinical knowledge", lines: ["FDA labels and RxNav", "drug references"], status: "running" },
         { id: "measures", title: "Measures", lines: ["Weight, BP, heart rate,", "eGFR, potassium, PHQ-9"], status: "running" },
       ],
     },
@@ -65,7 +68,7 @@ export function buildStages(ruleCount: number): ArchStage[] {
       nodes: [
         { id: "patient", title: "Patient view", lines: ["Findings and questions for", "their doctor, never orders"], status: "running" },
         { id: "clinician", title: "Clinician view", lines: ["Evidence and decision support,", "every finding routed"], status: "running" },
-        { id: "photon", title: "Photon workflow", lines: ["Opens only after a", "clinician approves"], status: "running" },
+        { id: "photon", title: "Photon workflow", lines: ["Opens only after a", "clinician approves"], status: "running", sponsor: "Photon Health" },
         { id: "export", title: "Export", lines: ["Printable summary,", "FHIR file"], status: "running" },
         { id: "link", title: "Secure link", lines: ["Next: revocable, time-limited", "clinician link"], status: "next" },
       ],

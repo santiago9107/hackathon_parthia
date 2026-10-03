@@ -37,9 +37,10 @@ function AgentCard({ agent, index }: { agent: AgentPersona; index: number }) {
   const steps = stepsFor(agent);
   const step = stepIndexOf(agent.id);
   const chips = (agent.does ?? agent.tools).slice(0, 3);
+  const live = agent.id === "photon";
   return (
     <article
-      className="af-card overflow-hidden rounded-card border border-line bg-surface shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+      className={`af-card overflow-hidden rounded-card border bg-surface shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-lg ${live ? "border-gold-500 ring-2 ring-gold-500" : "border-line"}`}
       style={{ "--d": `${Math.max(step, 0) * STEP_SECONDS}s`, "--in": `${index * 60}ms` } as React.CSSProperties}
     >
       <div className="h-[3px]" style={{ backgroundColor: agent.color }} />
@@ -62,6 +63,11 @@ function AgentCard({ agent, index }: { agent: AgentPersona; index: number }) {
           {steps > 0 && <><strong className="text-ink">{steps}</strong> steps in Margaret&apos;s run · </>}
           {stat(agent)}
         </p>
+        {live && (
+          <Link href="/clinician/#photon-screen" className="mt-3 flex items-center justify-between gap-2 rounded-lg bg-gold-100 px-3 py-2 text-xs font-bold text-[#5c430d] hover:bg-gold-200">
+            <span>Live integration: Photon Neutron sandbox</span><span aria-hidden>See it in the clinician view</span>
+          </Link>
+        )}
         <details className="mt-2 text-xs text-ink-soft">
           <summary className="cursor-pointer font-semibold text-brand-700">About this agent</summary>
           <p className="mt-2 leading-relaxed">{agent.description}</p>

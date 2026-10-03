@@ -11,6 +11,8 @@ export interface FlowStep {
   agentIds: string[];
   label: string;
   sub: string;
+  /** A live sponsor integration, drawn with a gold ring. */
+  sponsor?: boolean;
 }
 
 export const FLOW: FlowStep[] = [
@@ -19,7 +21,7 @@ export const FLOW: FlowStep[] = [
   { key: "safety", agentIds: ["safety"], label: "Dex", sub: "Rules" },
   { key: "orchestrator", agentIds: ["orchestrator"], label: "Router", sub: "Routes" },
   { key: "specialists", agentIds: ["cardiology", "nutrition", "behavioral"], label: "Specialists", sub: "Review" },
-  { key: "photon", agentIds: ["photon"], label: "Fotini", sub: "Photon" },
+  { key: "photon", agentIds: ["photon"], label: "Fotini", sub: "Photon Health", sponsor: true },
   { key: "reviewer", agentIds: ["reviewer"], label: "Reviewer", sub: "Checks" },
   { key: "liaison", agentIds: ["liaison"], label: "Iris", sub: "Clinician" },
 ];

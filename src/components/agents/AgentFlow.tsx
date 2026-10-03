@@ -51,7 +51,7 @@ export function AgentFlow({ captions }: { captions: string[] }) {
           {FLOW.map((step, i) => (
             <Fragment key={step.key}>
               <li className="flex w-1/4 flex-col items-center text-center sm:w-[76px] sm:shrink-0">
-                <span className="af-ring grid place-items-center rounded-full bg-surface ring-1 ring-line" style={{ "--d": `${i * STEP_SECONDS}s` } as React.CSSProperties}>
+                <span className={`af-ring grid place-items-center rounded-full bg-surface ${step.sponsor ? "ring-2 ring-gold-500" : "ring-1 ring-line"}`} style={{ "--d": `${i * STEP_SECONDS}s` } as React.CSSProperties}>
                   {step.agentIds.length > 1 ? (
                     <span className="flex items-center px-1 py-1">
                       {step.agentIds.map((id, k) => <span key={id} className={`rounded-full bg-surface ring-2 ring-surface ${k > 0 ? "-ml-3" : ""}`}><AgentFace id={id} size={28} /></span>)}
@@ -61,7 +61,7 @@ export function AgentFlow({ captions }: { captions: string[] }) {
                   )}
                 </span>
                 <span className="mt-1.5 text-[13px] font-semibold leading-tight text-ink">{step.label}</span>
-                <span className="text-[11px] leading-tight text-ink-muted">{step.sub}</span>
+                <span className={`text-[11px] leading-tight ${step.sponsor ? "font-bold text-[#5c430d]" : "text-ink-muted"}`}>{step.sub}</span>
               </li>
               {i < FLOW.length - 1 && (
                 <li className="relative mt-[22px] hidden h-px flex-1 border-t border-dashed border-line-strong sm:block">
