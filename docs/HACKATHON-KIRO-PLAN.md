@@ -186,6 +186,29 @@ server. Do NOT put the client secret in the browser. Solution on Vercel (hosting
   write prescriptions, so it should work, but confirm in the sandbox). Do not invent field names.
 - Note from the docs: allergy screening only works if allergies were synced via the API.
 
+**VERIFIED tonight (2 Oct, 22:40) with the team's sandbox credentials:**
+- Credentials: M2M client id/secret are in Om's credential store and in the git-ignored
+  `.env.local` at `/Users/theomthakur/Documents/Projects/parthia-health/.env.local`
+  (`PHOTON_CLIENT_ID`, `PHOTON_CLIENT_SECRET`, `PHOTON_AUTH_URL`, `PHOTON_AUDIENCE`,
+  `PHOTON_GRAPHQL_URL`). Copy it into your worktree; set the same vars in the Vercel project.
+  Never commit them, never expose the secret to the browser.
+- Token: `POST https://auth.neutron.health/oauth/token` with
+  `{client_id, client_secret, audience: "https://api.neutron.health", grant_type: "client_credentials"}`
+  → `access_token`, `expires_in: 86400`. Scopes: `read:patient write:patient read:prescription
+  read:order write:order write:invite read:invite read:organization` (no prescription writing).
+- **Clinical API** `https://clinical-api.neutron.health/graphql` accepts the M2M token with headers
+  `x-photon-auth-token: <access_token>` and `x-photon-auth-token-type: auth0` (NOT `Authorization:
+  Bearer`, which returns `EMPTY_AUTHORIZATION_HEADER`). Its Query type includes
+  `prescriptionScreen`, `treatments`, `allergens`, `patients`, `patient`, `medicationFromNdc`.
+- **Main API** `https://api.neutron.health/graphql` accepts `Authorization: Bearer <token>`; Query
+  includes `patients`, `patient`, `prescriptions`, `orders`, `fill`, `pharmacies`, `medications`,
+  `medicationConcepts`, `allergens`, `catalogs`. Use it for patient lookup/creation and orders.
+- Still to check: mutation names for creating a patient and syncing allergies / medication
+  history, and the `treatments` search argument for `treatmentId`s. Use GraphQL introspection
+  (`__type(name: "Mutation")`) on each endpoint with the token.
+- The SPA client id (`NEXT_PUBLIC_PHOTON_SPA_CLIENT_ID`) is public, whitelisted for
+  `http://localhost:3000` only. Add the Vercel URL in Photon settings if Photon Elements are used.
+
 **Where it shows up in the clinician view:**
 - When the clinician picks **"Draft a prescription"** (e.g. ciprofloxacin for Harold's UTI, or
   re-screening his current list), call `/api/photon/screen` **before** the "Continue in Photon"
