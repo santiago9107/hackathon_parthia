@@ -7,7 +7,7 @@ const nodes = [
 ];
 
 export default function SystemDesignPage() {
-  return <div className="space-y-6 pb-10">
+  return <div className="w-full space-y-6 pb-10">
     <header className="border border-slate-800 bg-slate-950 px-6 py-8 text-white sm:px-8"><p className="text-xs font-semibold uppercase tracking-[.18em] text-teal-300">System design</p><h1 className="mt-3 text-4xl font-semibold tracking-[-.045em]">Evidence enters through bounded adapters.<br/>Authority never leaves the clinician.</h1><p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300">This view documents the implemented prototype: data contracts, agent state, deterministic safety checks, policy boundaries, MCP access and human approval.</p></header>
     <section className="border border-slate-200 bg-white p-5 sm:p-7"><p className="text-[11px] font-semibold uppercase tracking-[.16em] text-teal-700">Context architecture</p><div className="mt-6 grid items-center gap-4 xl:grid-cols-[1fr_auto_1.2fr_auto_1fr]">
       <div className="space-y-3">{nodes.map((node) => <div key={node.title} className={`border-l-4 p-4 ${node.tone}`}><p className="font-semibold text-slate-950">{node.title}</p><p className="mt-1 text-xs leading-5 text-slate-600">{node.text}</p></div>)}</div><span className="hidden text-2xl text-teal-700 xl:block">→</span>

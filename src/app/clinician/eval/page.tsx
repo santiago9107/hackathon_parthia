@@ -5,7 +5,7 @@ export default function ClinicianEvalPage() {
   const results = runEvaluation();
   const passed = results.filter((result) => result.passed).length;
   return (
-    <div className="space-y-5">
+    <div className="w-full space-y-5">
       <div className="flex flex-col gap-4 rounded-[1.5rem] bg-navy p-6 text-white sm:flex-row sm:items-end sm:justify-between">
         <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-100">Prototype evaluation</p><h1 className="mt-1 font-serif text-3xl font-semibold">Expected findings and prohibited alarms</h1><p className="mt-2 max-w-2xl text-sm text-white/70">A deterministic check of configured rules. This is not clinical validation.</p></div>
         <div className="rounded-2xl bg-white/10 px-6 py-4 text-center"><p className="text-3xl font-bold text-gold-200">{passed}/{results.length}</p><p className="text-xs uppercase tracking-wider text-white/60">cases passed</p></div>
