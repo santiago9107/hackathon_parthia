@@ -135,7 +135,9 @@ function splitPairs(flag: RiskFlag, meds: Medication[]): { ingredients: string[]
   const aSide = involved.filter((m) => knowledge.matches(m, pair.a));
   const bSide = involved.filter((m) => knowledge.matches(m, pair.b) && !aSide.includes(m));
   if (!aSide.length || !bSide.length) return [{ ingredients: ingredientsOf(flag.medications), title: flag.title }];
-  return aSide.flatMap((a) => bSide.map((b) => ({ ingredients: ingredientsOf([a.name, b.name]), title: flag.title })));
+  // Each split finding names its own pair, so two rows from one rule never
+  // arrive in the queue under the same heading.
+  return aSide.flatMap((a) => bSide.map((b) => ({ ingredients: ingredientsOf([a.name, b.name]), title: `${flag.title}: ${a.name} and ${b.name}` })));
 }
 
 export interface EngineResult {
