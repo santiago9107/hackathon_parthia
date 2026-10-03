@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
@@ -153,6 +155,38 @@ describe("captured sandbox responses", () => {
     expect(html.match(/MODERATE|MAJOR/g) ?? []).toHaveLength(4);
     expect(html).toContain("MAJOR");
     expect(html).toContain("Recorded sandbox response");
+  });
+});
+describe("raw sandbox evidence", () => {
+  /**
+   * `fixtures/photon/raw/*.json` are the raw clinical-API envelopes from the
+   * first live run, kept as evidence and read by no runtime code. This test is
+   * the guard that keeps them from drifting back into contradicting the
+   * generated fallback the UI actually reads, which is what made two capture
+   * sets a problem in the first place.
+   */
+  interface RawCapture {
+    recordedAt: string;
+    patientId: string;
+    response: { data: { prescriptionScreen: { alerts: { type: string; severity: string; involvedEntities: { id: string }[] }[] } } };
+  }
+  function rawCapture(treatmentKey: string): RawCapture {
+    return JSON.parse(readFileSync(join(process.cwd(), "fixtures", "photon", "raw", `${treatmentKey}-raw.json`), "utf8")) as RawCapture;
+  }
+  it("agrees with the generated fallback on the drug screened and the alerts returned", () => {
+    for (const key of ["ciprofloxacin-500-mg", "amoxicillin-500-mg", "ibuprofen-200-mg"]) {
+      const raw = rawCapture(key);
+      const rawAlerts = raw.response.data.prescriptionScreen.alerts;
+      const recorded = PHOTON_RECORDED_SCREENS[key];
+      const shape = (alerts: { type: string; severity: string }[]) => alerts.map((alert) => `${alert.type}/${alert.severity}`).sort();
+      expect(shape(rawAlerts), `raw and recorded disagree for ${key}`).toEqual(shape(recorded.alerts));
+      const screened = photonTreatmentId(key);
+      expect(rawAlerts.some((alert) => alert.involvedEntities.some((entity) => entity.id === screened))).toBe(true);
+      expect(recorded.alerts.some((alert) => alert.involvedEntities.some((entity) => entity.id === screened))).toBe(true);
+      expect(raw.patientId).toBe("pat_01M412P6SKKHQH8TXN43N4BV4Q");
+      expect(raw.recordedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+      expect(JSON.stringify(raw)).not.toMatch(/token|secret|bearer/i);
+    }
   });
 });
 describe("Photon screening panel view", () => {

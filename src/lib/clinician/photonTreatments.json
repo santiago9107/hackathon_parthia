@@ -4,7 +4,7 @@
   "note": "Synthetic demo catalog for one synthetic patient. Ids are sandbox identifiers, not a formulary. Screening is read-only decision support.",
   "treatments": {
     "warfarin-5-mg": { "id": "med_01KZEXS5037PM8ND32W632Q9Q4", "name": "Warfarin Sodium Oral Tablet 5 MG", "label": "Warfarin 5 mg" },
-    "ibuprofen-200-mg": { "id": "med_01KZEG3HFG5M9FYXPGJHS67FMR", "name": "Ibuprofen Oral Tablet 200 MG", "label": "Ibuprofen 200 mg" },
+    "ibuprofen-200-mg": { "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J", "name": "Ibuprofen Oral Capsule 200 MG", "label": "Ibuprofen 200 mg capsule" },
     "aspirin-81-mg": { "id": "med_01JEP4HF9KET0934K7DQTC2FM9", "name": "Aspirin 81 Oral Tablet Delayed Release 81 MG", "label": "Aspirin 81 mg" },
     "ciprofloxacin-500-mg": { "id": "med_01JVT1WGAMK8H6M0KRPYTQ989A", "name": "Ciprofloxacin HCl Oral Tablet 500 MG", "label": "Ciprofloxacin 500 mg" },
     "amoxicillin-500-mg": { "id": "med_01KAY4KR7NRMWJWPDV7J8Z994G", "name": "Amoxicillin Oral Capsule 500 MG", "label": "Amoxicillin 500 mg" },
