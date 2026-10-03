@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import { Card } from "@/components/PageHeader";
 import { Citations } from "@/components/patient/Citations";
+import { VisitQuestions } from "@/components/patient/VisitQuestions";
+import { usePatient } from "@/lib/context/PatientContext";
 import { usePatientAgent } from "@/lib/patientAgent/usePatientAgent";
+import { buildVisitQuestions } from "@/lib/patientAgent/visitQuestions";
 import type { AgentCitation } from "@/lib/patientAgent/types";
 
 /**
@@ -18,6 +22,9 @@ import type { AgentCitation } from "@/lib/patientAgent/types";
  */
 export function AgentCard() {
   const { update } = usePatientAgent();
+  const { record, issues } = usePatient();
+  const [prepared, setPrepared] = useState(false);
+  const questions = useMemo(() => buildVisitQuestions(update, issues, record), [update, issues, record]);
   const { newCount, newFindings, updatedFindings, patientReportedOnly } = update;
   const nothingNew = newCount === 0 && updatedFindings.length === 0;
 
@@ -62,8 +69,30 @@ export function AgentCard() {
         <Link href="/medications/#flags-heading" className="text-sm font-semibold text-brand-700 hover:text-brand-900">
           {nothingNew ? "See your safety check" : "See what this is about"} &rarr;
         </Link>
+        <button
+          type="button"
+          onClick={() => setPrepared((x) => !x)}
+          aria-expanded={prepared}
+          aria-controls="visit-questions"
+          className="min-h-11 rounded-full px-4 text-sm font-semibold text-brand-800 ring-1 ring-line hover:bg-brand-50"
+        >
+          {prepared ? "Hide my visit questions" : "Prepare for my visit"}
+        </button>
         <span className="text-[11px] text-ink-muted">Answered from your records by Parthia&apos;s rules</span>
       </div>
+
+      {prepared && (
+        <div id="visit-questions" className="mt-3 rounded-xl bg-surface/70 p-3">
+          <p className="text-sm font-semibold text-ink">
+            {questions.length} question{questions.length === 1 ? "" : "s"} you can ask at your visit
+          </p>
+          <VisitQuestions questions={questions} className="mt-2" showChip={false} />
+          <Link href="/passport/share/?prepare=1" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-brand-700 hover:text-brand-900">
+            Add these to my visit summary &rarr;
+          </Link>
+          <p className="mt-1 text-[11px] text-ink-muted">Nothing is sent anywhere. You print the summary or hand it over yourself.</p>
+        </div>
+      )}
     </Card>
   );
 }

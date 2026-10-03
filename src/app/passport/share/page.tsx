@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { usePatient } from "@/lib/context/PatientContext";
+import { VisitQuestions } from "@/components/patient/VisitQuestions";
+import { usePatientAgent } from "@/lib/patientAgent/usePatientAgent";
+import { buildVisitQuestions } from "@/lib/patientAgent/visitQuestions";
 import { Wordmark } from "@/components/Wordmark";
 import { CATEGORY_LABELS, LEVEL_STYLES } from "@/components/Badges";
 import { withinLastDays, mean } from "@/lib/safetyEngine/rules/types";
@@ -20,6 +24,7 @@ const SHARE_SECTIONS = [
   { id: "allergies", label: "Allergies", fhir: ["allergies"] },
   { id: "safety", label: "Safety questions (flags)" },
   { id: "recordQuestions", label: "Questions about my records" },
+  { id: "visitQuestions", label: "Questions the agent prepared" },
   { id: "labs", label: "Recent labs and vitals", fhir: ["labs", "vitals"] },
   { id: "screenings", label: "Mental health screenings", sensitive: true, fhir: ["screenings"] },
   { id: "selfReported", label: "Last 14 days: mood, meals, symptoms", sensitive: true },
@@ -34,10 +39,27 @@ function fmt(d: string) {
   return new Date(d.length === 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
+/**
+ * `useSearchParams` is client-only and must sit inside a Suspense boundary,
+ * the same pattern as src/app/log/medication/page.tsx. `?prepare=1` arrives
+ * from the "Prepare for my visit" action on the dashboard and pre-ticks the
+ * visit questions section. Without it the share page behaves exactly as before.
+ */
 export default function SharePage() {
+  return (
+    <Suspense fallback={<p className="text-sm text-ink-muted">Loading your summary…</p>}>
+      <ShareBuilder />
+    </Suspense>
+  );
+}
+
+function ShareBuilder() {
+  const prepare = useSearchParams().get("prepare") === "1";
   const { record, flags, indicators, now, issues, patientId } = usePatient();
+  const { update } = usePatientAgent();
   const recordQuestions = questionsForClinician(issues);
-  const [chosen, setChosen] = useState<Set<ShareSection>>(() => new Set(DEFAULT_SECTIONS));
+  const visitQuestions = useMemo(() => buildVisitQuestions(update, issues, record), [update, issues, record]);
+  const [chosen, setChosen] = useState<Set<ShareSection>>(() => new Set(prepare ? [...DEFAULT_SECTIONS, "visitQuestions" as ShareSection] : DEFAULT_SECTIONS));
   const on = (id: ShareSection) => chosen.has(id);
   const toggle = (id: ShareSection) =>
     setChosen((prev) => {
@@ -83,6 +105,14 @@ export default function SharePage() {
             <Link href="/clinician/" className="min-h-11 rounded-full bg-navy px-4 py-3 text-sm font-semibold text-white hover:bg-brand-900">
               Open as clinician →
             </Link>
+            <button
+              type="button"
+              onClick={() => setChosen((prev) => new Set(prev).add("visitQuestions"))}
+              disabled={on("visitQuestions")}
+              className="min-h-11 rounded-full px-4 text-sm font-semibold text-brand-800 ring-1 ring-line hover:bg-brand-50 disabled:opacity-50"
+            >
+              {on("visitQuestions") ? `Visit questions included (${visitQuestions.length})` : "Prepare for my visit"}
+            </button>
             <button type="button" onClick={print} className="min-h-11 rounded-full bg-brand-700 px-4 text-sm font-semibold text-white hover:bg-brand-800">
               Print / Save as PDF
             </button>
@@ -217,6 +247,18 @@ export default function SharePage() {
                 <li key={q}>{q}</li>
               ))}
             </ol>
+          </section>
+        )}
+
+        {on("visitQuestions") && (
+          <section className="mt-6">
+            <h2 className="font-serif text-lg font-semibold text-navy">Questions the agent prepared ({visitQuestions.length})</h2>
+            <p className="text-xs text-ink-muted">
+              Written by Parthia&apos;s rule-based agent from the patient&apos;s own records: what is new since their last visit, the open safety
+              flags and the differences between their list and connected records. AI-generated, not a clinical assessment, and not an instruction
+              about any medicine.
+            </p>
+            <VisitQuestions questions={visitQuestions} className="mt-2" showChip={false} />
           </section>
         )}
 
