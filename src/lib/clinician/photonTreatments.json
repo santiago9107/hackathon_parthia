@@ -1,0 +1,33 @@
+{
+  "lookedUpOn": "2026-10-03",
+  "source": "Photon Neutron sandbox clinical API. Treatment ids from treatments(filter: { term }), allergen ids from allergens(filter: { name }).",
+  "note": "Synthetic demo catalog for one synthetic patient. Ids are sandbox identifiers, not a formulary. Screening is read-only decision support.",
+  "treatments": {
+    "warfarin-5-mg": { "id": "med_01KZEXS5037PM8ND32W632Q9Q4", "name": "Warfarin Sodium Oral Tablet 5 MG", "label": "Warfarin 5 mg" },
+    "ibuprofen-200-mg": { "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J", "name": "Ibuprofen Oral Capsule 200 MG", "label": "Ibuprofen 200 mg capsule" },
+    "aspirin-81-mg": { "id": "med_01JEP4HF9KET0934K7DQTC2FM9", "name": "Aspirin 81 Oral Tablet Delayed Release 81 MG", "label": "Aspirin 81 mg" },
+    "ciprofloxacin-500-mg": { "id": "med_01JVT1WGAMK8H6M0KRPYTQ989A", "name": "Ciprofloxacin HCl Oral Tablet 500 MG", "label": "Ciprofloxacin 500 mg" },
+    "amoxicillin-500-mg": { "id": "med_01KAY4KR7NRMWJWPDV7J8Z994G", "name": "Amoxicillin Oral Capsule 500 MG", "label": "Amoxicillin 500 mg" },
+    "atorvastatin-40-mg": { "id": "med_01KZEKT8HVMJRTHT5FE32QHR2B", "name": "Atorvastatin Calcium Oral Tablet 40 MG", "label": "Atorvastatin 40 mg" },
+    "metoprolol-50-mg": { "id": "med_01KZFP97S7VPF1XM4ARGRHG7ZG", "name": "Metoprolol Succinate ER Oral Tablet Extended Release 24 Hour 50 MG", "label": "Metoprolol succinate 50 mg" }
+  },
+  "allergens": {
+    "penicillin": { "id": "alg_01GBAPSGF62Q3WBET1QD2J3F0F", "name": "penicillin G", "label": "Penicillin" },
+    "nsaid-ibuprofen": { "id": "alg_01GBAPSGE2TV2JSWR3BAYPP15E", "name": "ibuprofen", "label": "Ibuprofen (NSAID)" }
+  },
+  "demoPatient": {
+    "externalId": "parthia-harold-okafor",
+    "firstName": "Harold",
+    "lastName": "Okafor",
+    "dateOfBirth": "1958-03-14",
+    "sex": "MALE",
+    "phone": "+12125550123",
+    "allergenKeys": ["penicillin", "nsaid-ibuprofen"],
+    "medicationHistoryKeys": ["warfarin-5-mg", "atorvastatin-40-mg", "metoprolol-50-mg", "aspirin-81-mg"]
+  },
+  "demoDrafts": [
+    { "treatmentKey": "ciprofloxacin-500-mg", "expects": "DRUG alert involving warfarin" },
+    { "treatmentKey": "amoxicillin-500-mg", "expects": "ALLERGEN alert involving penicillin" },
+    { "treatmentKey": "ibuprofen-200-mg", "expects": "DRUG alert involving warfarin plus ALLERGEN alert involving the NSAID allergy" }
+  ]
+}
