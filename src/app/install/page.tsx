@@ -46,7 +46,7 @@ export default function InstallPage() {
             <p className="font-semibold text-ink">Add Parthia Health to your {platform === "android" ? "phone" : "computer"}</p>
             <p className="text-sm text-ink-muted">One tap — your browser will confirm.</p>
           </div>
-          <button type="button" onClick={() => promptInstall()} className="rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-800">
+          <button type="button" onClick={() => promptInstall()} className="min-h-11 rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-800">
             Install
           </button>
         </Card>
