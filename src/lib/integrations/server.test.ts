@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { photonDemoPatient, photonTreatmentId } from "../clinician/photonCatalog";
-import { askOpenRouter, resetPhotonTokenCache, screenPhoton, syncPhotonPatient } from "./server";
+import { askOpenRouter, findPhotonDemoPatientId, resetPhotonTokenCache, screenPhoton, syncPhotonPatient } from "./server";
 const ORIGINAL = { ...process.env };
 afterEach(() => {
   process.env = { ...ORIGINAL };
@@ -184,17 +184,43 @@ describe("synthetic sandbox patient sync", () => {
     vi.stubGlobal("fetch", fetchMock);
     await expect(syncPhotonPatient()).resolves.toMatchObject({ patientId: "pat_new", created: true });
   });
-  it("screens the synthetic patient when no patient id is supplied", async () => {
+  it("looks the synthetic patient up when no patient id is supplied, and writes nothing", async () => {
     photonCredentials();
+    const demo = photonDemoPatient();
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(tokenResponse())
-      .mockResolvedValueOnce(graphqlResponse({ patients: [] }))
-      .mockResolvedValueOnce(graphqlResponse({ createPatient: { id: "pat_new" } }))
+      .mockResolvedValueOnce(graphqlResponse({ patients: [{ id: "pat_existing", externalId: demo.externalId, allergies: [], medicationHistory: [] }] }))
       .mockResolvedValueOnce(graphqlResponse({ prescriptionScreen: { alerts: [] } }));
     vi.stubGlobal("fetch", fetchMock);
     const result = await screenPhoton({ treatmentIds: [CIPRO] });
-    expect(result.patientId).toBe("pat_new");
-    const sent = JSON.parse(String((fetchMock.mock.calls[3] as [string, RequestInit])[1].body)) as { variables: { patientId: string } };
-    expect(sent.variables.patientId).toBe("pat_new");
+    expect(result.patientId).toBe("pat_existing");
+    const sent = JSON.parse(String((fetchMock.mock.calls[2] as [string, RequestInit])[1].body)) as { variables: { patientId: string } };
+    expect(sent.variables.patientId).toBe("pat_existing");
+    // A screen is a read. It must never create or change a patient record,
+    // even one whose allergies drifted from the catalog.
+    const bodies = fetchMock.mock.calls.map((call) => String((call[1] as RequestInit).body ?? ""));
+    expect(bodies.some((body) => body.includes("mutation"))).toBe(false);
+    expect(bodies.some((body) => body.includes("createPatient"))).toBe(false);
+    expect(bodies.some((body) => body.includes("updatePatient"))).toBe(false);
+  });
+  it("fails closed instead of creating the patient when he is not in the org yet", async () => {
+    photonCredentials();
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(tokenResponse())
+      .mockResolvedValueOnce(graphqlResponse({ patients: [] }));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(screenPhoton({ treatmentIds: [CIPRO] })).rejects.toThrow("not in the Photon org yet");
+    const bodies = fetchMock.mock.calls.map((call) => String((call[1] as RequestInit).body ?? ""));
+    expect(bodies.some((body) => body.includes("createPatient"))).toBe(false);
+  });
+  it("resolves the demo patient id read-only, with no mutation in any request", async () => {
+    photonCredentials();
+    const demo = photonDemoPatient();
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(tokenResponse())
+      .mockResolvedValueOnce(graphqlResponse({ patients: [{ id: "pat_existing", externalId: demo.externalId, allergies: [], medicationHistory: [] }] }));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(findPhotonDemoPatientId()).resolves.toBe("pat_existing");
+    expect(fetchMock.mock.calls.every((call) => !String((call[1] as RequestInit).body ?? "").includes("mutation"))).toBe(true);
   });
 });

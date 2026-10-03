@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import screenHandler from "../../../api/photon/screen";
 import syncHandler from "../../../api/photon/sync-patient";
-import { photonTreatmentId } from "../clinician/photonCatalog";
+import { photonDemoPatient, photonTreatmentId } from "../clinician/photonCatalog";
 import { resetPhotonTokenCache } from "./server";
 /**
  * Handler-level tests for the two root `api/photon` Vercel functions. They
@@ -113,6 +113,33 @@ describe("api/photon/screen handler", () => {
     expect((captured.body as { detail: string }).detail).toContain("not in the Photon screening allow-list");
     expect(fetchMock).not.toHaveBeenCalled();
   });
+  it("resolves the demo patient by lookup and writes nothing when patientId is omitted", async () => {
+    photonCredentials();
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(tokenResponse())
+      .mockResolvedValueOnce(graphqlResponse({ patients: [{ id: "pat_1", externalId: "parthia-harold-okafor", allergies: [], medicationHistory: [] }] }))
+      .mockResolvedValueOnce(graphqlResponse({ prescriptionScreen: { alerts: [] } }));
+    vi.stubGlobal("fetch", fetchMock);
+    const { response, captured } = collector();
+    await screenHandler({ method: "POST", body: { treatmentIds: [CIPRO] } }, response);
+    expect(captured.code).toBe(200);
+    expect(captured.body).toMatchObject({ patientId: "pat_1" });
+    const bodies = fetchMock.mock.calls.map((call) => String((call[1] as RequestInit).body ?? ""));
+    expect(bodies.some((body) => body.includes("mutation"))).toBe(false);
+  });
+  it("answers 503 rather than creating the patient when he is not synced yet", async () => {
+    photonCredentials();
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(tokenResponse())
+      .mockResolvedValueOnce(graphqlResponse({ patients: [] }));
+    vi.stubGlobal("fetch", fetchMock);
+    const { response, captured } = collector();
+    await screenHandler({ method: "POST", body: { treatmentIds: [CIPRO] } }, response);
+    expect(captured.code).toBe(503);
+    expect((captured.body as { detail: string }).detail).toContain("not in the Photon org yet");
+    const bodies = fetchMock.mock.calls.map((call) => String((call[1] as RequestInit).body ?? ""));
+    expect(bodies.some((body) => body.includes("createPatient"))).toBe(false);
+  });
   it("never returns a credential or a token in its response body", async () => {
     photonCredentials();
     process.env.PHOTON_USER_TOKEN = "user-access-token";
@@ -160,6 +187,34 @@ describe("api/photon/sync-patient handler", () => {
     expect(second.captured.body).toMatchObject({ patientId: "pat_1", created: false });
     const creates = fetchMock.mock.calls.filter((call) => String((call[1] as RequestInit).body ?? "").includes("createPatient"));
     expect(creates).toHaveLength(1);
+  });
+  it("ignores caller-supplied input entirely and syncs only the committed demo patient", async () => {
+    photonCredentials();
+    const demo = photonDemoPatient();
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(tokenResponse())
+      .mockResolvedValueOnce(graphqlResponse({ patients: [] }))
+      .mockResolvedValueOnce(graphqlResponse({ createPatient: { id: "pat_1", externalId: demo.externalId } }));
+    vi.stubGlobal("fetch", fetchMock);
+    const { response, captured } = collector();
+    // A hostile body: a different patient, different allergens, different
+    // history. None of it may reach the sandbox.
+    await syncHandler({
+      method: "POST",
+      body: { externalId: "attacker-chosen", name: { first: "Someone", last: "Else" }, allergies: [{ allergenId: "alg_attacker" }], medicationHistory: [{ medicationId: "med_attacker", active: true }] },
+      query: { externalId: "attacker-chosen" },
+    } as { method: string }, response);
+    expect(captured.code).toBe(200);
+    expect(captured.body).toMatchObject({ externalId: demo.externalId });
+    const sent = JSON.parse(String((fetchMock.mock.calls[2] as [string, RequestInit])[1].body)) as { variables: Record<string, unknown> };
+    expect(sent.variables).toMatchObject({
+      externalId: demo.externalId,
+      name: { first: demo.firstName, last: demo.lastName },
+      allergies: demo.allergenIds.map((allergenId) => ({ allergenId })),
+      medicationHistory: demo.medicationIds.map((medicationId) => ({ medicationId, active: true })),
+    });
+    const bodies = fetchMock.mock.calls.map((call) => String((call[1] as RequestInit).body ?? ""));
+    expect(bodies.some((body) => /attacker/.test(body))).toBe(false);
   });
   it("answers 503 without leaking the credential names' values when sync fails", async () => {
     delete process.env.PHOTON_CLIENT_ID;
