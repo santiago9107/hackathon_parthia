@@ -25,10 +25,11 @@ const TRENDS: NavItem = { href: "/trends/", label: "Trends", icon: TrendIcon };
 const ASSISTANT: NavItem = { href: "/assistant/", label: "Assistant", icon: ChatIcon };
 const AGENTS: NavItem = { href: "/agents/", label: "Agents", icon: AgentsIcon, prefix: "/agents/" };
 const CLINICIAN: NavItem = { href: "/clinician/", label: "Clinician", icon: ClinicianIcon, prefix: "/clinician/" };
+const ARCHITECTURE: NavItem = { href: "/architecture/", label: "Architecture", icon: ClinicianIcon, prefix: "/architecture/" };
 const LOG: NavItem = { href: "/log/", label: "Log", icon: PlusIcon, prefix: "/log/" };
 
 /** Desktop header: the Passport is a primary item; "Log" is a separate button. */
-const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, AGENTS, CLINICIAN];
+const DESKTOP_NAV: NavItem[] = [HOME, PASSPORT, SAFETY, TRENDS, ASSISTANT, AGENTS, CLINICIAN, ARCHITECTURE];
 /** Mobile tab bar (max 5): Log sits in the middle as a raised quick action. */
 const MOBILE_NAV: NavItem[] = [HOME, PASSPORT, LOG, SAFETY, ASSISTANT];
 
