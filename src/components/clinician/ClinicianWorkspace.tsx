@@ -12,6 +12,7 @@ import { buildLiveClinicianCase, type LiveClinicianCaseResult } from "@/lib/clin
 import { listSandboxPatients, SANDBOX_UNAVAILABLE, type SandboxPatient } from "@/lib/fhir/live";
 import type { CaseSourceId, ClinicianDecision, ClinicianFinding } from "@/lib/clinician/types";
 import { ClinicalBodyAtlas3D } from "./ClinicalBodyAtlas3D";
+import { PhotonScreenPanel } from "./PhotonScreenPanel";
 
 const STAGES = ["Gather", "Validate", "Normalize", "Reconcile", "Check", "Clarify", "Explain", "Route"];
 const SOURCE_META: Record<CaseSourceId, { short: string; color: string }> = {
@@ -57,7 +58,6 @@ export function ClinicianWorkspace() {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<{ question: string; reply: ClinicianChatReply }[]>([]);
   const [agentAnswering, setAgentAnswering] = useState(false);
-  const [screen, setScreen] = useState<"idle" | "loading" | "recorded" | "live">("idle");
   const [agentProgress, setAgentProgress] = useState(0);
   const launched = launchedFor === activePatientId;
   const run = launched ? runClinicianAgent(caseData, { available: availability, confirmations, decisions, resumed: Object.keys(confirmations).length > 0 }) : null;
@@ -69,8 +69,8 @@ export function ClinicianWorkspace() {
   useEffect(() => { const timer = window.setTimeout(() => setActivePatientId(patientId), 0); return () => window.clearTimeout(timer); }, [patientId]);
   useEffect(() => { if (!agentRunning) return; const timer = window.setTimeout(() => setAgentProgress((value) => Math.min(STAGES.length, value + 1)), 500); return () => window.clearTimeout(timer); }, [agentProgress, agentRunning]);
 
-  function resetState(id: string) { setActivePatientId(id); setLaunchedFor(null); setAgentProgress(0); setAvailability({}); setConfirmations({}); setDecisions([]); setSelected(null); setMessages([]); setScreen("idle"); }
-  function launch() { setLaunchedFor(activePatientId); setAgentProgress(1); setConfirmations({}); setDecisions([]); setSelected(null); setMessages([]); setScreen("idle"); }
+  function resetState(id: string) { setActivePatientId(id); setLaunchedFor(null); setAgentProgress(0); setAvailability({}); setConfirmations({}); setDecisions([]); setSelected(null); setMessages([]); }
+  function launch() { setLaunchedFor(activePatientId); setAgentProgress(1); setConfirmations({}); setDecisions([]); setSelected(null); setMessages([]); }
   async function loadLivePatients() {
     setLiveState("listing"); setLiveError(null);
     try { const patients = await listSandboxPatients(6); setLivePatients(patients); setLiveState("ready"); }
@@ -99,11 +99,6 @@ export function ClinicianWorkspace() {
       setMessages((all) => [...all, { question: prompt, reply: { text: result.text, tools: ["evidence", "provenance", `OpenRouter · ${result.model ?? "configured model"}`], source: "openrouter" } }]);
     } catch { setMessages((all) => [...all, { question: prompt, reply: { ...deterministic, source: "deterministic" } }]); }
     finally { setAgentAnswering(false); }
-  }
-  async function screenPhoton() {
-    setScreen("loading");
-    try { const response = await fetch("/api/photon/screen", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ patientId: "demo-harold", treatmentIds: ["ciprofloxacin"] }) }); if (!response.ok) throw new Error(); setScreen("live"); }
-    catch { setScreen("recorded"); }
   }
 
   return <div className="-mt-6 w-full pb-10">
@@ -141,12 +136,17 @@ export function ClinicianWorkspace() {
           </section>
 
           {!run ? <div className="grid min-h-[390px] place-items-center px-8 text-center"><div><span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-teal-50 text-teal-700"><Icon name="spark" className="h-7 w-7" /></span><h3 className="mt-4 text-lg font-semibold text-slate-950">Ready to reconcile {caseData.patientName}&apos;s record</h3><p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">The agent will gather five sources, normalize identity, preserve provenance, run configured rules, and stop wherever a person must decide.</p></div></div> : <RunResults run={run} finding={finding} selected={selected} setSelected={setSelected} decisions={decisions} decide={decide} caseData={caseData} activePatientId={activePatientId} messages={messages} question={question} setQuestion={setQuestion} ask={ask} agentAnswering={agentAnswering} />}
+
+          {/* Read-only Photon screening. Always reachable, so a drafted
+              prescription can be screened before or after a reconciliation run.
+              The panel owns its own state and provenance labels. */}
+          <section className="border-t border-slate-200 px-6 py-6"><PhotonScreenPanel /></section>
         </main>
 
         <aside className="border-t border-slate-200 bg-slate-950 xl:border-l xl:border-t-0">
           <ClinicalBodyAtlas3D findingTitle={finding?.title} compact embedded />
           <div className="border-t border-slate-800 px-5 py-5 text-white"><div className="flex items-center gap-2 text-teal-300"><Icon name="shield" /><p className="text-[10px] font-semibold uppercase tracking-[.16em]">Authority boundary</p></div><div className="mt-4 space-y-3">{[["Read and reconcile evidence", "Agent", true], ["Detect configured risks", "Rules", true], ["Explain and route", "Agent", true], ["Change medication", "Clinician", false]].map(([label, owner, allowed]) => <div key={String(label)} className="flex items-center gap-3"><span className={`h-1.5 w-1.5 rounded-full ${allowed ? "bg-teal-400" : "bg-red-400"}`} /><span className="flex-1 text-xs text-slate-300">{label}</span><span className="text-[9px] uppercase text-slate-600">{owner}</span></div>)}</div></div>
-          <div className="border-t border-slate-800 p-5"><div className="flex items-center justify-between"><div><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-slate-500">Photon check</p><p className="mt-1 text-xs text-slate-300">Independent draft screening</p></div><button type="button" onClick={screenPhoton} disabled={screen === "loading"} className="rounded-lg border border-slate-700 px-3 py-2 text-[9px] font-semibold text-white hover:border-teal-400 disabled:opacity-50">{screen === "loading" ? "Checking" : "Run check"}</button></div>{screen !== "idle" && screen !== "loading" && <div className="mt-4 rounded-xl border border-red-400/30 bg-red-400/10 p-3"><div className="flex items-center justify-between"><span className="text-[9px] font-semibold text-red-300">MODERATE INTERACTION</span><span className="text-[8px] uppercase text-slate-500">{screen === "live" ? "Live Neutron" : "Recorded fallback"}</span></div><p className="mt-2 text-[10px] leading-5 text-slate-300">Ciprofloxacin may enhance warfarin&apos;s anticoagulant effect.</p></div>}</div>
+          <div className="border-t border-slate-800 p-5"><p className="text-[10px] font-semibold uppercase tracking-[.14em] text-slate-500">Photon check</p><p className="mt-1 text-xs text-slate-300">Draft screening runs in the Photon screening panel in this workspace, where every alert the sandbox returns is shown with its provenance.</p></div>
         </aside>
       </div>
     </div>
