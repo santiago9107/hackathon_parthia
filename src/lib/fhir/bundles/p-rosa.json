@@ -1,0 +1,2108 @@
+{
+  "resourceType": "Bundle",
+  "id": "everything-p-rosa",
+  "type": "searchset",
+  "timestamp": "2026-09-11T07:00:00Z",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://parthiahealth.com/fhir/tags",
+        "code": "SYNTHETIC",
+        "display": "SYNTHETIC — simulated Mesa Valley Health (Epic MyChart) export, no real patient"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:epic-rosa",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "epic-rosa",
+        "name": [
+          {
+            "use": "official",
+            "given": [
+              "Rosa"
+            ],
+            "family": "Delgado"
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1961-01-27"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-prac-1",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "r-prac-1",
+        "name": [
+          {
+            "given": [
+              "Priya"
+            ],
+            "family": "Raman",
+            "prefix": [
+              "Dr."
+            ],
+            "suffix": [
+              "MD"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "MD"
+            }
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 030-5500",
+            "use": "work"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-prac-2",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "r-prac-2",
+        "name": [
+          {
+            "given": [
+              "Hannah"
+            ],
+            "family": "Cole",
+            "suffix": [
+              "RN, CDCES"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "RN, CDCES"
+            }
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 030-5520",
+            "use": "work"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-prac-3",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "r-prac-3",
+        "name": [
+          {
+            "given": [
+              "Sofía"
+            ],
+            "family": "Márquez",
+            "suffix": [
+              "RDN"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "RDN"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-prac-4",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "r-prac-4",
+        "name": [
+          {
+            "given": [
+              "Omar"
+            ],
+            "family": "Haddad",
+            "prefix": [
+              "Dr."
+            ],
+            "suffix": [
+              "MD"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "MD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-cond-5",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "r-cond-5",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E11.9",
+              "display": "Type 2 diabetes mellitus without complications"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "44054006",
+              "display": "Type 2 diabetes mellitus without complications"
+            }
+          ],
+          "text": "Type 2 diabetes mellitus without complications"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "onsetDateTime": "2026-07-30",
+        "recordedDate": "2026-07-30"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-cond-6",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "r-cond-6",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "I10",
+              "display": "Essential hypertension"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "38341003",
+              "display": "Essential hypertension"
+            }
+          ],
+          "text": "Essential hypertension"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "onsetDateTime": "2019-10-04",
+        "recordedDate": "2019-10-04"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-cond-7",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "r-cond-7",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E78.5",
+              "display": "Hyperlipidemia"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "55822004",
+              "display": "Hyperlipidemia"
+            }
+          ],
+          "text": "Hyperlipidemia"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "onsetDateTime": "2019-10-04",
+        "recordedDate": "2019-10-04"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-cond-8",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "r-cond-8",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E03.9",
+              "display": "Hypothyroidism, unspecified"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "40930008",
+              "display": "Hypothyroidism, unspecified"
+            }
+          ],
+          "text": "Hypothyroidism, unspecified"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "onsetDateTime": "2011-02-18",
+        "recordedDate": "2011-02-18"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-cond-9",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "r-cond-9",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E55.9",
+              "display": "Vitamin D deficiency"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "34713006",
+              "display": "Vitamin D deficiency"
+            }
+          ],
+          "text": "Vitamin D deficiency"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "onsetDateTime": "2026-07-30",
+        "recordedDate": "2026-07-30"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-medrx-10",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "r-medrx-10",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "861007",
+              "display": "metformin hydrochloride 500 MG Oral Tablet"
+            }
+          ],
+          "text": "metformin hydrochloride 500 MG Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "authoredOn": "2026-07-30",
+        "requester": {
+          "reference": "Practitioner/r-prac-1",
+          "display": "Priya Raman, MD"
+        },
+        "reasonCode": [
+          {
+            "text": "Type 2 diabetes"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet by mouth daily with dinner",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 500,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-medrx-11",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "r-medrx-11",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "314076",
+              "display": "lisinopril 10 MG Oral Tablet"
+            }
+          ],
+          "text": "lisinopril 10 MG Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "authoredOn": "2019-10-20",
+        "requester": {
+          "display": "Marcus Bell, MD (outside provider)"
+        },
+        "reasonCode": [
+          {
+            "text": "Hypertension"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet by mouth daily (outside prescription, reconciled at intake)",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 10,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-medrx-12",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "r-medrx-12",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "310798",
+              "display": "hydrochlorothiazide 12.5 MG Oral Capsule"
+            }
+          ],
+          "text": "hydrochlorothiazide 12.5 MG Oral Capsule"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "authoredOn": "2021-03-08",
+        "requester": {
+          "display": "Marcus Bell, MD (outside provider)"
+        },
+        "reasonCode": [
+          {
+            "text": "Hypertension"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 capsule by mouth daily (outside prescription, reconciled at intake)",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 12.5,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-medrx-13",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "r-medrx-13",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "859749",
+              "display": "rosuvastatin calcium 10 MG Oral Tablet"
+            }
+          ],
+          "text": "rosuvastatin calcium 10 MG Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "authoredOn": "2019-10-20",
+        "requester": {
+          "display": "Marcus Bell, MD (outside provider)"
+        },
+        "reasonCode": [
+          {
+            "text": "Hyperlipidemia"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet by mouth daily (outside prescription, reconciled at intake)",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 10,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-allergy-14",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "r-allergy-14",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "type": "allergy",
+        "category": [
+          "medication"
+        ],
+        "criticality": "low",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "723",
+              "display": "Amoxicillin"
+            }
+          ],
+          "text": "Amoxicillin"
+        },
+        "patient": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "recordedDate": "2009-11-20",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Rash and hives"
+              }
+            ],
+            "severity": "moderate"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-allergy-15",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "r-allergy-15",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "type": "allergy",
+        "category": [
+          "medication"
+        ],
+        "criticality": "low",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "293637006",
+              "display": "Iodinated contrast media"
+            }
+          ],
+          "text": "Iodinated contrast media"
+        },
+        "patient": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "recordedDate": "2016-04-11",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Hives"
+              }
+            ],
+            "severity": "moderate"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-lab-16",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-lab-16",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "4548-4",
+              "display": "Hemoglobin A1c/Hemoglobin.total in Blood"
+            }
+          ],
+          "text": "Hemoglobin A1c/Hemoglobin.total in Blood"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "valueQuantity": {
+          "value": 8.1,
+          "unit": "%",
+          "system": "http://unitsofmeasure.org",
+          "code": "%"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ],
+            "text": "High"
+          }
+        ],
+        "referenceRange": [
+          {
+            "high": {
+              "value": 7,
+              "unit": "%"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-report-17",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "r-report-17",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "4548-4",
+              "display": "Hemoglobin A1c"
+            }
+          ],
+          "text": "Hemoglobin A1c"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "performer": [
+          {
+            "display": "Mesa Valley Lab"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/r-prac-1",
+            "display": "Priya Raman, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/r-lab-16"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-lab-18",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-lab-18",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1558-6",
+              "display": "Fasting glucose [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Fasting glucose [Mass/volume] in Serum or Plasma"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "valueQuantity": {
+          "value": 156,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ],
+            "text": "High"
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 70,
+              "unit": "mg/dL"
+            },
+            "high": {
+              "value": 100,
+              "unit": "mg/dL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-lab-19",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-lab-19",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "98979-8",
+              "display": "Glomerular filtration rate/1.73 sq M.predicted (CKD-EPI 2021)"
+            }
+          ],
+          "text": "Glomerular filtration rate/1.73 sq M.predicted (CKD-EPI 2021)"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "valueQuantity": {
+          "value": 84,
+          "unit": "mL/min/{1.73_m2}",
+          "system": "http://unitsofmeasure.org",
+          "code": "mL/min/{1.73_m2}"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 60,
+              "unit": "mL/min/{1.73_m2}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-report-20",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "r-report-20",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24323-8",
+              "display": "Comprehensive metabolic panel"
+            }
+          ],
+          "text": "Comprehensive metabolic panel"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "performer": [
+          {
+            "display": "Mesa Valley Lab"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/r-prac-1",
+            "display": "Priya Raman, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/r-lab-18"
+          },
+          {
+            "reference": "Observation/r-lab-19"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-lab-21",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-lab-21",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "9318-7",
+              "display": "Albumin/Creatinine [Mass Ratio] in Urine"
+            }
+          ],
+          "text": "Albumin/Creatinine [Mass Ratio] in Urine"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "valueQuantity": {
+          "value": 18,
+          "unit": "mg/g",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/g"
+        },
+        "referenceRange": [
+          {
+            "high": {
+              "value": 30,
+              "unit": "mg/g"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-report-22",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "r-report-22",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "9318-7",
+              "display": "Urine albumin/creatinine ratio"
+            }
+          ],
+          "text": "Urine albumin/creatinine ratio"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "performer": [
+          {
+            "display": "Mesa Valley Lab"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/r-prac-1",
+            "display": "Priya Raman, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/r-lab-21"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-lab-23",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-lab-23",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1989-3",
+              "display": "25-hydroxyvitamin D3 [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "25-hydroxyvitamin D3 [Mass/volume] in Serum or Plasma"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "valueQuantity": {
+          "value": 18,
+          "unit": "ng/mL",
+          "system": "http://unitsofmeasure.org",
+          "code": "ng/mL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "L",
+                "display": "Low"
+              }
+            ],
+            "text": "Low"
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 30,
+              "unit": "ng/mL"
+            },
+            "high": {
+              "value": 100,
+              "unit": "ng/mL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-report-24",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "r-report-24",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1989-3",
+              "display": "Vitamin D, 25-hydroxy"
+            }
+          ],
+          "text": "Vitamin D, 25-hydroxy"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T08:00:00Z",
+        "performer": [
+          {
+            "display": "Mesa Valley Lab"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/r-prac-1",
+            "display": "Priya Raman, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/r-lab-23"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-bp-25",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-bp-25",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood pressure panel"
+            }
+          ],
+          "text": "Blood pressure panel"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T10:15:00Z",
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8480-6",
+                  "display": "Systolic blood pressure"
+                }
+              ],
+              "text": "Systolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 136,
+              "unit": "mm[Hg]"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8462-4",
+                  "display": "Diastolic blood pressure"
+                }
+              ],
+              "text": "Diastolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 82,
+              "unit": "mm[Hg]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-hr-26",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-hr-26",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart rate"
+            }
+          ],
+          "text": "Heart rate"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T10:15:00Z",
+        "valueQuantity": {
+          "value": 78,
+          "unit": "/min"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-wt-27",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-wt-27",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ],
+          "text": "Body weight"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T10:15:00Z",
+        "valueQuantity": {
+          "value": 81,
+          "unit": "kg"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-social-28",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-social-28",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "social-history",
+                "display": "Social History"
+              }
+            ],
+            "text": "Social History"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "72166-2",
+              "display": "Tobacco smoking status"
+            }
+          ],
+          "text": "Tobacco smoking status"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "266919005",
+              "display": "Never smoker"
+            }
+          ],
+          "text": "Never smoker"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-social-29",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-social-29",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "social-history",
+                "display": "Social History"
+              }
+            ],
+            "text": "Social History"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11331-6",
+              "display": "History of alcohol use"
+            }
+          ],
+          "text": "History of alcohol use"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30",
+        "valueCodeableConcept": {
+          "text": "Occasional beer or wine on weekends"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-survey-30",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-survey-30",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey",
+                "display": "Survey"
+              }
+            ],
+            "text": "Survey"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "44261-6",
+              "display": "Patient Health Questionnaire 9 item (PHQ-9) total score"
+            }
+          ],
+          "text": "Patient Health Questionnaire 9 item (PHQ-9) total score"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T10:00:00Z",
+        "valueQuantity": {
+          "value": 8,
+          "unit": "{score}"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-survey-31",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "r-survey-31",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey",
+                "display": "Survey"
+              }
+            ],
+            "text": "Survey"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "70274-6",
+              "display": "Generalized anxiety disorder 7 item (GAD-7) total score"
+            }
+          ],
+          "text": "Generalized anxiety disorder 7 item (GAD-7) total score"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "effectiveDateTime": "2026-07-30T10:00:00Z",
+        "valueQuantity": {
+          "value": 9,
+          "unit": "{score}"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-enc-32",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "r-enc-32",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "New patient visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Endocrinology"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/r-prac-1",
+              "display": "Priya Raman, MD"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-07-30T09:00:00Z",
+          "end": "2026-07-30T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "New diagnosis — type 2 diabetes"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Mesa Valley Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-enc-33",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "r-enc-33",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "Education visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Diabetes education"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/r-prac-2",
+              "display": "Hannah Cole, RN, CDCES"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-08-03T09:00:00Z",
+          "end": "2026-08-03T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Starting metformin; meter training"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Mesa Valley Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-enc-34",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "r-enc-34",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "Office visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Nutrition"
+        },
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/r-prac-3",
+              "display": "Sofía Márquez, RDN"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-08-19T09:00:00Z",
+          "end": "2026-08-19T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Meal planning for diabetes"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Mesa Valley Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-doc-35",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "r-doc-35",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Progress note"
+            }
+          ],
+          "text": "Progress note"
+        },
+        "category": [
+          {
+            "text": "Clinical Note"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "date": "2026-07-30T12:00:00Z",
+        "author": [
+          {
+            "reference": "Practitioner/r-prac-1",
+            "display": "Priya Raman, MD"
+          }
+        ],
+        "custodian": {
+          "display": "Mesa Valley Health"
+        },
+        "description": "Endocrinology — new diagnosis",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Endocrinology — new diagnosis",
+              "data": "RU5ET0NSSU5PTE9HWSBDT05TVUxUCkExYyA4LjElLCBmYXN0aW5nIGdsdWNvc2UgMTU2IG1nL2RMIOKGkiB0eXBlIDIgZGlhYmV0ZXMuClN0YXJ0IG1ldGZvcm1pbiA1MDAgbWcgUE8gZGFpbHkgd2l0aCBkaW5uZXIgeDEgd2VlaywgdGhlbiBCSUQgd2l0aCBtZWFscy4KVml0YW1pbiBEIDE4IG5nL21MIOKAlCBzdGFydCB2aXRhbWluIEQzIDIsMDAwIHVuaXRzIGRhaWx5IChPVEMpLgpSZWZlcjogZGlhYmV0ZXMgZWR1Y2F0aW9uLCBudXRyaXRpb24uIFJlY2hlY2sgQTFjIGluIDMgbW9udGhzLg=="
+            }
+          }
+        ],
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/r-enc-32"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-doc-36",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "r-doc-36",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Progress note"
+            }
+          ],
+          "text": "Progress note"
+        },
+        "category": [
+          {
+            "text": "Clinical Note"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "date": "2026-08-03T12:00:00Z",
+        "author": [
+          {
+            "reference": "Practitioner/r-prac-2",
+            "display": "Hannah Cole, RN, CDCES"
+          }
+        ],
+        "custodian": {
+          "display": "Mesa Valley Health"
+        },
+        "description": "Diabetes education visit",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Diabetes education visit",
+              "data": "RElBQkVURVMgRURVQ0FUSU9OCk1ldGVyIHRlYWNoaW5nIGNvbXBsZXRlZDsgcmV0dXJuIGRlbW9uc3RyYXRpb24gZ29vZC4KUmV2aWV3ZWQgaHlwby9oeXBlcmdseWNlbWlhIHN5bXB0b21zLCB0YWtpbmcgbWV0Zm9ybWluIHdpdGggZm9vZC4KUGF0aWVudCBhbnhpb3VzIGFib3V0IGRpYWdub3NpcyDigJQgZW5jb3VyYWdlZCBzbWFsbCBzdGVwcywgZmFtaWx5IGludm9sdmVtZW50Lg=="
+            }
+          }
+        ],
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/r-enc-33"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-doc-37",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "r-doc-37",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "34765-3",
+              "display": "Nutrition and dietetics Note"
+            }
+          ],
+          "text": "Nutrition and dietetics Note"
+        },
+        "category": [
+          {
+            "text": "Clinical Note"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "date": "2026-08-19T12:00:00Z",
+        "author": [
+          {
+            "reference": "Practitioner/r-prac-3",
+            "display": "Sofía Márquez, RDN"
+          }
+        ],
+        "custodian": {
+          "display": "Mesa Valley Health"
+        },
+        "description": "Nutrition visit — meal planning",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Nutrition visit — meal planning",
+              "data": "TlVUUklUSU9OIE5PVEUKTmV3bHkgZGlhZ25vc2VkIFQyRE0uIEFmdGVybm9vbiBzd2VldCBicmVhZCArIHN3ZWV0ZW5lZCBjb2ZmZWUgbW9zdCBkYXlzLgpQbGFuOiBmcnVpdCArIG51dHMgc3dhcCwgcGxhdGUgbWV0aG9kLCBtZWFzdXJlZCB0b3J0aWxsYXMsIGxpbWl0IGFsY29ob2wgd2l0aCBtZXRmb3JtaW4uCkZvbGxvdy11cCBpbiA0IHdlZWtzLg=="
+            }
+          }
+        ],
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/r-enc-34"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-appt-38",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "r-appt-38",
+        "status": "booked",
+        "specialty": [
+          {
+            "text": "Nutrition"
+          }
+        ],
+        "reasonCode": [
+          {
+            "text": "Meal planning follow-up"
+          }
+        ],
+        "description": "Meal planning follow-up",
+        "start": "2026-09-16T14:00:00",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/epic-rosa",
+              "display": "Rosa Delgado"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "reference": "Practitioner/r-prac-3",
+              "display": "Sofía Márquez, RDN"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "display": "Mesa Valley Endocrine"
+            },
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-appt-39",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "r-appt-39",
+        "status": "booked",
+        "specialty": [
+          {
+            "text": "Endocrinology"
+          }
+        ],
+        "reasonCode": [
+          {
+            "text": "3-month diabetes follow-up (A1c recheck)"
+          }
+        ],
+        "description": "3-month diabetes follow-up (A1c recheck)",
+        "start": "2026-10-29T08:30:00",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/epic-rosa",
+              "display": "Rosa Delgado"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "reference": "Practitioner/r-prac-1",
+              "display": "Priya Raman, MD"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "display": "Mesa Valley Endocrine"
+            },
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-appt-40",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "r-appt-40",
+        "status": "booked",
+        "specialty": [
+          {
+            "text": "Ophthalmology"
+          }
+        ],
+        "reasonCode": [
+          {
+            "text": "Diabetic eye exam"
+          }
+        ],
+        "description": "Diabetic eye exam",
+        "start": "2026-11-05T13:00:00",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/epic-rosa",
+              "display": "Rosa Delgado"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "reference": "Practitioner/r-prac-4",
+              "display": "Omar Haddad, MD"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "display": "Clearview Eye Care"
+            },
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-imm-41",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "r-imm-41",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/cvx",
+              "code": "197",
+              "display": "Influenza, quadrivalent, preservative free"
+            }
+          ],
+          "text": "Influenza, quadrivalent, preservative free"
+        },
+        "patient": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "occurrenceDateTime": "2025-10-15",
+        "performer": [
+          {
+            "actor": {
+              "display": "Mesa Pharmacy"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-imm-42",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "r-imm-42",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/cvx",
+              "code": "187",
+              "display": "Zoster recombinant"
+            }
+          ],
+          "text": "Zoster recombinant"
+        },
+        "patient": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "occurrenceDateTime": "2026-03-04",
+        "performer": [
+          {
+            "actor": {
+              "display": "Mesa Pharmacy"
+            }
+          }
+        ],
+        "protocolApplied": [
+          {
+            "doseNumberPositiveInt": 1,
+            "seriesDosesPositiveInt": 2
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-careteam-43",
+      "resource": {
+        "resourceType": "CareTeam",
+        "id": "r-careteam-43",
+        "status": "active",
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "managingOrganization": [
+          {
+            "display": "Mesa Valley Health"
+          }
+        ],
+        "participant": [
+          {
+            "role": [
+              {
+                "text": "Endocrinologist"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/r-prac-1",
+              "display": "Priya Raman, MD"
+            }
+          },
+          {
+            "role": [
+              {
+                "text": "Diabetes educator"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/r-prac-2",
+              "display": "Hannah Cole, RN, CDCES"
+            }
+          },
+          {
+            "role": [
+              {
+                "text": "Dietitian"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/r-prac-3",
+              "display": "Sofía Márquez, RDN"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:r-careplan-44",
+      "resource": {
+        "resourceType": "CarePlan",
+        "id": "r-careplan-44",
+        "status": "active",
+        "intent": "plan",
+        "title": "Starting diabetes care",
+        "category": [
+          {
+            "text": "Medication"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-rosa",
+          "display": "Rosa Delgado"
+        },
+        "author": {
+          "reference": "Practitioner/r-prac-1",
+          "display": "Priya Raman, MD"
+        },
+        "created": "2026-07-30",
+        "period": {
+          "start": "2026-07-30"
+        },
+        "activity": [
+          {
+            "detail": {
+              "description": "Metformin 500 mg daily with dinner for one week, then twice daily with meals.",
+              "status": "in-progress"
+            }
+          },
+          {
+            "detail": {
+              "description": "Check fasting blood sugar 3 mornings a week and bring the log.",
+              "status": "in-progress"
+            }
+          },
+          {
+            "detail": {
+              "description": "A1c recheck in 3 months.",
+              "status": "in-progress"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

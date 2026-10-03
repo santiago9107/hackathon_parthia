@@ -1,0 +1,3016 @@
+{
+  "resourceType": "Bundle",
+  "id": "everything-p-harold",
+  "type": "searchset",
+  "timestamp": "2026-09-11T07:00:00Z",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://parthiahealth.com/fhir/tags",
+        "code": "SYNTHETIC",
+        "display": "SYNTHETIC — simulated Riverside Health (Epic MyChart) export, no real patient"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:epic-harold",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "epic-harold",
+        "name": [
+          {
+            "use": "official",
+            "given": [
+              "Harold"
+            ],
+            "family": "Okafor"
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1958-03-02",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 010-5501"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-prac-1",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "h-prac-1",
+        "name": [
+          {
+            "given": [
+              "Amara"
+            ],
+            "family": "Nwosu",
+            "prefix": [
+              "Dr."
+            ],
+            "suffix": [
+              "MD"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "MD"
+            }
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 010-2200",
+            "use": "work"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-prac-2",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "h-prac-2",
+        "name": [
+          {
+            "given": [
+              "Daniel"
+            ],
+            "family": "Cho",
+            "prefix": [
+              "Dr."
+            ],
+            "suffix": [
+              "MD"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "MD"
+            }
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 010-3300",
+            "use": "work"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-prac-3",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "h-prac-3",
+        "name": [
+          {
+            "given": [
+              "Linda"
+            ],
+            "family": "Park",
+            "suffix": [
+              "PharmD"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "PharmD"
+            }
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 010-3345",
+            "use": "work"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-prac-4",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "h-prac-4",
+        "name": [
+          {
+            "given": [
+              "Maya"
+            ],
+            "family": "Brooks",
+            "suffix": [
+              "RDN"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "RDN"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-prac-5",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "h-prac-5",
+        "name": [
+          {
+            "given": [
+              "Ruth"
+            ],
+            "family": "Adler",
+            "prefix": [
+              "Dr."
+            ],
+            "suffix": [
+              "MD"
+            ]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "text": "MD"
+            }
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(555) 010-6600",
+            "use": "work"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-cond-6",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "h-cond-6",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "I48.91",
+              "display": "Atrial fibrillation"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "49436004",
+              "display": "Atrial fibrillation"
+            }
+          ],
+          "text": "Atrial fibrillation"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "onsetDateTime": "2023-11-02",
+        "recordedDate": "2023-11-02"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-cond-7",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "h-cond-7",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "I10",
+              "display": "Essential hypertension"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "38341003",
+              "display": "Essential hypertension"
+            }
+          ],
+          "text": "Essential hypertension"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "onsetDateTime": "2015-03-12",
+        "recordedDate": "2015-03-12"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-cond-8",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "h-cond-8",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E78.5",
+              "display": "Hyperlipidemia"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "55822004",
+              "display": "Hyperlipidemia"
+            }
+          ],
+          "text": "Hyperlipidemia"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "onsetDateTime": "2015-03-12",
+        "recordedDate": "2015-03-12"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-cond-9",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "h-cond-9",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E11.9",
+              "display": "Type 2 diabetes mellitus without complications"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "44054006",
+              "display": "Type 2 diabetes mellitus without complications"
+            }
+          ],
+          "text": "Type 2 diabetes mellitus without complications"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "onsetDateTime": "2019-06-20",
+        "recordedDate": "2019-06-20"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-cond-10",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "h-cond-10",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item",
+                "display": "Problem List Item"
+              }
+            ],
+            "text": "Problem List Item"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "K21.9",
+              "display": "Gastro-esophageal reflux disease"
+            },
+            {
+              "system": "http://snomed.info/sct",
+              "code": "235595009",
+              "display": "Gastro-esophageal reflux disease"
+            }
+          ],
+          "text": "Gastro-esophageal reflux disease"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "onsetDateTime": "2022-02-14",
+        "recordedDate": "2022-02-14"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-medrx-11",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "h-medrx-11",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "855332",
+              "display": "warfarin sodium 5 MG Oral Tablet"
+            }
+          ],
+          "text": "warfarin sodium 5 MG Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "authoredOn": "2023-11-10",
+        "requester": {
+          "reference": "Practitioner/h-prac-2",
+          "display": "Daniel Cho, MD"
+        },
+        "reasonCode": [
+          {
+            "text": "Atrial fibrillation"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet (5 mg) by mouth every evening",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 5,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-medrx-12",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "h-medrx-12",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "617312",
+              "display": "atorvastatin 40 MG Oral Tablet"
+            }
+          ],
+          "text": "atorvastatin 40 MG Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "authoredOn": "2015-04-01",
+        "requester": {
+          "reference": "Practitioner/h-prac-1",
+          "display": "Amara Nwosu, MD"
+        },
+        "reasonCode": [
+          {
+            "text": "Hyperlipidemia"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet by mouth daily",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 40,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-medrx-13",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "h-medrx-13",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "866427",
+              "display": "metoprolol succinate 25 MG Extended Release Oral Tablet"
+            }
+          ],
+          "text": "metoprolol succinate 25 MG Extended Release Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "authoredOn": "2023-11-10",
+        "requester": {
+          "reference": "Practitioner/h-prac-2",
+          "display": "Daniel Cho, MD"
+        },
+        "reasonCode": [
+          {
+            "text": "Atrial fibrillation — rate control"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet by mouth daily",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 25,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-medrx-14",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "h-medrx-14",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "314077",
+              "display": "lisinopril 20 MG Oral Tablet"
+            }
+          ],
+          "text": "lisinopril 20 MG Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "authoredOn": "2015-04-01",
+        "requester": {
+          "reference": "Practitioner/h-prac-1",
+          "display": "Amara Nwosu, MD"
+        },
+        "reasonCode": [
+          {
+            "text": "Hypertension"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet by mouth daily",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 20,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-medrx-15",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "h-medrx-15",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "861004",
+              "display": "metformin hydrochloride 1000 MG Oral Tablet"
+            }
+          ],
+          "text": "metformin hydrochloride 1000 MG Oral Tablet"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "authoredOn": "2019-07-01",
+        "requester": {
+          "reference": "Practitioner/h-prac-1",
+          "display": "Amara Nwosu, MD"
+        },
+        "reasonCode": [
+          {
+            "text": "Type 2 diabetes"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 tablet by mouth twice daily with meals",
+            "timing": {
+              "repeat": {
+                "frequency": 2,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 1000,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-medrx-16",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "h-medrx-16",
+        "status": "stopped",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "198053",
+              "display": "omeprazole 20 MG Delayed Release Oral Capsule"
+            }
+          ],
+          "text": "omeprazole 20 MG Delayed Release Oral Capsule"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "authoredOn": "2022-02-14",
+        "requester": {
+          "reference": "Practitioner/h-prac-1",
+          "display": "Amara Nwosu, MD"
+        },
+        "reasonCode": [
+          {
+            "text": "GERD"
+          }
+        ],
+        "dosageInstruction": [
+          {
+            "text": "Take 1 capsule by mouth daily before breakfast",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 20,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-allergy-17",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "h-allergy-17",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "type": "allergy",
+        "category": [
+          "medication"
+        ],
+        "criticality": "high",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "5640",
+              "display": "Ibuprofen"
+            }
+          ],
+          "text": "Ibuprofen"
+        },
+        "patient": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "recordedDate": "2018-05-03",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Gastrointestinal hemorrhage"
+              }
+            ],
+            "severity": "severe"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-allergy-18",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "h-allergy-18",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ],
+          "text": "Active"
+        },
+        "type": "allergy",
+        "category": [
+          "medication"
+        ],
+        "criticality": "low",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "70618",
+              "display": "Penicillin"
+            }
+          ],
+          "text": "Penicillin"
+        },
+        "patient": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "recordedDate": "1994-01-01",
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "Urticaria (hives)"
+              }
+            ],
+            "severity": "moderate"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-19",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-19",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "98979-8",
+              "display": "Glomerular filtration rate/1.73 sq M.predicted (CKD-EPI 2021)"
+            }
+          ],
+          "text": "Glomerular filtration rate/1.73 sq M.predicted (CKD-EPI 2021)"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "valueQuantity": {
+          "value": 64,
+          "unit": "mL/min/{1.73_m2}",
+          "system": "http://unitsofmeasure.org",
+          "code": "mL/min/{1.73_m2}"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 60,
+              "unit": "mL/min/{1.73_m2}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-20",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-20",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2823-3",
+              "display": "Potassium [Moles/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Potassium [Moles/volume] in Serum or Plasma"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "valueQuantity": {
+          "value": 4.6,
+          "unit": "mmol/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "mmol/L"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 3.5,
+              "unit": "mmol/L"
+            },
+            "high": {
+              "value": 5.1,
+              "unit": "mmol/L"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-21",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-21",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "2160-0",
+              "display": "Creatinine [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Creatinine [Mass/volume] in Serum or Plasma"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "valueQuantity": {
+          "value": 1.2,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0.7,
+              "unit": "mg/dL"
+            },
+            "high": {
+              "value": 1.3,
+              "unit": "mg/dL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-report-22",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "h-report-22",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24323-8",
+              "display": "Comprehensive metabolic panel"
+            }
+          ],
+          "text": "Comprehensive metabolic panel"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "performer": [
+          {
+            "display": "Quest Diagnostics"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/h-prac-1",
+            "display": "Amara Nwosu, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/h-lab-19"
+          },
+          {
+            "reference": "Observation/h-lab-20"
+          },
+          {
+            "reference": "Observation/h-lab-21"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-23",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-23",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "4548-4",
+              "display": "Hemoglobin A1c/Hemoglobin.total in Blood"
+            }
+          ],
+          "text": "Hemoglobin A1c/Hemoglobin.total in Blood"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "valueQuantity": {
+          "value": 6.9,
+          "unit": "%",
+          "system": "http://unitsofmeasure.org",
+          "code": "%"
+        },
+        "referenceRange": [
+          {
+            "high": {
+              "value": 7,
+              "unit": "%"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-report-24",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "h-report-24",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "4548-4",
+              "display": "Hemoglobin A1c"
+            }
+          ],
+          "text": "Hemoglobin A1c"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "performer": [
+          {
+            "display": "Quest Diagnostics"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/h-prac-1",
+            "display": "Amara Nwosu, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/h-lab-23"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-25",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-25",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "13457-7",
+              "display": "Cholesterol in LDL [Mass/volume] in Serum or Plasma by calculation"
+            }
+          ],
+          "text": "Cholesterol in LDL [Mass/volume] in Serum or Plasma by calculation"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "valueQuantity": {
+          "value": 88,
+          "unit": "mg/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/dL"
+        },
+        "referenceRange": [
+          {
+            "high": {
+              "value": 100,
+              "unit": "mg/dL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-report-26",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "h-report-26",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "57698-3",
+              "display": "Lipid panel"
+            }
+          ],
+          "text": "Lipid panel"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T08:00:00Z",
+        "performer": [
+          {
+            "display": "Quest Diagnostics"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/h-prac-1",
+            "display": "Amara Nwosu, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/h-lab-25"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-27",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-27",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "6301-6",
+              "display": "INR in Platelet poor plasma by Coagulation assay"
+            }
+          ],
+          "text": "INR in Platelet poor plasma by Coagulation assay"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-21T08:00:00Z",
+        "valueQuantity": {
+          "value": 3.1,
+          "unit": "{INR}",
+          "system": "http://unitsofmeasure.org",
+          "code": "{INR}"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ],
+            "text": "High"
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 2,
+              "unit": "{INR}"
+            },
+            "high": {
+              "value": 3,
+              "unit": "{INR}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-report-28",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "h-report-28",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "34714-6",
+              "display": "Prothrombin time / INR"
+            }
+          ],
+          "text": "Prothrombin time / INR"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-21T08:00:00Z",
+        "performer": [
+          {
+            "display": "Riverside Heart Center lab"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/h-prac-2",
+            "display": "Daniel Cho, MD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/h-lab-27"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-29",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-29",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "6301-6",
+              "display": "INR in Platelet poor plasma by Coagulation assay"
+            }
+          ],
+          "text": "INR in Platelet poor plasma by Coagulation assay"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-09-04T08:00:00Z",
+        "valueQuantity": {
+          "value": 3.4,
+          "unit": "{INR}",
+          "system": "http://unitsofmeasure.org",
+          "code": "{INR}"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ],
+            "text": "High"
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 2,
+              "unit": "{INR}"
+            },
+            "high": {
+              "value": 3,
+              "unit": "{INR}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-report-30",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "h-report-30",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "34714-6",
+              "display": "Prothrombin time / INR"
+            }
+          ],
+          "text": "Prothrombin time / INR"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-09-04T08:00:00Z",
+        "performer": [
+          {
+            "display": "Riverside Heart Center lab"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/h-prac-3",
+            "display": "Linda Park, PharmD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/h-lab-29"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-lab-31",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-lab-31",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "718-7",
+              "display": "Hemoglobin [Mass/volume] in Blood"
+            }
+          ],
+          "text": "Hemoglobin [Mass/volume] in Blood"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-09-04T08:00:00Z",
+        "valueQuantity": {
+          "value": 13.1,
+          "unit": "g/dL",
+          "system": "http://unitsofmeasure.org",
+          "code": "g/dL"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "L",
+                "display": "Low"
+              }
+            ],
+            "text": "Low"
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 13.5,
+              "unit": "g/dL"
+            },
+            "high": {
+              "value": 17.5,
+              "unit": "g/dL"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-report-32",
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "h-report-32",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "LAB",
+                "display": "Laboratory"
+              }
+            ],
+            "text": "Laboratory"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "58410-2",
+              "display": "Complete blood count"
+            }
+          ],
+          "text": "Complete blood count"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-09-04T08:00:00Z",
+        "performer": [
+          {
+            "display": "Riverside Heart Center lab"
+          }
+        ],
+        "resultsInterpreter": [
+          {
+            "reference": "Practitioner/h-prac-3",
+            "display": "Linda Park, PharmD"
+          }
+        ],
+        "result": [
+          {
+            "reference": "Observation/h-lab-31"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-bp-33",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-bp-33",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood pressure panel"
+            }
+          ],
+          "text": "Blood pressure panel"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-20T10:30:00Z",
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8480-6",
+                  "display": "Systolic blood pressure"
+                }
+              ],
+              "text": "Systolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 136,
+              "unit": "mm[Hg]"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8462-4",
+                  "display": "Diastolic blood pressure"
+                }
+              ],
+              "text": "Diastolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 84,
+              "unit": "mm[Hg]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-hr-34",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-hr-34",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart rate"
+            }
+          ],
+          "text": "Heart rate"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-20T10:30:00Z",
+        "valueQuantity": {
+          "value": 71,
+          "unit": "/min"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-wt-35",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-wt-35",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ],
+          "text": "Body weight"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-20T10:30:00Z",
+        "valueQuantity": {
+          "value": 89.3,
+          "unit": "kg"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-bp-36",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-bp-36",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "85354-9",
+              "display": "Blood pressure panel"
+            }
+          ],
+          "text": "Blood pressure panel"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T09:05:00Z",
+        "component": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8480-6",
+                  "display": "Systolic blood pressure"
+                }
+              ],
+              "text": "Systolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 138,
+              "unit": "mm[Hg]"
+            }
+          },
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8462-4",
+                  "display": "Diastolic blood pressure"
+                }
+              ],
+              "text": "Diastolic blood pressure"
+            },
+            "valueQuantity": {
+              "value": 86,
+              "unit": "mm[Hg]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-hr-37",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-hr-37",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8867-4",
+              "display": "Heart rate"
+            }
+          ],
+          "text": "Heart rate"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T09:05:00Z",
+        "valueQuantity": {
+          "value": 72,
+          "unit": "/min"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-wt-38",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-wt-38",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ],
+            "text": "Vital Signs"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "29463-7",
+              "display": "Body weight"
+            }
+          ],
+          "text": "Body weight"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T09:05:00Z",
+        "valueQuantity": {
+          "value": 89.5,
+          "unit": "kg"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-social-39",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-social-39",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "social-history",
+                "display": "Social History"
+              }
+            ],
+            "text": "Social History"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "72166-2",
+              "display": "Tobacco smoking status"
+            }
+          ],
+          "text": "Tobacco smoking status"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "8517006",
+              "display": "Former smoker"
+            }
+          ],
+          "text": "Former smoker"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-social-40",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-social-40",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "social-history",
+                "display": "Social History"
+              }
+            ],
+            "text": "Social History"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11331-6",
+              "display": "History of alcohol use"
+            }
+          ],
+          "text": "History of alcohol use"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15",
+        "valueCodeableConcept": {
+          "text": "A glass of wine with dinner on weekends"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-survey-41",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-survey-41",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey",
+                "display": "Survey"
+              }
+            ],
+            "text": "Survey"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "44261-6",
+              "display": "Patient Health Questionnaire 9 item (PHQ-9) total score"
+            }
+          ],
+          "text": "Patient Health Questionnaire 9 item (PHQ-9) total score"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 3,
+          "unit": "{score}"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-survey-42",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "h-survey-42",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "survey",
+                "display": "Survey"
+              }
+            ],
+            "text": "Survey"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "70274-6",
+              "display": "Generalized anxiety disorder 7 item (GAD-7) total score"
+            }
+          ],
+          "text": "Generalized anxiety disorder 7 item (GAD-7) total score"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "effectiveDateTime": "2026-08-15T10:00:00Z",
+        "valueQuantity": {
+          "value": 4,
+          "unit": "{score}"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-enc-43",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "h-enc-43",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "Office visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Nutrition"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/h-prac-4",
+              "display": "Maya Brooks, RDN"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-06-10T09:00:00Z",
+          "end": "2026-06-10T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Diet review while on warfarin"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Riverside Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-enc-44",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "h-enc-44",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "Office visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Internal Medicine"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/h-prac-1",
+              "display": "Amara Nwosu, MD"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-08-15T09:00:00Z",
+          "end": "2026-08-15T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Diabetes and blood pressure follow-up"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Riverside Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-enc-45",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "h-enc-45",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "Office visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Cardiology"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/h-prac-2",
+              "display": "Daniel Cho, MD"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-08-20T09:00:00Z",
+          "end": "2026-08-20T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Atrial fibrillation follow-up"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Riverside Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-enc-46",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "h-enc-46",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "Anticoagulation clinic visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Anticoagulation clinic"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/h-prac-3",
+              "display": "Linda Park, PharmD"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-09-04T09:00:00Z",
+          "end": "2026-09-04T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "INR check"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Riverside Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-enc-47",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "h-enc-47",
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
+        },
+        "type": [
+          {
+            "text": "Anticoagulation clinic visit"
+          }
+        ],
+        "serviceType": {
+          "text": "Anticoagulation clinic"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "participant": [
+          {
+            "individual": {
+              "reference": "Practitioner/h-prac-3",
+              "display": "Linda Park, PharmD"
+            }
+          }
+        ],
+        "period": {
+          "start": "2026-07-10T09:00:00Z",
+          "end": "2026-07-10T09:40:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "INR check"
+          }
+        ],
+        "serviceProvider": {
+          "display": "Riverside Health"
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-doc-48",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "h-doc-48",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "34765-3",
+              "display": "Nutrition and dietetics Note"
+            }
+          ],
+          "text": "Nutrition and dietetics Note"
+        },
+        "category": [
+          {
+            "text": "Clinical Note"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "date": "2026-06-10T12:00:00Z",
+        "author": [
+          {
+            "reference": "Practitioner/h-prac-4",
+            "display": "Maya Brooks, RDN"
+          }
+        ],
+        "custodian": {
+          "display": "Riverside Health"
+        },
+        "description": "Nutrition visit — diet and warfarin",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Nutrition visit — diet and warfarin",
+              "data": "TlVUUklUSU9OIE5PVEUKUmVhc29uOiBkaWV0IHJldmlldyB3aGlsZSBvbiB3YXJmYXJpbi4KQXNzZXNzbWVudDogaW50ZXJtaXR0ZW50IGhpZ2ggaW50YWtlIG9mIGxlYWZ5IGdyZWVucyAoa2FsZSwgc3BpbmFjaCkgYWx0ZXJuYXRpbmcgd2l0aCB3ZWVrcyBvZiBub25lLgpQbGFuOiBjb25zaXN0ZW50IHZpdGFtaW4gSyBpbnRha2UsIDPigJM0IHNlcnZpbmdzIG9mIGxlYWZ5IGdyZWVucyBwZXIgd2VlayBzcHJlYWQgZXZlbmx5OyBrZWVwIGEgc2ltcGxlIGZvb2QgbG9nOyBicmluZyBsb2cgdG8gSU5SIHZpc2l0cy4="
+            }
+          }
+        ],
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/h-enc-43"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-doc-49",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "h-doc-49",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Progress note"
+            }
+          ],
+          "text": "Progress note"
+        },
+        "category": [
+          {
+            "text": "Clinical Note"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "date": "2026-08-20T12:00:00Z",
+        "author": [
+          {
+            "reference": "Practitioner/h-prac-2",
+            "display": "Daniel Cho, MD"
+          }
+        ],
+        "custodian": {
+          "display": "Riverside Health"
+        },
+        "description": "Cardiology visit summary",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Cardiology visit summary",
+              "data": "Q0FSRElPTE9HWSBGT0xMT1ctVVAKQXRyaWFsIGZpYnJpbGxhdGlvbiwgcmF0ZSBjb250cm9sbGVkIG9uIG1ldG9wcm9sb2wgc3VjY2luYXRlLgpSZWNvbW1lbmQgYXNwaXJpbiA4MSBtZyBkYWlseSAob3ZlciB0aGUgY291bnRlcikuCkNvbnRpbnVlIHdhcmZhcmluIDUgbWcgZGFpbHksIElOUiBnb2FsIDIuMOKAkzMuMC4KUmV0dXJuIGluIDMgbW9udGhzLg=="
+            }
+          }
+        ],
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/h-enc-45"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-doc-50",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "h-doc-50",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Progress note"
+            }
+          ],
+          "text": "Progress note"
+        },
+        "category": [
+          {
+            "text": "Clinical Note"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "date": "2026-09-04T12:00:00Z",
+        "author": [
+          {
+            "reference": "Practitioner/h-prac-3",
+            "display": "Linda Park, PharmD"
+          }
+        ],
+        "custodian": {
+          "display": "Riverside Health"
+        },
+        "description": "Anticoagulation clinic note",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Anticoagulation clinic note",
+              "data": "QU5USUNPQUdVTEFUSU9OIENMSU5JQwpJTlIgMy40IChnb2FsIDIuMOKAkzMuMCkuIEhnYiAxMy4xIChzbGlnaHRseSBsb3cpLgpSZXBvcnRzIGJydWlzaW5nIG9uIGZvcmVhcm1zIGFuZCBvbmUgYnJpZWYgbm9zZWJsZWVkIHNpbmNlIGFzcGlyaW4gd2FzIGFkZGVkLgpObyB3YXJmYXJpbiBkb3NlIGNoYW5nZSB0b2RheTsgcmVjaGVjayBJTlIgYW5kIENCQyBpbiAyIHdlZWtzLgpSZXZpZXdlZCBibGVlZGluZyBwcmVjYXV0aW9ucyBhbmQgY29uc2lzdGVudCB2aXRhbWluIEsgaW50YWtlLg=="
+            }
+          }
+        ],
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/h-enc-46"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-doc-51",
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "h-doc-51",
+        "status": "current",
+        "type": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11506-3",
+              "display": "Progress note"
+            }
+          ],
+          "text": "Progress note"
+        },
+        "category": [
+          {
+            "text": "Clinical Note"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "date": "2026-07-10T12:00:00Z",
+        "author": [
+          {
+            "reference": "Practitioner/h-prac-3",
+            "display": "Linda Park, PharmD"
+          }
+        ],
+        "custodian": {
+          "display": "Riverside Health"
+        },
+        "description": "Anticoagulation clinic note",
+        "content": [
+          {
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Anticoagulation clinic note",
+              "data": "QU5USUNPQUdVTEFUSU9OIENMSU5JQwpJTlIgMi40LCBpbiByYW5nZS4gQ29udGludWUgd2FyZmFyaW4gNSBtZyBkYWlseS4gUmVjaGVjayBpbiAyIHdlZWtzLg=="
+            }
+          }
+        ],
+        "context": {
+          "encounter": [
+            {
+              "reference": "Encounter/h-enc-47"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-appt-52",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "h-appt-52",
+        "status": "booked",
+        "specialty": [
+          {
+            "text": "Anticoagulation clinic"
+          }
+        ],
+        "reasonCode": [
+          {
+            "text": "INR recheck"
+          }
+        ],
+        "description": "INR recheck",
+        "start": "2026-09-18T08:30:00",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/epic-harold",
+              "display": "Harold Okafor"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "reference": "Practitioner/h-prac-3",
+              "display": "Linda Park, PharmD"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "display": "Riverside Heart Center"
+            },
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-appt-53",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "h-appt-53",
+        "status": "booked",
+        "specialty": [
+          {
+            "text": "Laboratory"
+          }
+        ],
+        "reasonCode": [
+          {
+            "text": "CBC recheck (lab draw before INR visit)"
+          }
+        ],
+        "description": "CBC recheck (lab draw before INR visit)",
+        "start": "2026-09-18T08:15:00",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/epic-harold",
+              "display": "Harold Okafor"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "reference": "Practitioner/h-prac-3",
+              "display": "Linda Park, PharmD"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "display": "Riverside Heart Center lab"
+            },
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-appt-54",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "h-appt-54",
+        "status": "booked",
+        "specialty": [
+          {
+            "text": "Internal Medicine"
+          }
+        ],
+        "reasonCode": [
+          {
+            "text": "Follow-up: bruising, INR, new aspirin"
+          }
+        ],
+        "description": "Follow-up: bruising, INR, new aspirin",
+        "start": "2026-10-02T09:15:00",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/epic-harold",
+              "display": "Harold Okafor"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "reference": "Practitioner/h-prac-1",
+              "display": "Amara Nwosu, MD"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "display": "Riverside Health — Primary Care"
+            },
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-appt-55",
+      "resource": {
+        "resourceType": "Appointment",
+        "id": "h-appt-55",
+        "status": "booked",
+        "specialty": [
+          {
+            "text": "Cardiology"
+          }
+        ],
+        "reasonCode": [
+          {
+            "text": "Cardiology follow-up"
+          }
+        ],
+        "description": "Cardiology follow-up",
+        "start": "2026-11-12T11:00:00",
+        "participant": [
+          {
+            "actor": {
+              "reference": "Patient/epic-harold",
+              "display": "Harold Okafor"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "reference": "Practitioner/h-prac-2",
+              "display": "Daniel Cho, MD"
+            },
+            "status": "accepted"
+          },
+          {
+            "actor": {
+              "display": "Riverside Heart Center"
+            },
+            "status": "accepted"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-imm-56",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "h-imm-56",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/cvx",
+              "code": "197",
+              "display": "Influenza, high-dose, quadrivalent, preservative free"
+            }
+          ],
+          "text": "Influenza, high-dose, quadrivalent, preservative free"
+        },
+        "patient": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "occurrenceDateTime": "2025-10-08",
+        "performer": [
+          {
+            "actor": {
+              "display": "Riverside Pharmacy"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-imm-57",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "h-imm-57",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/cvx",
+              "code": "309",
+              "display": "COVID-19, mRNA, 2025–2026 formula"
+            }
+          ],
+          "text": "COVID-19, mRNA, 2025–2026 formula"
+        },
+        "patient": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "occurrenceDateTime": "2025-10-08",
+        "performer": [
+          {
+            "actor": {
+              "display": "Riverside Pharmacy"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-imm-58",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "h-imm-58",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/cvx",
+              "code": "216",
+              "display": "Pneumococcal conjugate PCV 20"
+            }
+          ],
+          "text": "Pneumococcal conjugate PCV 20"
+        },
+        "patient": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "occurrenceDateTime": "2024-01-15",
+        "performer": [
+          {
+            "actor": {
+              "display": "Dr. Amara Nwosu"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-imm-59",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "h-imm-59",
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/cvx",
+              "code": "187",
+              "display": "Zoster recombinant"
+            }
+          ],
+          "text": "Zoster recombinant"
+        },
+        "patient": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "occurrenceDateTime": "2023-05-02",
+        "performer": [
+          {
+            "actor": {
+              "display": "Riverside Pharmacy"
+            }
+          }
+        ],
+        "protocolApplied": [
+          {
+            "doseNumberPositiveInt": 2,
+            "seriesDosesPositiveInt": 2
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-proc-60",
+      "resource": {
+        "resourceType": "Procedure",
+        "id": "h-proc-60",
+        "status": "completed",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "40701008",
+              "display": "Echocardiography"
+            }
+          ],
+          "text": "Echocardiography"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "performedDateTime": "2023-11-05",
+        "performer": [
+          {
+            "actor": {
+              "reference": "Practitioner/h-prac-2",
+              "display": "Daniel Cho, MD"
+            }
+          }
+        ],
+        "outcome": {
+          "text": "Normal pumping function; mildly enlarged left atrium."
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-proc-61",
+      "resource": {
+        "resourceType": "Procedure",
+        "id": "h-proc-61",
+        "status": "completed",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "73761001",
+              "display": "Colonoscopy"
+            }
+          ],
+          "text": "Colonoscopy"
+        },
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "performedDateTime": "2022-03-10",
+        "performer": [
+          {
+            "actor": {
+              "reference": "Practitioner/h-prac-5",
+              "display": "Ruth Adler, MD"
+            }
+          }
+        ],
+        "outcome": {
+          "text": "One small polyp removed; repeat in 5 years."
+        }
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-careteam-62",
+      "resource": {
+        "resourceType": "CareTeam",
+        "id": "h-careteam-62",
+        "status": "active",
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "managingOrganization": [
+          {
+            "display": "Riverside Health"
+          }
+        ],
+        "participant": [
+          {
+            "role": [
+              {
+                "text": "Primary care physician"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/h-prac-1",
+              "display": "Amara Nwosu, MD"
+            }
+          },
+          {
+            "role": [
+              {
+                "text": "Cardiologist"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/h-prac-2",
+              "display": "Daniel Cho, MD"
+            }
+          },
+          {
+            "role": [
+              {
+                "text": "Anticoagulation pharmacist"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/h-prac-3",
+              "display": "Linda Park, PharmD"
+            }
+          },
+          {
+            "role": [
+              {
+                "text": "Dietitian"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/h-prac-4",
+              "display": "Maya Brooks, RDN"
+            }
+          },
+          {
+            "role": [
+              {
+                "text": "Gastroenterologist"
+              }
+            ],
+            "member": {
+              "reference": "Practitioner/h-prac-5",
+              "display": "Ruth Adler, MD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:h-careplan-63",
+      "resource": {
+        "resourceType": "CarePlan",
+        "id": "h-careplan-63",
+        "status": "active",
+        "intent": "plan",
+        "title": "Warfarin monitoring",
+        "category": [
+          {
+            "text": "Monitoring"
+          }
+        ],
+        "subject": {
+          "reference": "Patient/epic-harold",
+          "display": "Harold Okafor"
+        },
+        "author": {
+          "reference": "Practitioner/h-prac-3",
+          "display": "Linda Park, PharmD"
+        },
+        "created": "2026-09-04",
+        "period": {
+          "start": "2026-09-04"
+        },
+        "activity": [
+          {
+            "detail": {
+              "description": "INR goal 2.0–3.0.",
+              "status": "in-progress"
+            }
+          },
+          {
+            "detail": {
+              "description": "INR check every two weeks until two results in range.",
+              "status": "in-progress"
+            }
+          },
+          {
+            "detail": {
+              "description": "Call the clinic for unusual bruising, blood in urine or stool, or a nosebleed that won't stop.",
+              "status": "in-progress"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
