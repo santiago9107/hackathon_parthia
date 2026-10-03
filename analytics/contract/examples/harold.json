@@ -1,10 +1,10 @@
 {
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "patient_id": "p-harold",
   "as_of": "2026-10-03T12:00:00Z",
   "module_version": "0.3.0",
   "knowledge_version": "234dfffb4aee",
-  "overrides_version": "2026-10-03.1",
+  "overrides_version": "2026-10-03.2",
   "knowledge_mode": "development",
   "phenotype": {
     "element_id": "D003",
@@ -2033,8 +2033,8 @@
       },
       {
         "rule_id": "R16",
-        "outcome": "not_evaluable",
-        "detail": "Pending AMB-01: whether 140/90 means systolic AND diastolic or systolic OR diastolic.",
+        "outcome": "not_fired",
+        "detail": "0 of 7 readings at or above 140/90.",
         "review_status": "draft_verify"
       },
       {
@@ -2064,13 +2064,13 @@
       {
         "rule_id": "R21",
         "outcome": "not_fired",
-        "detail": "0 urgent item(s).",
+        "detail": "0 urgent item(s). Runs in every mode (DEC-17).",
         "review_status": "draft_verify"
       },
       {
         "rule_id": "R22",
         "outcome": "not_fired",
-        "detail": "0 PHQ-9 with item 9 > 0 in the D016 window.",
+        "detail": "0 PHQ-9 with item 9 > 0 in the D016 window. Runs in every mode (DEC-17).",
         "review_status": "draft_verify"
       }
     ],
@@ -2198,6 +2198,18 @@
       {
         "threshold_id": "T06",
         "element_id": "D012",
+        "parameter": "high BP reading: systolic >= 140 or diastolic >= 90",
+        "op": ">=",
+        "value": 140,
+        "low": null,
+        "high": 90,
+        "unit": "mmHg",
+        "source": "default",
+        "reference": "T06 Alert HIGH; DEC-08; DEC-15"
+      },
+      {
+        "threshold_id": "T06",
+        "element_id": "D012",
         "parameter": "low systolic (R09)",
         "op": "<",
         "value": 90,
@@ -2210,14 +2222,14 @@
       {
         "threshold_id": "T06",
         "element_id": "D012",
-        "parameter": "urgent BP 180/120 (or; provisional AMB-02)",
+        "parameter": "urgent BP: systolic >= 180 or diastolic >= 120",
         "op": ">=",
         "value": 180,
         "low": null,
         "high": 120,
         "unit": "mmHg",
         "source": "default",
-        "reference": "T06 URGENT; AMB-02"
+        "reference": "T06 URGENT; DEC-15"
       },
       {
         "threshold_id": "T06",
@@ -2437,6 +2449,11 @@
       {
         "kind": "rule",
         "id": "R14",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R16",
         "review_status": "draft_verify"
       },
       {

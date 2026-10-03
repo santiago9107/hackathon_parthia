@@ -57,10 +57,11 @@ describe("confirmed, reconciled data only", () => {
     expect(b.needs_review).toContainEqual(expect.objectContaining({ item_id: "m-naproxen", reason: "unconfirmed" }));
   });
 
-  it("conflicting and pending items are excluded and listed; possible red flags first", () => {
+  it("conflicting and pending items are excluded from analysis and listed; a conflicting urgent value still alerts (DEC-18)", () => {
     const b = run(fixture("edge-conflicting-sources"));
     expect(findingsFor(b, "R01")).toHaveLength(0);
-    expect(b.urgent).toHaveLength(0); // the conflicting 6.3 is NOT used
+    expect(b.urgent.map((u) => [u.urgent_id, u.data_status])).toEqual([["UL-K-HIGH:p-harold-k-2026-10-01-a", "conflict"]]);
+    expect(b.needs_review[0]).toMatchObject({ item_id: "p-harold-k-2026-10-01-a", possible_red_flag: true });
     const reasons = b.needs_review.map((n) => [n.item_id, n.reason]);
     expect(reasons).toContainEqual(["p-harold-k-2026-10-01-a", "conflict"]);
     expect(reasons).toContainEqual(["m-naproxen", "pending_reconciliation"]);
@@ -188,9 +189,34 @@ describe("other rules", () => {
     expect(findingsFor(run(s), "R11")[0]!.severity).toBe("high");
   });
 
-  it("R15 and R16 are reported as not evaluable, not silently skipped", () => {
-    const b = run(fixture("margaret"));
-    expect(ruleOutcome(b, "R15")).toBe("not_evaluable");
-    expect(ruleOutcome(b, "R16")).toBe("not_evaluable");
+  it("R15 is reported as not evaluable, not silently skipped", () => {
+    expect(ruleOutcome(run(fixture("margaret")), "R15")).toBe("not_evaluable");
+  });
+
+  it("R16 (DEC-15): >= 3 of >= 4 readings with systolic >= 140 OR diastolic >= 90 -> Low", () => {
+    const s = fixture("harold");
+    const recent = s.vitals.filter((v) => v.kind === "blood_pressure" && v.datetime >= "2026-09-30");
+    recent[0]!.diastolic = 92; // diastolic only
+    recent[1]!.systolic = 144; // systolic only
+    recent[2]!.systolic = 141;
+    const b = run(s);
+    const f = findingsFor(b, "R16")[0]!;
+    expect(f.severity).toBe("low");
+    expect(f.evidence).toHaveLength(3);
+    expect(f.decision_ids).toContain("DEC-15");
+    expect(b.domain_profile.find((d) => d.domain === "bp_heart_rate")!.status).toBe("watch");
+    recent[2]!.systolic = 120;
+    expect(findingsFor(run(s), "R16")).toHaveLength(0);
+  });
+
+  it("R16 uses the care-plan BP goal over the default (threshold priority 1)", () => {
+    const s = fixture("margaret");
+    for (const v of s.vitals) if (v.kind === "blood_pressure" && v.datetime >= "2026-09-30") v.systolic = 134;
+    const b = run(s);
+    expect(findingsFor(b, "R16")[0]!.thresholds_used[0]).toMatchObject({ source: "care_plan", value: 130, high: 80 });
+  });
+
+  it("R16 with fewer than 4 readings in 7 days reports missing data", () => {
+    expect(ruleOutcome(run(fixture("rosa")), "R16")).toBe("missing_data");
   });
 });

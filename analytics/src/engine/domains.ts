@@ -108,14 +108,15 @@ function domainTrend(ctx: Ctx, cfg: TrendCfg | null, timeline: HolisticAnalysisB
       return compare(points, ctx, cfg, cfg.stable_tolerance!, "up", "Missed doses per day", "");
     }
     case "out_of_range_share": {
-      // Unambiguous alert limits only: systolic below the R09 limit, HR below R17 or above R18.
-      // The R16 high-BP limit is left out until AMB-01 is decided.
+      // Default alert limits: systolic below R09; systolic or diastolic at/above R16 (DEC-15); HR below R17 or above R18.
       const r = ctx.k.overrides.rules;
       const points = ctx.p.vitals
         .filter((v) => v.kind === "blood_pressure" || v.kind === "heart_rate")
         .map((v) => ({
           at: toMs(v.datetime),
-          value: v.kind === "blood_pressure" ? Number(v.systolic! < r.R09.systolic_lt) : Number(v.value! < r.R17.hr_lt || v.value! > r.R18.hr_gt),
+          value: v.kind === "blood_pressure"
+            ? Number(v.systolic! < r.R09.systolic_lt || v.systolic! >= r.R16.systolic_gte || v.diastolic! >= r.R16.diastolic_gte)
+            : Number(v.value! < r.R17.hr_lt || v.value! > r.R18.hr_gt),
         }));
       return compare(points, ctx, cfg, cfg.stable_tolerance!, "up", "Share of BP/HR readings outside alert limits", "");
     }

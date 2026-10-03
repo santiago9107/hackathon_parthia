@@ -10,7 +10,7 @@
  */
 import { z } from "zod";
 
-export const CONTRACT_VERSION = "1.0.0";
+export const CONTRACT_VERSION = "1.1.0";
 
 export const SeverityZ = z.enum(["urgent", "high", "moderate", "low"]);
 export const ReviewStatusZ = z.enum(["draft_verify", "in_review", "approved", "retired", "clinical_lead_decision"]);
@@ -87,6 +87,17 @@ export const UrgentItemZ = z.strictObject({
   knowledge: z.array(KnowledgeRefZ),
   triggered_at: z.string(),
   domain: DomainIdZ,
+  /**
+   * The urgent pathway runs in every knowledge mode (DEC-17). While its KB rows
+   * are not Approved, items are marked "draft_pending_clinical_approval".
+   */
+  approval_status: z.enum(["approved", "draft_pending_clinical_approval"]),
+  approval_label: z.string(),
+  /**
+   * Status of the data that triggered it (DEC-18). Non-"confirmed" items are
+   * still shown as urgent AND listed in needs_review.
+   */
+  data_status: z.enum(["confirmed", "unconfirmed", "pending_reconciliation", "conflict"]),
 });
 export type UrgentItem = z.infer<typeof UrgentItemZ>;
 

@@ -6,7 +6,7 @@
   "properties": {
     "contract_version": {
       "type": "string",
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "patient_id": {
       "type": "string"
@@ -378,6 +378,25 @@
               "nutrition",
               "function_qol"
             ]
+          },
+          "approval_status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "draft_pending_clinical_approval"
+            ]
+          },
+          "approval_label": {
+            "type": "string"
+          },
+          "data_status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "unconfirmed",
+              "pending_reconciliation",
+              "conflict"
+            ]
           }
         },
         "required": [
@@ -397,7 +416,10 @@
           "thresholds_used",
           "knowledge",
           "triggered_at",
-          "domain"
+          "domain",
+          "approval_status",
+          "approval_label",
+          "data_status"
         ],
         "additionalProperties": false
       }

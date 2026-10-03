@@ -66,7 +66,7 @@ export function analyzePatient(snapshot: PatientSnapshotInput | PatientSnapshot,
   }
 
   for (const text of [
-    ...urgent.flatMap((u) => [u.title, u.clinician_note]),
+    ...urgent.flatMap((u) => [u.title, u.clinician_note, u.patient_message]),
     ...findings.flatMap((f) => [f.summary, f.patient_question, f.clinician_note]),
     ...domainProfile.map((d) => d.reason),
     ...[...ctx.missing.values()].map((m) => m.suggested_patient_question ?? ""),
@@ -74,6 +74,10 @@ export function analyzePatient(snapshot: PatientSnapshotInput | PatientSnapshot,
     const hits = forbiddenPhrases(text);
     if (hits.length) ctx.warnings.push(`Forbidden wording (${hits.join(", ")}) in generated text: "${text}"`);
   }
+
+  // DEC-18: an item that triggered an urgent result but is held back from analysis stays in needs_review, flagged.
+  const urgentItemIds = new Set(urgent.flatMap((u) => u.evidence.map((e) => e.item_id)));
+  for (const n of p.needsReview) if (urgentItemIds.has(n.item_id)) n.possible_red_flag = true;
 
   const bundle: HolisticAnalysisBundle = {
     contract_version: CONTRACT_VERSION,

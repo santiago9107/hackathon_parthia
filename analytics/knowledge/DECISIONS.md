@@ -21,3 +21,12 @@ re-run the export, and remove the override if the KB text then carries the struc
 | DEC-12 | Domain mapping | KB 1, 4, 6, 7 → Medication safety; 2 → Heart-kidney labs; 3 → Fluid/congestion; 5 → BP/HR; 8 → Nutrition; 9 → Mental health (R19) / Adherence (R20); 10 → `urgent[]`. | Optional: add a "Module domain" column to Rules. |
 | DEC-13 | Care-plan targets | Tagged with the element they override (D011, D012, D009, D010, D019, D013) and source "care plan". | — |
 | DEC-14 | Priority defaults | Modifiability and evidence strength default to 0.5 until the clinical panel sets values. | Add "Modifiability" to Rules when defined. |
+
+### Second round (2026-10-03, after the phase 1–3 review)
+
+| ID | Topic | Decision | Excel update needed |
+| --- | --- | --- | --- |
+| DEC-15 | "x/y" BP thresholds use OR | Urgent BP: systolic ≥ 180 **or** diastolic ≥ 120. R16: a reading is high when systolic ≥ 140 **or** diastolic ≥ 90 (care-plan BP goal overrides). R16 switched on. | Thresholds T06; Rules R16, R21: write "systolic or diastolic". |
+| DEC-16 | Urgent message wording | R21 and R22 patient messages approved as written in `config/messages.json`. R13 clinician note rewording approved. | Rules R21, R22 "Question for the patient": replace the description with the message text. R13 note. |
+| DEC-17 | Urgent pathway in every mode | R21, R22 and urgent labs run in **every** knowledge mode, even while Draft, and are marked "Draft – pending clinical approval" (`approval_status`) in the output. | — (approve R21, R22, T06–T09, T01, T02, T11 to clear the label) |
+| DEC-18 | Unconfirmed red flags | Patient-entered data (symptoms, PHQ-9, logs) counts as confirmed on entry; confirmation applies to imported data. Any unconfirmed, pending or conflicting item that would be urgent triggers the urgent message **and** stays in needs_review (`data_status`, `possible_red_flag`). Safety over strictness. | Dictionary guide rule 2: add the exception. |

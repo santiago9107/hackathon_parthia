@@ -546,6 +546,37 @@ const R20: Impl = (ctx) => {
   };
 };
 
+const R16: Impl = (ctx) => {
+  const prm = ruleParams<{ systolic_gte: number; diastolic_gte: number; min_high_readings: number; min_readings: number; window_days: number; threshold_id: string; decision: string; combine_decision: string }>(ctx.k, "R16");
+  const from = ctx.asOf - prm.window_days * DAY_MS;
+  const bp = ctx.p.vitals.filter((v) => v.kind === "blood_pressure" && toMs(v.datetime) > from && toMs(v.datetime) <= ctx.asOf);
+  if (bp.length < prm.min_readings) {
+    addMissing(ctx, "D012", "R16", { reason: "no_data", detail: `${bp.length} home blood pressure reading(s) in the last ${prm.window_days} days; R16 needs at least ${prm.min_readings}.`, last: null, lastAt: null });
+    return { outcome: "missing_data", detail: `${bp.length} BP readings in window.` };
+  }
+  // Threshold priority: the clinician's BP goal (care plan) overrides the T06 default (DEC-13).
+  const goal = carePlan(ctx, "bp_goal");
+  const sysLim = goal?.systolic ?? prm.systolic_gte;
+  const diaLim = goal?.diastolic ?? prm.diastolic_gte;
+  const t = recordThreshold(ctx, {
+    threshold_id: prm.threshold_id, element_id: "D012", parameter: `high BP reading: systolic >= ${sysLim} or diastolic >= ${diaLim}`, op: ">=", value: sysLim, low: null, high: diaLim, unit: "mmHg",
+    source: goal ? "care_plan" : "default", reference: goal ? `care plan ${goal.id} (${dayKey(goal.set_on)}); ${prm.combine_decision}` : `T06 Alert HIGH; ${prm.decision}; ${prm.combine_decision}`,
+  });
+  const high = bp.filter((v) => v.systolic! >= sysLim || v.diastolic! >= diaLim);
+  if (high.length < prm.min_high_readings) return { outcome: "not_fired", detail: `${high.length} of ${bp.length} readings at or above ${sysLim}/${diaLim}.` };
+  return {
+    outcome: "fired",
+    detail: `${high.length} of ${bp.length} readings at or above ${sysLim}/${diaLim}.`,
+    findings: [fire(ctx, "R16", {
+      summary: `${high.length} of ${bp.length} home blood pressure readings in the last ${prm.window_days} days were at or above ${sysLim}/${diaLim} mmHg (${goal ? "care-plan goal" : "default alert level"}; systolic or diastolic).`,
+      values: {},
+      evidence: high.map((v) => evidence(ctx, { element_id: "D012", item_id: v.id, label: "blood pressure", value: `${v.systolic}/${v.diastolic}`, unit: "mmHg", date: v.datetime, source: v.provenance.source })),
+      thresholds: [t],
+      decisions: [prm.combine_decision],
+    })],
+  };
+};
+
 const notEvaluable: Impl = () => ({ outcome: "not_evaluable", detail: "" });
 
 export const RULES: Record<string, Impl> = {
@@ -564,7 +595,7 @@ export const RULES: Record<string, Impl> = {
   R13,
   R14: labRule("R14", "egfr", "eGFR", true),
   R15: notEvaluable,
-  R16: notEvaluable,
+  R16,
   R17: hrRule("R17"),
   R18: hrRule("R18"),
   R19,
