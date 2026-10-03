@@ -1,0 +1,2344 @@
+{
+  "contract_version": "1.0.0",
+  "patient_id": "p-harold",
+  "as_of": "2026-10-03T12:00:00Z",
+  "module_version": "0.3.0",
+  "knowledge_version": "234dfffb4aee",
+  "overrides_version": "2026-10-03.1",
+  "knowledge_mode": "development",
+  "phenotype": {
+    "element_id": "D003",
+    "value": "HFrEF",
+    "lvef": {
+      "element_id": "D002",
+      "item_id": "p-harold-lvef-2026-02-14",
+      "label": "LVEF",
+      "value": 35,
+      "unit": "%",
+      "date": "2026-02-14",
+      "source": "ehr",
+      "conversion": null
+    },
+    "detail": "LVEF 35% on 2026-02-14 -> HFrEF (DEC-02).",
+    "decision_ids": [
+      "DEC-02"
+    ]
+  },
+  "urgent": [],
+  "domain_profile": [],
+  "ranked_findings": [
+    {
+      "finding_id": "R01:m-naproxen",
+      "rule_id": "R01",
+      "title": "NSAID in heart failure",
+      "category": "Drug–disease",
+      "severity": "high",
+      "base_severity": "high",
+      "domain": "medication_safety",
+      "kb_domain": "1. Drugs that worsen HF",
+      "summary": "Naproxen (NSAID) is on the confirmed medicine list of a patient with heart failure.",
+      "patient_question": "I was given Naproxen for pain. Is it safe with my heart failure, and is there a safer option?",
+      "clinician_note": "NSAIDs can cause sodium/fluid retention, worsen HF and kidney function, and blunt diuretics.",
+      "evidence": [
+        {
+          "element_id": "D005",
+          "item_id": "m-naproxen",
+          "label": "Naproxen 500 mg twice daily",
+          "value": null,
+          "unit": null,
+          "date": "2026-09-29",
+          "source": "scan",
+          "conversion": null
+        }
+      ],
+      "element_ids": [
+        "D001",
+        "D005"
+      ],
+      "rule_ids": [
+        "R01"
+      ],
+      "source_ids": [
+        "S01",
+        "S07"
+      ],
+      "threshold_ids": [],
+      "card_ids": [
+        "C02"
+      ],
+      "decision_ids": [],
+      "thresholds_used": [],
+      "knowledge": [
+        {
+          "kind": "rule",
+          "id": "R01",
+          "review_status": "draft_verify"
+        },
+        {
+          "kind": "card",
+          "id": "C02",
+          "review_status": "draft_verify"
+        },
+        {
+          "kind": "element",
+          "id": "D001",
+          "review_status": "in_review"
+        },
+        {
+          "kind": "element",
+          "id": "D005",
+          "review_status": "in_review"
+        },
+        {
+          "kind": "override",
+          "id": "rule_elements",
+          "review_status": "draft_verify"
+        },
+        {
+          "kind": "override",
+          "id": "drug_groups",
+          "review_status": "draft_verify"
+        }
+      ],
+      "triggered_at": "2026-09-29",
+      "priority": null
+    }
+  ],
+  "precursors": [],
+  "contributing_factors": [],
+  "risk_scores": [],
+  "missing_data": [],
+  "needs_review": [],
+  "timeline": {
+    "events": [
+      {
+        "event_id": "m-atorvastatin#0",
+        "at": "2022-11-01",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Atorvastatin",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-metoprolol#0",
+        "at": "2023-03-01",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Metoprolol succinate",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-warfarin#0",
+        "at": "2023-03-01",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Warfarin",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-furosemide#0",
+        "at": "2024-01-15",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Furosemide",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-lisinopril#0",
+        "at": "2024-01-15",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Lisinopril",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-lisinopril#1",
+        "at": "2025-04-08",
+        "category": "medication_stop",
+        "element_id": "D005",
+        "label": "Lisinopril: switched to sacubitril/valsartan",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-entresto#0",
+        "at": "2025-04-10",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Sacubitril/valsartan",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-empagliflozin#0",
+        "at": "2025-06-01",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Empagliflozin",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-lvef-2026-02-14",
+        "at": "2026-02-14",
+        "category": "lab",
+        "element_id": "D002",
+        "label": "lvef",
+        "value": 35,
+        "unit": "%",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-cp-egfr_baseline",
+        "at": "2026-03-01",
+        "category": "care_plan",
+        "element_id": "D009",
+        "label": "care-plan egfr baseline",
+        "value": 66,
+        "unit": "mL/min/1.73m²",
+        "source": "care_plan",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-cp-inr_range",
+        "at": "2026-03-01",
+        "category": "care_plan",
+        "element_id": "D019",
+        "label": "care-plan inr range",
+        "value": null,
+        "unit": "ratio",
+        "source": "care_plan",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-aspirin#0",
+        "at": "2026-09-01",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Aspirin",
+        "value": null,
+        "unit": null,
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-egfr-2026-09-02",
+        "at": "2026-09-02",
+        "category": "lab",
+        "element_id": "D009",
+        "label": "egfr",
+        "value": 64,
+        "unit": "mL/min/1.73m²",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-k-2026-09-02",
+        "at": "2026-09-02",
+        "category": "lab",
+        "element_id": "D007",
+        "label": "potassium",
+        "value": 4.4,
+        "unit": "mEq/L",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-na-2026-09-02",
+        "at": "2026-09-02",
+        "category": "lab",
+        "element_id": "D008",
+        "label": "sodium",
+        "value": 139,
+        "unit": "mEq/L",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-19-1",
+        "at": "2026-09-19",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-19",
+        "at": "2026-09-19T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-19",
+        "at": "2026-09-19T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-19-0800",
+        "at": "2026-09-19T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "112/70",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-19-0800",
+        "at": "2026-09-19T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 61,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-20-1",
+        "at": "2026-09-20",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-phq-9-2026-09-20",
+        "at": "2026-09-20",
+        "category": "mood",
+        "element_id": "D016",
+        "label": "PHQ-9",
+        "value": 4,
+        "unit": "points",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-20",
+        "at": "2026-09-20T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84.2,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-20",
+        "at": "2026-09-20T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-20-0800",
+        "at": "2026-09-20T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "113/71",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-20-0800",
+        "at": "2026-09-20T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 62,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-21-1",
+        "at": "2026-09-21",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "vitamin_k",
+        "value": 1,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-21",
+        "at": "2026-09-21T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 83.9,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-21",
+        "at": "2026-09-21T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-21-0800",
+        "at": "2026-09-21T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "114/72",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-21-0800",
+        "at": "2026-09-21T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 63,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-22-1",
+        "at": "2026-09-22",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-22",
+        "at": "2026-09-22T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84.1,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-22",
+        "at": "2026-09-22T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-22-0800",
+        "at": "2026-09-22T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "115/70",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-22-0800",
+        "at": "2026-09-22T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 64,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-23-1",
+        "at": "2026-09-23",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-23",
+        "at": "2026-09-23T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-23",
+        "at": "2026-09-23T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-23-0800",
+        "at": "2026-09-23T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "112/71",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-23-0800",
+        "at": "2026-09-23T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 61,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-24-1",
+        "at": "2026-09-24",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "vitamin_k",
+        "value": 1,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-24",
+        "at": "2026-09-24T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84.2,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-24",
+        "at": "2026-09-24T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-24-0800",
+        "at": "2026-09-24T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "113/72",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-24-0800",
+        "at": "2026-09-24T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 62,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-25-1",
+        "at": "2026-09-25",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-25",
+        "at": "2026-09-25T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 83.9,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-25",
+        "at": "2026-09-25T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-25-0800",
+        "at": "2026-09-25T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "114/70",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-25-0800",
+        "at": "2026-09-25T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 63,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-26-1",
+        "at": "2026-09-26",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-26",
+        "at": "2026-09-26T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84.1,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-26",
+        "at": "2026-09-26T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-26-0800",
+        "at": "2026-09-26T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "115/71",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-26-0800",
+        "at": "2026-09-26T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 64,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-27-1",
+        "at": "2026-09-27",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "vitamin_k",
+        "value": 1,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-27",
+        "at": "2026-09-27T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-27",
+        "at": "2026-09-27T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-27-0800",
+        "at": "2026-09-27T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "112/72",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-27-0800",
+        "at": "2026-09-27T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 61,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-28-1",
+        "at": "2026-09-28",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-inr-2026-09-28",
+        "at": "2026-09-28",
+        "category": "lab",
+        "element_id": "D019",
+        "label": "inr",
+        "value": 3.4,
+        "unit": "ratio",
+        "source": "ehr",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-28",
+        "at": "2026-09-28T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84.2,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-28",
+        "at": "2026-09-28T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-28-0800",
+        "at": "2026-09-28T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "113/70",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-28-0800",
+        "at": "2026-09-28T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 62,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "m-naproxen#0",
+        "at": "2026-09-29",
+        "category": "medication_start",
+        "element_id": "D005",
+        "label": "Naproxen: urgent care, knee pain",
+        "value": null,
+        "unit": null,
+        "source": "scan",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": "high",
+        "rule_ids": [
+          "R01"
+        ]
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-29-1",
+        "at": "2026-09-29",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-29",
+        "at": "2026-09-29T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 83.9,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-29",
+        "at": "2026-09-29T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-29-0800",
+        "at": "2026-09-29T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "114/71",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-29-0800",
+        "at": "2026-09-29T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 63,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-09-30-1",
+        "at": "2026-09-30",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "vitamin_k",
+        "value": 1,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-09-30",
+        "at": "2026-09-30T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84.1,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-09-30",
+        "at": "2026-09-30T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-09-30-0800",
+        "at": "2026-09-30T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "115/72",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-09-30-0800",
+        "at": "2026-09-30T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 64,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-10-01-1",
+        "at": "2026-10-01",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-10-01",
+        "at": "2026-10-01T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-10-01",
+        "at": "2026-10-01T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-10-01-0800",
+        "at": "2026-10-01T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "112/70",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-10-01-0800",
+        "at": "2026-10-01T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 61,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-10-02-1",
+        "at": "2026-10-02",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "meal log: no risk tags",
+        "value": 0,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-10-02",
+        "at": "2026-10-02T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 84.2,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-10-02",
+        "at": "2026-10-02T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-10-02-0800",
+        "at": "2026-10-02T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "113/71",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-10-02-0800",
+        "at": "2026-10-02T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 62,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-diet-2026-10-03-1",
+        "at": "2026-10-03",
+        "category": "diet",
+        "element_id": "D015",
+        "label": "vitamin_k",
+        "value": 1,
+        "unit": "risk tags",
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-wt-2026-10-03",
+        "at": "2026-10-03T07:00:00-04:00",
+        "category": "weight",
+        "element_id": "D011",
+        "label": "body weight",
+        "value": 83.9,
+        "unit": "kg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-sx-2026-10-03",
+        "at": "2026-10-03T07:30:00-04:00",
+        "category": "symptom",
+        "element_id": "D014",
+        "label": "symptom check: none reported",
+        "value": null,
+        "unit": null,
+        "source": "patient",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-bp-2026-10-03-0800",
+        "at": "2026-10-03T08:00:00-04:00",
+        "category": "blood_pressure",
+        "element_id": "D012",
+        "label": "blood pressure",
+        "value": "114/72",
+        "unit": "mmHg",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      },
+      {
+        "event_id": "p-harold-hr-2026-10-03-0800",
+        "at": "2026-10-03T08:00:00-04:00",
+        "category": "heart_rate",
+        "element_id": "D013",
+        "label": "resting heart rate",
+        "value": 63,
+        "unit": "beats/min",
+        "source": "device",
+        "confirmed": true,
+        "used_in_analysis": true,
+        "severity": null,
+        "rule_ids": []
+      }
+    ],
+    "daily_series": {
+      "weight_kg": [
+        {
+          "date": "2026-09-19",
+          "value": 84,
+          "n": 1
+        },
+        {
+          "date": "2026-09-20",
+          "value": 84.2,
+          "n": 1
+        },
+        {
+          "date": "2026-09-21",
+          "value": 83.9,
+          "n": 1
+        },
+        {
+          "date": "2026-09-22",
+          "value": 84.1,
+          "n": 1
+        },
+        {
+          "date": "2026-09-23",
+          "value": 84,
+          "n": 1
+        },
+        {
+          "date": "2026-09-24",
+          "value": 84.2,
+          "n": 1
+        },
+        {
+          "date": "2026-09-25",
+          "value": 83.9,
+          "n": 1
+        },
+        {
+          "date": "2026-09-26",
+          "value": 84.1,
+          "n": 1
+        },
+        {
+          "date": "2026-09-27",
+          "value": 84,
+          "n": 1
+        },
+        {
+          "date": "2026-09-28",
+          "value": 84.2,
+          "n": 1
+        },
+        {
+          "date": "2026-09-29",
+          "value": 83.9,
+          "n": 1
+        },
+        {
+          "date": "2026-09-30",
+          "value": 84.1,
+          "n": 1
+        },
+        {
+          "date": "2026-10-01",
+          "value": 84,
+          "n": 1
+        },
+        {
+          "date": "2026-10-02",
+          "value": 84.2,
+          "n": 1
+        },
+        {
+          "date": "2026-10-03",
+          "value": 83.9,
+          "n": 1
+        }
+      ],
+      "systolic_mmhg": [
+        {
+          "date": "2026-09-19",
+          "value": 112,
+          "n": 1
+        },
+        {
+          "date": "2026-09-20",
+          "value": 113,
+          "n": 1
+        },
+        {
+          "date": "2026-09-21",
+          "value": 114,
+          "n": 1
+        },
+        {
+          "date": "2026-09-22",
+          "value": 115,
+          "n": 1
+        },
+        {
+          "date": "2026-09-23",
+          "value": 112,
+          "n": 1
+        },
+        {
+          "date": "2026-09-24",
+          "value": 113,
+          "n": 1
+        },
+        {
+          "date": "2026-09-25",
+          "value": 114,
+          "n": 1
+        },
+        {
+          "date": "2026-09-26",
+          "value": 115,
+          "n": 1
+        },
+        {
+          "date": "2026-09-27",
+          "value": 112,
+          "n": 1
+        },
+        {
+          "date": "2026-09-28",
+          "value": 113,
+          "n": 1
+        },
+        {
+          "date": "2026-09-29",
+          "value": 114,
+          "n": 1
+        },
+        {
+          "date": "2026-09-30",
+          "value": 115,
+          "n": 1
+        },
+        {
+          "date": "2026-10-01",
+          "value": 112,
+          "n": 1
+        },
+        {
+          "date": "2026-10-02",
+          "value": 113,
+          "n": 1
+        },
+        {
+          "date": "2026-10-03",
+          "value": 114,
+          "n": 1
+        }
+      ],
+      "diastolic_mmhg": [
+        {
+          "date": "2026-09-19",
+          "value": 70,
+          "n": 1
+        },
+        {
+          "date": "2026-09-20",
+          "value": 71,
+          "n": 1
+        },
+        {
+          "date": "2026-09-21",
+          "value": 72,
+          "n": 1
+        },
+        {
+          "date": "2026-09-22",
+          "value": 70,
+          "n": 1
+        },
+        {
+          "date": "2026-09-23",
+          "value": 71,
+          "n": 1
+        },
+        {
+          "date": "2026-09-24",
+          "value": 72,
+          "n": 1
+        },
+        {
+          "date": "2026-09-25",
+          "value": 70,
+          "n": 1
+        },
+        {
+          "date": "2026-09-26",
+          "value": 71,
+          "n": 1
+        },
+        {
+          "date": "2026-09-27",
+          "value": 72,
+          "n": 1
+        },
+        {
+          "date": "2026-09-28",
+          "value": 70,
+          "n": 1
+        },
+        {
+          "date": "2026-09-29",
+          "value": 71,
+          "n": 1
+        },
+        {
+          "date": "2026-09-30",
+          "value": 72,
+          "n": 1
+        },
+        {
+          "date": "2026-10-01",
+          "value": 70,
+          "n": 1
+        },
+        {
+          "date": "2026-10-02",
+          "value": 71,
+          "n": 1
+        },
+        {
+          "date": "2026-10-03",
+          "value": 72,
+          "n": 1
+        }
+      ],
+      "heart_rate_bpm": [
+        {
+          "date": "2026-09-19",
+          "value": 61,
+          "n": 1
+        },
+        {
+          "date": "2026-09-20",
+          "value": 62,
+          "n": 1
+        },
+        {
+          "date": "2026-09-21",
+          "value": 63,
+          "n": 1
+        },
+        {
+          "date": "2026-09-22",
+          "value": 64,
+          "n": 1
+        },
+        {
+          "date": "2026-09-23",
+          "value": 61,
+          "n": 1
+        },
+        {
+          "date": "2026-09-24",
+          "value": 62,
+          "n": 1
+        },
+        {
+          "date": "2026-09-25",
+          "value": 63,
+          "n": 1
+        },
+        {
+          "date": "2026-09-26",
+          "value": 64,
+          "n": 1
+        },
+        {
+          "date": "2026-09-27",
+          "value": 61,
+          "n": 1
+        },
+        {
+          "date": "2026-09-28",
+          "value": 62,
+          "n": 1
+        },
+        {
+          "date": "2026-09-29",
+          "value": 63,
+          "n": 1
+        },
+        {
+          "date": "2026-09-30",
+          "value": 64,
+          "n": 1
+        },
+        {
+          "date": "2026-10-01",
+          "value": 61,
+          "n": 1
+        },
+        {
+          "date": "2026-10-02",
+          "value": 62,
+          "n": 1
+        },
+        {
+          "date": "2026-10-03",
+          "value": 63,
+          "n": 1
+        }
+      ],
+      "phq9_score": [
+        {
+          "date": "2026-09-20",
+          "value": 4,
+          "n": 1
+        }
+      ],
+      "diet_risk_tags": [
+        {
+          "date": "2026-09-19",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-20",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-21",
+          "value": 1,
+          "n": 1
+        },
+        {
+          "date": "2026-09-22",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-23",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-24",
+          "value": 1,
+          "n": 1
+        },
+        {
+          "date": "2026-09-25",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-26",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-27",
+          "value": 1,
+          "n": 1
+        },
+        {
+          "date": "2026-09-28",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-29",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-09-30",
+          "value": 1,
+          "n": 1
+        },
+        {
+          "date": "2026-10-01",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-10-02",
+          "value": 0,
+          "n": 1
+        },
+        {
+          "date": "2026-10-03",
+          "value": 1,
+          "n": 1
+        }
+      ],
+      "missed_doses": []
+    }
+  },
+  "audit": {
+    "rules_evaluated": [
+      {
+        "rule_id": "R01",
+        "outcome": "fired",
+        "detail": "1 active NSAID.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R02",
+        "outcome": "not_applicable",
+        "detail": "No active MRA.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R03",
+        "outcome": "not_applicable",
+        "detail": "No active MRA.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R04",
+        "outcome": "not_applicable",
+        "detail": "No active diltiazem or verapamil.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R05",
+        "outcome": "not_applicable",
+        "detail": "No active thiazolidinedione.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R06",
+        "outcome": "not_fired",
+        "detail": "No ACE inhibitor overlap.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R07",
+        "outcome": "not_fired",
+        "detail": "No potassium salt substitute logged in the D015 window.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R08",
+        "outcome": "not_fired",
+        "detail": "1-day gain -0.3 kg, 7-day gain 0 kg.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R09",
+        "outcome": "not_fired",
+        "detail": "0 low systolic reading(s).",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R10",
+        "outcome": "not_applicable",
+        "detail": "No active DPP-4 inhibitor linked to HF hospitalization.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R11",
+        "outcome": "not_fired",
+        "detail": "potassium 4.4 mEq/L.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R12",
+        "outcome": "not_fired",
+        "detail": "sodium 139 mEq/L.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R13",
+        "outcome": "not_fired",
+        "detail": "eGFR 3% below baseline.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R14",
+        "outcome": "not_applicable",
+        "detail": "No relevant active medicine.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R15",
+        "outcome": "not_evaluable",
+        "detail": "Threshold undefined: 'rise vs baseline (define % with clinician)'.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R16",
+        "outcome": "not_evaluable",
+        "detail": "Pending AMB-01: whether 140/90 means systolic AND diastolic or systolic OR diastolic.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R17",
+        "outcome": "not_fired",
+        "detail": "Resting HR 63 beats/min.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R18",
+        "outcome": "not_fired",
+        "detail": "Resting HR 63 beats/min.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R19",
+        "outcome": "not_fired",
+        "detail": "Screening below alert levels.",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R20",
+        "outcome": "not_fired",
+        "detail": "0 missed HF-medicine dose(s).",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R21",
+        "outcome": "not_fired",
+        "detail": "0 urgent item(s).",
+        "review_status": "draft_verify"
+      },
+      {
+        "rule_id": "R22",
+        "outcome": "not_fired",
+        "detail": "0 PHQ-9 with item 9 > 0 in the D016 window.",
+        "review_status": "draft_verify"
+      }
+    ],
+    "thresholds_used": [
+      {
+        "threshold_id": null,
+        "element_id": "D006",
+        "parameter": "missed HF-medicine doses in window",
+        "op": ">=",
+        "value": 2,
+        "low": null,
+        "high": null,
+        "unit": "doses",
+        "source": "default",
+        "reference": "R20; DEC-08; window 7 days"
+      },
+      {
+        "threshold_id": "T01",
+        "element_id": "D007",
+        "parameter": "potassium (R11)",
+        "op": "<",
+        "value": 3.5,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T01 via R11"
+      },
+      {
+        "threshold_id": "T01",
+        "element_id": "D007",
+        "parameter": "urgent potassium",
+        "op": ">=",
+        "value": 6,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T01 URGENT; DEC-06"
+      },
+      {
+        "threshold_id": "T01",
+        "element_id": "D007",
+        "parameter": "urgent potassium",
+        "op": "<",
+        "value": 3,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T01 URGENT; DEC-06"
+      },
+      {
+        "threshold_id": "T02",
+        "element_id": "D008",
+        "parameter": "sodium (R12)",
+        "op": "<",
+        "value": 130,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T02 via R12"
+      },
+      {
+        "threshold_id": "T02",
+        "element_id": "D008",
+        "parameter": "urgent sodium",
+        "op": "<",
+        "value": 125,
+        "low": null,
+        "high": null,
+        "unit": "mEq/L",
+        "source": "default",
+        "reference": "T02 URGENT; DEC-06"
+      },
+      {
+        "threshold_id": "T03",
+        "element_id": "D009",
+        "parameter": "eGFR baseline",
+        "op": "range",
+        "value": 66,
+        "low": null,
+        "high": null,
+        "unit": "mL/min/1.73m²",
+        "source": "care_plan",
+        "reference": "care plan p-harold-cp-egfr_baseline (2026-03-01)"
+      },
+      {
+        "threshold_id": "T03",
+        "element_id": "D009",
+        "parameter": "eGFR drop from baseline",
+        "op": ">=",
+        "value": 30,
+        "low": null,
+        "high": null,
+        "unit": "%",
+        "source": "default",
+        "reference": "T03 / R13 (baseline from care plan)"
+      },
+      {
+        "threshold_id": "T05",
+        "element_id": "D011",
+        "parameter": "1-day weight gain",
+        "op": ">=",
+        "value": 0.9,
+        "low": null,
+        "high": null,
+        "unit": "kg",
+        "source": "default",
+        "reference": "T05 Alert HIGH; DEC-04"
+      },
+      {
+        "threshold_id": "T05",
+        "element_id": "D011",
+        "parameter": "7-day weight gain from lowest value",
+        "op": ">=",
+        "value": 2.3,
+        "low": null,
+        "high": null,
+        "unit": "kg",
+        "source": "default",
+        "reference": "T05 Alert HIGH; DEC-04"
+      },
+      {
+        "threshold_id": "T06",
+        "element_id": "D012",
+        "parameter": "low systolic (R09)",
+        "op": "<",
+        "value": 90,
+        "low": null,
+        "high": null,
+        "unit": "mmHg",
+        "source": "default",
+        "reference": "R09; DEC-08"
+      },
+      {
+        "threshold_id": "T06",
+        "element_id": "D012",
+        "parameter": "urgent BP 180/120 (or; provisional AMB-02)",
+        "op": ">=",
+        "value": 180,
+        "low": null,
+        "high": 120,
+        "unit": "mmHg",
+        "source": "default",
+        "reference": "T06 URGENT; AMB-02"
+      },
+      {
+        "threshold_id": "T06",
+        "element_id": "D012",
+        "parameter": "urgent systolic with symptoms",
+        "op": "<",
+        "value": 80,
+        "low": null,
+        "high": null,
+        "unit": "mmHg",
+        "source": "default",
+        "reference": "T06 URGENT; DEC-07"
+      },
+      {
+        "threshold_id": "T07",
+        "element_id": "D013",
+        "parameter": "resting HR alert high",
+        "op": ">",
+        "value": 100,
+        "low": null,
+        "high": null,
+        "unit": "beats/min",
+        "source": "default",
+        "reference": "T07"
+      },
+      {
+        "threshold_id": "T07",
+        "element_id": "D013",
+        "parameter": "resting HR alert low",
+        "op": "<",
+        "value": 50,
+        "low": null,
+        "high": null,
+        "unit": "beats/min",
+        "source": "default",
+        "reference": "T07"
+      },
+      {
+        "threshold_id": "T07",
+        "element_id": "D013",
+        "parameter": "urgent resting HR with symptoms",
+        "op": "range",
+        "value": null,
+        "low": 40,
+        "high": 120,
+        "unit": "beats/min",
+        "source": "default",
+        "reference": "T07 URGENT; DEC-07"
+      },
+      {
+        "threshold_id": "T08",
+        "element_id": "D016",
+        "parameter": "PHQ-9 item 9",
+        "op": ">",
+        "value": 0,
+        "low": null,
+        "high": null,
+        "unit": "points",
+        "source": "default",
+        "reference": "T08 URGENT"
+      },
+      {
+        "threshold_id": "T08",
+        "element_id": "D016",
+        "parameter": "PHQ-9 rise vs previous",
+        "op": ">=",
+        "value": 5,
+        "low": null,
+        "high": null,
+        "unit": "points",
+        "source": "default",
+        "reference": "T08 Alert HIGH"
+      },
+      {
+        "threshold_id": "T08",
+        "element_id": "D016",
+        "parameter": "PHQ-9 score",
+        "op": ">=",
+        "value": 10,
+        "low": null,
+        "high": null,
+        "unit": "points",
+        "source": "default",
+        "reference": "T08 Alert HIGH"
+      },
+      {
+        "threshold_id": "T09",
+        "element_id": "D014",
+        "parameter": "red-flag symptom",
+        "op": "range",
+        "value": null,
+        "low": null,
+        "high": null,
+        "unit": "n/a",
+        "source": "default",
+        "reference": "T09 URGENT; DEC-07"
+      },
+      {
+        "threshold_id": "T11",
+        "element_id": "D019",
+        "parameter": "urgent inr",
+        "op": ">",
+        "value": 4.5,
+        "low": null,
+        "high": null,
+        "unit": "ratio",
+        "source": "default",
+        "reference": "T11 URGENT; DEC-06"
+      }
+    ],
+    "knowledge_rows_used": [
+      {
+        "kind": "card",
+        "id": "C02",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "decision",
+        "id": "DEC-02",
+        "review_status": "clinical_lead_decision"
+      },
+      {
+        "kind": "element",
+        "id": "D001",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D002",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D003",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "element",
+        "id": "D005",
+        "review_status": "in_review"
+      },
+      {
+        "kind": "override",
+        "id": "drug_groups",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "override",
+        "id": "rule_elements",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R01",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R02",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R03",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R04",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R05",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R06",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R07",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R08",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R09",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R10",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R11",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R12",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R13",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R14",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R17",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R18",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R19",
+        "review_status": "draft_verify"
+      },
+      {
+        "kind": "rule",
+        "id": "R20",
+        "review_status": "draft_verify"
+      }
+    ],
+    "warnings": [],
+    "not_implemented": [
+      "precursors (phase 5)",
+      "contributing_factors (phase 6)",
+      "risk_scores (phase 7; tables to be supplied by the clinical lead, DEC-10)",
+      "ranked_findings[].priority (phase 4; findings are ordered by severity, then recency)"
+    ]
+  }
+}

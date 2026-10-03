@@ -1,0 +1,1564 @@
+{
+  "$id": "parthia/analytics/holistic_bundle.schema.json",
+  "title": "HolisticAnalysisBundle",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "patient_id": {
+      "type": "string"
+    },
+    "as_of": {
+      "type": "string"
+    },
+    "module_version": {
+      "type": "string"
+    },
+    "knowledge_version": {
+      "type": "string"
+    },
+    "overrides_version": {
+      "type": "string"
+    },
+    "knowledge_mode": {
+      "type": "string",
+      "enum": [
+        "development",
+        "clinical"
+      ]
+    },
+    "phenotype": {
+      "type": "object",
+      "properties": {
+        "element_id": {
+          "type": "string",
+          "const": "D003"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "HFrEF",
+                "HFmrEF",
+                "HFpEF",
+                "HFimpEF"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "lvef": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "element_id": {
+                  "type": "string"
+                },
+                "item_id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "date": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "conversion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "element_id",
+                "item_id",
+                "label",
+                "value",
+                "unit",
+                "date",
+                "source",
+                "conversion"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detail": {
+          "type": "string"
+        },
+        "decision_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "element_id",
+        "value",
+        "lvef",
+        "detail",
+        "decision_ids"
+      ],
+      "additionalProperties": false
+    },
+    "urgent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "urgent_id": {
+            "type": "string"
+          },
+          "pathway": {
+            "type": "string",
+            "enum": [
+              "red_flag_symptom",
+              "urgent_vital",
+              "self_harm",
+              "urgent_lab"
+            ]
+          },
+          "rule_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "patient_message": {
+            "type": "string"
+          },
+          "clinician_note": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "element_id": {
+                  "type": "string"
+                },
+                "item_id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "date": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "conversion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "element_id",
+                "item_id",
+                "label",
+                "value",
+                "unit",
+                "date",
+                "source",
+                "conversion"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "element_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rule_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "threshold_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "card_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "decision_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "thresholds_used": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "threshold_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "element_id": {
+                  "type": "string"
+                },
+                "parameter": {
+                  "type": "string"
+                },
+                "op": {
+                  "type": "string",
+                  "enum": [
+                    "<",
+                    "<=",
+                    ">",
+                    ">=",
+                    "range"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "low": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "high": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "care_plan",
+                    "lab_reference_range",
+                    "default"
+                  ]
+                },
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "threshold_id",
+                "element_id",
+                "parameter",
+                "op",
+                "value",
+                "low",
+                "high",
+                "unit",
+                "source",
+                "reference"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "knowledge": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "rule",
+                    "threshold",
+                    "card",
+                    "element",
+                    "decision",
+                    "override"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "review_status": {
+                  "type": "string",
+                  "enum": [
+                    "draft_verify",
+                    "in_review",
+                    "approved",
+                    "retired",
+                    "clinical_lead_decision"
+                  ]
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "review_status"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "triggered_at": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "medication_safety",
+              "fluid_congestion",
+              "heart_kidney_labs",
+              "bp_heart_rate",
+              "mental_health",
+              "adherence",
+              "nutrition",
+              "function_qol"
+            ]
+          }
+        },
+        "required": [
+          "urgent_id",
+          "pathway",
+          "rule_id",
+          "title",
+          "patient_message",
+          "clinician_note",
+          "evidence",
+          "element_ids",
+          "rule_ids",
+          "source_ids",
+          "threshold_ids",
+          "card_ids",
+          "decision_ids",
+          "thresholds_used",
+          "knowledge",
+          "triggered_at",
+          "domain"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "domain_profile": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "enum": [
+              "medication_safety",
+              "fluid_congestion",
+              "heart_kidney_labs",
+              "bp_heart_rate",
+              "mental_health",
+              "adherence",
+              "nutrition",
+              "function_qol"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "good",
+              "watch",
+              "attention",
+              "insufficient_data"
+            ]
+          },
+          "trend": {
+            "type": "string",
+            "enum": [
+              "improving",
+              "stable",
+              "worsening",
+              "unknown"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "trend_detail": {
+            "type": "string"
+          },
+          "finding_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "urgent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "missing_element_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "element_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rule_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "domain",
+          "label",
+          "status",
+          "trend",
+          "reason",
+          "trend_detail",
+          "finding_ids",
+          "urgent_ids",
+          "missing_element_ids",
+          "element_ids",
+          "rule_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ranked_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "finding_id": {
+            "type": "string"
+          },
+          "rule_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "urgent",
+              "high",
+              "moderate",
+              "low"
+            ]
+          },
+          "base_severity": {
+            "type": "string",
+            "enum": [
+              "urgent",
+              "high",
+              "moderate",
+              "low"
+            ]
+          },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "medication_safety",
+              "fluid_congestion",
+              "heart_kidney_labs",
+              "bp_heart_rate",
+              "mental_health",
+              "adherence",
+              "nutrition",
+              "function_qol"
+            ]
+          },
+          "kb_domain": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "patient_question": {
+            "type": "string"
+          },
+          "clinician_note": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "element_id": {
+                  "type": "string"
+                },
+                "item_id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "date": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "conversion": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "element_id",
+                "item_id",
+                "label",
+                "value",
+                "unit",
+                "date",
+                "source",
+                "conversion"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "element_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rule_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "threshold_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "card_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "decision_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "thresholds_used": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "threshold_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "element_id": {
+                  "type": "string"
+                },
+                "parameter": {
+                  "type": "string"
+                },
+                "op": {
+                  "type": "string",
+                  "enum": [
+                    "<",
+                    "<=",
+                    ">",
+                    ">=",
+                    "range"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "low": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "high": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "care_plan",
+                    "lab_reference_range",
+                    "default"
+                  ]
+                },
+                "reference": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "threshold_id",
+                "element_id",
+                "parameter",
+                "op",
+                "value",
+                "low",
+                "high",
+                "unit",
+                "source",
+                "reference"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "knowledge": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "rule",
+                    "threshold",
+                    "card",
+                    "element",
+                    "decision",
+                    "override"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "review_status": {
+                  "type": "string",
+                  "enum": [
+                    "draft_verify",
+                    "in_review",
+                    "approved",
+                    "retired",
+                    "clinical_lead_decision"
+                  ]
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "review_status"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "triggered_at": {
+            "type": "string"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number"
+                  },
+                  "components": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "weight": {
+                          "type": "number"
+                        },
+                        "value": {
+                          "type": "number"
+                        },
+                        "contribution": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "weight",
+                        "value",
+                        "contribution"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "score",
+                  "components"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "finding_id",
+          "rule_id",
+          "title",
+          "category",
+          "severity",
+          "base_severity",
+          "domain",
+          "kb_domain",
+          "summary",
+          "patient_question",
+          "clinician_note",
+          "evidence",
+          "element_ids",
+          "rule_ids",
+          "source_ids",
+          "threshold_ids",
+          "card_ids",
+          "decision_ids",
+          "thresholds_used",
+          "knowledge",
+          "triggered_at",
+          "priority"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "precursors": {
+      "type": "array",
+      "items": {}
+    },
+    "contributing_factors": {
+      "type": "array",
+      "items": {}
+    },
+    "risk_scores": {
+      "type": "array",
+      "items": {}
+    },
+    "missing_data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "element_id": {
+            "type": "string"
+          },
+          "element_name": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "no_data",
+              "stale",
+              "post_change_monitoring_due",
+              "post_change_monitoring_overdue",
+              "baseline_not_set"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "needed_by_rule_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "needed_by_domains": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "medication_safety",
+                "fluid_congestion",
+                "heart_kidney_labs",
+                "bp_heart_rate",
+                "mental_health",
+                "adherence",
+                "nutrition",
+                "function_qol"
+              ]
+            }
+          },
+          "last_value": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "element_id": {
+                    "type": "string"
+                  },
+                  "item_id": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": [
+                      "number",
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "unit": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "conversion": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "element_id",
+                  "item_id",
+                  "label",
+                  "value",
+                  "unit",
+                  "date",
+                  "source",
+                  "conversion"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "suggested_patient_question": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "knowledge": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "rule",
+                    "threshold",
+                    "card",
+                    "element",
+                    "decision",
+                    "override"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "review_status": {
+                  "type": "string",
+                  "enum": [
+                    "draft_verify",
+                    "in_review",
+                    "approved",
+                    "retired",
+                    "clinical_lead_decision"
+                  ]
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "review_status"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "element_id",
+          "element_name",
+          "reason",
+          "detail",
+          "needed_by_rule_ids",
+          "needed_by_domains",
+          "last_value",
+          "suggested_patient_question",
+          "knowledge"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "needs_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "element_id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "unconfirmed",
+              "pending_reconciliation",
+              "conflict",
+              "unknown_element",
+              "element_mismatch",
+              "unit_not_convertible",
+              "invalid_value"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "possible_red_flag": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item_id",
+          "kind",
+          "element_id",
+          "label",
+          "reason",
+          "detail",
+          "source",
+          "possible_red_flag"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string"
+              },
+              "at": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "medication_start",
+                  "medication_change",
+                  "medication_stop",
+                  "lab",
+                  "weight",
+                  "blood_pressure",
+                  "heart_rate",
+                  "mood",
+                  "diet",
+                  "symptom",
+                  "missed_dose",
+                  "er_visit",
+                  "hospital_admission",
+                  "hospital_discharge",
+                  "fall",
+                  "care_plan"
+                ]
+              },
+              "element_id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "source": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "used_in_analysis": {
+                "type": "boolean"
+              },
+              "severity": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "urgent",
+                      "high",
+                      "moderate",
+                      "low"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rule_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "event_id",
+              "at",
+              "category",
+              "element_id",
+              "label",
+              "value",
+              "unit",
+              "source",
+              "confirmed",
+              "used_in_analysis",
+              "severity",
+              "rule_ids"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "daily_series": {
+          "type": "object",
+          "properties": {
+            "weight_kg": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "date",
+                  "value",
+                  "n"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "systolic_mmhg": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "date",
+                  "value",
+                  "n"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "diastolic_mmhg": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "date",
+                  "value",
+                  "n"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "heart_rate_bpm": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "date",
+                  "value",
+                  "n"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "phq9_score": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "date",
+                  "value",
+                  "n"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "diet_risk_tags": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "date",
+                  "value",
+                  "n"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "missed_doses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "date",
+                  "value",
+                  "n"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "weight_kg",
+            "systolic_mmhg",
+            "diastolic_mmhg",
+            "heart_rate_bpm",
+            "phq9_score",
+            "diet_risk_tags",
+            "missed_doses"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "events",
+        "daily_series"
+      ],
+      "additionalProperties": false
+    },
+    "audit": {
+      "type": "object",
+      "properties": {
+        "rules_evaluated": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "rule_id": {
+                "type": "string"
+              },
+              "outcome": {
+                "type": "string",
+                "enum": [
+                  "fired",
+                  "not_fired",
+                  "not_applicable",
+                  "missing_data",
+                  "not_evaluable",
+                  "excluded_by_mode"
+                ]
+              },
+              "detail": {
+                "type": "string"
+              },
+              "review_status": {
+                "type": "string",
+                "enum": [
+                  "draft_verify",
+                  "in_review",
+                  "approved",
+                  "retired",
+                  "clinical_lead_decision"
+                ]
+              }
+            },
+            "required": [
+              "rule_id",
+              "outcome",
+              "detail",
+              "review_status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "thresholds_used": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "threshold_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "element_id": {
+                "type": "string"
+              },
+              "parameter": {
+                "type": "string"
+              },
+              "op": {
+                "type": "string",
+                "enum": [
+                  "<",
+                  "<=",
+                  ">",
+                  ">=",
+                  "range"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "low": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "high": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string",
+                "enum": [
+                  "care_plan",
+                  "lab_reference_range",
+                  "default"
+                ]
+              },
+              "reference": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "threshold_id",
+              "element_id",
+              "parameter",
+              "op",
+              "value",
+              "low",
+              "high",
+              "unit",
+              "source",
+              "reference"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "knowledge_rows_used": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "rule",
+                  "threshold",
+                  "card",
+                  "element",
+                  "decision",
+                  "override"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "review_status": {
+                "type": "string",
+                "enum": [
+                  "draft_verify",
+                  "in_review",
+                  "approved",
+                  "retired",
+                  "clinical_lead_decision"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "review_status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "not_implemented": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "rules_evaluated",
+        "thresholds_used",
+        "knowledge_rows_used",
+        "warnings",
+        "not_implemented"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "contract_version",
+    "patient_id",
+    "as_of",
+    "module_version",
+    "knowledge_version",
+    "overrides_version",
+    "knowledge_mode",
+    "phenotype",
+    "urgent",
+    "domain_profile",
+    "ranked_findings",
+    "precursors",
+    "contributing_factors",
+    "risk_scores",
+    "missing_data",
+    "needs_review",
+    "timeline",
+    "audit"
+  ],
+  "additionalProperties": false
+}
