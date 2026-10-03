@@ -6,41 +6,45 @@
  */
 import sharp from "sharp";
 import { mkdir } from "node:fs/promises";
-
 const TEAL = "#0E5C56";
 const GOLD = "#C9962B";
 const CREAM = "#F7F4EE";
-
+/**
+ * The mark, drawn in a 64x64 space so it matches src/components/Wordmark.tsx:
+ * three record lines merge into one line that ends in a node (the reconciled
+ * list), with one small accent dot (a finding surfaced for a clinician).
+ */
+function mark({ line, accent }) {
+  return `
+  <g fill="none" stroke="${line}" stroke-width="3" stroke-linecap="round">
+    <path d="M12 17 C24.5 17 25.5 32 36.5 32"/>
+    <path d="M12 32 H36.5"/>
+    <path d="M12 47 C24.5 47 25.5 32 36.5 32"/>
+  </g>
+  <circle cx="44.5" cy="32" r="8" fill="${line}"/>
+  ${accent ? `<circle cx="44.5" cy="32" r="3.6" fill="${accent}"/>` : ""}`;
+}
 function svg({ size, maskable }) {
-  const pad = maskable ? size * 0.18 : size * 0.1;
+  // Maskable icons are cropped to a circle by the launcher, so the artwork is
+  // scaled down to sit inside the safe zone and the tile is left square.
   const r = maskable ? 0 : size * 0.22;
-  const inner = size - pad * 2;
-  const cx = size / 2;
-  const cy = size / 2;
+  const scale = (size / 64) * (maskable ? 0.76 : 1);
+  const offset = (size - 64 * scale) / 2;
   return `
 <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
   <rect width="${size}" height="${size}" rx="${r}" fill="${TEAL}"/>
-  <!-- leaf / shield motif -->
-  <path d="M ${cx} ${cy - inner * 0.34}
-           C ${cx + inner * 0.34} ${cy - inner * 0.34}, ${cx + inner * 0.34} ${cy + inner * 0.10}, ${cx} ${cy + inner * 0.36}
-           C ${cx - inner * 0.34} ${cy + inner * 0.10}, ${cx - inner * 0.34} ${cy - inner * 0.34}, ${cx} ${cy - inner * 0.34} Z"
-        fill="${CREAM}" opacity="0.96"/>
-  <path d="M ${cx} ${cy - inner * 0.22} L ${cx} ${cy + inner * 0.26}" stroke="${TEAL}" stroke-width="${inner * 0.045}" stroke-linecap="round"/>
-  <path d="M ${cx} ${cy - inner * 0.02} C ${cx + inner * 0.08} ${cy - inner * 0.10}, ${cx + inner * 0.14} ${cy - inner * 0.12}, ${cx + inner * 0.18} ${cy - inner * 0.16}" stroke="${TEAL}" stroke-width="${inner * 0.04}" stroke-linecap="round" fill="none"/>
-  <path d="M ${cx} ${cy + inner * 0.10} C ${cx - inner * 0.08} ${cy + inner * 0.02}, ${cx - inner * 0.14} ${cy}, ${cx - inner * 0.18} ${cy - inner * 0.04}" stroke="${TEAL}" stroke-width="${inner * 0.04}" stroke-linecap="round" fill="none"/>
-  <circle cx="${cx + inner * 0.30}" cy="${cy - inner * 0.30}" r="${inner * 0.07}" fill="${GOLD}"/>
+  <g transform="translate(${offset} ${offset}) scale(${scale})">${mark({ line: CREAM, accent: GOLD })}</g>
 </svg>`;
 }
-
 function badge(size) {
+  // Notification badges are rendered as a monochrome mask, so no accent dot.
+  const scale = (size / 64) * 0.92;
+  const offset = (size - 64 * scale) / 2;
   return `
 <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <path d="M ${size / 2} ${size * 0.12}
-           C ${size * 0.86} ${size * 0.12}, ${size * 0.86} ${size * 0.58}, ${size / 2} ${size * 0.9}
-           C ${size * 0.14} ${size * 0.58}, ${size * 0.14} ${size * 0.12}, ${size / 2} ${size * 0.12} Z" fill="#ffffff"/>
+  <g transform="translate(${offset} ${offset}) scale(${scale})">${mark({ line: "#ffffff", accent: null })}</g>
 </svg>`;
 }
-
 await mkdir("public/icons", { recursive: true });
 const jobs = [
   ["public/icons/icon-192.png", svg({ size: 192, maskable: false })],

@@ -1,4 +1,4 @@
-import { LeafMark } from "./Wordmark";
+import { Mark } from "./Wordmark";
 
 /**
  * iOS has no install prompt, so the "Add to Home Screen" moment has to be
@@ -44,7 +44,7 @@ export function IOSInstallGuide() {
             <span className="rounded-md bg-[#0a84ff]/10 px-1.5 font-semibold text-[#0a84ff] ring-2 ring-[#0a84ff]/60">Add</span>
           </div>
           <div className="mt-3 flex items-center gap-3 rounded-lg bg-white p-2.5">
-            <LeafMark className="h-11 w-11" />
+            <Mark className="h-11 w-11" />
             <div>
               <p className="text-[15px] font-medium text-[#1c1c1e]">Parthia</p>
               <p className="text-xs text-[#8e8e93]">parthia.health</p>
