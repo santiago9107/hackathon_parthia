@@ -91,6 +91,7 @@ export function AskParthiaPanel({
           <h2 id={`${id}-heading`} ref={headingRef} tabIndex={-1} className="font-serif text-base font-semibold text-navy outline-none">
             Ask Parthia
           </h2>
+          <p className="text-xs font-semibold text-brand-700">Chat with Nova, your Parthia agent</p>
           <p className="text-xs font-medium text-ink-soft">On this page: {context.label}</p>
           <p className="mt-1 text-xs leading-snug text-ink-muted">{context.capability}</p>
         </div>
