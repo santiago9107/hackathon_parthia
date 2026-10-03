@@ -1,0 +1,14 @@
+{
+  "$comment": "Engine settings. Non-clinical defaults unless marked DRAFT (clinical panel to set).",
+  "knowledge_mode": "development",
+  "urgent": {
+    "$comment": "DRAFT (AMB-05): an urgent BP/HR reading must be this recent to trigger the urgent pathway.",
+    "vital_lookback_hours": 24,
+    "pathway_order": ["self_harm", "red_flag_symptom", "urgent_vital", "urgent_lab"]
+  },
+  "timeline": {
+    "$comment": "Daily series: weight uses the first (morning) reading of the day; BP and HR use the daily mean.",
+    "weight_daily": "first",
+    "vitals_daily": "mean"
+  }
+}

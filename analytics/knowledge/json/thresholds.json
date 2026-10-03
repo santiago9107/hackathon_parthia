@@ -1,0 +1,538 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "Thresholds",
+  "notes": [
+    "How agents choose which threshold applies (highest priority first):",
+    "1. Patient-specific target set by the clinician (e.g. dry weight, BP goal, INR range).",
+    "2. Reference range reported by the lab with the result (labs differ).",
+    "3. Default values in this sheet.",
+    "All values are DRAFT and must be verified by the clinical lead against the listed sources before approval."
+  ],
+  "rows": [
+    {
+      "threshold_id": "T01",
+      "element_id": "D007",
+      "measure": "Potassium",
+      "unit": "mEq/L",
+      "reference_range": "3.5–5.0 (use the lab's own range if reported)",
+      "hf_target": "Keep below 5.0 when starting/continuing MRA",
+      "alert_low": "< 3.5 (higher concern with digoxin or loop diuretics)",
+      "alert_high": "≥ 5.5 on MRA/RAAS inhibitors (R02)",
+      "urgent": "≥ 6.0 or < 3.0",
+      "context": "Check 1–2 weeks after starting or changing MRA/RAAS inhibitor",
+      "patient_override": "No",
+      "source_ids_text": "S01; S09",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S09"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 3.5
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "alert_high_parsed": {
+        "comparisons": [
+          {
+            "op": ">=",
+            "value": 5.5
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": ">=",
+            "value": 6.0
+          },
+          {
+            "op": "<",
+            "value": 3.0
+          }
+        ],
+        "parse_status": "exact"
+      }
+    },
+    {
+      "threshold_id": "T02",
+      "element_id": "D008",
+      "measure": "Sodium",
+      "unit": "mEq/L",
+      "reference_range": "135–145 (lab range)",
+      "hf_target": "No specific target",
+      "alert_low": "< 130",
+      "alert_high": "> 145",
+      "urgent": "< 125",
+      "context": "Low sodium often with diuretics; trend matters",
+      "patient_override": "No",
+      "source_ids_text": "S01",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 130.0
+          }
+        ],
+        "parse_status": "exact"
+      },
+      "alert_high_parsed": {
+        "comparisons": [
+          {
+            "op": ">",
+            "value": 145.0
+          }
+        ],
+        "parse_status": "exact"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 125.0
+          }
+        ],
+        "parse_status": "exact"
+      }
+    },
+    {
+      "threshold_id": "T03",
+      "element_id": "D009",
+      "measure": "eGFR",
+      "unit": "mL/min/1.73m²",
+      "reference_range": "≥ 60 normal kidney function",
+      "hf_target": "Track trend from patient baseline",
+      "alert_low": "≤ 30 (MRA eligibility; metformin contraindicated < 30)",
+      "alert_high": "n/a",
+      "urgent": "Drop ≥ 30% from baseline within weeks",
+      "context": "Some creatinine rise is expected after starting RAAS inhibitors/SGLT2i; clinician interprets",
+      "patient_override": "Baseline set by clinician",
+      "source_ids_text": "S01; S09",
+      "review_status_text": "Draft – verify",
+      "notes": "Use creatinine (D009) rise as companion check",
+      "source_ids": [
+        "S01",
+        "S09"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [
+          {
+            "op": "<=",
+            "value": 30.0
+          },
+          {
+            "op": "<",
+            "value": 30.0
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "alert_high_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": ">=",
+            "value": 30.0
+          }
+        ],
+        "parse_status": "partial"
+      }
+    },
+    {
+      "threshold_id": "T04",
+      "element_id": "D010",
+      "measure": "BNP / NT-proBNP",
+      "unit": "pg/mL",
+      "reference_range": "Diagnostic cut-offs (ambulatory): BNP ≥ 35, NT-proBNP ≥ 125",
+      "hf_target": "Lower is better; compare with patient's own baseline",
+      "alert_low": "n/a",
+      "alert_high": "Rising vs patient baseline",
+      "urgent": "n/a",
+      "context": "Not used alone; NT-proBNP higher with age, kidney disease; lower with obesity",
+      "patient_override": "Baseline set by clinician",
+      "source_ids_text": "S01; S06",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S06"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      },
+      "alert_high_parsed": {
+        "comparisons": [],
+        "parse_status": "none"
+      },
+      "urgent_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      }
+    },
+    {
+      "threshold_id": "T05",
+      "element_id": "D011",
+      "measure": "Body weight change",
+      "unit": "kg",
+      "reference_range": "n/a",
+      "hf_target": "Stay near 'dry weight' set by clinician",
+      "alert_low": "n/a",
+      "alert_high": "+1 kg in 1 day or +2.3 kg in 1 week (≈ 2 lb / 5 lb)",
+      "urgent": "Rapid gain with severe breathlessness",
+      "context": "Thresholds are common education values; care team may individualize",
+      "patient_override": "Yes (dry weight, limits)",
+      "source_ids_text": "S12; S01",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S12"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      },
+      "alert_high_parsed": {
+        "comparisons": [],
+        "parse_status": "none"
+      },
+      "urgent_parsed": {
+        "comparisons": [],
+        "parse_status": "none"
+      }
+    },
+    {
+      "threshold_id": "T06",
+      "element_id": "D012",
+      "measure": "Blood pressure",
+      "unit": "mmHg",
+      "reference_range": "Normal < 120/80",
+      "hf_target": "< 130/80 if hypertension (individualized); priority is tolerating HF medicines",
+      "alert_low": "Systolic < 90, or < 100 with dizziness",
+      "alert_high": "≥ 140/90 on repeated readings",
+      "urgent": "Systolic < 80 with symptoms, or ≥ 180/120",
+      "context": "Low BP plus dizziness on several BP-lowering drugs → R09",
+      "patient_override": "Yes (target set by clinician)",
+      "source_ids_text": "S01; hypertension guideline (add to register)",
+      "review_status_text": "Draft – verify",
+      "notes": "Add current AHA/ACC hypertension guideline to Source register",
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 90.0
+          },
+          {
+            "op": "<",
+            "value": 100.0
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "alert_high_parsed": {
+        "comparisons": [
+          {
+            "op": ">=",
+            "value": 140.0
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 80.0
+          },
+          {
+            "op": ">=",
+            "value": 180.0
+          }
+        ],
+        "parse_status": "partial"
+      }
+    },
+    {
+      "threshold_id": "T07",
+      "element_id": "D013",
+      "measure": "Resting heart rate",
+      "unit": "beats/min",
+      "reference_range": "60–100",
+      "hf_target": "Individualized; beta-blocker lowers rate",
+      "alert_low": "< 50 (esp. on beta-blocker, digoxin, ivabradine)",
+      "alert_high": "> 100 at rest",
+      "urgent": "< 40 or > 120 with symptoms",
+      "context": "Irregular rate may suggest atrial fibrillation",
+      "patient_override": "Yes",
+      "source_ids_text": "S01; S02",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S02"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 50.0
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "alert_high_parsed": {
+        "comparisons": [
+          {
+            "op": ">",
+            "value": 100.0
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 40.0
+          },
+          {
+            "op": ">",
+            "value": 120.0
+          }
+        ],
+        "parse_status": "partial"
+      }
+    },
+    {
+      "threshold_id": "T08",
+      "element_id": "D016",
+      "measure": "PHQ-9 score",
+      "unit": "points",
+      "reference_range": "0–4 minimal; 5–9 mild; 10–14 moderate; 15–19 moderately severe; 20–27 severe",
+      "hf_target": "Lower is better",
+      "alert_low": "n/a",
+      "alert_high": "≥ 10, or rise ≥ 5 points",
+      "urgent": "Item 9 > 0 (any thoughts of self-harm)",
+      "context": "PHQ-2 ≥ 3 → complete PHQ-9",
+      "patient_override": "No",
+      "source_ids_text": "S15",
+      "review_status_text": "Draft – verify",
+      "notes": "Item 9 always triggers urgent pathway",
+      "source_ids": [
+        "S15"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      },
+      "alert_high_parsed": {
+        "comparisons": [
+          {
+            "op": ">=",
+            "value": 10.0
+          },
+          {
+            "op": ">=",
+            "value": 5.0
+          }
+        ],
+        "parse_status": "partial"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": ">",
+            "value": 0.0
+          }
+        ],
+        "parse_status": "partial"
+      }
+    },
+    {
+      "threshold_id": "T09",
+      "element_id": "D014",
+      "measure": "Symptoms",
+      "unit": "n/a",
+      "reference_range": "n/a",
+      "hf_target": "n/a",
+      "alert_low": "n/a",
+      "alert_high": "New or worse breathlessness, orthopnea, swelling, dizziness",
+      "urgent": "Chest pain, fainting, severe breathlessness at rest, confusion",
+      "context": "Red flags bypass analysis → urgent message",
+      "patient_override": "No",
+      "source_ids_text": "S12; S01",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01",
+        "S12"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      },
+      "alert_high_parsed": {
+        "comparisons": [],
+        "parse_status": "none"
+      },
+      "urgent_parsed": {
+        "comparisons": [],
+        "parse_status": "none"
+      }
+    },
+    {
+      "threshold_id": "T10",
+      "element_id": "D018",
+      "measure": "Magnesium",
+      "unit": "mg/dL",
+      "reference_range": "1.7–2.2 (lab range)",
+      "hf_target": "Within range (diuretics, digoxin, arrhythmia risk)",
+      "alert_low": "< 1.7",
+      "alert_high": "> 2.6",
+      "urgent": "< 1.2",
+      "context": "Later priority",
+      "patient_override": "No",
+      "source_ids_text": "S01",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 1.7
+          }
+        ],
+        "parse_status": "exact"
+      },
+      "alert_high_parsed": {
+        "comparisons": [
+          {
+            "op": ">",
+            "value": 2.6
+          }
+        ],
+        "parse_status": "exact"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 1.2
+          }
+        ],
+        "parse_status": "exact"
+      }
+    },
+    {
+      "threshold_id": "T11",
+      "element_id": "D019",
+      "measure": "INR",
+      "unit": "ratio",
+      "reference_range": "~1.0 without anticoagulant",
+      "hf_target": "2.0–3.0 for most AF patients on warfarin",
+      "alert_low": "< 2.0",
+      "alert_high": "> 3.0",
+      "urgent": "> 4.5 or any bleeding",
+      "context": "Only if on warfarin",
+      "patient_override": "Yes (target set by clinician)",
+      "source_ids_text": "S09",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S09"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [
+          {
+            "op": "<",
+            "value": 2.0
+          }
+        ],
+        "parse_status": "exact"
+      },
+      "alert_high_parsed": {
+        "comparisons": [
+          {
+            "op": ">",
+            "value": 3.0
+          }
+        ],
+        "parse_status": "exact"
+      },
+      "urgent_parsed": {
+        "comparisons": [
+          {
+            "op": ">",
+            "value": 4.5
+          }
+        ],
+        "parse_status": "partial"
+      }
+    },
+    {
+      "threshold_id": "T12",
+      "element_id": "D020",
+      "measure": "HbA1c",
+      "unit": "%",
+      "reference_range": "< 5.7",
+      "hf_target": "Individualized; often < 7–8% in older adults",
+      "alert_low": "n/a",
+      "alert_high": "Above individual target",
+      "urgent": "n/a",
+      "context": "Later priority",
+      "patient_override": "Yes",
+      "source_ids_text": "S04",
+      "review_status_text": "Draft – verify",
+      "notes": null,
+      "source_ids": [
+        "S04"
+      ],
+      "review_status": "draft_verify",
+      "alert_low_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      },
+      "alert_high_parsed": {
+        "comparisons": [],
+        "parse_status": "none"
+      },
+      "urgent_parsed": {
+        "comparisons": [],
+        "parse_status": "not_applicable"
+      }
+    }
+  ]
+}

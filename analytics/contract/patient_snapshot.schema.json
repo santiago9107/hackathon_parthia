@@ -1,0 +1,995 @@
+{
+  "$id": "parthia/analytics/patient_snapshot.schema.json",
+  "title": "PatientSnapshot",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "patient_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "display_name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "sex": {
+          "type": "string",
+          "enum": [
+            "female",
+            "male",
+            "other",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "age",
+        "sex"
+      ],
+      "additionalProperties": false
+    },
+    "conditions": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code_system": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "onset_date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "key",
+          "name",
+          "active"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "medications": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "name": {
+            "type": "string"
+          },
+          "ingredients": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rxnorm": {
+            "type": "string"
+          },
+          "dose": {
+            "type": "string"
+          },
+          "frequency": {
+            "type": "string"
+          },
+          "otc": {
+            "default": false,
+            "type": "boolean"
+          },
+          "prescriber": {
+            "type": "string"
+          },
+          "events": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "start",
+                    "change",
+                    "stop"
+                  ]
+                },
+                "date": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+                },
+                "detail": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "date"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "name",
+          "ingredients",
+          "events"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "labs": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "analyte": {
+            "type": "string",
+            "enum": [
+              "potassium",
+              "sodium",
+              "creatinine",
+              "egfr",
+              "bnp",
+              "ntprobnp",
+              "magnesium",
+              "inr",
+              "hba1c",
+              "lvef"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "reference_range": {
+            "type": "object",
+            "properties": {
+              "low": {
+                "type": "number"
+              },
+              "high": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "analyte",
+          "value",
+          "unit",
+          "date"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "vitals": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "weight",
+              "blood_pressure",
+              "heart_rate"
+            ]
+          },
+          "datetime": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "value": {
+            "type": "number"
+          },
+          "systolic": {
+            "type": "number"
+          },
+          "diastolic": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "irregular": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "kind",
+          "datetime",
+          "unit"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "symptoms": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "datetime": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "reported": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "datetime",
+          "reported"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "diet_logs": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "date",
+          "tags"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "mood": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "instrument": {
+            "type": "string",
+            "enum": [
+              "PHQ-2",
+              "PHQ-9"
+            ]
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "item9": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "date",
+          "instrument",
+          "score"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "adherence": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "period_end": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "period_days": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "missed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "medication_id": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "medication_id",
+                "date",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "period_end",
+          "period_days",
+          "missed"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "er_visit",
+              "hospitalization",
+              "fall"
+            ]
+          },
+          "start": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "end": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "type",
+          "start"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "care_plan": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element_id": {
+            "type": "string",
+            "pattern": "^D\\d{3}$"
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "ehr",
+                  "scan",
+                  "patient",
+                  "device",
+                  "pharmacy",
+                  "care_plan",
+                  "calculated"
+                ]
+              },
+              "source_label": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "reconciliation": {
+                "default": "reconciled",
+                "type": "string",
+                "enum": [
+                  "reconciled",
+                  "pending",
+                  "conflict"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "confirmed"
+            ],
+            "additionalProperties": false
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "dry_weight",
+              "weight_gain_1d_limit",
+              "weight_gain_7d_limit",
+              "bp_goal",
+              "egfr_baseline",
+              "bnp_baseline",
+              "inr_range",
+              "resting_hr_range",
+              "fluid_limit"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "low": {
+            "type": "number"
+          },
+          "high": {
+            "type": "number"
+          },
+          "systolic": {
+            "type": "number"
+          },
+          "diastolic": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "set_on": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}(T[\\d:.]+(Z|[+-]\\d{2}:\\d{2})?)?$"
+          },
+          "set_by": {
+            "type": "string"
+          },
+          "patient_priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "id",
+          "element_id",
+          "provenance",
+          "target",
+          "unit",
+          "set_on"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "patient_id",
+    "synthetic",
+    "profile"
+  ],
+  "additionalProperties": false
+}

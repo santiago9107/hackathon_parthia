@@ -1,0 +1,167 @@
+{
+  "knowledge_version": "234dfffb4aee",
+  "source_workbook": "Parthia Health - HF Knowledge Base.xlsx",
+  "sheet": "Recommendation cards",
+  "notes": [],
+  "rows": [
+    {
+      "card_id": "C01",
+      "topic": "MRA use and monitoring",
+      "recommendation": "In HFrEF, mineralocorticoid receptor antagonists are recommended for eligible patients (adequate kidney function and potassium). Potassium and kidney function should be checked when starting and regularly afterwards.",
+      "class_of_recommendation": "1 (verify)",
+      "level_of_evidence": "A (verify)",
+      "population": "HFrEF",
+      "drug_tags": "MRA; spironolactone; eplerenone",
+      "data_tags": "Potassium; eGFR; creatinine",
+      "used_by_agent": "Pharmacist + Cardiology",
+      "patient_text": "This medicine helps your heart work better, but it can raise potassium. Regular blood tests keep it safe.",
+      "source_ids_text": "S01",
+      "section": "MRA section",
+      "review_status_text": "Draft – verify",
+      "reviewed_by": null,
+      "date_reviewed": null,
+      "related_rules_text": "R02; R03",
+      "kb_domain": "2. Potassium & kidney",
+      "source_ids": [
+        "S01"
+      ],
+      "review_status": "draft_verify",
+      "related_rule_ids": [
+        "R02",
+        "R03"
+      ]
+    },
+    {
+      "card_id": "C02",
+      "topic": "Avoid NSAIDs",
+      "recommendation": "Drugs that cause fluid retention or worsen heart function, such as NSAIDs, should be avoided in patients with heart failure when possible.",
+      "class_of_recommendation": "Verify",
+      "level_of_evidence": "Verify",
+      "population": "All HF",
+      "drug_tags": "NSAIDs",
+      "data_tags": "Symptoms; weight; creatinine",
+      "used_by_agent": "Pharmacist",
+      "patient_text": "Common pain medicines like ibuprofen and naproxen can make heart failure worse. Ask your doctor or pharmacist about safer options.",
+      "source_ids_text": "S01; S07",
+      "section": "Verify",
+      "review_status_text": "Draft – verify",
+      "reviewed_by": null,
+      "date_reviewed": null,
+      "related_rules_text": "R01",
+      "kb_domain": "1. Drugs that worsen HF",
+      "source_ids": [
+        "S01",
+        "S07"
+      ],
+      "review_status": "draft_verify",
+      "related_rule_ids": [
+        "R01"
+      ]
+    },
+    {
+      "card_id": "C03",
+      "topic": "Non-dihydropyridine CCBs in HFrEF",
+      "recommendation": "Diltiazem and verapamil can weaken heart contraction and are considered potentially harmful in HFrEF.",
+      "class_of_recommendation": "Verify",
+      "level_of_evidence": "Verify",
+      "population": "HFrEF",
+      "drug_tags": "Diltiazem; verapamil",
+      "data_tags": "LVEF",
+      "used_by_agent": "Pharmacist + Cardiology",
+      "patient_text": "Some blood pressure and heart rhythm medicines are not recommended for your type of heart failure. Your doctor can confirm if yours is appropriate.",
+      "source_ids_text": "S01; S07",
+      "section": "Verify",
+      "review_status_text": "Draft – verify",
+      "reviewed_by": null,
+      "date_reviewed": null,
+      "related_rules_text": "R04",
+      "kb_domain": "1. Drugs that worsen HF",
+      "source_ids": [
+        "S01",
+        "S07"
+      ],
+      "review_status": "draft_verify",
+      "related_rule_ids": [
+        "R04"
+      ]
+    },
+    {
+      "card_id": "C04",
+      "topic": "Daily weight monitoring",
+      "recommendation": "Patients should weigh themselves daily and know when weight gain should prompt contact with their care team, as part of heart failure self-care.",
+      "class_of_recommendation": "n/a",
+      "level_of_evidence": "n/a",
+      "population": "All HF",
+      "drug_tags": "Diuretics",
+      "data_tags": "Daily weight; swelling; breathlessness",
+      "used_by_agent": "Cardiology",
+      "patient_text": "Weigh yourself every morning. Fast weight gain can mean fluid build-up, even before you feel worse.",
+      "source_ids_text": "S12; S01",
+      "section": "Self-care section",
+      "review_status_text": "Draft – verify",
+      "reviewed_by": null,
+      "date_reviewed": null,
+      "related_rules_text": "R08",
+      "kb_domain": "3. Diuretics & congestion",
+      "source_ids": [
+        "S01",
+        "S12"
+      ],
+      "review_status": "draft_verify",
+      "related_rule_ids": [
+        "R08"
+      ]
+    },
+    {
+      "card_id": "C05",
+      "topic": "Sodium intake",
+      "recommendation": "Avoiding excessive sodium is reasonable in heart failure; trial evidence (SODIUM-HF) did not show fewer clinical events with stricter restriction, so messaging should avoid extreme limits.",
+      "class_of_recommendation": "2a (verify)",
+      "level_of_evidence": "Verify",
+      "population": "All HF",
+      "drug_tags": "Diuretics",
+      "data_tags": "Diet log: high-sodium meals",
+      "used_by_agent": "Nutrition",
+      "patient_text": "Try to avoid very salty foods. Your care team can tell you what level is right for you.",
+      "source_ids_text": "S01; S13",
+      "section": "Nonpharmacological interventions",
+      "review_status_text": "Draft – verify",
+      "reviewed_by": null,
+      "date_reviewed": null,
+      "related_rules_text": null,
+      "kb_domain": "8. Nutrition",
+      "source_ids": [
+        "S01",
+        "S13"
+      ],
+      "review_status": "draft_verify",
+      "related_rule_ids": []
+    },
+    {
+      "card_id": "C06",
+      "topic": "SGLT2 inhibitors across the EF spectrum",
+      "recommendation": "SGLT2 inhibitors reduce heart failure hospitalization and are recommended in HFrEF and reasonable in HFpEF per current U.S. documents; check updates in the 2026 HFpEF pathway.",
+      "class_of_recommendation": "Verify",
+      "level_of_evidence": "Verify",
+      "population": "HFrEF; HFpEF",
+      "drug_tags": "SGLT2i; dapagliflozin; empagliflozin",
+      "data_tags": "eGFR; glucose; genital infection symptoms",
+      "used_by_agent": "Pharmacist + Cardiology",
+      "patient_text": "This medicine can lower the chance of being hospitalized for heart failure, whether or not you have diabetes.",
+      "source_ids_text": "S01; S02; S03",
+      "section": "Verify",
+      "review_status_text": "Draft – verify",
+      "reviewed_by": null,
+      "date_reviewed": null,
+      "related_rules_text": null,
+      "kb_domain": "4. Core HF medicines",
+      "source_ids": [
+        "S01",
+        "S02",
+        "S03"
+      ],
+      "review_status": "draft_verify",
+      "related_rule_ids": []
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$comment": "Forbidden-phrase scan (Dictionary guide rule 10, brief rule 9). Applied to ALL generated text. Patterns are case-insensitive regular expressions. 'must_not_say' entries come from the KB Test cases sheet.",
+  "forbidden_patterns": [
+    "\\bstop(s|ped|ping)?\\b",
+    "\\bstart(s|ed|ing)?\\b",
+    "\\bincreas(e|es|ed|ing)\\b",
+    "\\bdecreas(e|es|ed|ing)\\b",
+    "\\bdiscontinu(e|es|ed|ing)\\b",
+    "\\breduce (your|the) dose\\b",
+    "\\bdouble (your|the) dose\\b",
+    "\\bskip (your|a|the) dose\\b",
+    "\\btake an extra\\b",
+    "\\byou have (heart failure|hyperkalemia|depression|kidney disease|ckd)\\b",
+    "\\bdiagnos(is|ed|e)\\b",
+    "\\bdangerous\\b"
+  ],
+  "must_not_say": [
+    "Stop taking naproxen",
+    "Your potassium is dangerous",
+    "Take an extra diuretic dose"
+  ]
+}

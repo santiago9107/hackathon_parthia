@@ -1,0 +1,336 @@
+{
+  "schema_version": "1",
+  "patient_id": "edge-diltiazem-hfpef",
+  "synthetic": true,
+  "profile": {
+    "display_name": "Rosa Delgado (synthetic)",
+    "age": 65,
+    "sex": "female"
+  },
+  "conditions": [
+    {
+      "id": "p-rosa-cond-heart_failure",
+      "element_id": "D001",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "key": "heart_failure",
+      "name": "Heart failure",
+      "code_system": "SNOMED CT",
+      "code": "84114007",
+      "onset_date": "2025-11-20",
+      "active": true
+    },
+    {
+      "id": "p-rosa-cond-diabetes",
+      "element_id": "D004",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "key": "diabetes",
+      "name": "Type 2 diabetes",
+      "code_system": "SNOMED CT",
+      "code": "44054006",
+      "onset_date": "2025-03-01",
+      "active": true
+    },
+    {
+      "id": "edge-cond-atrial_fibrillation",
+      "element_id": "D004",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "key": "atrial_fibrillation",
+      "name": "Atrial fibrillation",
+      "code_system": "SNOMED CT",
+      "code": "49436004",
+      "onset_date": "2026-01-01",
+      "active": true
+    }
+  ],
+  "medications": [
+    {
+      "id": "m-metformin",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Metformin",
+      "ingredients": [
+        "metformin"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2025-03-15"
+        }
+      ],
+      "dose": "1000 mg",
+      "frequency": "twice daily"
+    },
+    {
+      "id": "m-empagliflozin",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Empagliflozin",
+      "ingredients": [
+        "empagliflozin"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2025-12-01"
+        }
+      ],
+      "dose": "10 mg",
+      "frequency": "once daily"
+    },
+    {
+      "id": "m-lisinopril",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Lisinopril",
+      "ingredients": [
+        "lisinopril"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2023-05-01"
+        }
+      ],
+      "dose": "10 mg",
+      "frequency": "once daily"
+    },
+    {
+      "id": "m-diltiazem",
+      "element_id": "D005",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "name": "Diltiazem",
+      "ingredients": [
+        "diltiazem"
+      ],
+      "otc": false,
+      "events": [
+        {
+          "type": "start",
+          "date": "2026-02-01"
+        }
+      ],
+      "dose": "120 mg",
+      "frequency": "once daily"
+    }
+  ],
+  "labs": [
+    {
+      "id": "p-rosa-k-2026-08-05",
+      "element_id": "D007",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "potassium",
+      "value": 4.3,
+      "unit": "mEq/L",
+      "date": "2026-08-05",
+      "reference_range": {
+        "low": 3.5,
+        "high": 5.0
+      }
+    },
+    {
+      "id": "p-rosa-na-2026-08-05",
+      "element_id": "D008",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "sodium",
+      "value": 140,
+      "unit": "mEq/L",
+      "date": "2026-08-05"
+    },
+    {
+      "id": "p-rosa-egfr-2026-08-05",
+      "element_id": "D009",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "egfr",
+      "value": 72,
+      "unit": "mL/min/1.73m²",
+      "date": "2026-08-05"
+    },
+    {
+      "id": "p-rosa-hba1c-2026-08-05",
+      "element_id": "D020",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "hba1c",
+      "value": 7.1,
+      "unit": "%",
+      "date": "2026-08-05"
+    },
+    {
+      "id": "edge-lvef-hfpef",
+      "element_id": "D002",
+      "provenance": {
+        "source": "ehr",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "analyte": "lvef",
+      "value": 60,
+      "unit": "%",
+      "date": "2026-06-01"
+    }
+  ],
+  "vitals": [
+    {
+      "id": "p-rosa-wt-2026-09-25",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-25T07:00:00-04:00",
+      "value": 68.2,
+      "unit": "kg"
+    },
+    {
+      "id": "p-rosa-wt-2026-09-28",
+      "element_id": "D011",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Bluetooth scale"
+      },
+      "kind": "weight",
+      "datetime": "2026-09-28T07:00:00-04:00",
+      "value": 68.4,
+      "unit": "kg"
+    },
+    {
+      "id": "p-rosa-bp-2026-09-28-0800",
+      "element_id": "D012",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "blood_pressure",
+      "datetime": "2026-09-28T08:00:00-04:00",
+      "systolic": 124,
+      "diastolic": 78,
+      "unit": "mmHg"
+    },
+    {
+      "id": "p-rosa-hr-2026-09-28-0800",
+      "element_id": "D013",
+      "provenance": {
+        "source": "device",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Home BP cuff"
+      },
+      "kind": "heart_rate",
+      "datetime": "2026-09-28T08:00:00-04:00",
+      "value": 70,
+      "unit": "beats/min"
+    }
+  ],
+  "symptoms": [
+    {
+      "id": "p-rosa-sx-2026-09-28",
+      "element_id": "D014",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "datetime": "2026-09-28T07:30:00-04:00",
+      "reported": []
+    }
+  ],
+  "diet_logs": [
+    {
+      "id": "p-rosa-diet-2026-09-15-1",
+      "element_id": "D015",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Meal log (AI-tagged, patient-confirmed)"
+      },
+      "date": "2026-09-15",
+      "tags": []
+    }
+  ],
+  "mood": [
+    {
+      "id": "p-rosa-phq-9-2026-07-01",
+      "element_id": "D016",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled"
+      },
+      "date": "2026-07-01",
+      "instrument": "PHQ-9",
+      "score": 3,
+      "item9": 0
+    }
+  ],
+  "adherence": [
+    {
+      "id": "p-rosa-adh-2026-09-19",
+      "element_id": "D006",
+      "provenance": {
+        "source": "patient",
+        "confirmed": true,
+        "reconciliation": "reconciled",
+        "source_label": "Weekly medicine check-in"
+      },
+      "period_end": "2026-09-19",
+      "period_days": 7,
+      "missed": []
+    }
+  ],
+  "events": [],
+  "care_plan": []
+}

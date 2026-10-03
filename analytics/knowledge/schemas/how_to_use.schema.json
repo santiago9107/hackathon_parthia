@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "parthia/knowledge/how_to_use.schema.json",
+  "title": "Parthia HF knowledge base: how_to_use",
+  "type": "object",
+  "required": [
+    "knowledge_version",
+    "source_workbook",
+    "sheet",
+    "rows"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "knowledge_version": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{12}$"
+    },
+    "source_workbook": {
+      "type": "string"
+    },
+    "sheet": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "number"
+          ]
+        }
+      }
+    }
+  }
+}
