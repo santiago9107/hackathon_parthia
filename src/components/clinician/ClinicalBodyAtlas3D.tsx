@@ -94,8 +94,6 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
     const key = new THREE.DirectionalLight(0xffffff, 2.5); key.position.set(-2, 4, 3); scene.add(key);
     const rim = new THREE.DirectionalLight(0x67e8f9, 1.2); rim.position.set(2, 2, -3); scene.add(rim);
 
-    const ground = new THREE.Mesh(new THREE.CircleGeometry(3, 96), new THREE.MeshStandardMaterial({ color: 0x0b1b28, roughness: 0.95 }));
-    ground.rotation.x = -Math.PI / 2; ground.position.y = -0.019; scene.add(ground);
 
     const materials = new Map<AtlasSystem, THREE.MeshStandardMaterial>();
     const meshes: THREE.Mesh[] = [];
@@ -129,8 +127,6 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
       anatomy.position.set(-center.x, -center.y, -center.z);
       const fitted = new THREE.Box3().setFromObject(anatomy);
       const size = fitted.getSize(new THREE.Vector3());
-      const floorY = fitted.min.y - 0.02;
-      ground.position.y = floorY;
       const height = Math.max(size.y, 0.1);
       const width = Math.max(size.x, 0.1);
       const verticalFov = THREE.MathUtils.degToRad(camera.fov);
@@ -226,7 +222,6 @@ export function ClinicalBodyAtlas3D({ findingTitle, compact = false, embedded = 
       disposed = true; abort.abort(); cancelAnimationFrame(frame); observer.disconnect(); controls.dispose();
       renderer.domElement.removeEventListener("pointerdown", onDown); renderer.domElement.removeEventListener("pointerup", onUp);
       geometries.forEach((geometry) => geometry.dispose()); materials.forEach((material) => material.dispose());
-      ground.geometry.dispose(); (ground.material as THREE.Material).dispose();
       environment.dispose(); renderer.dispose(); renderer.domElement.remove();
     };
   }, []);
