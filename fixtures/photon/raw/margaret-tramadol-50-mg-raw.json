@@ -1,0 +1,14 @@
+{
+  "recordedAt": "2026-10-03T17:01:03.002Z",
+  "patientId": "pat_01M41BCCXE4YV6E9Z3C3PFYRBQ",
+  "response": {
+    "data": {
+      "prescriptionScreen": {
+        "alerts": [
+          { "type": "DRUG", "severity": "MAJOR", "involvedEntities": [{ "id": "mht_01M41BCCXX0S2DVTAE98RS7AX9" }, { "id": "med_01M032SWE1Q86HDCTAJFB3C3W9" }] },
+          { "type": "DRUG", "severity": "MAJOR", "involvedEntities": [{ "id": "med_01M032SWE1Q86HDCTAJFB3C3W9" }, { "id": "mht_01M41BCCY1N1JW8GEXGM8320X2" }] }
+        ]
+      }
+    }
+  }
+}

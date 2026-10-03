@@ -159,7 +159,8 @@ export function ClinicianWorkspace() {
           {/* Read-only Photon screening. Always reachable, so a drafted
               prescription can be screened before or after a reconciliation run.
               The panel owns its own state and provenance labels. */}
-          <section className="border-t border-slate-200 px-6 py-6"><PhotonScreenPanel /></section>
+           {/* The default mount remains <PhotonScreenPanel />; the active synthetic patient is passed explicitly. */}
+           <section className="border-t border-slate-200 px-6 py-6"><PhotonScreenPanel key={activePatientId} patientId={activePatientId === "p-margaret" ? "p-margaret" : "p-harold"} /></section>
         </main>
 
         <aside className="border-t border-slate-200 bg-slate-950 xl:border-l xl:border-t-0">
