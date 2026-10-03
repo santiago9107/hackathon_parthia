@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-10-03T14:49:51.804Z",
+  "treatmentKey": "ciprofloxacin-500-mg",
+  "alerts": [
+    {
+      "type": "DRUG",
+      "severity": "MODERATE",
+      "description": "Fluoroquinolones such as Ciprofloxacin HCl Oral Tablet 500 MG may increase anticoagulant effects of Warfarin Sodium Oral Tablet 5 MG.",
+      "involvedEntities": [
+        {
+          "id": "med_01JVT1WGAMK8H6M0KRPYTQ989A",
+          "name": "Ciprofloxacin HCl",
+          "kind": "drafted"
+        },
+        {
+          "id": "mht_01M412P6TR3EEHFTW7N6AFRQ7Z",
+          "name": "Warfarin Sodium",
+          "kind": "existing"
+        }
+      ]
+    }
+  ],
+  "draft": {
+    "treatmentId": "med_01JVT1WGAMK8H6M0KRPYTQ989A",
+    "name": "Ciprofloxacin HCl Oral Tablet 500 MG",
+    "label": "Ciprofloxacin 500 mg"
+  },
+  "expects": "DRUG alert involving warfarin",
+  "patientId": "pat_01M412P6SKKHQH8TXN43N4BV4Q",
+  "source": "Photon Neutron sandbox",
+  "live": false,
+  "label": "Recorded sandbox response",
+  "note": "Real sandbox response captured for the offline fallback. Synthetic patient. No credentials or tokens are stored here."
+}

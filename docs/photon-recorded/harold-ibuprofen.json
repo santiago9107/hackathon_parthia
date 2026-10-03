@@ -1,0 +1,75 @@
+{
+  "recordedAt": "2026-10-03T10:47:00-04:00",
+  "source": "Photon Neutron sandbox, clinical-api prescriptionScreen (live)",
+  "patientId": "pat_01M412P6SKKHQH8TXN43N4BV4Q",
+  "patient": "Harold Okafor (synthetic)",
+  "draft": "ibuprofen",
+  "response": {
+    "data": {
+      "prescriptionScreen": {
+        "alerts": [
+          {
+            "type": "DRUG",
+            "severity": "MAJOR",
+            "description": "Non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG) may diminish the cardioprotective effect of aspirin. Non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG) may enhance the adverse/toxic effect of aspirin. An increased risk of bleeding may be associated with use of this combination. Aspirin may decrease the serum concentration of non-selective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG).",
+            "involvedEntities": [
+              {
+                "id": "mht_01M412P6VFP47NJ16RG4PQ1E8S",
+                "name": "Aspirin 81"
+              },
+              {
+                "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
+                "name": "Ibuprofen"
+              }
+            ]
+          },
+          {
+            "type": "DRUG",
+            "severity": "MODERATE",
+            "description": "Nonselective nonsteroidal anti-inflammatory agents (eg, Ibuprofen Oral Capsule 200 MG) may enhance the anticoagulant effect of vitamin K antagonists (eg, Warfarin Sodium Oral Tablet 5 MG).",
+            "involvedEntities": [
+              {
+                "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
+                "name": "Ibuprofen"
+              },
+              {
+                "id": "mht_01M412P6TR3EEHFTW7N6AFRQ7Z",
+                "name": "Warfarin Sodium"
+              }
+            ]
+          },
+          {
+            "type": "DRUG",
+            "severity": "MODERATE",
+            "description": "Ibuprofen Oral Capsule 200 MG may impair the hypotensive effect of Metoprolol Succinate ER Oral Tablet Extended Release 24 Hour 50 MG.",
+            "involvedEntities": [
+              {
+                "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
+                "name": "Ibuprofen"
+              },
+              {
+                "id": "mht_01M412P6V5WH60RXK62HGV7T7W",
+                "name": "Metoprolol Succinate ER"
+              }
+            ]
+          },
+          {
+            "type": "ALLERGEN",
+            "severity": "MODERATE",
+            "description": "The use of Ibuprofen Oral Capsule 200 MG may result in an allergic reaction based on a reported history of allergy to ibuprofen.",
+            "involvedEntities": [
+              {
+                "id": "alg_01GBAPSGE2TV2JSWR3BAYPP15E",
+                "name": "ibuprofen"
+              },
+              {
+                "id": "med_01KZEG3HFJQF4VK0AXCYAVS77J",
+                "name": "Ibuprofen"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
