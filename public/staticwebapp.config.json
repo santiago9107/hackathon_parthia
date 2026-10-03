@@ -1,0 +1,45 @@
+{
+  "trailingSlash": "auto",
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/404.html",
+      "statusCode": 404
+    }
+  },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "routes": [
+    {
+      "route": "/sw.js",
+      "headers": {
+        "Cache-Control": "no-cache",
+        "Service-Worker-Allowed": "/"
+      }
+    },
+    {
+      "route": "/manifest.json",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
+    },
+    {
+      "route": "/_next/static/*",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "route": "/ocr/*",
+      "headers": {
+        "Cache-Control": "public, max-age=604800"
+      }
+    }
+  ],
+  "mimeTypes": {
+    ".json": "application/json",
+    ".webmanifest": "application/manifest+json",
+    ".gz": "application/gzip"
+  }
+}
