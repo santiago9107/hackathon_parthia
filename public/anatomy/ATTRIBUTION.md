@@ -1,10 +1,10 @@
 # Anatomy data attribution
 
-BodyParts3D, © The Database Center for Life Science, licensed under the Creative Commons Attribution 4.0 International license.
+BodyParts3D, © The Database Center for Life Science, licensed under the Creative Commons Attribution-ShareAlike 2.1 Japan license.
 
 - Dataset and license: https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html
 - Download source: https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html
-- License terms: https://creativecommons.org/licenses/by/4.0/
+- License terms: https://creativecommons.org/licenses/by-sa/2.1/jp/
 - Publication: Mitsuhashi et al. (2009), *BodyParts3D: 3D structure database for anatomical concepts*. https://doi.org/10.1093/nar/gkn613
 - Web renderer: Human Atlas, MIT licensed. https://github.com/ashemag/human-atlas
 
