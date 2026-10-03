@@ -10,6 +10,11 @@ describe("agent roster", () => {
     expect(tributes).toEqual(expect.arrayContaining(["DxAngels", "Redesign Health", "Photon Health", "TechNovaTime", "Visualize AI"]));
   });
 
+  it("gives a sponsor tribute only to the five named agents, with Iris as the one for Visualize AI", () => {
+    expect(AGENTS.filter((a) => a.tribute).map((a) => a.id)).toEqual(["patient", "records", "safety", "photon", "liaison"]);
+    expect(AGENTS.find((a) => a.tribute === "Visualize AI")!.id).toBe("liaison");
+  });
+
   it("never lists a tool the policy denies", () => {
     const denied = new Set(guardrails().map((g) => g.tool));
     for (const agent of AGENTS) for (const tool of agent.tools) expect(denied.has(tool)).toBe(false);
